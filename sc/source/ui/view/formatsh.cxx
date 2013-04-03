@@ -61,7 +61,6 @@
 #include "docsh.hxx"
 #include "patattr.hxx"
 #include "scmod.hxx"
-#include "attrdlg.hrc"
 #include "stlpool.hxx"
 #include "stlsheet.hxx"
 #include "printfun.hxx"
@@ -1420,7 +1419,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             case SID_ATTR_CHAR_COLOR:
             case SID_ATTR_CHAR_FONT:
             case SID_ATTR_CHAR_FONTHEIGHT:
-                pTabViewShell->ExecuteCellFormatDlg( rReq, TP_FONT );       // wenn ToolBar vertikal
+                pTabViewShell->ExecuteCellFormatDlg(rReq, "font");       // wenn ToolBar vertikal
                 break;
 
             case SID_BACKGROUND_COLOR:

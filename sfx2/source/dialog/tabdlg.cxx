@@ -987,6 +987,11 @@ void SfxTabDialog::RemoveTabPage( sal_uInt16 nId )
     }
 }
 
+void SfxTabDialog::RemoveTabPage(const OString &rName)
+{
+    RemoveTabPage(m_pTabCtrl->GetPageId(rName));
+}
+
 // -----------------------------------------------------------------------
 
 void SfxTabDialog::PageCreated

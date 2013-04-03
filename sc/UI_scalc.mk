@@ -12,6 +12,7 @@ $(eval $(call gb_UI_UI,modules/scalc))
 $(eval $(call gb_UI_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/cellprotectionpage \
 	sc/uiconfig/scalc/ui/definename \
+	sc/uiconfig/scalc/ui/formatcellsdialog \
 	sc/uiconfig/scalc/ui/insertname \
 	sc/uiconfig/scalc/ui/insertsheet \
 	sc/uiconfig/scalc/ui/printeroptions \

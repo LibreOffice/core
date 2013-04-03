@@ -391,7 +391,7 @@ public:
 
     void    UpdateNumberFormatter   ( const SvxNumberInfoItem&  rInfoItem );
 
-    void    ExecuteCellFormatDlg    ( SfxRequest& rReq, sal_uInt16 nTabPage = 0xffff );
+    void    ExecuteCellFormatDlg    ( SfxRequest& rReq, const OString &rTabPage = OString());
 
     sal_Bool    GetFunction( String& rFuncStr, sal_uInt16 nErrCode = 0 );
 

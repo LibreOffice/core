@@ -481,8 +481,7 @@ public:
 
     virtual SfxAbstractTabDialog * CreateScAttrDlg( SfxViewFrame*    pFrame, //add for ScAttrDlg
                                                     Window*          pParent,
-                                                    const SfxItemSet* pCellAttrs,
-                                                    int nId) = 0;
+                                                    const SfxItemSet* pCellAttrs ) = 0;
 
     virtual SfxAbstractTabDialog * CreateScHFEditDlg( SfxViewFrame*     pFrame, //add for ScHFEditDlg
                                                     Window*         pParent,

@@ -1338,25 +1338,11 @@ AbstractScImportOptionsDlg * ScAbstractDialogFactory_Impl::CreateScImportOptions
 }
 
 
-SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScAttrDlg( SfxViewFrame*  pFrame,
-                                                                        Window*          pParent,
-                                                                        const SfxItemSet* pCellAttrs,
-                                                                        int nId)
+SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScAttrDlg(SfxViewFrame* pFrame,
+    Window* pParent, const SfxItemSet* pCellAttrs)
 {
-    SfxTabDialog* pDlg=NULL;
-    switch ( nId )
-    {
-        case RID_SCDLG_ATTR :
-            pDlg = new ScAttrDlg( pFrame, pParent, pCellAttrs );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new ScAbstractTabDialog_Impl( pDlg );
-    return 0;
-
+    SfxTabDialog* pDlg = new ScAttrDlg(pFrame, pParent, pCellAttrs);
+    return new ScAbstractTabDialog_Impl(pDlg);
 }
 
 #undef SfxTabDialog

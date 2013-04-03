@@ -183,6 +183,7 @@ public:
                                     sal_Bool bItemsOnDemand = sal_False,
                                     sal_uInt16 nPos = TAB_APPEND);
 
+    void                RemoveTabPage( const OString& rName ); // Name of the label for the page in the notebook .ui
     void                RemoveTabPage( sal_uInt16 nId );
 
     void                SetCurPageId(sal_uInt16 nId)

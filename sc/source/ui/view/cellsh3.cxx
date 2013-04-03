@@ -37,7 +37,6 @@
 #include "autoform.hxx"
 #include "autofmt.hxx"
 #include "cellsh.hxx"
-#include "attrdlg.hrc"      // TP_ALIGNMENT
 #include "inputhdl.hxx"
 #include "editable.hxx"
 #include "markdata.hxx"
@@ -355,7 +354,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             break;
 
         case SID_ENABLE_HYPHENATION:
-            pTabViewShell->ExecuteCellFormatDlg( rReq, TP_ALIGNMENT );
+            pTabViewShell->ExecuteCellFormatDlg(rReq, "alignment");
             break;
 
         case SID_OPENDLG_SOLVE:

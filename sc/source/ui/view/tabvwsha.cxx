@@ -466,7 +466,7 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
 }
 
 //------------------------------------------------------------------
-void ScTabViewShell::ExecuteCellFormatDlg( SfxRequest& rReq, sal_uInt16 nTabPage )
+void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName)
 {
     SfxAbstractTabDialog * pDlg = NULL;
     ScDocument*             pDoc    = GetViewData()->GetDocument();
@@ -516,10 +516,10 @@ void ScTabViewShell::ExecuteCellFormatDlg( SfxRequest& rReq, sal_uInt16 nTabPage
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-    pDlg = pFact->CreateScAttrDlg( GetViewFrame(), GetDialogParent(), pOldSet, RID_SCDLG_ATTR);
+    pDlg = pFact->CreateScAttrDlg(GetViewFrame(), GetDialogParent(), pOldSet);
     OSL_ENSURE(pDlg, "Dialog create fail!");
-    if ( nTabPage != 0xffff )
-        pDlg->SetCurPageId( nTabPage );
+    if (!rName.isEmpty())
+        pDlg->SetCurPageId(rName);
     short nResult = pDlg->Execute();
     bInFormatDialog = false;
 

@@ -946,7 +946,6 @@
 #define BMP_END                 (BMP_START + 100)
 
 #define SC_DIALOGS_START        (BMP_END)
-#define RID_SCDLG_ATTR          (SC_DIALOGS_START)
 #define RID_SCDLG_SORT          (SC_DIALOGS_START + 5)
 #define RID_SCPAGE_SORT_FIELDS  (SC_DIALOGS_START + 6)
 

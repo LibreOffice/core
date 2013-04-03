@@ -549,8 +549,7 @@ public:
                                                                     sal_Bool                    bImport = sal_True );
     virtual SfxAbstractTabDialog * CreateScAttrDlg( SfxViewFrame*    pFrame, //add for ScAttrDlg
                                                     Window*          pParent,
-                                                    const SfxItemSet* pCellAttrs,
-                                                    int nId);
+                                                    const SfxItemSet* pCellAttrs );
 
     virtual SfxAbstractTabDialog * CreateScHFEditDlg( SfxViewFrame*     pFrame, //add for ScHFEditDlg
                                                     Window*         pParent,

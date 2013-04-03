@@ -31,7 +31,6 @@
 #include "tabpages.hxx"
 #include "attrdlg.hxx"
 #include "scresid.hxx"
-#include "attrdlg.hrc"
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/flagsdef.hxx>
@@ -40,41 +39,34 @@
 
 //==================================================================
 
-ScAttrDlg::ScAttrDlg( SfxViewFrame*     pFrameP,
-                      Window*           pParent,
-                      const SfxItemSet* pCellAttrs )
-
-    :   SfxTabDialog( pFrameP,
-                      pParent,
-                      ScResId( RID_SCDLG_ATTR ),
-                      pCellAttrs )
+ScAttrDlg::ScAttrDlg(SfxViewFrame* pFrameP, Window* pParent, const SfxItemSet* pCellAttrs)
+    : SfxTabDialog(pFrameP, pParent, "FormatCellsDialog", "modules/scalc/ui/formatcellsdialog.ui", pCellAttrs)
 {
     SvtCJKOptions aCJKOptions;
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialogdiet fail!");
 
     OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT ), "GetTabPageCreatorFunc fail!");
-    AddTabPage( TP_NUMBER, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT ), 0 );
+    m_nNumberPageId = AddTabPage( "numbers", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT ), 0 );
     OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageCreatorFunc fail!");
-    AddTabPage( TP_FONT, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), 0 );
+    m_nFontPageId = AddTabPage( "font", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), 0 );
     OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), "GetTabPageCreatorFunc fail!");
-    AddTabPage( TP_FONTEFF, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), 0 );
+    AddTabPage( "fonteffects", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), 0 );
     OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGNMENT ), "GetTabPageCreatorFunc fail!");
-    AddTabPage( TP_ALIGNMENT, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGNMENT ),    0 );
+    AddTabPage( "alignment", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_ALIGNMENT ),    0 );
 
     if ( aCJKOptions.IsAsianTypographyEnabled() )
     {
         OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageCreatorFunc fail!");
-        AddTabPage( TP_ASIAN,   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),       0 );
+        AddTabPage( "asiantypography",   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),       0 );
     }
     else
-        RemoveTabPage( TP_ASIAN );
+        RemoveTabPage( "asiantypography" );
     OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");
-    AddTabPage( TP_BORDER,      pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ),     0 );
+    AddTabPage( "borders",      pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ),     0 );
     OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
-    AddTabPage( TP_BACKGROUND,  pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
-    AddTabPage( TP_PROTECTION,  ScTabPageProtection::Create,    0 );
-    FreeResource();
+    AddTabPage( "background",  pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
+    AddTabPage( "cellprotection" ,  ScTabPageProtection::Create,    0 );
 }
 
 // -----------------------------------------------------------------------
@@ -89,28 +81,19 @@ void ScAttrDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
-    switch ( nPageId )
+    if (nPageId == m_nNumberPageId)
     {
-        case TP_NUMBER:
-        {
-            aSet.Put (SfxLinkItem( SID_LINK_TYPE, LINK( this, ScAttrDlg, OkHandler )));
-            rTabPage.PageCreated(aSet);
-        }
-        break;
+        aSet.Put (SfxLinkItem( SID_LINK_TYPE, LINK( this, ScAttrDlg, OkHandler )));
+        rTabPage.PageCreated(aSet);
+    }
+    else if (nPageId == m_nFontPageId)
+    {
+        const SfxPoolItem* pInfoItem = pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST );
 
-        case TP_FONT:
-        {
-            const SfxPoolItem* pInfoItem = pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST );
+        OSL_ENSURE( pInfoItem, "FontListItem  not found :-(" );
 
-            OSL_ENSURE( pInfoItem, "FontListItem  not found :-(" );
-
-            aSet.Put (SvxFontListItem(((const SvxFontListItem*)pInfoItem)->GetFontList(), SID_ATTR_CHAR_FONTLIST ));
-            rTabPage.PageCreated(aSet);
-        }
-        break;
-
-        default:
-        break;
+        aSet.Put (SvxFontListItem(((const SvxFontListItem*)pInfoItem)->GetFontList(), SID_ATTR_CHAR_FONTLIST ));
+        rTabPage.PageCreated(aSet);
     }
 }
 

@@ -27,7 +27,6 @@
 #include "scresid.hxx"
 #include "sc.hrc"
 
-#include "attrdlg.hrc"
 #include "tabpages.hxx"
 
 // STATIC DATA -----------------------------------------------------------
