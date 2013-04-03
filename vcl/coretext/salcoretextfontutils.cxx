@@ -113,6 +113,7 @@ static bool GetDevFontAttributes( CTFontDescriptorRef font_descriptor, ImplDevFo
         break;
     case kCTFontSansSerifClass:
         rDFA.SetFamilyType( FAMILY_SWISS );
+        break;
     case kCTFontOrnamentalsClass:
         rDFA.SetFamilyType( FAMILY_DECORATIVE );
         break;
