@@ -28,39 +28,34 @@
 # instead of those above.
 #
 
-# we expect our work directory to be where soffice had been started
-# $(1) should be the path to the executable
+EXECUTABLE=${1}
+COREDIR=${2}
 
-OFFICEFILE=${1}
-WORKDIR=${2}
-
-if test -n "`which gdb`"
+if test -n "$(which gdb)"
 then
-    if test `ls "${WORKDIR}"/core* 2>/dev/null | wc -l` -eq 1
+    if test "$(ls "$COREDIR"/core* 2>/dev/null | wc -l)" -eq 1
     then
-        COREFILE=`ls "${WORKDIR}"/core*`
+        COREFILE=$(ls "$COREDIR"/core*)
         echo
-        echo "It seems like soffice.bin crashed during the test excution!"
-        echo "Found a core dump at ${COREFILE}"
-        echo "Stacktrace:"
+        echo "It looks like ${EXECUTABLE} generated a core file at ${COREFILE}"
+        echo "Backtraces:"
         GDBCOMMANDFILE=`mktemp`
-        echo "thread apply all bt" > ${GDBCOMMANDFILE}
-        gdb -x $GDBCOMMANDFILE --batch ${OFFICEFILE}.bin ${COREFILE}
-        rm ${GDBCOMMANDFILE}
+        echo "thread apply all backtrace" > "$GDBCOMMANDFILE"
+        gdb -x "$GDBCOMMANDFILE" --batch "$EXECUTABLE" "$COREFILE"
+        rm "$GDBCOMMANDFILE"
         echo
-        exit 1
+        exit 0
     else
         echo
-        echo "No core dump at ${WORKDIR}, to create core dumps (and stack traces)"
-        echo "for crashed soffice instances, enable core dumps with:"
+        echo "No core file identified in directory ${COREDIR}"
+        echo "To show backtraces for crashes during test execution,"
+        echo "enable core files with:"
         echo
         echo "   ulimit -c unlimited"
         echo
-        exit 0
+        exit 1
     fi
 else
-    echo "You need gdb in your path to generate stacktraces."
-    exit 0
+    echo "You need gdb in your path to show backtraces"
+    exit 1
 fi
-
-# vim: set et sw=4 sts=4:

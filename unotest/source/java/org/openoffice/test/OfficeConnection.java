@@ -43,11 +43,6 @@ import static org.junit.Assert.*;
 
 
 public final class OfficeConnection {
-    private final class PostprocessFailedException extends java.lang.RuntimeException {
-        PostprocessFailedException() {
-            super("This likely means that soffice crashed during the test.");
-        }
-    };
     /** Start up an OOo instance.
     */
     public void setUp() throws Exception {
@@ -108,6 +103,7 @@ public final class OfficeConnection {
     public void tearDown()
         throws InterruptedException, com.sun.star.uno.Exception
     {
+        boolean cleanTermination = false;
         try {
             boolean desktopTerminated = true;
             if (process != null) {
@@ -148,38 +144,45 @@ public final class OfficeConnection {
             if (process != null) {
                 code = process.waitFor();
             }
-            boolean outTerminated = outForward == null || outForward.terminated();
-            boolean errTerminated = errForward == null || errForward.terminated();
+            boolean outTerminated = outForward == null
+                || outForward.terminated();
+            boolean errTerminated = errForward == null
+                || errForward.terminated();
             assertEquals(0, code);
+            cleanTermination = true;
             assertTrue(outTerminated);
             assertTrue(errTerminated);
         } finally {
-            try {
-                String sofficeArg = Argument.get("soffice");
-                String workdir = Argument.get("workdir");
-                String postprocesscommand = Argument.get("postprocesscommand");
-                if(sofficeArg.startsWith("path:") && workdir != null && postprocesscommand != null) {
-                    ProcessBuilder pb = new ProcessBuilder(
-                        postprocesscommand,
-                        sofficeArg.substring("path:".length()),
-                        workdir);
-                    Process postprocess = pb.start();
-                    Forward ppoutForward = new Forward(postprocess.getInputStream(), System.out);
-                    ppoutForward.start();
-                    Forward pperrForward = new Forward(postprocess.getErrorStream(), System.err);
-                    pperrForward.start();
-                    postprocess.waitFor();
-                    if(postprocess.exitValue() != 0)
+            if (!cleanTermination) {
+                try {
+                    String sofficeArg = Argument.get("soffice");
+                    String workdir = Argument.get("workdir");
+                    String postprocesscommand = Argument.get(
+                        "postprocesscommand");
+                    if (sofficeArg.startsWith("path:") && workdir != null
+                        && postprocesscommand != null)
                     {
-                        // no ugly long java stacktrace needed here
-                        PostprocessFailedException e = new PostprocessFailedException();
-                        StackTraceElement[] newStackTrace = new StackTraceElement[0];
-                        e.setStackTrace(newStackTrace);
-                        throw e;
+                        ProcessBuilder pb = new ProcessBuilder(
+                            postprocesscommand,
+                            sofficeArg.substring("path:".length()) + ".bin",
+                            workdir);
+                        Process postprocess = pb.start();
+                        Forward ppoutForward = new Forward(
+                            postprocess.getInputStream(), System.out);
+                        ppoutForward.start();
+                        Forward pperrForward = new Forward(
+                            postprocess.getErrorStream(), System.err);
+                        pperrForward.start();
+                        int code = postprocess.waitFor();
+                        if (code != 0) {
+                            throw new PostprocessFailedException(code);
+                        }
                     }
                 }
+                catch (IOException e) {
+                    throw new PostprocessFailedException(e);
+                }
             }
-            catch(IOException e) {}
         }
     }
 
@@ -261,6 +264,18 @@ public final class OfficeConnection {
         private final PrintStream out;
         private boolean done = false;
     }
+
+    private static final class PostprocessFailedException
+        extends RuntimeException
+    {
+        PostprocessFailedException(int exitCode) {
+            super("postprocessing failed with exit code " + exitCode);
+        }
+
+        PostprocessFailedException(IOException cause) {
+            super("postprocessing failed with IOException " + cause, cause);
+        }
+    };
 
     private String description;
     private Process process = null;

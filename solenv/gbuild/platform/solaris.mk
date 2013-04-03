@@ -333,6 +333,10 @@ $(call gb_LinkTarget_get_target,$(2)) : RPATH :=
 
 endef
 
+define gb_CppunitTest_postprocess
+$(SRCDIR)/solenv/bin/gdb-core-bt.sh $(1) $(2)
+endef
+
 # JunitTest class
 
 ifneq ($(OOO_TEST_SOFFICE),)
@@ -350,7 +354,7 @@ $(call gb_JunitTest_get_target,$(1)) : DEFS := \
 	-Dorg.openoffice.test.arg.env=$(gb_Helper_LIBRARY_PATH_VAR)"$$$${$(gb_Helper_LIBRARY_PATH_VAR)+=$$$$$(gb_Helper_LIBRARY_PATH_VAR)}" \
 	-Dorg.openoffice.test.arg.user=$(call gb_Helper_make_url,$(call gb_JunitTest_get_userdir,$(1))) \
 	-Dorg.openoffice.test.arg.workdir=$(call gb_JunitTest_get_userdir,$(1)) \
-	-Dorg.openoffice.test.arg.postprocesscommand=$(GBUILDDIR)/platform/unxgcc_gdbforjunit.sh \
+	-Dorg.openoffice.test.arg.postprocesscommand=$(SRCDIR)/solenv/bin/gdb-core-bt.sh \
 	-Dorg.openoffice.test.arg.soffice="$(gb_JunitTest_SOFFICEARG)" \
 
 endef

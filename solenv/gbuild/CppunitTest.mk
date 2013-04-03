@@ -83,6 +83,9 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_CPPTESTDEPS)
 	$(call gb_Output_announce,$*,$(true),CUT,2)
 	$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
+		$(if $(gb_CppunitTest__interactive),, \
+			$(if $(value gb_CppunitTest_postprocess), \
+				rm -fr $@.core && mkdir $@.core && cd $@.core &&)) \
 		($(gb_CppunitTest_CPPTESTPRECOMMAND) \
 		$(if $(G_SLICE),G_SLICE=$(G_SLICE)) \
 		$(if $(GLIBCXX_FORCE_NEW),GLIBCXX_FORCE_NEW=$(GLIBCXX_FORCE_NEW)) \
@@ -92,7 +95,12 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_CPPTESTDEPS)
 		$(ICECREAM_RUN) $(gb_CppunitTest_GDBTRACE) $(gb_CppunitTest_VALGRINDTOOL) $(gb_CppunitTest_CPPTESTCOMMAND) \
 		$(call gb_LinkTarget_get_target,CppunitTest/$(call gb_CppunitTest_get_libfilename,$*)) \
 		$(call gb_CppunitTest__make_args) \
-		$(if $(gb_CppunitTest__interactive),,> $@.log 2>&1 || (cat $@.log && $(UNIT_FAILED_MSG) && false))))
+		$(if $(gb_CppunitTest__interactive),, \
+			> $@.log 2>&1 \
+			|| (cat $@.log && $(UNIT_FAILED_MSG) \
+				$(if $(value gb_CppunitTest_postprocess), \
+					&& $(call gb_CppunitTest_postprocess,$(gb_CppunitTest_CPPTESTCOMMAND),$@.core)) \
+				&& false))))
 
 define gb_CppunitTest_CppunitTest
 $(call gb_CppunitTest__CppunitTest_impl,$(1),$(call gb_CppunitTest__get_linktargetname,$(1)))
