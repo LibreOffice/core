@@ -21,9 +21,9 @@
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRLINEATTRIBUTE_HXX
 
 #include <drawinglayer/drawinglayerdllapi.h>
-
 #include <basegfx/vector/b2enums.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
+#include <o3tl/cow_wrapper.hxx>
 #include <vector>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -45,8 +45,11 @@ namespace drawinglayer
     {
         class DRAWINGLAYER_DLLPUBLIC SdrLineAttribute
         {
+        public:
+            typedef o3tl::cow_wrapper< ImpSdrLineAttribute > ImplType;
+
         private:
-            ImpSdrLineAttribute*                mpSdrLineAttribute;
+            ImplType mpSdrLineAttribute;
 
         public:
             /// constructors/assignmentoperator/destructor
