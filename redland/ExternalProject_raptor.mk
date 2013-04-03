@@ -26,6 +26,7 @@ $(call gb_ExternalProject_get_state_target,raptor,build):
 		./configure --disable-static --enable-shared --disable-gtk-doc \
 			--enable-parsers="rdfxml ntriples turtle trig guess rss-tag-soup" \
 			--with-www=xml \
+			--without-xslt-config \
 			--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --target=$(HOST_PLATFORM) \
 			lt_cv_cc_dll_switch="-shared" \
 		&& $(MAKE) \
@@ -43,10 +44,10 @@ $(call gb_ExternalProject_get_state_target,raptor,build):
 		./configure --disable-gtk-doc \
 			 --enable-parsers="rdfxml ntriples turtle trig guess rss-tag-soup" \
 			--with-www=xml \
+			--without-xslt-config \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(filter IOS ANDROID,$(OS)),--disable-shared,--disable-static) \
-			$(if $(filter NO,$(SYSTEM_LIBXSLT)),--with-xslt-config=$(OUTDIR)/bin/xslt-config) \
 			$(if $(filter NO,$(SYSTEM_LIBXML)),--with-xml2-config=$(OUTDIR)/bin/xml2-config) \
 		&& $(MAKE) \
 	)
