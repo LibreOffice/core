@@ -73,7 +73,7 @@
  
 -the_libs="@XSLT_LIBDIR@ @XSLT_LIBS@"
 +#the_libs="@XSLT_LIBDIR@ @XSLT_LIBS@"
-+the_libs="-L${libdir} ${XSLTLIB} -lm"
++the_libs="-L${libdir} -lxslt -lm"
  if test "$includedir" != "/usr/include"; then
      the_flags="$the_flags -I$includedir `@XML_CONFIG@ --cflags`"
  else
