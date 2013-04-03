@@ -21,6 +21,7 @@
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRLINESTARTENDATTRIBUTE_HXX
 
 #include <drawinglayer/drawinglayerdllapi.h>
+#include <o3tl/cow_wrapper.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -41,8 +42,11 @@ namespace drawinglayer
     {
         class DRAWINGLAYER_DLLPUBLIC SdrLineStartEndAttribute
         {
+        public:
+            typedef o3tl::cow_wrapper< ImpSdrLineStartEndAttribute > ImplType;
+
         private:
-            ImpSdrLineStartEndAttribute*               mpSdrLineStartEndAttribute;
+            ImplType mpSdrLineStartEndAttribute;
 
         public:
             /// constructors/assignmentoperator/destructor

@@ -19,6 +19,7 @@
 
 #include <drawinglayer/attribute/sdrlinestartendattribute.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <rtl/instance.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -29,9 +30,6 @@ namespace drawinglayer
         class ImpSdrLineStartEndAttribute
         {
         public:
-            // refcounter
-            sal_uInt32                              mnRefCount;
-
             // line arrow definitions
             basegfx::B2DPolyPolygon                 maStartPolyPolygon;     // start Line PolyPolygon
             basegfx::B2DPolyPolygon                 maEndPolyPolygon;       // end Line PolyPolygon
@@ -53,8 +51,7 @@ namespace drawinglayer
                 bool bEndActive,
                 bool bStartCentered,
                 bool bEndCentered)
-            :   mnRefCount(0),
-                maStartPolyPolygon(rStartPolyPolygon),
+            :   maStartPolyPolygon(rStartPolyPolygon),
                 maEndPolyPolygon(rEndPolyPolygon),
                 mfStartWidth(fStartWidth),
                 mfEndWidth(fEndWidth),
@@ -62,6 +59,18 @@ namespace drawinglayer
                 mbEndActive(bEndActive),
                 mbStartCentered(bStartCentered),
                 mbEndCentered(bEndCentered)
+            {
+            }
+
+            ImpSdrLineStartEndAttribute()
+            :   maStartPolyPolygon(basegfx::B2DPolyPolygon()),
+                maEndPolyPolygon(basegfx::B2DPolyPolygon()),
+                mfStartWidth(0.0),
+                mfEndWidth(0.0),
+                mbStartActive(false),
+                mbEndActive(false),
+                mbStartCentered(false),
+                mbEndCentered(false)
             {
             }
 
@@ -86,30 +95,13 @@ namespace drawinglayer
                     && isStartCentered() == rCandidate.isStartCentered()
                     && isEndCentered() == rCandidate.isEndCentered());
             }
-
-            static ImpSdrLineStartEndAttribute* get_global_default()
-            {
-                static ImpSdrLineStartEndAttribute* pDefault = 0;
-
-                if(!pDefault)
-                {
-                    pDefault = new ImpSdrLineStartEndAttribute(
-                        basegfx::B2DPolyPolygon(),
-                        basegfx::B2DPolyPolygon(),
-                        0.0,
-                        0.0,
-                        false,
-                        false,
-                        false,
-                        false);
-
-                    // never delete; start with RefCount 1, not 0
-                    pDefault->mnRefCount++;
-                }
-
-                return pDefault;
-            }
         };
+
+        namespace
+        {
+            struct theGlobalDefault :
+                public rtl::Static< SdrLineStartEndAttribute::ImplType, theGlobalDefault > {};
+        }
 
         SdrLineStartEndAttribute::SdrLineStartEndAttribute(
             const basegfx::B2DPolyPolygon& rStartPolyPolygon,
@@ -120,73 +112,39 @@ namespace drawinglayer
             bool bEndActive,
             bool bStartCentered,
             bool bEndCentered)
-        :   mpSdrLineStartEndAttribute(new ImpSdrLineStartEndAttribute(
+        :   mpSdrLineStartEndAttribute(ImpSdrLineStartEndAttribute(
                 rStartPolyPolygon, rEndPolyPolygon, fStartWidth, fEndWidth, bStartActive, bEndActive, bStartCentered, bEndCentered))
         {
         }
 
         SdrLineStartEndAttribute::SdrLineStartEndAttribute()
-        :   mpSdrLineStartEndAttribute(ImpSdrLineStartEndAttribute::get_global_default())
+        :   mpSdrLineStartEndAttribute(theGlobalDefault::get())
         {
-            mpSdrLineStartEndAttribute->mnRefCount++;
         }
 
         SdrLineStartEndAttribute::SdrLineStartEndAttribute(const SdrLineStartEndAttribute& rCandidate)
         :   mpSdrLineStartEndAttribute(rCandidate.mpSdrLineStartEndAttribute)
         {
-            mpSdrLineStartEndAttribute->mnRefCount++;
         }
 
         SdrLineStartEndAttribute::~SdrLineStartEndAttribute()
         {
-            if(mpSdrLineStartEndAttribute->mnRefCount)
-            {
-                mpSdrLineStartEndAttribute->mnRefCount--;
-            }
-            else
-            {
-                delete mpSdrLineStartEndAttribute;
-            }
         }
 
         bool SdrLineStartEndAttribute::isDefault() const
         {
-            return mpSdrLineStartEndAttribute == ImpSdrLineStartEndAttribute::get_global_default();
+            return mpSdrLineStartEndAttribute.same_object(theGlobalDefault::get());
         }
 
         SdrLineStartEndAttribute& SdrLineStartEndAttribute::operator=(const SdrLineStartEndAttribute& rCandidate)
         {
-            if(rCandidate.mpSdrLineStartEndAttribute != mpSdrLineStartEndAttribute)
-            {
-                if(mpSdrLineStartEndAttribute->mnRefCount)
-                {
-                    mpSdrLineStartEndAttribute->mnRefCount--;
-                }
-                else
-                {
-                    delete mpSdrLineStartEndAttribute;
-                }
-
-                mpSdrLineStartEndAttribute = rCandidate.mpSdrLineStartEndAttribute;
-                mpSdrLineStartEndAttribute->mnRefCount++;
-            }
-
+            mpSdrLineStartEndAttribute = rCandidate.mpSdrLineStartEndAttribute;
             return *this;
         }
 
         bool SdrLineStartEndAttribute::operator==(const SdrLineStartEndAttribute& rCandidate) const
         {
-            if(rCandidate.mpSdrLineStartEndAttribute == mpSdrLineStartEndAttribute)
-            {
-                return true;
-            }
-
-            if(rCandidate.isDefault() != isDefault())
-            {
-                return false;
-            }
-
-            return (*rCandidate.mpSdrLineStartEndAttribute == *mpSdrLineStartEndAttribute);
+            return rCandidate.mpSdrLineStartEndAttribute == mpSdrLineStartEndAttribute;
         }
 
         const basegfx::B2DPolyPolygon& SdrLineStartEndAttribute::getStartPolyPolygon() const
