@@ -4028,8 +4028,8 @@ void SwDoc::ChkBoxNumFmt( SwTableBox& rBox, sal_Bool bCallUpdate )
             SwTableBoxFmt* pBoxFmt = (SwTableBoxFmt*)rBox.GetFrmFmt();
             SfxItemSet aBoxSet( GetAttrPool(), RES_BOXATR_FORMAT, RES_BOXATR_VALUE );
 
-            sal_Bool bLockModify = sal_True;
-            sal_Bool bSetNumFmt = sal_False;
+            bool bLockModify = true;
+            bool bSetNumberFormat = false;
             const bool bForceNumberFormat = IsInsTblFormatNum() && IsInsTblChangeNumFormat();
 
             // if the user forced a number format in this cell previously,
@@ -4046,17 +4046,17 @@ void SwDoc::ChkBoxNumFmt( SwTableBox& rBox, sal_Bool bCallUpdate )
                     // Current and specified NumFormat match
                     // -> keep old Format
                     nFmtIdx = nOldNumFmt;
-                    bSetNumFmt = sal_True;
+                    bSetNumberFormat = true;
                 }
                 else
                 {
                     // Current and specified NumFormat do not match
                     // -> insert as Text
-                    bLockModify = bSetNumFmt = sal_False;
+                    bLockModify = bSetNumberFormat = false;
                 }
             }
 
-            if( bSetNumFmt || bForceNumberFormat )
+            if( bSetNumberFormat || bForceNumberFormat )
             {
                 pBoxFmt = (SwTableBoxFmt*)rBox.ClaimFrmFmt();
 
@@ -4066,7 +4066,7 @@ void SwDoc::ChkBoxNumFmt( SwTableBox& rBox, sal_Bool bCallUpdate )
 
             // It's not enough to only reset the Formula.
             // Make sure that the Text is formatted accordingly
-            if( !bSetNumFmt && !bIsEmptyTxtNd && pNumFmtItem )
+            if( !bSetNumberFormat && !bIsEmptyTxtNd && pNumFmtItem )
             {
                 // Just resetting Attributes is not enough
                 // Make sure that the Text is formatted accordingly
@@ -4077,7 +4077,7 @@ void SwDoc::ChkBoxNumFmt( SwTableBox& rBox, sal_Bool bCallUpdate )
             pBoxFmt->ResetFmtAttr( RES_BOXATR_FORMAT, RES_BOXATR_VALUE );
             if( bLockModify ) pBoxFmt->UnlockModify();
 
-            if( bSetNumFmt )
+            if( bSetNumberFormat )
                 pBoxFmt->SetFmtAttr( aBoxSet );
         }
     }
