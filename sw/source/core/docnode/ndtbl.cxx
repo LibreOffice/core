@@ -4028,31 +4028,35 @@ void SwDoc::ChkBoxNumFmt( SwTableBox& rBox, sal_Bool bCallUpdate )
             SwTableBoxFmt* pBoxFmt = (SwTableBoxFmt*)rBox.GetFrmFmt();
             SfxItemSet aBoxSet( GetAttrPool(), RES_BOXATR_FORMAT, RES_BOXATR_VALUE );
 
-            sal_Bool bSetNumFmt = IsInsTblFormatNum();
             sal_Bool bLockModify = sal_True;
+            sal_Bool bSetNumFmt = sal_False;
+            const bool bForceNumberFormat = IsInsTblFormatNum() && IsInsTblChangeNumFormat();
 
-            if( bSetNumFmt && !IsInsTblChangeNumFormat() )
+            // if the user forced a number format in this cell previously,
+            // keep it, unless the user set that she wants the full number
+            // format recognition
+            if( pNumFmtItem && !bForceNumberFormat )
             {
-                if( !pNumFmtItem )
-                    bSetNumFmt = sal_False;
+                sal_uLong nOldNumFmt = ((SwTblBoxNumFormat*)pNumFmtItem)->GetValue();
+                SvNumberFormatter* pNumFmtr = GetNumberFormatter();
+
+                short nFmtType = pNumFmtr->GetType( nFmtIdx );
+                if( nFmtType == pNumFmtr->GetType( nOldNumFmt ) || NUMBERFORMAT_NUMBER == nFmtType )
+                {
+                    // Current and specified NumFormat match
+                    // -> keep old Format
+                    nFmtIdx = nOldNumFmt;
+                    bSetNumFmt = sal_True;
+                }
                 else
                 {
-                    sal_uLong nOldNumFmt = ((SwTblBoxNumFormat*)pNumFmtItem)->GetValue();
-                    SvNumberFormatter* pNumFmtr = GetNumberFormatter();
-
-                    short nFmtType = pNumFmtr->GetType( nFmtIdx );
-                    if( nFmtType == pNumFmtr->GetType( nOldNumFmt ) || NUMBERFORMAT_NUMBER == nFmtType )
-                        // Current and specified NumFormat match
-                        // -> keep old Format
-                        nFmtIdx = nOldNumFmt;
-                    else
-                        // Current and specified NumFormat do not match
-                        // -> insert as Text
-                        bLockModify = bSetNumFmt = sal_False;
+                    // Current and specified NumFormat do not match
+                    // -> insert as Text
+                    bLockModify = bSetNumFmt = sal_False;
                 }
             }
 
-            if( bSetNumFmt )
+            if( bSetNumFmt || bForceNumberFormat )
             {
                 pBoxFmt = (SwTableBoxFmt*)rBox.ClaimFrmFmt();
 
