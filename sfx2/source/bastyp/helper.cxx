@@ -251,9 +251,9 @@ OUString SfxContentHelper::GetActiveHelpString( const OUString& rURL )
 
 // -----------------------------------------------------------------------
 
-sal_Bool SfxContentHelper::IsHelpErrorDocument( const OUString& rURL )
+bool SfxContentHelper::IsHelpErrorDocument( const OUString& rURL )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     try
     {
         ::ucbhelper::Content aCnt( INetURLObject( rURL ).GetMainURL( INetURLObject::NO_DECODE ),

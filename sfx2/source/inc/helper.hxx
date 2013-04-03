@@ -35,7 +35,7 @@ public:
     static ::com::sun::star::uno::Sequence< ::rtl::OUString >
                                 GetHelpTreeViewContents( const String& rURL );
     static OUString GetActiveHelpString( const OUString& rURL );
-    static sal_Bool IsHelpErrorDocument( const OUString& rURL );
+    static bool IsHelpErrorDocument( const OUString& rURL );
 
     static sal_Int64 GetSize( const String& rContent );
 };
