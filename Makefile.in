@@ -138,6 +138,7 @@ clean: clean-host clean-build
 
 clean-host:
 	rm -fr $(DEVINSTALLDIR)
+	rm -fr $(INSTDIR)
 	rm -fr $(OUTDIR)
 	rm -fr $(WORKDIR)
 	rm -fr install

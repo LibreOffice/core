@@ -3896,11 +3896,14 @@ if test -n "${with_solver_and_workdir_root}"; then
     # IsValidFilePath in /sal/osl/w32/file_url.cxx rejects "X:\\" breaking idlc
     if echo ${formatted_path} | $GREP -q '/$'; then
         WORKDIR=${formatted_path}workdir/${INPATH}
+        INSTDIR=${formatted_path}instdir/${INPATH}
     else
         WORKDIR=${formatted_path}/workdir/${INPATH}
+        INSTDIR=${formatted_path}/instdir/${INPATH}
     fi
 else
     WORKDIR=${BUILDDIR}/workdir/${INPATH}
+    INSTDIR=${BUILDDIR}/instdir/${INPATH}
 fi
 OUTDIR="${SOLARVER}/${INPATH}"
 SOLARINC="-I. -I${SOLARVER}/$INPATH/inc/external -I${SOLARVER}/$INPATH/inc -I$SRC_ROOT/solenv/inc $SOLARINC"
@@ -3913,6 +3916,7 @@ AC_SUBST(EPM_FLAGS)
 AC_SUBST(GUI)
 AC_SUBST(GUIBASE)
 AC_SUBST(INPATH)
+AC_SUBST([INSTDIR])
 AC_SUBST(OS)
 AC_SUBST(OUTDIR)
 AC_SUBST(OUTPATH)

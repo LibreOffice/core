@@ -44,10 +44,13 @@ endef
 $(foreach destination,$(call gb_PackagePart_get_destinations),$(eval \
   $(call gb_PackagePart__rule,$(destination))))
 
+# Deliver one file to the output dir.
+#
+# gb_PackagePart_PackagePart destfile source prep-target outdir
 define gb_PackagePart_PackagePart
-$(OUTDIR)/$(1) : $(2) | $(dir $(OUTDIR)/$(1)).dir
+$(4)/$(1) : $(2) | $(dir $(4)/$(1)).dir
 $(2) :| $(3)
-$(call gb_Deliver_add_deliverable,$(OUTDIR)/$(1),$(2),$(3))
+$(call gb_Deliver_add_deliverable,$(4)/$(1),$(2),$(3))
 endef
 
 
@@ -70,6 +73,7 @@ $(call gb_Package_get_target,%) :
 # for other targets that want to create Packages, does not register at Module
 define gb_Package_Package_internal
 gb_Package_SOURCEDIR_$(1) := $(2)
+gb_Package_OUTDIR_$(1) := $(OUTDIR)
 $(call gb_Package_get_clean_target,$(1)) : FILES := $(call gb_Package_get_target,$(1)) $(call gb_Package_get_preparation_target,$(1))
 $(call gb_Package_get_target,$(1)) : $(call gb_Package_get_preparation_target,$(1))
 
@@ -83,10 +87,20 @@ $(call gb_Helper_make_userfriendly_targets,$(1),Package)
 
 endef
 
+# Set output dir for the package files.
+#
+# Default is $(OUTDIR).
+#
+# gb_Package_set_outdir package outdir
+define gb_Package_set_outdir
+gb_Package_OUTDIR_$(1) := $(2)
+
+endef
+
 define gb_Package_add_file
-$(call gb_Package_get_target,$(1)) : $(OUTDIR)/$(2)
-$(call gb_Package_get_clean_target,$(1)) : FILES += $(OUTDIR)/$(2)
-$(call gb_PackagePart_PackagePart,$(2),$$(gb_Package_SOURCEDIR_$(1))/$(3),$(call gb_Package_get_preparation_target,$(1)))
+$(call gb_Package_get_target,$(1)) : $$(gb_Package_OUTDIR_$(1))/$(2)
+$(call gb_Package_get_clean_target,$(1)) : FILES += $$(gb_Package_OUTDIR_$(1))/$(2)
+$(call gb_PackagePart_PackagePart,$(2),$$(gb_Package_SOURCEDIR_$(1))/$(3),$(call gb_Package_get_preparation_target,$(1)),$$(gb_Package_OUTDIR_$(1)))
 
 endef
 

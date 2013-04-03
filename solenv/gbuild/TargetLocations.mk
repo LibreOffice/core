@@ -39,6 +39,7 @@ gb_Extension_get_target = $(OUTDIR)/bin/$(1).oxt
 gb_HelpTarget_get_outdir_target = $(OUTDIR)/pck/$(1).zip
 gb_Pagein_get_outdir_target = $(OUTDIR)/bin/pagein-$(1)
 gb_PackagePart_get_destinations = \
+	$(INSTDIR) \
 	$(OUTDIR)/bin \
 	$(OUTDIR)/inc \
 	$(OUTDIR)/lib \
