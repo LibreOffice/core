@@ -84,48 +84,35 @@ void RscLangEnum::Init( RscNameTable& rNames )
     {
 #if OSL_DEBUG_LEVEL > 2
         fprintf( stderr, "ISO Language in : %d, 0x%04x, %s\n",
-                 (int)nIndex,
-                 (unsigned)pLangEntry->mnLang,
-                 OUStringToOString( LanguageTag( pLangEntry->mnLang ).getBcp47(), RTL_TEXTENCODING_ASCII_US).getStr() );
+                (int)nIndex,
+                (unsigned)pLangEntry->mnLang,
+                OUStringToOString( pLangEntry->getTagString(), RTL_TEXTENCODING_ASCII_US).getStr());
+        fprintf( stderr, "ISO Language out:");
 #endif
-        rtl::OString aLang(pLangEntry->maLangStr, strlen(pLangEntry->maLangStr));
-        rtl::OString aCountry(pLangEntry->maCountry, strlen(pLangEntry->maCountry));
-        if ( aCountry.isEmpty() || aLang.equalsIgnoreAsciiCase(aCountry) )
+        LanguageTag aLanguageTag( pLangEntry->getTagString());
+        ::std::vector< OUString > aFallbacks( aLanguageTag.getFallbackStrings());
+        for (::std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
         {
+            OString aLang( OUStringToOString( *it, RTL_TEXTENCODING_ASCII_US));
             SetConstant( rNames.Put( aLang.getStr(), CONSTNAME, mnLangId ), mnLangId );
-            if ( ! GetLangId( aLang ))
+            bool bAdd = (GetLangId( aLang ) == 0);
+            if ( bAdd )
                 ULong_Iso_map[ aLang ] = mnLangId;
 #if OSL_DEBUG_LEVEL > 2
-            fprintf( stderr, "ISO Language out: %s 0x%lx\n", aLang.getStr(), mnLangId );
+            fprintf( stderr, " %s 0x%lx (%s)", aLang.getStr(), mnLangId, (bAdd ? "added" : "exists") );
 #endif
             mnLangId++;
         }
-        else
-        {
-            SetConstant( rNames.Put( aLang.getStr(), CONSTNAME, mnLangId ), mnLangId );
-            if ( ! GetLangId( aLang ))
-                ULong_Iso_map[ aLang ] = mnLangId;
 #if OSL_DEBUG_LEVEL > 2
-            fprintf( stderr, "ISO Language out: %s 0x%lx", aLang.getStr(), mnLangId );
+        fprintf( stderr, "\n");
 #endif
-            mnLangId++;
-            aLang = aLang + rtl::OString( '-' ) + aCountry.toAsciiUpperCase();
-            SetConstant( rNames.Put( aLang.getStr(), CONSTNAME, mnLangId ), mnLangId );
-            if ( ! GetLangId( aLang ))
-                ULong_Iso_map[ aLang ] = mnLangId;
-#if OSL_DEBUG_LEVEL > 2
-            fprintf( stderr, " %s 0x%lx\n", aLang.getStr(), mnLangId );
-#endif
-            mnLangId++;
-// hack - survive "x-no-translate"
-            if (aLang.equalsL(RTL_CONSTASCII_STRINGPARAM("en-US")))
-            {
-                SetConstant( rNames.Put( "x-comment", CONSTNAME, mnLangId ), mnLangId );
-                mnLangId++;
-            }
-        }
         nIndex++;
     }
+    // hack - survive "x-no-translate"
+    /* XXX: that ^^^ was the original comment, but we're adding "x-comment"
+     * here? Which is good anyway. */
+    SetConstant( rNames.Put( "x-comment", CONSTNAME, mnLangId ), mnLangId );
+    mnLangId++;
 
     rtl::OString aEnvIsoTokens = getenv( "RSC_LANG_ISO" );
     if ( !aEnvIsoTokens.isEmpty() )
@@ -139,10 +126,12 @@ void RscLangEnum::Init( RscNameTable& rNames )
             if ( !aIsoToken.isEmpty() )
             {
                 SetConstant( rNames.Put( aIsoToken.getStr(), CONSTNAME, mnLangId ), mnLangId );
-                if ( ! GetLangId( aIsoToken ))
+                bool bAdd = (GetLangId( aIsoToken ) == 0);
+                if ( bAdd )
                     ULong_Iso_map[ aIsoToken ] = mnLangId;
 #if OSL_DEBUG_LEVEL > 2
-                fprintf( stderr, "Env ISO Language out: %s 0x%lx\n", aIsoToken.getStr(), mnLangId );
+                fprintf( stderr, "Env ISO Language out: %s 0x%lx (%s)\n",
+                        aIsoToken.getStr(), mnLangId, (bAdd ? "added" : "exists") );
 #endif
                 mnLangId++;
             }
@@ -166,20 +155,22 @@ void RscLangEnum::Init( RscNameTable& rNames )
 Atom RscLangEnum::AddLanguage( const char* pLang, RscNameTable& rNames )
 {
     Atom nResult = 0;
+    bool bAdd = false;
     KEY_STRUCT aStruct;
     if( ! rNames.Get( nResult = pHS->getID( pLang ), &aStruct ) )
     {
         SetConstant( nResult = rNames.Put( pLang, CONSTNAME, mnLangId ), mnLangId );
         // insert new lang to ULong_Iso_map
         rtl::OString aLang( pLang );
-        if ( ! GetLangId( aLang ))
+        bAdd = (GetLangId( aLang ) == 0);
+        if ( bAdd )
             ULong_Iso_map[ aLang ] = mnLangId;
         // increase id counter
         mnLangId++;
     }
-    #if OSL_DEBUG_LEVEL > 2
-    fprintf( stderr, "AddLanguage( %s ) = %d\n", pLang, nResult );
-    #endif
+#if OSL_DEBUG_LEVEL > 2
+    fprintf( stderr, "AddLanguage( '%s' ) = %d (%s)\n", pLang, nResult, (bAdd ? "added" : "exists") );
+#endif
     return nResult;
 }
 

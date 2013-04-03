@@ -23,6 +23,7 @@
 #include <string.h>
 
 #include <tools/rc.h>
+#include <i18npool/languagetag.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <sal/macros.h>
@@ -74,76 +75,42 @@ RscTypCont :: RscTypCont( RscError * pErrHdl,
     Init();
 }
 
-static sal_uInt32 getLangIdAndShortenLocale( RscTypCont* pTypCont,
-                                             rtl::OString& rLang,
-                                             rtl::OString& rCountry,
-                                             rtl::OString& rVariant )
-{
-    rtl::OStringBuffer aLangStr( 64 );
-    aLangStr.append( rLang.toAsciiLowerCase() );
-    if( !rCountry.isEmpty() )
-    {
-        aLangStr.append( '-' );
-        aLangStr.append( rCountry.toAsciiUpperCase() );
-    }
-    if( !rVariant.isEmpty() )
-    {
-        aLangStr.append( '-' );
-        aLangStr.append( rVariant );
-    }
-    rtl::OString aL( aLangStr.makeStringAndClear() );
-    sal_uInt32 nRet = GetLangId( aL );
-    if( nRet == 0 )
-    {
-        pTypCont->AddLanguage( aL.getStr() );
-        nRet = GetLangId( aL );
-    }
-    if( !rVariant.isEmpty() )
-        rVariant = rtl::OString();
-    else if( !rCountry.isEmpty() )
-        rCountry = rtl::OString();
-    else
-        rLang = rtl::OString();
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, " %s (0x%hx)", aL.getStr(), (int)nRet );
-#endif
-    return nRet;
-}
-
 rtl::OString RscTypCont::ChangeLanguage(const rtl::OString& rNewLang)
 {
     rtl::OString aRet = aLanguage;
     aLanguage = rNewLang;
 
-    rtl::OString aLang = aLanguage;
-    rtl::OString aLg, aCountry, aVariant;
-    sal_Int32 nIndex = 0;
-    aLg = aLang.getToken( 0, '-', nIndex );
-    if( nIndex != -1 )
-        aCountry = aLang.getToken( 0, '-', nIndex );
-    if( nIndex != -1 )
-        aVariant = aLang.copy( nIndex );
-
+    ::std::vector< OUString > aFallbacks;
+    if (rNewLang.isEmpty())
+        aFallbacks.push_back( "" );     // do not resolve to SYSTEM (en-US)
+    else
+        aFallbacks = LanguageTag( OStringToOUString( rNewLang, RTL_TEXTENCODING_ASCII_US)).getFallbackStrings();
     bool bAppendEnUsFallback =
         ! (rNewLang.equalsIgnoreAsciiCase( "en-US" ) ||
            rNewLang.equalsIgnoreAsciiCase( "x-no-translate" ) );
+    if (bAppendEnUsFallback)
+        aFallbacks.push_back( "en-US");
 
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "RscTypCont::ChangeLanguage:" );
+    fprintf( stderr, "RscTypCont::ChangeLanguage: " );
 #endif
+
     aLangFallbacks.clear();
 
-    do
+    for (::std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
     {
-        aLangFallbacks.push_back(getLangIdAndShortenLocale( this, aLg, aCountry, aVariant ) );
-    } while( !aLg.isEmpty() );
-
-    if( bAppendEnUsFallback )
-    {
-        aLg = "en";
-        aCountry = "US";
-        aVariant = rtl::OString();
-        aLangFallbacks.push_back( getLangIdAndShortenLocale( this, aLg, aCountry, aVariant ) );
+        rtl::OString aLang( OUStringToOString( *it, RTL_TEXTENCODING_ASCII_US));
+        sal_uInt32 nID = GetLangId( aLang );
+        bool bAdd = (nID == 0);
+        if ( bAdd )
+        {
+            AddLanguage( aLang.getStr() );
+            nID = GetLangId( aLang );
+        }
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, " '%s' (0x%hx) (%s)", aLang.getStr(), (int)nID, (bAdd ? "added" : "exists") );
+#endif
+        aLangFallbacks.push_back( nID);
     }
 
 #if OSL_DEBUG_LEVEL > 1
