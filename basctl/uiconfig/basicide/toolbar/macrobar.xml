@@ -18,22 +18,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:LibSelector" toolbar:helpid="helpid:30787"  />
+ <toolbar:toolbaritem xlink:href=".uno:LibSelector"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:CompileBasic" toolbar:helpid="helpid:5954"  />
- <toolbar:toolbaritem xlink:href=".uno:RunBasic" toolbar:helpid="helpid:5955"  />
- <toolbar:toolbaritem xlink:href=".uno:BasicStop" toolbar:helpid="helpid:5958"  />
+ <toolbar:toolbaritem xlink:href=".uno:CompileBasic"/>
+ <toolbar:toolbaritem xlink:href=".uno:RunBasic"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicStop"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:BasicStepOver" toolbar:helpid="helpid:5957"  />
- <toolbar:toolbaritem xlink:href=".uno:BasicStepInto" toolbar:helpid="helpid:5956"  />
- <toolbar:toolbaritem xlink:href=".uno:BasicStepOut" toolbar:helpid="helpid:5963"  />
- <toolbar:toolbaritem xlink:href=".uno:ToggleBreakPoint" toolbar:helpid="helpid:30768"  />
- <toolbar:toolbaritem xlink:href=".uno:ManageBreakPoints" toolbar:helpid="helpid:30810"  />
- <toolbar:toolbaritem xlink:href=".uno:AddWatch" toolbar:helpid="helpid:30769"  />
- <toolbar:toolbaritem xlink:href=".uno:MatchGroup" toolbar:helpid="helpid:30782"  />
+ <toolbar:toolbaritem xlink:href=".uno:BasicStepOver"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicStepInto"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicStepOut"/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleBreakPoint"/>
+ <toolbar:toolbaritem xlink:href=".uno:ManageBreakPoints"/>
+ <toolbar:toolbaritem xlink:href=".uno:AddWatch"/>
+ <toolbar:toolbaritem xlink:href=".uno:MatchGroup"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:LoadBasic" toolbar:helpid="helpid:5951"  />
- <toolbar:toolbaritem xlink:href=".uno:SaveBasicAs" toolbar:helpid="helpid:5953"  />
+ <toolbar:toolbaritem xlink:href=".uno:LoadBasic"/>
+ <toolbar:toolbaritem xlink:href=".uno:SaveBasicAs"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ImportDialog" />
+ <toolbar:toolbaritem xlink:href=".uno:ImportDialog"/>
 </toolbar:toolbar>

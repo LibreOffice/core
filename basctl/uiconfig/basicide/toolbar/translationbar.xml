@@ -18,6 +18,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:CurrentLanguage" toolbar:helpid="helpid:30821"  />
- <toolbar:toolbaritem xlink:href=".uno:ManageLanguage" toolbar:helpid="helpid:30820"  />
+ <toolbar:toolbaritem xlink:href=".uno:CurrentLanguage"/>
+ <toolbar:toolbaritem xlink:href=".uno:ManageLanguage"/>
 </toolbar:toolbar>

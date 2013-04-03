@@ -18,23 +18,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:ClickChangeRotation" toolbar:helpid="helpid:27170"  toolbar:style="auto" />
+ <toolbar:toolbaritem xlink:href=".uno:ClickChangeRotation" toolbar:style="auto"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:GridVisible" toolbar:helpid="helpid:27322"  toolbar:style="auto" />
- <toolbar:toolbaritem xlink:href=".uno:HelplinesVisible" toolbar:helpid="helpid:27324"  toolbar:style="auto" />
- <toolbar:toolbaritem xlink:href=".uno:HelplinesMove" toolbar:helpid="helpid:27153"  toolbar:style="auto" />
+ <toolbar:toolbaritem xlink:href=".uno:GridVisible" toolbar:style="auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:HelplinesVisible" toolbar:style="auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:HelplinesMove" toolbar:style="auto"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:GridUse" toolbar:helpid="helpid:27154"  toolbar:style="auto" />
- <toolbar:toolbaritem xlink:href=".uno:HelplinesUse" toolbar:helpid="helpid:27152"  toolbar:style="auto" />
- <toolbar:toolbaritem xlink:href=".uno:SnapBorder" toolbar:helpid="helpid:27155"  toolbar:style="auto" />
- <toolbar:toolbaritem xlink:href=".uno:SnapFrame" toolbar:helpid="helpid:27156"  toolbar:style="auto" />
- <toolbar:toolbaritem xlink:href=".uno:SnapPoints" toolbar:helpid="helpid:27157"  toolbar:style="auto" />
+ <toolbar:toolbaritem xlink:href=".uno:GridUse" toolbar:style="auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:HelplinesUse" toolbar:style="auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:SnapBorder" toolbar:style="auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:SnapFrame" toolbar:style="auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:SnapPoints" toolbar:style="auto"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:QuickEdit" toolbar:helpid="helpid:27158"  toolbar:style="auto" />
- <toolbar:toolbaritem xlink:href=".uno:PickThrough" toolbar:helpid="helpid:27159"  toolbar:style="auto" />
- <toolbar:toolbaritem xlink:href=".uno:DoubleClickTextEdit" toolbar:helpid="helpid:27169"  toolbar:style="auto" />
+ <toolbar:toolbaritem xlink:href=".uno:QuickEdit" toolbar:style="auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:PickThrough" toolbar:style="auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:DoubleClickTextEdit" toolbar:style="auto"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SolidCreate" toolbar:helpid="helpid:27151"  toolbar:style="auto" />
+ <toolbar:toolbaritem xlink:href=".uno:SolidCreate" toolbar:style="auto"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:LeaveAllGroups" toolbar:helpid="helpid:27345"  toolbar:style="auto" />
+ <toolbar:toolbaritem xlink:href=".uno:LeaveAllGroups" toolbar:style="auto"/>
 </toolbar:toolbar>

@@ -18,33 +18,33 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:RecSave" toolbar:helpid="helpid:38991" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:RecSave" toolbar:text=""/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:DSBEditDoc" toolbar:helpid="helpid:6312" toolbar:text="" toolbar:style="" />
+ <toolbar:toolbaritem xlink:href=".uno:DSBEditDoc" toolbar:text="" toolbar:style=""/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Cut" toolbar:helpid="helpid:5710" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:Copy" toolbar:helpid="helpid:5711" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:Paste" toolbar:helpid="helpid:5712" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:Cut" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:Copy" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:Paste" toolbar:text=""/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:RecUndo" toolbar:helpid="helpid:38992" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:RecUndo" toolbar:text=""/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:RecSearch" toolbar:helpid="helpid:10725" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:RecSearch" toolbar:text=""/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Refresh" toolbar:helpid="helpid:10724" toolbar:text="" toolbar:style="dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:Refresh" toolbar:text="" toolbar:style="dropdown"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:OrderCrit" toolbar:helpid="helpid:10714" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:Sortup" toolbar:helpid="helpid:10712" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:SortDown" toolbar:helpid="helpid:10713" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:OrderCrit" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:Sortup" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:SortDown" toolbar:text=""/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:AutoFilter" toolbar:helpid="helpid:10716" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:FormFiltered" toolbar:helpid="helpid:10723" toolbar:text="" toolbar:style="" />
- <toolbar:toolbaritem xlink:href=".uno:FilterCrit" toolbar:helpid="helpid:10715" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:AutoFilter" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:FormFiltered" toolbar:text="" toolbar:style=""/>
+ <toolbar:toolbaritem xlink:href=".uno:FilterCrit" toolbar:text=""/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:RemoveFilterSort" toolbar:helpid="helpid:10711" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:RemoveFilterSort" toolbar:text=""/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:DSBInsertColumns" toolbar:helpid="helpid:12202" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:DSBInsertContent" toolbar:helpid="helpid:12201" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:DSBFormLetter" toolbar:helpid="helpid:12203" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:DSBDocumentDataSource" toolbar:helpid="helpid:12252" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:DSBrowserExplorer" toolbar:helpid="helpid:10764" toolbar:text="" toolbar:style="" />
+ <toolbar:toolbaritem xlink:href=".uno:DSBInsertColumns" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:DSBInsertContent" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:DSBFormLetter" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:DSBDocumentDataSource" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:DSBrowserExplorer" toolbar:text="" toolbar:style=""/>
 </toolbar:toolbar>

@@ -18,11 +18,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:CalloutShapes.rectangular-callout" toolbar:helpid="helpid:11006"  />
- <toolbar:toolbaritem xlink:href=".uno:CalloutShapes.round-rectangular-callout" toolbar:helpid="helpid:11006"  />
- <toolbar:toolbaritem xlink:href=".uno:CalloutShapes.round-callout" toolbar:helpid="helpid:11006"  />
- <toolbar:toolbaritem xlink:href=".uno:CalloutShapes.cloud-callout" toolbar:helpid="helpid:11006"  />
- <toolbar:toolbaritem xlink:href=".uno:CalloutShapes.line-callout-1" toolbar:helpid="helpid:11006"  />
- <toolbar:toolbaritem xlink:href=".uno:CalloutShapes.line-callout-2" toolbar:helpid="helpid:11006"  />
- <toolbar:toolbaritem xlink:href=".uno:CalloutShapes.line-callout-3" toolbar:helpid="helpid:11006"  />
+ <toolbar:toolbaritem xlink:href=".uno:CalloutShapes.rectangular-callout"/>
+ <toolbar:toolbaritem xlink:href=".uno:CalloutShapes.round-rectangular-callout"/>
+ <toolbar:toolbaritem xlink:href=".uno:CalloutShapes.round-callout"/>
+ <toolbar:toolbaritem xlink:href=".uno:CalloutShapes.cloud-callout"/>
+ <toolbar:toolbaritem xlink:href=".uno:CalloutShapes.line-callout-1"/>
+ <toolbar:toolbaritem xlink:href=".uno:CalloutShapes.line-callout-2"/>
+ <toolbar:toolbaritem xlink:href=".uno:CalloutShapes.line-callout-3"/>
 </toolbar:toolbar>

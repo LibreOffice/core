@@ -18,24 +18,24 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.smiley" toolbar:helpid="helpid:11003" />
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.sun" toolbar:helpid="helpid:11003" />
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.moon" toolbar:helpid="helpid:11003" />
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.lightning" toolbar:helpid="helpid:11003" />
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.heart" toolbar:helpid="helpid:11003" />
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.flower" toolbar:helpid="helpid:11003" />
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.smiley"/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.sun"/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.moon"/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.lightning"/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.heart"/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.flower"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.cloud" toolbar:helpid="helpid:11003" />
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.forbidden" toolbar:helpid="helpid:11003" />
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.puzzle" toolbar:helpid="helpid:11003" />
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.bracket-pair" toolbar:helpid="helpid:11003" />
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.left-bracket" toolbar:helpid="helpid:11003" />
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.right-bracket" toolbar:helpid="helpid:11003" />
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.cloud"/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.forbidden"/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.puzzle"/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.bracket-pair"/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.left-bracket"/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.right-bracket"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.brace-pair" toolbar:helpid="helpid:11003" />
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.left-brace" toolbar:helpid="helpid:11003" />
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.right-brace" toolbar:helpid="helpid:11003" />
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.quad-bevel" toolbar:helpid="helpid:11003" />
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.octagon-bevel" toolbar:helpid="helpid:11003" />
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.diamond-bevel" toolbar:helpid="helpid:11003" />
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.brace-pair"/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.left-brace"/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.right-brace"/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.quad-bevel"/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.octagon-bevel"/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.diamond-bevel"/>
 </toolbar:toolbar>

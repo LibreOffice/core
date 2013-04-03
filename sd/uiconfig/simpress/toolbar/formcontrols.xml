@@ -18,26 +18,26 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:SelectObject" toolbar:helpid="helpid:10128"  toolbar:style="radio auto" />
- <toolbar:toolbaritem xlink:href=".uno:SwitchControlDesignMode" toolbar:helpid="helpid:10629"  />
+ <toolbar:toolbaritem xlink:href=".uno:SelectObject" toolbar:style="radio auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:SwitchControlDesignMode"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:ControlProperties" toolbar:helpid="helpid:10613"  />
- <toolbar:toolbaritem xlink:href=".uno:FormProperties" toolbar:helpid="helpid:10614"  />
+ <toolbar:toolbaritem xlink:href=".uno:ControlProperties"/>
+ <toolbar:toolbaritem xlink:href=".uno:FormProperties"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:CheckBox" toolbar:helpid="helpid:10596"  toolbar:style="radio auto" />
- <toolbar:toolbaritem xlink:href=".uno:Edit" toolbar:helpid="helpid:10599"  toolbar:style="radio auto" />
+ <toolbar:toolbaritem xlink:href=".uno:CheckBox" toolbar:style="radio auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:Edit" toolbar:style="radio auto"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:FormattedField" toolbar:helpid="helpid:10728"  toolbar:style="radio auto" />
- <toolbar:toolbaritem xlink:href=".uno:Pushbutton" toolbar:helpid="helpid:10594"  toolbar:style="radio auto" />
+ <toolbar:toolbaritem xlink:href=".uno:FormattedField" toolbar:style="radio auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:Pushbutton" toolbar:style="radio auto"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:RadioButton" toolbar:helpid="helpid:10595"  toolbar:style="radio auto" />
- <toolbar:toolbaritem xlink:href=".uno:ListBox" toolbar:helpid="helpid:10600"  toolbar:style="radio auto" />
+ <toolbar:toolbaritem xlink:href=".uno:RadioButton" toolbar:style="radio auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:ListBox" toolbar:style="radio auto"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:ComboBox" toolbar:helpid="helpid:10601"  toolbar:style="radio auto" />
- <toolbar:toolbaritem xlink:href=".uno:Label" toolbar:helpid="helpid:10597"  toolbar:style="radio auto" />
+ <toolbar:toolbaritem xlink:href=".uno:ComboBox" toolbar:style="radio auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:Label" toolbar:style="radio auto"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:FormDesignTools" toolbar:helpid="helpid:11046"  />
- <toolbar:toolbaritem xlink:href=".uno:MoreControls" toolbar:helpid="helpid:11045"  />
+ <toolbar:toolbaritem xlink:href=".uno:FormDesignTools"/>
+ <toolbar:toolbaritem xlink:href=".uno:MoreControls"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:UseWizards" toolbar:helpid="helpid:10727"  />
+ <toolbar:toolbaritem xlink:href=".uno:UseWizards"/>
 </toolbar:toolbar>

@@ -18,33 +18,33 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:LineStyle" toolbar:helpid="helpid:10200" />
- <toolbar:toolbaritem xlink:href=".uno:FrameLineColor" toolbar:helpid="helpid:10201" />
+ <toolbar:toolbaritem xlink:href=".uno:LineStyle"/>
+ <toolbar:toolbaritem xlink:href=".uno:FrameLineColor"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SetBorderStyle" toolbar:helpid="helpid:10187" />
- <toolbar:toolbaritem xlink:href=".uno:BackgroundColor" toolbar:helpid="helpid:10185"  toolbar:style="dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:SetBorderStyle"/>
+ <toolbar:toolbaritem xlink:href=".uno:BackgroundColor" toolbar:style="dropdown"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:MergeCells" toolbar:helpid="helpid:20506" />
- <toolbar:toolbaritem xlink:href=".uno:SplitCell" toolbar:helpid="helpid:20505" />
- <toolbar:toolbaritem xlink:href=".uno:OptimizeTable" toolbar:helpid="helpid:20510"  toolbar:style="dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:MergeCells"/>
+ <toolbar:toolbaritem xlink:href=".uno:SplitCell"/>
+ <toolbar:toolbaritem xlink:href=".uno:OptimizeTable" toolbar:style="dropdown"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:CellVertTop" toolbar:helpid="helpid:20585"  toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:CellVertCenter" toolbar:helpid="helpid:20586"  toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:CellVertBottom" toolbar:helpid="helpid:20587"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:CellVertTop" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:CellVertCenter" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:CellVertBottom" toolbar:style="radio"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:InsertRows" toolbar:helpid="helpid:20501" />
- <toolbar:toolbaritem xlink:href=".uno:InsertColumns" toolbar:helpid="helpid:20502" />
- <toolbar:toolbaritem xlink:href=".uno:DeleteRows" toolbar:helpid="helpid:20503" />
- <toolbar:toolbaritem xlink:href=".uno:DeleteColumns" toolbar:helpid="helpid:20504" />
+ <toolbar:toolbaritem xlink:href=".uno:InsertRows"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertColumns"/>
+ <toolbar:toolbaritem xlink:href=".uno:DeleteRows"/>
+ <toolbar:toolbaritem xlink:href=".uno:DeleteColumns"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SelectTable" toolbar:helpid="helpid:20515"  toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:EntireColumn" toolbar:helpid="helpid:20514"  toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:EntireRow" toolbar:helpid="helpid:20513"  toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:SelectTable" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:EntireColumn" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:EntireRow" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:AutoFormat" toolbar:helpid="helpid:20595" />
- <toolbar:toolbaritem xlink:href=".uno:TableDialog" toolbar:helpid="helpid:20459" />
+ <toolbar:toolbaritem xlink:href=".uno:AutoFormat"/>
+ <toolbar:toolbaritem xlink:href=".uno:TableDialog"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:TableSort" toolbar:helpid="helpid:20533" />
+ <toolbar:toolbaritem xlink:href=".uno:TableSort"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:AutoSum" toolbar:helpid="helpid:20595" />
+ <toolbar:toolbaritem xlink:href=".uno:AutoSum"/>
 </toolbar:toolbar>

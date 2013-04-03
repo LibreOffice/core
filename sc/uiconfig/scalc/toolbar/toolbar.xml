@@ -18,23 +18,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:InsertCtrl" toolbar:helpid="helpid:26626"  toolbar:style="dropdown" />
- <toolbar:toolbaritem xlink:href=".uno:InsCellsCtrl" toolbar:helpid="helpid:26627"  toolbar:style="dropdown" />
- <toolbar:toolbaritem xlink:href=".uno:InsObjCtrl" toolbar:helpid="helpid:26628"  toolbar:style="dropdown" />
- <toolbar:toolbaritem xlink:href=".uno:Config" toolbar:helpid="helpid:10593"  toolbar:style="dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:InsertCtrl" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsCellsCtrl" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsObjCtrl" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:Config" toolbar:style="dropdown"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:AutoFormat" toolbar:helpid="helpid:10242"  />
- <toolbar:toolbaritem xlink:href=".uno:ChooseDesign" toolbar:helpid="helpid:26082"  />
- <toolbar:toolbaritem xlink:href=".uno:ThesaurusDialog" toolbar:helpid="helpid:10245"  toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:AutoFormat"/>
+ <toolbar:toolbaritem xlink:href=".uno:ChooseDesign"/>
+ <toolbar:toolbaritem xlink:href=".uno:ThesaurusDialog" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:DataFilterAutoFilter" toolbar:helpid="helpid:26325"  />
- <toolbar:toolbaritem xlink:href=".uno:DataFilterStandardFilter" toolbar:helpid="helpid:26323"  toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:DataFilterSpecialFilter" toolbar:helpid="helpid:26324"  toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:DataDataPilotRun" toolbar:helpid="helpid:26151"  toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:EuroConverter" toolbar:helpid="helpid:26083"  toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:DataFilterAutoFilter"/>
+ <toolbar:toolbaritem xlink:href=".uno:DataFilterStandardFilter" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:DataFilterSpecialFilter" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:DataDataPilotRun" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:EuroConverter" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:DefineName" toolbar:helpid="helpid:26271"  toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:GoalSeekDialog" toolbar:helpid="helpid:26153"  toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:Group" toolbar:helpid="helpid:26331"  />
- <toolbar:toolbaritem xlink:href=".uno:Ungroup" toolbar:helpid="helpid:26332"  />
+ <toolbar:toolbaritem xlink:href=".uno:DefineName" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:GoalSeekDialog" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Group"/>
+ <toolbar:toolbaritem xlink:href=".uno:Ungroup"/>
 </toolbar:toolbar>

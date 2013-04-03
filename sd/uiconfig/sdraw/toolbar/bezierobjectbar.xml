@@ -18,20 +18,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:ToggleObjectBezierMode" toolbar:helpid="helpid:10126"  toolbar:style="radio auto" />
+ <toolbar:toolbaritem xlink:href=".uno:ToggleObjectBezierMode" toolbar:style="radio auto"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:BezierMove" toolbar:helpid="helpid:10121"  />
- <toolbar:toolbaritem xlink:href=".uno:BezierInsert" toolbar:helpid="helpid:10119"  />
+ <toolbar:toolbaritem xlink:href=".uno:BezierMove"/>
+ <toolbar:toolbaritem xlink:href=".uno:BezierInsert"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:BezierDelete" toolbar:helpid="helpid:10120"  />
- <toolbar:toolbaritem xlink:href=".uno:BezierCutLine" toolbar:helpid="helpid:10127"  />
- <toolbar:toolbaritem xlink:href=".uno:BezierConvert" toolbar:helpid="helpid:27065"  />
+ <toolbar:toolbaritem xlink:href=".uno:BezierDelete"/>
+ <toolbar:toolbaritem xlink:href=".uno:BezierCutLine"/>
+ <toolbar:toolbaritem xlink:href=".uno:BezierConvert"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:BezierEdge" toolbar:helpid="helpid:27066"  />
- <toolbar:toolbaritem xlink:href=".uno:BezierSmooth" toolbar:helpid="helpid:10123"  />
- <toolbar:toolbaritem xlink:href=".uno:BezierSymmetric" toolbar:helpid="helpid:27067"  />
+ <toolbar:toolbaritem xlink:href=".uno:BezierEdge"/>
+ <toolbar:toolbaritem xlink:href=".uno:BezierSmooth"/>
+ <toolbar:toolbaritem xlink:href=".uno:BezierSymmetric"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:BezierClose" toolbar:helpid="helpid:10122"  />
+ <toolbar:toolbaritem xlink:href=".uno:BezierClose"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:BezierEliminatePoints" toolbar:helpid="helpid:27030"  />
+ <toolbar:toolbaritem xlink:href=".uno:BezierEliminatePoints"/>
 </toolbar:toolbar>

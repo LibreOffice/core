@@ -18,13 +18,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:InsertObjectFloatingFrame" toolbar:helpid="helpid:5563"  />
+ <toolbar:toolbaritem xlink:href=".uno:InsertObjectFloatingFrame"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:InsertSymbol" toolbar:helpid="helpid:10503"  />
+ <toolbar:toolbaritem xlink:href=".uno:InsertSymbol"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:InsertGraphic" toolbar:helpid="helpid:10241"  />
- <toolbar:toolbaritem xlink:href=".uno:InsertAVMedia" toolbar:helpid="helpid:6695"  />
- <toolbar:toolbaritem xlink:href=".uno:InsertObjectStarMath" toolbar:helpid="helpid:26063"  />
- <toolbar:toolbaritem xlink:href=".uno:DrawChart" toolbar:helpid="helpid:26071" toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:InsertObject" toolbar:helpid="helpid:5561" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:InsertGraphic"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertAVMedia"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertObjectStarMath"/>
+ <toolbar:toolbaritem xlink:href=".uno:DrawChart" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertObject" toolbar:visible="false"/>
 </toolbar:toolbar>

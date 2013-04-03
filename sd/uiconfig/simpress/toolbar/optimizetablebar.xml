@@ -18,6 +18,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:DistributeColumns" toolbar:helpid="helpid:20582"  />
- <toolbar:toolbaritem xlink:href=".uno:DistributeRows" toolbar:helpid="helpid:20583"  />
+ <toolbar:toolbaritem xlink:href=".uno:DistributeColumns"/>
+ <toolbar:toolbaritem xlink:href=".uno:DistributeRows"/>
 </toolbar:toolbar>

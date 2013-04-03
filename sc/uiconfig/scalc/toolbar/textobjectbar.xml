@@ -18,35 +18,35 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:CharFontName" toolbar:helpid="helpid:10007"  />
+ <toolbar:toolbaritem xlink:href=".uno:CharFontName"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FontHeight" toolbar:helpid="helpid:10015"  />
+ <toolbar:toolbaritem xlink:href=".uno:FontHeight"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Bold" toolbar:helpid="helpid:10009"  toolbar:style="auto" />
- <toolbar:toolbaritem xlink:href=".uno:Italic" toolbar:helpid="helpid:10008"  toolbar:style="auto" />
- <toolbar:toolbaritem xlink:href=".uno:Underline" toolbar:helpid="helpid:10014"  toolbar:style="auto" />
- <toolbar:toolbaritem xlink:href=".uno:UnderlineDouble" toolbar:helpid="helpid:26648"  toolbar:style="auto" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:Bold" toolbar:style="auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:Italic" toolbar:style="auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:Underline" toolbar:style="auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:UnderlineDouble" toolbar:style="auto" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:AlignLeft" toolbar:helpid="helpid:10028"  toolbar:style="radio auto" />
- <toolbar:toolbaritem xlink:href=".uno:AlignHorizontalCenter" toolbar:helpid="helpid:10030"  toolbar:style="radio auto" />
- <toolbar:toolbaritem xlink:href=".uno:AlignRight" toolbar:helpid="helpid:10029"  toolbar:style="radio auto" />
- <toolbar:toolbaritem xlink:href=".uno:AlignBlock" toolbar:helpid="helpid:10031"  toolbar:style="radio auto" />
+ <toolbar:toolbaritem xlink:href=".uno:AlignLeft" toolbar:style="radio auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignHorizontalCenter" toolbar:style="radio auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignRight" toolbar:style="radio auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignBlock" toolbar:style="radio auto"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SpacePara1" toolbar:helpid="helpid:10034"  toolbar:style="radio auto" />
- <toolbar:toolbaritem xlink:href=".uno:SpacePara15" toolbar:helpid="helpid:10035"  toolbar:style="radio auto" />
- <toolbar:toolbaritem xlink:href=".uno:SpacePara2" toolbar:helpid="helpid:10036"  toolbar:style="radio auto" />
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara1" toolbar:style="radio auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara15" toolbar:style="radio auto"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpacePara2" toolbar:style="radio auto"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight" toolbar:helpid="helpid:10950"  toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft" toolbar:helpid="helpid:10951"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft" toolbar:style="radio"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SuperScript" toolbar:helpid="helpid:10294"  />
- <toolbar:toolbaritem xlink:href=".uno:SubScript" toolbar:helpid="helpid:10295"  />
+ <toolbar:toolbaritem xlink:href=".uno:SuperScript"/>
+ <toolbar:toolbaritem xlink:href=".uno:SubScript"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:TextdirectionLeftToRight" toolbar:helpid="helpid:10907"  />
- <toolbar:toolbaritem xlink:href=".uno:TextdirectionTopToBottom" toolbar:helpid="helpid:10908"  />
+ <toolbar:toolbaritem xlink:href=".uno:TextdirectionLeftToRight"/>
+ <toolbar:toolbaritem xlink:href=".uno:TextdirectionTopToBottom"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FontDialog" toolbar:helpid="helpid:10296"  />
- <toolbar:toolbaritem xlink:href=".uno:ParagraphDialog" toolbar:helpid="helpid:10297"  />
+ <toolbar:toolbaritem xlink:href=".uno:FontDialog"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParagraphDialog"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Color" toolbar:helpid="helpid:10017"  />
+ <toolbar:toolbaritem xlink:href=".uno:Color"/>
 </toolbar:toolbar>

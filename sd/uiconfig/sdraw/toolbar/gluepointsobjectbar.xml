@@ -18,20 +18,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:GlueInsertPoint" toolbar:helpid="helpid:27302"  />
+ <toolbar:toolbaritem xlink:href=".uno:GlueInsertPoint"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:GlueEscapeDirectionLeft" toolbar:helpid="helpid:27314"  />
- <toolbar:toolbaritem xlink:href=".uno:GlueEscapeDirectionTop" toolbar:helpid="helpid:27316"  />
- <toolbar:toolbaritem xlink:href=".uno:GlueEscapeDirectionRight" toolbar:helpid="helpid:27315"  />
- <toolbar:toolbaritem xlink:href=".uno:GlueEscapeDirectionBottom" toolbar:helpid="helpid:27317"  />
+ <toolbar:toolbaritem xlink:href=".uno:GlueEscapeDirectionLeft"/>
+ <toolbar:toolbaritem xlink:href=".uno:GlueEscapeDirectionTop"/>
+ <toolbar:toolbaritem xlink:href=".uno:GlueEscapeDirectionRight"/>
+ <toolbar:toolbaritem xlink:href=".uno:GlueEscapeDirectionBottom"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:GluePercent" toolbar:helpid="helpid:27303"  />
+ <toolbar:toolbaritem xlink:href=".uno:GluePercent"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:GlueHorzAlignLeft" toolbar:helpid="helpid:27306"  />
- <toolbar:toolbaritem xlink:href=".uno:GlueHorzAlignCenter" toolbar:helpid="helpid:27305"  />
- <toolbar:toolbaritem xlink:href=".uno:GlueHorzAlignRight" toolbar:helpid="helpid:27307"  />
+ <toolbar:toolbaritem xlink:href=".uno:GlueHorzAlignLeft"/>
+ <toolbar:toolbaritem xlink:href=".uno:GlueHorzAlignCenter"/>
+ <toolbar:toolbaritem xlink:href=".uno:GlueHorzAlignRight"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:GlueVertAlignTop" toolbar:helpid="helpid:27309"  />
- <toolbar:toolbaritem xlink:href=".uno:GlueVertAlignCenter" toolbar:helpid="helpid:27308"  />
- <toolbar:toolbaritem xlink:href=".uno:GlueVertAlignBottom" toolbar:helpid="helpid:27310"  />
+ <toolbar:toolbaritem xlink:href=".uno:GlueVertAlignTop"/>
+ <toolbar:toolbaritem xlink:href=".uno:GlueVertAlignCenter"/>
+ <toolbar:toolbaritem xlink:href=".uno:GlueVertAlignBottom"/>
 </toolbar:toolbar>

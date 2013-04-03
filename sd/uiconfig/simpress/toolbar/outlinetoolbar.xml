@@ -18,13 +18,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:OutlineCollapseAll" toolbar:helpid="helpid:10155"  />
- <toolbar:toolbaritem xlink:href=".uno:OutlineExpandAll" toolbar:helpid="helpid:10232"  />
- <toolbar:toolbaritem xlink:href=".uno:OutlineCollapse" toolbar:helpid="helpid:10231"  />
- <toolbar:toolbaritem xlink:href=".uno:OutlineExpand" toolbar:helpid="helpid:10233"  />
+ <toolbar:toolbaritem xlink:href=".uno:OutlineCollapseAll"/>
+ <toolbar:toolbaritem xlink:href=".uno:OutlineExpandAll"/>
+ <toolbar:toolbaritem xlink:href=".uno:OutlineCollapse"/>
+ <toolbar:toolbaritem xlink:href=".uno:OutlineExpand"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:OutlineFormat" toolbar:helpid="helpid:10154"  />
- <toolbar:toolbaritem xlink:href=".uno:ColorView" toolbar:helpid="helpid:27257"  />
+ <toolbar:toolbaritem xlink:href=".uno:OutlineFormat"/>
+ <toolbar:toolbaritem xlink:href=".uno:ColorView"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Presentation" toolbar:helpid="helpid:10157" />
+ <toolbar:toolbaritem xlink:href=".uno:Presentation"/>
 </toolbar:toolbar>

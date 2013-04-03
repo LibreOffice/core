@@ -18,8 +18,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:DBTableOpen" toolbar:helpid="helpid:12278" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:DBTableEdit" toolbar:helpid="helpid:12277" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:DBTableDelete" toolbar:helpid="helpid:12275" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:DBTableRename" toolbar:helpid="helpid:12276" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:DBTableOpen" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:DBTableEdit" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:DBTableDelete" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:DBTableRename" toolbar:text=""/>
 </toolbar:toolbar>

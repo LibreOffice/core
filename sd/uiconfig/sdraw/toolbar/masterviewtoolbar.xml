@@ -18,9 +18,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:InsertMasterPage" toolbar:helpid="helpid:27430"  />
- <toolbar:toolbaritem xlink:href=".uno:DeleteMasterPage" toolbar:helpid="helpid:27431"  />
- <toolbar:toolbaritem xlink:href=".uno:RenameMasterPage" toolbar:helpid="helpid:27432"  />
+ <toolbar:toolbaritem xlink:href=".uno:InsertMasterPage"/>
+ <toolbar:toolbaritem xlink:href=".uno:DeleteMasterPage"/>
+ <toolbar:toolbaritem xlink:href=".uno:RenameMasterPage"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:CloseMasterView" toolbar:helpid="helpid:27433"  />
+ <toolbar:toolbaritem xlink:href=".uno:CloseMasterView"/>
 </toolbar:toolbar>

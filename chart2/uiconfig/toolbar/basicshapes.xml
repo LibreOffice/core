@@ -18,29 +18,29 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.rectangle" toolbar:helpid="helpid:11002" />
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.round-rectangle" toolbar:helpid="helpid:11002" />
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.quadrat" toolbar:helpid="helpid:11002" />
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.round-quadrat" toolbar:helpid="helpid:11002" />
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.circle" toolbar:helpid="helpid:11002" />
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.ellipse" toolbar:helpid="helpid:11002" />
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.rectangle"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.round-rectangle"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.quadrat"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.round-quadrat"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.circle"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.ellipse"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.circle-pie" toolbar:helpid="helpid:11002" />
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.isosceles-triangle" toolbar:helpid="helpid:11002" />
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.right-triangle" toolbar:helpid="helpid:11002" />
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.trapezoid" toolbar:helpid="helpid:11002" />
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.diamond" toolbar:helpid="helpid:11002" />
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.parallelogram" toolbar:helpid="helpid:11002" />
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.circle-pie"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.isosceles-triangle"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.right-triangle"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.trapezoid"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.diamond"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.parallelogram"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.pentagon" toolbar:helpid="helpid:11002" />
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.hexagon" toolbar:helpid="helpid:11002" />
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.octagon" toolbar:helpid="helpid:11002" />
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.cross" toolbar:helpid="helpid:11002" />
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.ring" toolbar:helpid="helpid:11002" />
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.block-arc" toolbar:helpid="helpid:11002" />
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.pentagon"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.hexagon"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.octagon"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.cross"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.ring"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.block-arc"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.can" toolbar:helpid="helpid:11002" />
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.cube" toolbar:helpid="helpid:11002" />
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.paper" toolbar:helpid="helpid:11002" />
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes.frame" toolbar:helpid="helpid:11002" />
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.can"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.cube"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.paper"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes.frame"/>
 </toolbar:toolbar>

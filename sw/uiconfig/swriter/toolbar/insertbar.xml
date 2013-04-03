@@ -21,7 +21,7 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertTable" toolbar:helpid="20330"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertSection" toolbar:helpid="21419"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertFrameInteract" toolbar:helpid="20333"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertObjectFloatingFrame" toolbar:visible="false" toolbar:helpid="helpid:5563"  />
+ <toolbar:toolbaritem xlink:href=".uno:InsertObjectFloatingFrame" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertFootnote" toolbar:helpid="20399"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertEndnote" toolbar:helpid="21418"/>
@@ -39,8 +39,8 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertAVMedia" toolbar:helpid="6695"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertObjectStarMath" toolbar:helpid="20369"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart" toolbar:helpid="10140"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertObject" toolbar:visible="false" toolbar:helpid="helpid:5561"  />
- <toolbar:toolbaritem xlink:href=".uno:InsertPlugin" toolbar:visible="false" toolbar:helpid="helpid:5672"  />
+ <toolbar:toolbaritem xlink:href=".uno:InsertObject" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertPlugin" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertMultiIndex" toolbar:helpid="21420"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertIndexesEntry" toolbar:helpid="20335"/>

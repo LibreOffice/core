@@ -18,11 +18,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:AddTable" toolbar:helpid="helpid:10722" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:AddTable" toolbar:text=""/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:DBViewFunctions" toolbar:helpid="helpid:12297" toolbar:text="" toolbar:style="" />
- <toolbar:toolbaritem xlink:href=".uno:DBViewTableNames" toolbar:helpid="helpid:12298" toolbar:text="" toolbar:style="" />
- <toolbar:toolbaritem xlink:href=".uno:DBViewAliases" toolbar:helpid="helpid:12299" toolbar:text="" toolbar:style="" />
- <toolbar:toolbaritem xlink:href=".uno:DBDistinctValues" toolbar:helpid="helpid:12300" toolbar:text="" toolbar:style="" />
- <toolbar:toolbaritem xlink:href=".uno:DBLimit" />
+ <toolbar:toolbaritem xlink:href=".uno:DBViewFunctions" toolbar:text="" toolbar:style=""/>
+ <toolbar:toolbaritem xlink:href=".uno:DBViewTableNames" toolbar:text="" toolbar:style=""/>
+ <toolbar:toolbaritem xlink:href=".uno:DBViewAliases" toolbar:text="" toolbar:style=""/>
+ <toolbar:toolbaritem xlink:href=".uno:DBDistinctValues" toolbar:text="" toolbar:style=""/>
+ <toolbar:toolbaritem xlink:href=".uno:DBLimit"/>
 </toolbar:toolbar>

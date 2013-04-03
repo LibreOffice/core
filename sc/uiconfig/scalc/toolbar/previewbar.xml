@@ -18,22 +18,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:PreviousPage" toolbar:helpid="helpid:26497"  />
- <toolbar:toolbaritem xlink:href=".uno:NextPage" toolbar:helpid="helpid:26496"  />
+ <toolbar:toolbaritem xlink:href=".uno:PreviousPage"/>
+ <toolbar:toolbaritem xlink:href=".uno:NextPage"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FirstPage" toolbar:helpid="helpid:26498"  />
- <toolbar:toolbaritem xlink:href=".uno:LastPage" toolbar:helpid="helpid:26499"  />
+ <toolbar:toolbaritem xlink:href=".uno:FirstPage"/>
+ <toolbar:toolbaritem xlink:href=".uno:LastPage"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ZoomIn" toolbar:helpid="helpid:26501"  />
- <toolbar:toolbaritem xlink:href=".uno:ZoomOut" toolbar:helpid="helpid:26502"  />
- <toolbar:toolbaritem xlink:href=".uno:FullScreen" toolbar:helpid="helpid:5627"  />
+ <toolbar:toolbaritem xlink:href=".uno:ZoomIn"/>
+ <toolbar:toolbaritem xlink:href=".uno:ZoomOut"/>
+ <toolbar:toolbaritem xlink:href=".uno:FullScreen"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:PageFormatDialog" toolbar:helpid="helpid:26295"  />
- <toolbar:toolbaritem xlink:href=".uno:EditHeaderAndFooter" toolbar:helpid="helpid:26235"  toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:PageFormatDialog"/>
+ <toolbar:toolbaritem xlink:href=".uno:EditHeaderAndFooter" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Margins" toolbar:helpid="helpid:26504" />
+ <toolbar:toolbaritem xlink:href=".uno:Margins"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ScalingFactor" toolbar:helpid="helpid:26505" />
+ <toolbar:toolbaritem xlink:href=".uno:ScalingFactor"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ClosePreview" toolbar:helpid="helpid:5325"  />
+ <toolbar:toolbaritem xlink:href=".uno:ClosePreview"/>
 </toolbar:toolbar>

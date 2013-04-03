@@ -50,11 +50,11 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart" toolbar:helpid="helpid:26155"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertDraw" toolbar:helpid="helpid:10244"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SearchDialog" toolbar:helpid="helpid:5961" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SearchDialog" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Navigator" toolbar:helpid="helpid:10366"/>
  <toolbar:toolbaritem xlink:href=".uno:Gallery" toolbar:helpid="helpid:5960"/>
  <toolbar:toolbaritem xlink:href=".uno:ViewDataSourceBrowser" toolbar:helpid="helpid:6660"/>
- <toolbar:toolbaritem xlink:href=".uno:Zoom" toolbar:helpid="helpid:10000" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Zoom" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:HelpIndex"/>
  <toolbar:toolbaritem xlink:href=".uno:ExtendedHelp" toolbar:visible="false"/>

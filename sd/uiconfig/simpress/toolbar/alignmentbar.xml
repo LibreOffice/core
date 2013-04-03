@@ -18,11 +18,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:ObjectAlignLeft" toolbar:helpid="helpid:10131"  />
- <toolbar:toolbaritem xlink:href=".uno:AlignCenter" toolbar:helpid="helpid:10132"  />
- <toolbar:toolbaritem xlink:href=".uno:ObjectAlignRight" toolbar:helpid="helpid:10133"  />
+ <toolbar:toolbaritem xlink:href=".uno:ObjectAlignLeft"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignCenter"/>
+ <toolbar:toolbaritem xlink:href=".uno:ObjectAlignRight"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:AlignUp" toolbar:helpid="helpid:10134"  />
- <toolbar:toolbaritem xlink:href=".uno:AlignMiddle" toolbar:helpid="helpid:10135"  />
- <toolbar:toolbaritem xlink:href=".uno:AlignDown" toolbar:helpid="helpid:10136"  />
+ <toolbar:toolbaritem xlink:href=".uno:AlignUp"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignMiddle"/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignDown"/>
 </toolbar:toolbar>

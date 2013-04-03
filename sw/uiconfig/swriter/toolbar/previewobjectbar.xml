@@ -26,7 +26,7 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ShowTwoPages" toolbar:helpid="21251"/>
  <toolbar:toolbaritem xlink:href=".uno:ShowMultiplePages" toolbar:helpid="21252"/>
- <toolbar:toolbaritem xlink:href=".uno:ShowBookview" toolbar:helpid="helpid:21255"  />
+ <toolbar:toolbaritem xlink:href=".uno:ShowBookview"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ZoomPlus" toolbar:helpid="10097"/>
  <toolbar:toolbarseparator/>

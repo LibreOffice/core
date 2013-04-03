@@ -35,7 +35,7 @@
  <toolbar:toolbaritem xlink:href=".uno:LeftPara" toolbar:helpid="10028"/>
  <toolbar:toolbaritem xlink:href=".uno:CenterPara" toolbar:helpid="10030"/>
  <toolbar:toolbaritem xlink:href=".uno:RightPara" toolbar:helpid="10029"/>
- <toolbar:toolbaritem xlink:href=".uno:JustifyPara" toolbar:helpid="helpid:10031"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:JustifyPara" toolbar:style="radio"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight" toolbar:helpid="10950"/>
  <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft" toolbar:helpid="10951"/>

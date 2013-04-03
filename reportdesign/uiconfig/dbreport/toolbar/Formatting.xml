@@ -18,23 +18,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
- <toolbar:toolbaritem xlink:href=".uno:SelectObject" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:SelectObject" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:CharFontName" />
+ <toolbar:toolbaritem xlink:href=".uno:CharFontName"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FontHeight" />
+ <toolbar:toolbaritem xlink:href=".uno:FontHeight"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Bold" />
- <toolbar:toolbaritem xlink:href=".uno:Italic" />
- <toolbar:toolbaritem xlink:href=".uno:Underline" />
+ <toolbar:toolbaritem xlink:href=".uno:Bold"/>
+ <toolbar:toolbaritem xlink:href=".uno:Italic"/>
+ <toolbar:toolbaritem xlink:href=".uno:Underline"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:LeftPara" toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:CenterPara" toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:RightPara" toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:JustifyPara" toolbar:helpid="helpid:10031" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:LeftPara" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:CenterPara" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:RightPara" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:JustifyPara" toolbar:text="" toolbar:style="radio"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FontColor" toolbar:style="dropdown" />
- <toolbar:toolbaritem xlink:href=".uno:BackgroundColor" toolbar:style="dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:FontColor" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:BackgroundColor" toolbar:style="dropdown"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FontDialog" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:FontDialog" toolbar:visible="false"/>
 </toolbar:toolbar>

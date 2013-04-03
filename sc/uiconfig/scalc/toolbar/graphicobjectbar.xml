@@ -18,30 +18,30 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:GraphicFilterToolbox" toolbar:helpid="helpid:10469"  toolbar:style="dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:GraphicFilterToolbox" toolbar:style="dropdown"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:GrafMode" toolbar:helpid="helpid:10871"  />
+ <toolbar:toolbaritem xlink:href=".uno:GrafMode"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ColorSettings" toolbar:helpid="helpid:11016"  />
+ <toolbar:toolbaritem xlink:href=".uno:ColorSettings"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:GrafTransparence" toolbar:helpid="helpid:10869"  />
+ <toolbar:toolbaritem xlink:href=".uno:GrafTransparence"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FormatLine" toolbar:helpid="helpid:10143"  />
- <toolbar:toolbaritem xlink:href=".uno:FormatArea" toolbar:helpid="helpid:10142"  />
- <toolbar:toolbaritem xlink:href=".uno:FillShadow" toolbar:helpid="helpid:10299"  />
+ <toolbar:toolbaritem xlink:href=".uno:FormatLine"/>
+ <toolbar:toolbaritem xlink:href=".uno:FormatArea"/>
+ <toolbar:toolbaritem xlink:href=".uno:FillShadow"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:GrafAttrCrop" toolbar:helpid="helpid:10883"  />
+ <toolbar:toolbaritem xlink:href=".uno:GrafAttrCrop"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleAnchorType" toolbar:helpid="helpid:26412"  />
+ <toolbar:toolbaritem xlink:href=".uno:ToggleAnchorType"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:BringToFront" toolbar:helpid="helpid:10286"  />
- <toolbar:toolbaritem xlink:href=".uno:SendToBack" toolbar:helpid="helpid:10287"  />
- <toolbar:toolbaritem xlink:href=".uno:SetObjectToForeground" toolbar:helpid="helpid:10283"  />
- <toolbar:toolbaritem xlink:href=".uno:SetObjectToBackground" toolbar:helpid="helpid:10282"  />
+ <toolbar:toolbaritem xlink:href=".uno:BringToFront"/>
+ <toolbar:toolbaritem xlink:href=".uno:SendToBack"/>
+ <toolbar:toolbaritem xlink:href=".uno:SetObjectToForeground"/>
+ <toolbar:toolbaritem xlink:href=".uno:SetObjectToBackground"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:GridVisible" toolbar:helpid="helpid:27322"  toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:GridUse" toolbar:helpid="helpid:27154"  toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:HelplinesMove" toolbar:helpid="helpid:27153"  toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:GridVisible" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:GridUse" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:HelplinesMove" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ObjectAlign" toolbar:helpid="helpid:10130"  />
+ <toolbar:toolbaritem xlink:href=".uno:ObjectAlign"/>
 </toolbar:toolbar>

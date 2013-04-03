@@ -18,10 +18,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:RehearseTimings" toolbar:helpid="helpid:10159"  />
+ <toolbar:toolbaritem xlink:href=".uno:RehearseTimings"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ShowSlide" toolbar:helpid="helpid:27440"  />
- <toolbar:toolbaritem xlink:href=".uno:HideSlide" toolbar:helpid="helpid:10161"  />
+ <toolbar:toolbaritem xlink:href=".uno:ShowSlide"/>
+ <toolbar:toolbaritem xlink:href=".uno:HideSlide"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:PagesPerRow" toolbar:helpid="helpid:27284"  />
+ <toolbar:toolbaritem xlink:href=".uno:PagesPerRow"/>
 </toolbar:toolbar>

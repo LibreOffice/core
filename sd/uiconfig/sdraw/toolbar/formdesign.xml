@@ -18,29 +18,29 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:SelectObject" toolbar:helpid="helpid:10128"  toolbar:style="radio auto" />
+ <toolbar:toolbaritem xlink:href=".uno:SelectObject" toolbar:style="radio auto"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ControlProperties" toolbar:helpid="helpid:10613"  />
- <toolbar:toolbaritem xlink:href=".uno:FormProperties" toolbar:helpid="helpid:10614"  />
- <toolbar:toolbaritem xlink:href=".uno:TransformDialog" toolbar:helpid="helpid:10087"  />
+ <toolbar:toolbaritem xlink:href=".uno:ControlProperties"/>
+ <toolbar:toolbaritem xlink:href=".uno:FormProperties"/>
+ <toolbar:toolbaritem xlink:href=".uno:TransformDialog"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ShowFmExplorer" toolbar:helpid="helpid:10633"  />
- <toolbar:toolbaritem xlink:href=".uno:TabDialog" toolbar:helpid="helpid:10615"  />
- <toolbar:toolbaritem xlink:href=".uno:AddField" toolbar:helpid="helpid:10623"  />
- <toolbar:toolbaritem xlink:href=".uno:AutoControlFocus" toolbar:helpid="helpid:10763"  />
+ <toolbar:toolbaritem xlink:href=".uno:ShowFmExplorer"/>
+ <toolbar:toolbaritem xlink:href=".uno:TabDialog"/>
+ <toolbar:toolbaritem xlink:href=".uno:AddField"/>
+ <toolbar:toolbaritem xlink:href=".uno:AutoControlFocus"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:BringToFront" toolbar:helpid="helpid:10286"  toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:SendToBack" toolbar:helpid="helpid:10287"  toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:BringToFront" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SendToBack" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FormatGroup" toolbar:helpid="helpid:10454"  toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:FormatUngroup" toolbar:helpid="helpid:10455"  toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:EnterGroup" toolbar:helpid="helpid:27096"  toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:LeaveGroup" toolbar:helpid="helpid:27097"  toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:FormatGroup" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:FormatUngroup" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:EnterGroup" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:LeaveGroup" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ObjectAlign" toolbar:helpid="helpid:10130"  toolbar:style="dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:ObjectAlign" toolbar:style="dropdown"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:OpenReadOnly" toolbar:helpid="helpid:10709"  />
- <toolbar:toolbaritem xlink:href=".uno:GridVisible" toolbar:helpid="helpid:27322"  />
- <toolbar:toolbaritem xlink:href=".uno:GridUse" toolbar:helpid="helpid:27154"  />
- <toolbar:toolbaritem xlink:href=".uno:HelplinesMove" toolbar:helpid="helpid:27153"  />
+ <toolbar:toolbaritem xlink:href=".uno:OpenReadOnly"/>
+ <toolbar:toolbaritem xlink:href=".uno:GridVisible"/>
+ <toolbar:toolbaritem xlink:href=".uno:GridUse"/>
+ <toolbar:toolbaritem xlink:href=".uno:HelplinesMove"/>
 </toolbar:toolbar>

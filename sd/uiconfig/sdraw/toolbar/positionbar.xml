@@ -18,13 +18,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:BringToFront" toolbar:helpid="helpid:10286"  />
- <toolbar:toolbaritem xlink:href=".uno:Forward" toolbar:helpid="helpid:27031"  />
- <toolbar:toolbaritem xlink:href=".uno:Backward" toolbar:helpid="helpid:27032"  />
- <toolbar:toolbaritem xlink:href=".uno:SendToBack" toolbar:helpid="helpid:10287"  />
+ <toolbar:toolbaritem xlink:href=".uno:BringToFront"/>
+ <toolbar:toolbaritem xlink:href=".uno:Forward"/>
+ <toolbar:toolbaritem xlink:href=".uno:Backward"/>
+ <toolbar:toolbaritem xlink:href=".uno:SendToBack"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:BeforeObject" toolbar:helpid="helpid:27326"  />
- <toolbar:toolbaritem xlink:href=".uno:BehindObject" toolbar:helpid="helpid:27116"  />
+ <toolbar:toolbaritem xlink:href=".uno:BeforeObject"/>
+ <toolbar:toolbaritem xlink:href=".uno:BehindObject"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ReverseOrder" toolbar:helpid="helpid:27117"  />
+ <toolbar:toolbaritem xlink:href=".uno:ReverseOrder"/>
 </toolbar:toolbar>

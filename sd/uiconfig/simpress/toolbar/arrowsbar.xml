@@ -18,16 +18,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:Line" toolbar:helpid="helpid:10102"  toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:LineArrowEnd" toolbar:helpid="helpid:27173"  toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:LineArrowCircle" toolbar:helpid="helpid:27175"  toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:LineArrowSquare" toolbar:helpid="helpid:27177"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Line" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineArrowEnd" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineArrowCircle" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineArrowSquare" toolbar:style="radio"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:Line_Diagonal" toolbar:helpid="helpid:10103"  toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:LineArrowStart" toolbar:helpid="helpid:27172"  toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:LineCircleArrow" toolbar:helpid="helpid:27176"  toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:LineSquareArrow" toolbar:helpid="helpid:27178"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Line_Diagonal" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineArrowStart" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineCircleArrow" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineSquareArrow" toolbar:style="radio"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:MeasureLine" toolbar:helpid="helpid:27051"  toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:LineArrows" toolbar:helpid="helpid:27174"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:MeasureLine" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineArrows" toolbar:style="radio"/>
 </toolbar:toolbar>

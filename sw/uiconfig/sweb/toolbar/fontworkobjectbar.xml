@@ -18,11 +18,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:FontworkGalleryFloater" toolbar:helpid="helpid:10977" />
+ <toolbar:toolbaritem xlink:href=".uno:FontworkGalleryFloater"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FontworkShapeType" toolbar:helpid="helpid:10978" toolbar:style="dropdownonly" />
- <toolbar:toolbaritem xlink:href=".uno:FontworkSameLetterHeights" toolbar:helpid="helpid:10979" />
+ <toolbar:toolbaritem xlink:href=".uno:FontworkShapeType" toolbar:style="dropdownonly"/>
+ <toolbar:toolbaritem xlink:href=".uno:FontworkSameLetterHeights"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FontworkAlignmentFloater" toolbar:helpid="helpid:10981" toolbar:style="dropdownonly" />
- <toolbar:toolbaritem xlink:href=".uno:FontworkCharacterSpacingFloater" toolbar:helpid="helpid:10982" toolbar:style="dropdownonly" />
+ <toolbar:toolbaritem xlink:href=".uno:FontworkAlignmentFloater" toolbar:style="dropdownonly"/>
+ <toolbar:toolbaritem xlink:href=".uno:FontworkCharacterSpacingFloater" toolbar:style="dropdownonly"/>
 </toolbar:toolbar>

@@ -20,5 +20,5 @@
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
  <toolbar:toolbaritem xlink:href=".uno:InsertAVMedia" toolbar:helpid="6695"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:AVMediaToolBox" toolbar:helpid="helpid:6693"  />
+ <toolbar:toolbaritem xlink:href=".uno:AVMediaToolBox"/>
 </toolbar:toolbar>

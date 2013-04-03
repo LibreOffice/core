@@ -21,7 +21,7 @@
  <statusbar:statusbaritem xlink:href=".uno:StatePageNumber" statusbar:align="left" statusbar:autosize="true" statusbar:width="54" statusbar:helpid="helpid:21181"/>
  <statusbar:statusbaritem xlink:href=".uno:StateWordCount" statusbar:align="left" statusbar:autosize="true" statusbar:helpid="helpid:21184"/>
  <statusbar:statusbaritem xlink:href=".uno:PageStyleName" statusbar:align="left" statusbar:autosize="true" statusbar:width="79" statusbar:helpid="helpid:21182"/>
- <statusbar:statusbaritem xlink:href=".uno:LanguageStatus" statusbar:align="center" statusbar:autosize="true" statusbar:width="100" />
+ <statusbar:statusbaritem xlink:href=".uno:LanguageStatus" statusbar:align="center" statusbar:autosize="true" statusbar:width="100"/>
  <statusbar:statusbaritem xlink:href=".uno:InsertMode" statusbar:align="center" statusbar:width="55" statusbar:helpid="helpid:10221"/>
  <statusbar:statusbaritem xlink:href=".uno:SelectionMode" statusbar:align="center" statusbar:ownerdraw="true" statusbar:width="16" statusbar:helpid="helpid:21185"/>
  <statusbar:statusbaritem xlink:href=".uno:ModifiedStatus" statusbar:align="center" statusbar:ownerdraw="true" statusbar:width="16" statusbar:helpid="helpid:5584"/>

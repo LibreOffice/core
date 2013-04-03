@@ -18,12 +18,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:ZoomIn" toolbar:helpid="helpid:30266" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:ZoomOut" toolbar:helpid="helpid:30267" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:View100" toolbar:helpid="helpid:30264" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:Adjust" toolbar:helpid="helpid:30269" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:ZoomIn" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:ZoomOut" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:View100" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:Adjust" toolbar:text=""/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Draw" toolbar:helpid="helpid:30268" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:FormelCursor" toolbar:helpid="helpid:30271" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:SymbolCatalogue" toolbar:helpid="helpid:30261" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:Draw" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:FormelCursor" toolbar:text=""/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolCatalogue" toolbar:text=""/>
 </toolbar:toolbar>

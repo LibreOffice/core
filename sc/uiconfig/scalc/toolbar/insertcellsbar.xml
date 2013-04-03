@@ -18,8 +18,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:InsertCellsDown" toolbar:helpid="helpid:26278"  />
- <toolbar:toolbaritem xlink:href=".uno:InsertCellsRight" toolbar:helpid="helpid:26279"  />
- <toolbar:toolbaritem xlink:href=".uno:InsertRows" toolbar:helpid="helpid:26267"  />
- <toolbar:toolbaritem xlink:href=".uno:InsertColumns" toolbar:helpid="helpid:26268"  />
+ <toolbar:toolbaritem xlink:href=".uno:InsertCellsDown"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertCellsRight"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertRows"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertColumns"/>
 </toolbar:toolbar>

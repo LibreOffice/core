@@ -18,11 +18,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:Text" toolbar:helpid="helpid:10006"  toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:TextFitToSizeTool" toolbar:helpid="helpid:27285"  toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:DrawCaption" toolbar:helpid="helpid:10254"  />
+ <toolbar:toolbaritem xlink:href=".uno:Text" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:TextFitToSizeTool" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:DrawCaption"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:VerticalText" toolbar:helpid="helpid:10905"  toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:VerticalTextFitToSizeTool" toolbar:helpid="helpid:27286"  toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:VerticalCaption" toolbar:helpid="helpid:10906"  />
+ <toolbar:toolbaritem xlink:href=".uno:VerticalText" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:VerticalTextFitToSizeTool" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:VerticalCaption"/>
 </toolbar:toolbar>

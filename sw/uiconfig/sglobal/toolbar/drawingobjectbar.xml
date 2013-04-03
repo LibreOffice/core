@@ -18,18 +18,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:FormatLine" toolbar:helpid="helpid:10143" />
- <toolbar:toolbaritem xlink:href=".uno:LineEndStyle" toolbar:helpid="helpid:10301"  toolbar:style="dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:FormatLine"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineEndStyle" toolbar:style="dropdown"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:XLineStyle" toolbar:helpid="helpid:10169" />
+ <toolbar:toolbaritem xlink:href=".uno:XLineStyle"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:LineWidth" toolbar:helpid="helpid:10171" />
+ <toolbar:toolbaritem xlink:href=".uno:LineWidth"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:XLineColor" toolbar:helpid="helpid:10172" />
+ <toolbar:toolbaritem xlink:href=".uno:XLineColor"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FormatArea" toolbar:helpid="helpid:10142" />
+ <toolbar:toolbaritem xlink:href=".uno:FormatArea"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FillStyle" toolbar:helpid="helpid:10164" />
+ <toolbar:toolbaritem xlink:href=".uno:FillStyle"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ToggleObjectRotateMode" toolbar:helpid="10129"/>
  <toolbar:toolbaritem xlink:href=".uno:GridVisible" toolbar:visible="false" toolbar:helpid="27322"/>

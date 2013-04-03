@@ -46,7 +46,7 @@
  <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog" toolbar:helpid="5678"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Navigator" toolbar:helpid="10366"/>
- <toolbar:toolbaritem xlink:href=".uno:Window3D" toolbar:helpid="helpid:10644" toolbar:style="auto" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Window3D" toolbar:style="auto" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ZoomToolBox" toolbar:helpid="10096"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:HelpIndex"/>

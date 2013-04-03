@@ -18,17 +18,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:GraphicFilterInvert" toolbar:helpid="helpid:34149" />
- <toolbar:toolbaritem xlink:href=".uno:GraphicFilterSmooth" toolbar:helpid="helpid:34150" />
- <toolbar:toolbaritem xlink:href=".uno:GraphicFilterSharpen" toolbar:helpid="helpid:34151" />
- <toolbar:toolbaritem xlink:href=".uno:GraphicFilterRemoveNoise" toolbar:helpid="helpid:34152" />
+ <toolbar:toolbaritem xlink:href=".uno:GraphicFilterInvert"/>
+ <toolbar:toolbaritem xlink:href=".uno:GraphicFilterSmooth"/>
+ <toolbar:toolbaritem xlink:href=".uno:GraphicFilterSharpen"/>
+ <toolbar:toolbaritem xlink:href=".uno:GraphicFilterRemoveNoise"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:GraphicFilterSolarize" toolbar:helpid="helpid:34159" />
- <toolbar:toolbaritem xlink:href=".uno:GraphicFilterSepia" toolbar:helpid="helpid:34158" />
- <toolbar:toolbaritem xlink:href=".uno:GraphicFilterPoster" toolbar:helpid="helpid:34156" />
- <toolbar:toolbaritem xlink:href=".uno:GraphicFilterPopart" toolbar:helpid="helpid:34157" />
+ <toolbar:toolbaritem xlink:href=".uno:GraphicFilterSolarize"/>
+ <toolbar:toolbaritem xlink:href=".uno:GraphicFilterSepia"/>
+ <toolbar:toolbaritem xlink:href=".uno:GraphicFilterPoster"/>
+ <toolbar:toolbaritem xlink:href=".uno:GraphicFilterPopart"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:GraphicFilterSobel" toolbar:helpid="helpid:34153" />
- <toolbar:toolbaritem xlink:href=".uno:GraphicFilterRelief" toolbar:helpid="helpid:34155" />
- <toolbar:toolbaritem xlink:href=".uno:GraphicFilterMosaic" toolbar:helpid="helpid:34154" />
+ <toolbar:toolbaritem xlink:href=".uno:GraphicFilterSobel"/>
+ <toolbar:toolbaritem xlink:href=".uno:GraphicFilterRelief"/>
+ <toolbar:toolbaritem xlink:href=".uno:GraphicFilterMosaic"/>
 </toolbar:toolbar>

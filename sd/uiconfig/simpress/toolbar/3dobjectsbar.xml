@@ -18,13 +18,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:Cube" toolbar:helpid="helpid:27296"  toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:Sphere" toolbar:helpid="helpid:27297"  toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:Cylinder" toolbar:helpid="helpid:27298"  toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:Cone" toolbar:helpid="helpid:27299"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Cube" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:Sphere" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:Cylinder" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:Cone" toolbar:style="radio"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:Cyramid" toolbar:helpid="helpid:27300"  toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:Torus" toolbar:helpid="helpid:27312"  toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:Shell3D" toolbar:helpid="helpid:27311"  toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:HalfSphere" toolbar:helpid="helpid:27313"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Cyramid" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:Torus" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:Shell3D" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:HalfSphere" toolbar:style="radio"/>
 </toolbar:toolbar>

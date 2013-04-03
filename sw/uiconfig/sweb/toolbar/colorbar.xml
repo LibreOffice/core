@@ -18,17 +18,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:GrafRed" toolbar:helpid="helpid:10865"  />
+ <toolbar:toolbaritem xlink:href=".uno:GrafRed"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:GrafGreen" toolbar:helpid="helpid:10866"  />
+ <toolbar:toolbaritem xlink:href=".uno:GrafGreen"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:GrafBlue" toolbar:helpid="helpid:10867"  />
+ <toolbar:toolbaritem xlink:href=".uno:GrafBlue"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:GrafLuminance" toolbar:helpid="helpid:10863"  />
+ <toolbar:toolbaritem xlink:href=".uno:GrafLuminance"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:GrafContrast" toolbar:helpid="helpid:10864"  />
+ <toolbar:toolbaritem xlink:href=".uno:GrafContrast"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:GrafGamma" toolbar:helpid="helpid:10868"  />
+ <toolbar:toolbaritem xlink:href=".uno:GrafGamma"/>
  <toolbar:toolbarbreak/>
- <toolbar:toolbaritem xlink:href=".uno:GrafTransparence" toolbar:helpid="helpid:10869"  />
+ <toolbar:toolbaritem xlink:href=".uno:GrafTransparence"/>
 </toolbar:toolbar>
