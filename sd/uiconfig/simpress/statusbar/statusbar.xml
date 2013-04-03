@@ -18,12 +18,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <statusbar:statusbar xmlns:statusbar="http://openoffice.org/2001/statusbar" xmlns:xlink="http://www.w3.org/1999/xlink">
- <statusbar:statusbaritem xlink:href=".uno:Context" statusbar:align="left" statusbar:autosize="true" statusbar:width="184" statusbar:helpid="helpid:5310"/>
- <statusbar:statusbaritem xlink:href=".uno:Size" statusbar:align="center" statusbar:ownerdraw="true" statusbar:width="208" statusbar:helpid="helpid:10224"/>
- <statusbar:statusbaritem xlink:href=".uno:ModifiedStatus" statusbar:align="center" statusbar:ownerdraw="true" statusbar:width="9" statusbar:helpid="helpid:5584"/>
- <statusbar:statusbaritem xlink:href=".uno:Signature" statusbar:align="center" statusbar:ownerdraw="true" statusbar:width="16" statusbar:helpid="helpid:5699"/>
- <statusbar:statusbaritem xlink:href=".uno:PageStatus" statusbar:align="left" statusbar:width="124" statusbar:helpid="helpid:27086"/>
- <statusbar:statusbaritem xlink:href=".uno:LayoutStatus" statusbar:align="left" statusbar:autosize="true" statusbar:width="54" statusbar:helpid="helpid:27087"/>
- <statusbar:statusbaritem xlink:href=".uno:ZoomSlider" statusbar:align="center" statusbar:ownerdraw="true" statusbar:width="130" statusbar:helpid="helpid:11065"/>
- <statusbar:statusbaritem xlink:href=".uno:Zoom" statusbar:align="center" statusbar:width="36" statusbar:helpid="helpid:10000"/>
+ <statusbar:statusbaritem xlink:href=".uno:Context" statusbar:align="left" statusbar:autosize="true" statusbar:width="184"/>
+ <statusbar:statusbaritem xlink:href=".uno:Size" statusbar:align="center" statusbar:ownerdraw="true" statusbar:width="208"/>
+ <statusbar:statusbaritem xlink:href=".uno:ModifiedStatus" statusbar:align="center" statusbar:ownerdraw="true" statusbar:width="9"/>
+ <statusbar:statusbaritem xlink:href=".uno:Signature" statusbar:align="center" statusbar:ownerdraw="true" statusbar:width="16"/>
+ <statusbar:statusbaritem xlink:href=".uno:PageStatus" statusbar:align="left" statusbar:width="124"/>
+ <statusbar:statusbaritem xlink:href=".uno:LayoutStatus" statusbar:align="left" statusbar:autosize="true" statusbar:width="54"/>
+ <statusbar:statusbaritem xlink:href=".uno:ZoomSlider" statusbar:align="center" statusbar:ownerdraw="true" statusbar:width="130"/>
+ <statusbar:statusbaritem xlink:href=".uno:Zoom" statusbar:align="center" statusbar:width="36"/>
 </statusbar:statusbar>

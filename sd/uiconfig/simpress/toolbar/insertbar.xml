@@ -29,7 +29,7 @@
     <toolbar:toolbaritem xlink:href=".uno:InsertAVMedia"/>
     <toolbar:toolbaritem xlink:href=".uno:InsertSound" toolbar:visible="false"/>
     <toolbar:toolbaritem xlink:href=".uno:InsertVideo" toolbar:visible="false"/>
-    <toolbar:toolbaritem xlink:href=".uno:InsertMath" toolbar:helpid="helpid:27106"/>
+    <toolbar:toolbaritem xlink:href=".uno:InsertMath"/>
     <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart"/>
     <toolbar:toolbaritem xlink:href=".uno:InsertObject" toolbar:visible="false"   />
     <toolbar:toolbaritem xlink:href=".uno:InsertPlugin" toolbar:visible="false"/>

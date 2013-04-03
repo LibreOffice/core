@@ -34,7 +34,7 @@
  <toolbar:toolbaritem xlink:href=".uno:PickThrough" toolbar:helpid="27159"/>
  <toolbar:toolbaritem xlink:href=".uno:DoubleClickTextEdit" toolbar:helpid="27169"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:SolidCreate" toolbar:helpid="helpid:27151"/>
+ <toolbar:toolbaritem xlink:href=".uno:SolidCreate"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LeaveAllGroups" toolbar:helpid="27345"/>
 </toolbar:toolbar>

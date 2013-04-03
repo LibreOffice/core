@@ -18,11 +18,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation" toolbar:helpid="helpid:26276"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation"/>
   <toolbar:toolbarseparator/>
-  <toolbar:toolbaritem xlink:href=".uno:PreviousAnnotation" toolbar:helpid="helpid:11095"/>
-  <toolbar:toolbaritem xlink:href=".uno:NextAnnotation" toolbar:helpid="helpid:11094"/>
+  <toolbar:toolbaritem xlink:href=".uno:PreviousAnnotation"/>
+  <toolbar:toolbaritem xlink:href=".uno:NextAnnotation"/>
   <toolbar:toolbarseparator/>
-  <toolbar:toolbaritem xlink:href=".uno:DeleteAnnotation" toolbar:helpid="helpid:11093"/>
-  <toolbar:toolbaritem xlink:href=".uno:DeleteAllAnnotation" toolbar:helpid="helpid:11096"/>
+  <toolbar:toolbaritem xlink:href=".uno:DeleteAnnotation"/>
+  <toolbar:toolbaritem xlink:href=".uno:DeleteAllAnnotation"/>
 </toolbar:toolbar>

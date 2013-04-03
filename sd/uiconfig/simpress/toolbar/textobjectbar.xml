@@ -47,8 +47,8 @@
  <toolbar:toolbaritem xlink:href=".uno:OutlineRight" toolbar:helpid="10153"/>
  <toolbar:toolbaritem xlink:href=".uno:OutlineUp" toolbar:helpid="10150"/>
  <toolbar:toolbaritem xlink:href=".uno:OutlineDown" toolbar:helpid="10151"/>
- <toolbar:toolbaritem xlink:href=".uno:Grow" toolbar:helpid="helpid:20403"/>
- <toolbar:toolbaritem xlink:href=".uno:Shrink" toolbar:helpid="helpid:20404"/>
+ <toolbar:toolbaritem xlink:href=".uno:Grow"/>
+ <toolbar:toolbaritem xlink:href=".uno:Shrink"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:TextdirectionLeftToRight" toolbar:helpid="10907"/>
  <toolbar:toolbaritem xlink:href=".uno:TextdirectionTopToBottom" toolbar:helpid="10908"/>

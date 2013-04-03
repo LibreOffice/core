@@ -43,8 +43,8 @@
  <toolbar:toolbaritem xlink:href=".uno:SpacePara2" toolbar:helpid="10036"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:DefaultBullet" toolbar:helpid="20138"/>
- <toolbar:toolbaritem xlink:href=".uno:Grow" toolbar:helpid="helpid:20403"/>
- <toolbar:toolbaritem xlink:href=".uno:Shrink" toolbar:helpid="helpid:20404"/>
+ <toolbar:toolbaritem xlink:href=".uno:Grow"/>
+ <toolbar:toolbaritem xlink:href=".uno:Shrink"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:TextdirectionLeftToRight" toolbar:helpid="10907"/>
  <toolbar:toolbaritem xlink:href=".uno:TextdirectionTopToBottom" toolbar:helpid="10908"/>

@@ -18,6 +18,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <statusbar:statusbar xmlns:statusbar="http://openoffice.org/2001/statusbar" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <statusbar:statusbaritem xlink:href=".uno:ZoomSlider" statusbar:align="center" statusbar:ownerdraw="true" statusbar:width="130" statusbar:helpid="helpid:11065"/>
-  <statusbar:statusbaritem xlink:href=".uno:Zoom" statusbar:align="center" statusbar:width="35" statusbar:helpid="helpid:10000"/>
+  <statusbar:statusbaritem xlink:href=".uno:ZoomSlider" statusbar:align="center" statusbar:ownerdraw="true" statusbar:width="130"/>
+  <statusbar:statusbaritem xlink:href=".uno:Zoom" statusbar:align="center" statusbar:width="35"/>
 </statusbar:statusbar>
