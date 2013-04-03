@@ -229,61 +229,15 @@ namespace
     class LicenseDialog : public ModalDialog
     {
     private:
-        FixedText aText;
-        OKButton aShow;
-        CancelButton aClose;
-
-        DECL_LINK(CancelHdl, void *);
         DECL_LINK(ShowHdl, void *);
     public:
         LicenseDialog(Window *pParent=NULL);
     };
 
     LicenseDialog::LicenseDialog(Window *pParent)
-        : ModalDialog(pParent, SfxResId(DLG_HELP_LICENSING))
-        , aText( this )
-        , aShow( this, SfxResId( PB_LICENSING_SHOW ) )
-        , aClose( this, SfxResId( PB_LICENSING_CLOSE ) )
+        : ModalDialog(pParent, "LicenseDialog", "sfx/ui/licensedialog.ui")
     {
-        aClose.SetClickHdl( LINK( this, LicenseDialog, CancelHdl ) );
-        aShow.SetClickHdl( LINK( this, LicenseDialog, ShowHdl ) );
-
-        String aLicensing;
-        for ( int i = STR_LICENSING_INFORMATION_1; i <= STR_LICENSING_INFORMATION_5; ++i )
-        {
-            if ( i != STR_LICENSING_INFORMATION_1 )
-                aLicensing += String( RTL_CONSTASCII_USTRINGPARAM( "\n\n" ) );
-            aLicensing += SfxResId( i ).toString();
-        }
-
-        aText.SetText( aLicensing );
-
-        // positions and sizes are computed to always fit the language
-        Size aTextSize(aText.GetOptimalSize());
-        Size aShowSize(aShow.GetOptimalSize());
-        Size aCloseSize(aClose.GetOptimalSize());
-
-        long nDelimX = 12;
-        long nDelimY = 12;
-        long nWidth = aTextSize.Width() + 2*nDelimX;
-        long nButtonY = aTextSize.Height() + 2*nDelimY;
-        Size aButtonSize( std::max( aShowSize.Width(), aCloseSize.Width() ) + nDelimX,
-                std::max( aShowSize.Height(), aCloseSize.Height() ) );
-
-        SetSizePixel( Size( nWidth, aTextSize.Height() + 3*nDelimY + aButtonSize.Height() ) );
-        aText.SetPosSizePixel( Point( nDelimX, nDelimY ), aTextSize );
-        aShow.SetPosSizePixel( Point( ( nWidth - nDelimX ) / 2 - aButtonSize.Width(), nButtonY ), aButtonSize );
-        aClose.SetPosSizePixel( Point( aShow.GetPosPixel().X() + aButtonSize.Width() + nDelimX, nButtonY ), aButtonSize );
-
-        aText.Show();
-
-        FreeResource();
-    }
-
-    IMPL_LINK_NOARG(LicenseDialog, CancelHdl)
-    {
-        Close();
-        return 0;
+        get<PushButton>("show")->SetClickHdl(LINK(this, LicenseDialog, ShowHdl));
     }
 
     IMPL_LINK_NOARG(LicenseDialog, ShowHdl)
@@ -292,9 +246,7 @@ namespace
         showDocument("LICENSE");
         return 0;
     }
-
 }
-
 
 void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 {
