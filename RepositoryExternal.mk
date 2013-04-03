@@ -911,12 +911,6 @@ $(call gb_LinkTarget_use_libraries,$(1),\
 	rdf \
 )
 
-ifeq ($(OS),MACOSX)
-
-$(call gb_LinkTarget_add_libs,$(1),$(foreach replaceme,librasqal-lo.$(RASQAL_MAJOR) libraptor2-lo.$(RAPTOR_MAJOR),-dylib_file @loader_path/$(replaceme).dylib:$(gb_Library_OUTDIRLOCATION)/$(replaceme).dylib))
-
-endif
-
 endef
 
 else # ANDROID
@@ -2242,7 +2236,6 @@ $(call gb_LinkTarget_add_libs,$(1),\
 )
 else ifeq ($(OS),MACOSX)
 $(call gb_LinkTarget_add_libs,$(1),\
-	-dylib_file @loader_path/LibreOfficePython.framework/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/LibreOfficePython:$(call gb_UnpackedTarball_get_dir,python3)/python-inst/@__________________________________________________OOO/LibreOfficePython.framework/Versions/$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)/LibreOfficePython \
 	-F$(call gb_UnpackedTarball_get_dir,python3)/python-inst/@__________________________________________________OOO -framework LibreOfficePython \
 )
 else

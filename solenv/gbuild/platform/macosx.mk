@@ -133,20 +133,9 @@ $(if $(filter Executable,$(1)),\
 	$$(call gb_Library_get_layer,$(2)))
 endef
 
-# FIXME the DYLIB_FILE mess is only necessary because
-# solver layout is different from installation layout
 define gb_LinkTarget__command_dynamiclink
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
-	DYLIB_FILE=`$(gb_MKTEMP)` && \
-	$(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
-		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
-		$(if $(filter Bundle,$(TARGETTYPE)),$(gb_Bundle_TARGETTYPEFLAGS)) \
-		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
-		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
-		$(subst \d,$$,$(RPATH)) \
-		$(T_LDFLAGS) \
-		$(patsubst lib%.dylib,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))) > $${DYLIB_FILE} && \
 	$(gb_CXX) \
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
 		$(if $(filter Bundle,$(TARGETTYPE)),$(gb_Bundle_TARGETTYPEFLAGS)) \
@@ -163,21 +152,19 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),`cat $(extraobjectlist)`) \
-		`cat $${DYLIB_FILE}` \
 		$(LIBS) \
 		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
 		-o $(if $(SOVERSION),$(1).$(SOVERSION),$(1)) && \
 	$(if $(SOVERSION),ln -sf $(notdir $(1)).$(SOVERSION) $(1),:) && \
-    $(if $(filter Executable,$(TARGETTYPE)), \
-        $(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl app \
-            $(LAYER) $(1) &&) \
+	$(if $(filter Executable,$(TARGETTYPE)), \
+		$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl app $(LAYER) $(1) &&) \
 	$(if $(filter Library Bundle CppunitTest,$(TARGETTYPE)),\
 		$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl shl $(LAYER) $(if $(SOVERSION),$(1).$(SOVERSION),$(1)) && \
 		ln -sf $(notdir $(1)) $(basename $(1)).jnilib &&) \
 	$(if $(MACOSX_CODESIGNING_IDENTITY), \
 		$(if $(filter Executable,$(TARGETTYPE)), \
 			codesign --identifier=$(MACOSX_BUNDLE_IDENTIFIER).$(notdir $(1)) --sign $(MACOSX_CODESIGNING_IDENTITY) $(1) &&)) \
-	rm -f $${DYLIB_FILE})
+	:)
 endef
 
 # parameters: 1-linktarget 2-cobjects 3-cxxobjects
