@@ -683,7 +683,6 @@ sal_Bool SfxHelp::Start_Impl(const OUString& rURL, const Window* pWindow, const 
     OUString aHelpURL;
     INetURLObject aParser( rURL );
     INetProtocol nProtocol = aParser.GetProtocol();
-    OUString aHelpModuleName( GetHelpModuleName_Impl() );
 
     switch ( nProtocol )
     {
@@ -693,6 +692,7 @@ sal_Bool SfxHelp::Start_Impl(const OUString& rURL, const Window* pWindow, const 
             break;
         default:
         {
+            OUString aHelpModuleName( GetHelpModuleName_Impl() );
             // no URL, just a HelpID (maybe empty in case of keyword search)
             aHelpURL = CreateHelpURL_Impl( rURL, aHelpModuleName );
 
