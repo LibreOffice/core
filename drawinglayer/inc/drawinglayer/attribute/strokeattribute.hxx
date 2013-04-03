@@ -21,7 +21,7 @@
 #define INCLUDED_DRAWINGLAYER_ATTRIBUTE_STROKEATTRIBUTE_HXX
 
 #include <drawinglayer/drawinglayerdllapi.h>
-
+#include <o3tl/cow_wrapper.hxx>
 #include <vector>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -39,8 +39,11 @@ namespace drawinglayer
     {
         class DRAWINGLAYER_DLLPUBLIC StrokeAttribute
         {
+        public:
+            typedef o3tl::cow_wrapper< ImpStrokeAttribute > ImplType;
+
         private:
-            ImpStrokeAttribute*         mpStrokeAttribute;
+            ImplType mpStrokeAttribute;
 
         public:
             /// constructors/assignmentoperator/destructor

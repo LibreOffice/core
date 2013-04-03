@@ -18,6 +18,7 @@
  */
 
 #include <drawinglayer/attribute/strokeattribute.hxx>
+#include <rtl/instance.hxx>
 #include <numeric>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -29,9 +30,6 @@ namespace drawinglayer
         class ImpStrokeAttribute
         {
         public:
-            // refcounter
-            sal_uInt32                              mnRefCount;
-
             // data definitions
             ::std::vector< double >                     maDotDashArray;         // array of double which defines the dot-dash pattern
             double                                      mfFullDotDashLen;       // sum of maDotDashArray (for convenience)
@@ -39,9 +37,14 @@ namespace drawinglayer
             ImpStrokeAttribute(
                 const ::std::vector< double >& rDotDashArray,
                 double fFullDotDashLen)
-            :   mnRefCount(0),
-                maDotDashArray(rDotDashArray),
+            :   maDotDashArray(rDotDashArray),
                 mfFullDotDashLen(fFullDotDashLen)
+            {
+            }
+
+            ImpStrokeAttribute()
+            :   maDotDashArray(std::vector< double >()),
+                mfFullDotDashLen(0.0)
             {
             }
 
@@ -64,95 +67,50 @@ namespace drawinglayer
                 return (getDotDashArray() == rCandidate.getDotDashArray()
                     && getFullDotDashLen() == rCandidate.getFullDotDashLen());
             }
-
-            static ImpStrokeAttribute* get_global_default()
-            {
-                static ImpStrokeAttribute* pDefault = 0;
-
-                if(!pDefault)
-                {
-                    pDefault = new ImpStrokeAttribute(
-                        std::vector< double >(),
-                        0.0);
-
-                    // never delete; start with RefCount 1, not 0
-                    pDefault->mnRefCount++;
-                }
-
-                return pDefault;
-            }
         };
+
+        namespace
+        {
+            struct theGlobalDefault :
+                public rtl::Static< StrokeAttribute::ImplType, theGlobalDefault > {};
+        }
 
         StrokeAttribute::StrokeAttribute(
             const ::std::vector< double >& rDotDashArray,
             double fFullDotDashLen)
-        :   mpStrokeAttribute(new ImpStrokeAttribute(
+        :   mpStrokeAttribute(ImpStrokeAttribute(
                 rDotDashArray, fFullDotDashLen))
         {
         }
 
         StrokeAttribute::StrokeAttribute()
-        :   mpStrokeAttribute(ImpStrokeAttribute::get_global_default())
+        :   mpStrokeAttribute(theGlobalDefault::get())
         {
-            mpStrokeAttribute->mnRefCount++;
         }
 
         StrokeAttribute::StrokeAttribute(const StrokeAttribute& rCandidate)
         :   mpStrokeAttribute(rCandidate.mpStrokeAttribute)
         {
-            mpStrokeAttribute->mnRefCount++;
         }
 
         StrokeAttribute::~StrokeAttribute()
         {
-            if(mpStrokeAttribute->mnRefCount)
-            {
-                mpStrokeAttribute->mnRefCount--;
-            }
-            else
-            {
-                delete mpStrokeAttribute;
-            }
         }
 
         bool StrokeAttribute::isDefault() const
         {
-            return mpStrokeAttribute == ImpStrokeAttribute::get_global_default();
+            return mpStrokeAttribute.same_object(theGlobalDefault::get());
         }
 
         StrokeAttribute& StrokeAttribute::operator=(const StrokeAttribute& rCandidate)
         {
-            if(rCandidate.mpStrokeAttribute != mpStrokeAttribute)
-            {
-                if(mpStrokeAttribute->mnRefCount)
-                {
-                    mpStrokeAttribute->mnRefCount--;
-                }
-                else
-                {
-                    delete mpStrokeAttribute;
-                }
-
-                mpStrokeAttribute = rCandidate.mpStrokeAttribute;
-                mpStrokeAttribute->mnRefCount++;
-            }
-
+            mpStrokeAttribute = rCandidate.mpStrokeAttribute;
             return *this;
         }
 
         bool StrokeAttribute::operator==(const StrokeAttribute& rCandidate) const
         {
-            if(rCandidate.mpStrokeAttribute == mpStrokeAttribute)
-            {
-                return true;
-            }
-
-            if(rCandidate.isDefault() != isDefault())
-            {
-                return false;
-            }
-
-            return (*rCandidate.mpStrokeAttribute == *mpStrokeAttribute);
+            return rCandidate.mpStrokeAttribute == mpStrokeAttribute;
         }
 
         const ::std::vector< double >& StrokeAttribute::getDotDashArray() const
