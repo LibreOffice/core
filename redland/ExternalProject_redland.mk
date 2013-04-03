@@ -36,6 +36,7 @@ $(call gb_ExternalProject_get_state_target,redland,build):
 		RASQAL_LIBS="-L$(OUTDIR)/lib -lrasqal" \
 		./configure --disable-static --disable-gtk-doc \
 			--disable-modular \
+			--without-threads \
 			--without-bdb --without-sqlite --without-mysql \
 			--without-postgresql --without-threestore --without-virtuoso \
 			--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
@@ -59,12 +60,12 @@ $(call gb_ExternalProject_get_state_target,redland,build):
 		RASQAL_LIBS="-L$(OUTDIR)/lib -lrasqal" \
 		./configure --disable-gtk-doc \
 			--disable-modular \
+			--without-threads \
 			--without-bdb --without-sqlite --without-mysql \
 			--without-postgresql --without-threestone --without-virtuoso \
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(filter IOS ANDROID,$(OS)),--disable-shared,--disable-static) \
-			$(if $(filter-out ANDROID,$(OS)),--with-threads) \
 		&& $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),&& $(PERL) \
 			$(SOLARENV)/bin/macosx-change-install-names.pl shl OOO \
