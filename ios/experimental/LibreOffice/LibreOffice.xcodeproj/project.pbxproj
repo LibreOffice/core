@@ -58,6 +58,10 @@
 		BE9086FF16FF02B3004400A1 /* svptext.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svptext.cxx; path = ../../../../vcl/headless/svptext.cxx; sourceTree = "<group>"; };
 		BE90870016FF02B3004400A1 /* svpvd.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svpvd.cxx; path = ../../../../vcl/headless/svpvd.cxx; sourceTree = "<group>"; };
 		BE954A2E1704F9500040D517 /* iosinst.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = iosinst.cxx; path = ../../../../vcl/ios/iosinst.cxx; sourceTree = "<group>"; };
+		BEA86895170B3FC20043E44B /* salcoretextfontutils.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = salcoretextfontutils.cxx; path = ../../../../vcl/coretext/salcoretextfontutils.cxx; sourceTree = "<group>"; };
+		BEA86896170B3FC20043E44B /* salcoretextlayout.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = salcoretextlayout.cxx; path = ../../../../vcl/coretext/salcoretextlayout.cxx; sourceTree = "<group>"; };
+		BEA86897170B3FC20043E44B /* salcoretextstyle.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = salcoretextstyle.cxx; path = ../../../../vcl/coretext/salcoretextstyle.cxx; sourceTree = "<group>"; };
+		BEA86898170B3FC20043E44B /* salgdi.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = salgdi.cxx; path = ../../../../vcl/coretext/salgdi.cxx; sourceTree = "<group>"; };
 		BEBF3E3A17002D0200C454AC /* svapp.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svapp.cxx; path = ../../../../vcl/source/app/svapp.cxx; sourceTree = "<group>"; };
 		BEBF3E3B17002D0200C454AC /* svmain.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svmain.cxx; path = ../../../../vcl/source/app/svmain.cxx; sourceTree = "<group>"; };
 		BEBF3E3C17002D4C00C454AC /* frame.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = frame.cxx; path = ../../../../framework/source/services/frame.cxx; sourceTree = "<group>"; };
@@ -109,6 +113,7 @@
 				BEBF3E3D17002D6900C454AC /* window.cxx */,
 				BEBF3E3A17002D0200C454AC /* svapp.cxx */,
 				BEBF3E3B17002D0200C454AC /* svmain.cxx */,
+				BEA86899170B3FCB0043E44B /* coretext */,
 				BE2F0A0C17077A2F0060FE0D /* headless */,
 			);
 			name = vcl;
@@ -221,6 +226,17 @@
 				BE69AD8C1695954D001BE1CD /* Icon@2x.png */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		BEA86899170B3FCB0043E44B /* coretext */ = {
+			isa = PBXGroup;
+			children = (
+				BEA86895170B3FC20043E44B /* salcoretextfontutils.cxx */,
+				BEA86896170B3FC20043E44B /* salcoretextlayout.cxx */,
+				BEA86897170B3FC20043E44B /* salcoretextstyle.cxx */,
+				BEA86898170B3FC20043E44B /* salgdi.cxx */,
+			);
+			name = coretext;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
