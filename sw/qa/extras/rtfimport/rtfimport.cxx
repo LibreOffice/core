@@ -148,6 +148,7 @@ public:
     void testFdo61909();
     void testFdo62288();
     void testFdo37716();
+    void testFdo51916();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -269,6 +270,7 @@ void Test::run()
         {"fdo61909.rtf", &Test::testFdo61909},
         {"fdo62288.rtf", &Test::testFdo62288},
         {"fdo37716.rtf", &Test::testFdo37716},
+        {"fdo51916.rtf", &Test::testFdo51916},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1206,6 +1208,11 @@ void Test::testFdo37716()
     uno::Reference<container::XIndexAccess> xFrames(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
     // \nowrap got ignored, so Surround was text::WrapTextMode_PARALLEL
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_NONE, getProperty<text::WrapTextMode>(xFrames->getByIndex(0), "Surround"));
+}
+
+void Test::testFdo51916()
+{
+    // Complex nested table caused a crash.
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
