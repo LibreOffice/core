@@ -76,7 +76,6 @@ static bool GetDevFontAttributes( CTFontDescriptorRef font_descriptor, ImplDevFo
     CFDictionaryRef traits = (CFDictionaryRef)CTFontDescriptorCopyAttribute(font_descriptor, kCTFontTraitsAttribute);
     CFNumberRef symbolics = (CFNumberRef)CFDictionaryGetValue(traits, kCTFontSymbolicTrait);
     CFNumberGetValue(symbolics, kCFNumberIntType, &value);
-    CFRelease(symbolics);
 
     if(value & kCTFontMonoSpaceTrait)
     {
