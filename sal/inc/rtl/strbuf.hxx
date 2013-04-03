@@ -417,7 +417,11 @@ public:
 
       @since LibreOffice 3.5
     */
-    sal_Char & operator [](sal_Int32 index) { return pData->buffer[index]; }
+    sal_Char & operator [](sal_Int32 index)
+    {
+        assert(index >= 0 && index < pData->length);
+        return pData->buffer[index];
+    }
 
     /**
         Return a OString instance reflecting the current content

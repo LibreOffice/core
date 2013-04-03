@@ -409,7 +409,11 @@ public:
 
       @since LibreOffice 3.5
     */
-    sal_Unicode & operator [](sal_Int32 index) { return pData->buffer[index]; }
+    sal_Unicode & operator [](sal_Int32 index)
+    {
+        assert(index >= 0 && index < pData->length);
+        return pData->buffer[index];
+    }
 
     /**
         Return a OUString instance reflecting the current content

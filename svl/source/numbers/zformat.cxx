@@ -1522,7 +1522,9 @@ short SvNumberformat::ImpNextSymbol(OUStringBuffer& rString,
                 OUString aUpperDBNum( rChrCls().uppercase( rString.toString(), nPos-1, aDBNum.getLength() ) );
                 sal_Unicode cUpper = aUpperNatNum[0];
                 sal_Int32 nNatNumNum = rString.toString().copy( nPos - 1 + aNatNum.getLength() ).toInt32();
-                sal_Unicode cDBNum = rString[ nPos - 1 + aDBNum.getLength()];
+                sal_Unicode cDBNum =
+                    nPos - 1 + aDBNum.getLength() < rString.getLength()
+                    ? rString[nPos - 1 + aDBNum.getLength()] : 0;
                 if ( aUpperNatNum == aNatNum && 0 <= nNatNumNum && nNatNumNum <= 19 )
                 {
                     sBuffSymbol.stripStart((sal_Unicode)'[');

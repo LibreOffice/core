@@ -2265,7 +2265,7 @@ static sal_Bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
             return sal_False;
 
         nSepPos = aStr.indexOf( rLocaleDataWrapper.getTimeSep() );
-        if ( aStr[0] == '-' )
+        if ( !aStr.isEmpty() && aStr[0] == '-' )
             bNegative = sal_True;
         if ( nSepPos >= 0 )
         {
