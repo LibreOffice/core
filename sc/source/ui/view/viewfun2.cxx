@@ -1767,7 +1767,13 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
             || nCommand == SVX_SEARCHCMD_REPLACE_ALL )
         {
             if ( nCommand == SVX_SEARCHCMD_REPLACE )
+            {
                 pDocSh->PostPaint( nCol,nRow,nTab, nCol,nRow,nTab, PAINT_GRID );
+                SvxSearchItem aSearchItem = ScGlobal::GetSearchItem();
+                aSearchItem.SetCommand(SVX_SEARCHCMD_FIND);
+                aSearchItem.SetWhich(SID_SEARCH_ITEM);
+                GetViewData()->GetDispatcher().Execute( FID_SEARCH_NOW, SFX_CALLMODE_STANDARD, &aSearchItem, 0L );
+            }
             else
                 pDocSh->PostPaintGridAll();
             pDocSh->SetDocumentModified();
