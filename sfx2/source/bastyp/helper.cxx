@@ -68,16 +68,6 @@ DateTime convertDateTime( const util::DateTime& rUnoDT )
 
 }
 
-void AppendDateTime_Impl( const util::DateTime rDT,
-                          String& rRow, const LocaleDataWrapper& rWrapper )
-{
-    DateTime aDT = convertDateTime(rDT);
-    String aDateStr = rWrapper.getDate( aDT );
-    aDateStr += rtl::OUString(", ");
-    aDateStr += rWrapper.getTime( aDT );
-    rRow += aDateStr;
-}
-
 // -----------------------------------------------------------------------
 
 uno::Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
