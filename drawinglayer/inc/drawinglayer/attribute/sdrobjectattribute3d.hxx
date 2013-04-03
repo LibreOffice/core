@@ -26,6 +26,7 @@
 #include <com/sun/star/drawing/TextureProjectionMode.hpp>
 #include <com/sun/star/drawing/TextureKind2.hpp>
 #include <com/sun/star/drawing/TextureMode.hpp>
+#include <o3tl/cow_wrapper.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -43,8 +44,11 @@ namespace drawinglayer
     {
         class DRAWINGLAYER_DLLPUBLIC Sdr3DObjectAttribute
         {
+        public:
+            typedef o3tl::cow_wrapper< ImpSdr3DObjectAttribute > ImplType;
+
         private:
-            ImpSdr3DObjectAttribute*            mpSdr3DObjectAttribute;
+            ImplType mpSdr3DObjectAttribute;
 
         public:
             // constructors/destructor
