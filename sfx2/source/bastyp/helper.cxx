@@ -58,8 +58,6 @@ using ::rtl::OUString;
 using ::rtl::OStringBuffer;
 using ::rtl::OStringToOUString;
 
-typedef vector< OUString* > StringList_Impl;
-
 #define CONVERT_DATETIME( aUnoDT, aToolsDT ) \
     aToolsDT = DateTime( Date( aUnoDT.Day, aUnoDT.Month, aUnoDT.Year ), \
                          Time( aUnoDT.Hours, aUnoDT.Minutes, aUnoDT.Seconds, aUnoDT.HundredthSeconds ) );
@@ -79,7 +77,7 @@ void AppendDateTime_Impl( const util::DateTime rDT,
 
 uno::Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
 {
-    StringList_Impl* pList = NULL;
+    vector<OUString> aList;
     try
     {
         ::ucbhelper::Content aCnt( rURL, uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
@@ -109,7 +107,6 @@ uno::Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
 
         if ( xResultSet.is() )
         {
-            pList = new StringList_Impl();
             uno::Reference< sdbc::XRow > xRow( xResultSet, uno::UNO_QUERY );
             uno::Reference< ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
 
@@ -124,8 +121,7 @@ uno::Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
                     aRow += aType;
                     aRow += '\t';
                     aRow += String( xContentAccess->queryContentIdentifierString() );
-                    OUString* pRow = new OUString( aRow );
-                    pList->push_back( pRow );
+                    aList.push_back( OUString( aRow ) );
                 }
             }
             catch( const ucb::CommandAbortedException& )
@@ -143,30 +139,21 @@ uno::Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
         SAL_WARN( "sfx2.bastyp", "GetResultSet: Any other exception: " << e.Message );
     }
 
-    if ( pList )
+    size_t nCount = aList.size();
+    uno::Sequence < OUString > aRet( nCount );
+    OUString* pRet = aRet.getArray();
+    for ( size_t i = 0; i < nCount; ++i )
     {
-        size_t nCount = pList->size();
-        uno::Sequence < OUString > aRet( nCount );
-        OUString* pRet = aRet.getArray();
-        for ( size_t i = 0; i < nCount; ++i )
-        {
-            OUString* pEntry = pList->at(i);
-            pRet[i] = *( pEntry );
-            delete pEntry;
-        }
-        pList->clear();
-        delete pList;
-        return aRet;
+        pRet[i] = aList[0];
     }
-    else
-        return uno::Sequence < OUString > ();
+    return aRet;
 }
 
 // -----------------------------------------------------------------------
 
 uno::Sequence< OUString > SfxContentHelper::GetHelpTreeViewContents( const String& rURL )
 {
-    StringList_Impl* pProperties = NULL;
+    vector< OUString > aProperties;
     try
     {
         uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
@@ -196,7 +183,6 @@ uno::Sequence< OUString > SfxContentHelper::GetHelpTreeViewContents( const Strin
 
         if ( xResultSet.is() )
         {
-            pProperties = new StringList_Impl();
             uno::Reference< sdbc::XRow > xRow( xResultSet, uno::UNO_QUERY );
             uno::Reference< ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
 
@@ -211,8 +197,7 @@ uno::Sequence< OUString > SfxContentHelper::GetHelpTreeViewContents( const Strin
                     aRow += String( xContentAccess->queryContentIdentifierString() );
                     aRow += '\t';
                     aRow += bFolder ? '1' : '0';
-                    OUString* pRow = new OUString( aRow );
-                    pProperties->push_back( pRow );
+                    aProperties.push_back( OUString( aRow ) );
                 }
             }
             catch( const ucb::CommandAbortedException& )
@@ -227,23 +212,14 @@ uno::Sequence< OUString > SfxContentHelper::GetHelpTreeViewContents( const Strin
     {
     }
 
-    if ( pProperties )
+    size_t nCount = aProperties.size();
+    uno::Sequence < OUString > aRet( nCount );
+    OUString* pRet = aRet.getArray();
+    for(size_t i = 0; i < nCount; ++i)
     {
-        size_t nCount = pProperties->size();
-        uno::Sequence < OUString > aRet( nCount );
-        OUString* pRet = aRet.getArray();
-        for ( size_t i = 0; i < nCount; ++i )
-        {
-            OUString* pProperty = pProperties->at(i);
-            pRet[i] = *( pProperty );
-            delete pProperty;
-        }
-        pProperties->clear();
-        delete pProperties;
-        return aRet;
+        pRet[i] = aProperties[i];
     }
-    else
-        return uno::Sequence < OUString > ();
+    return aRet;
 }
 
 // -----------------------------------------------------------------------
