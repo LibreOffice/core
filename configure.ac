@@ -920,13 +920,13 @@ AC_ARG_ENABLE(gconf,
 ,enable_gconf=yes)
 
 AC_ARG_ENABLE(gnome-vfs,
-    AS_HELP_STRING([--disable-gnome-vfs],
+    AS_HELP_STRING([--enable-gnome-vfs],
         [Determines whether to use the Gnome Virtual Filing System on platforms
          where that VFS is available.]),
 ,enable_gnome_vfs=no)
 
 AC_ARG_ENABLE(gio,
-    AS_HELP_STRING([--enable-gio],
+    AS_HELP_STRING([--disable-gio],
         [Determines whether to use the GIO support.]),
 ,enable_gio=yes)
 
