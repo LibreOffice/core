@@ -932,7 +932,6 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 	rdf \
 	rasqal \
 	raptor2 \
-	crypto \
 )
 
 endef
