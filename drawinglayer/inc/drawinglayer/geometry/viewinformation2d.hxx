@@ -29,6 +29,7 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
+#include <o3tl/cow_wrapper.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -58,9 +59,12 @@ namespace drawinglayer
         */
         class DRAWINGLAYER_DLLPUBLIC ViewInformation2D
         {
+        public:
+            typedef o3tl::cow_wrapper< ImpViewInformation2D, o3tl::ThreadSafeRefCountingPolicy > ImplType;
+
         private:
             /// pointer to private implementation class
-            ImpViewInformation2D*                   mpViewInformation2D;
+            ImplType mpViewInformation2D;
 
         public:
             /** Constructor: Create a ViewInformation2D
