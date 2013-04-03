@@ -430,6 +430,9 @@ void SwSrcView::GetState(SfxItemSet& rSet)
             case SID_SAVEASDOC:
                 rSet.Put(SfxStringItem(nWhich, String(SW_RES(STR_SAVEAS_SRC))));
             break;
+            case SID_SAVEACOPY:
+                rSet.Put(SfxStringItem(nWhich, String(SW_RES(STR_SAVEACOPY_SRC))));
+            break;
             case SID_SAVEDOC:
             {
                 SwDocShell* pDocShell = GetDocShell();

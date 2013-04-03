@@ -793,6 +793,9 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_SAVEASDOC:
             aReturn.bEnabled = isConnected() && isEditable();
             break;
+        case SID_SAVEACOPY:
+            aReturn.bEnabled = isConnected() && isEditable();
+            break;
         case SID_EDITDOC:
             aReturn.bChecked = isEditable();
             break;
@@ -1913,6 +1916,7 @@ void OReportController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:NewDoc",                    SID_NEWDOC,                     CommandGroup::DOCUMENT );
     implDescribeSupportedFeature( ".uno:Save",                      SID_SAVEDOC,                    CommandGroup::DOCUMENT );
     implDescribeSupportedFeature( ".uno:SaveAs",                    SID_SAVEASDOC,                  CommandGroup::DOCUMENT );
+    implDescribeSupportedFeature( ".uno:SaveACopy",                 SID_SAVEACOPY,                  CommandGroup::DOCUMENT );
 
     implDescribeSupportedFeature( ".uno:InsertPageNumberField",     SID_INSERT_FLD_PGNUMBER,        CommandGroup::INSERT );
     implDescribeSupportedFeature( ".uno:InsertDateTimeField",       SID_DATETIME,                   CommandGroup::INSERT );
