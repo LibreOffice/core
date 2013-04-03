@@ -140,16 +140,6 @@ void RscLangEnum::Init( RscNameTable& rNames )
             nTokenCounter++;
         }
     }
-
-    SetConstant( rNames.Put( "LANGUAGE_USER1", CONSTNAME, LANGUAGE_USER1 ), LANGUAGE_USER1 );
-    SetConstant( rNames.Put( "LANGUAGE_USER2", CONSTNAME, LANGUAGE_USER2 ), LANGUAGE_USER2 );
-    SetConstant( rNames.Put( "LANGUAGE_USER3", CONSTNAME, LANGUAGE_USER3 ), LANGUAGE_USER3 );
-    SetConstant( rNames.Put( "LANGUAGE_USER4", CONSTNAME, LANGUAGE_USER4 ), LANGUAGE_USER4 );
-    SetConstant( rNames.Put( "LANGUAGE_USER5", CONSTNAME, LANGUAGE_USER5 ), LANGUAGE_USER5 );
-    SetConstant( rNames.Put( "LANGUAGE_USER6", CONSTNAME, LANGUAGE_USER6 ), LANGUAGE_USER6 );
-    SetConstant( rNames.Put( "LANGUAGE_USER7", CONSTNAME, LANGUAGE_USER7 ), LANGUAGE_USER7 );
-    SetConstant( rNames.Put( "LANGUAGE_USER8", CONSTNAME, LANGUAGE_USER8 ), LANGUAGE_USER8 );
-    SetConstant( rNames.Put( "EXTERN", CONSTNAME, LANGUAGE_USER9 ), LANGUAGE_USER9 );
 }
 
 Atom RscLangEnum::AddLanguage( const char* pLang, RscNameTable& rNames )

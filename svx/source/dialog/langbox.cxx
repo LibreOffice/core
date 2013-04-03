@@ -168,8 +168,7 @@ void SvxLanguageBox::Init()
 
             bool bInsert = true;
             if ((LANGUAGE_DONTKNOW == nLangType)  ||
-                (LANGUAGE_SYSTEM   == nLangType)  ||
-                (LANGUAGE_USER1 <= nLangType  &&  nLangType <= LANGUAGE_USER9))
+                (LANGUAGE_SYSTEM   == nLangType))
             {
                 bInsert = false;
             }
@@ -289,7 +288,6 @@ void SvxLanguageBox::SetLanguageList( sal_Int16 nLangList,
             if ( nLangType != LANGUAGE_DONTKNOW &&
                  nLangType != LANGUAGE_SYSTEM &&
                  nLangType != LANGUAGE_NONE &&
-                 (nLangType < LANGUAGE_USER1 || nLangType > LANGUAGE_USER9) &&
                  (MsLangId::getSubLanguage( nLangType) != 0 ||
                   (nLangList & LANG_LIST_ALSO_PRIMARY_ONLY)) &&
                  ((nLangList & LANG_LIST_ALL) != 0 ||

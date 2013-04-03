@@ -194,15 +194,6 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Ukrainian" ; LANGUAGE_UKRAINIAN ; > ;
         < "Uzbek Latin" ; LANGUAGE_UZBEK_LATIN ; > ;
         < "Welsh" ; LANGUAGE_WELSH ; > ;
-        < "User 1" ; LANGUAGE_USER1 ; > ;
-        < "User 2" ; LANGUAGE_USER2 ; > ;
-        < "User 3" ; LANGUAGE_USER3 ; > ;
-        < "User 4" ; LANGUAGE_USER4 ; > ;
-        < "User 5" ; LANGUAGE_USER5 ; > ;
-        < "User 6" ; LANGUAGE_USER6 ; > ;
-        < "User 7" ; LANGUAGE_USER7 ; > ;
-        < "User 8" ; LANGUAGE_USER8 ; > ;
-        < "User 9" ; LANGUAGE_USER9 ; > ;
         < "Latin" ; LANGUAGE_LATIN ; > ;
         < "Esperanto" ; LANGUAGE_USER_ESPERANTO ; > ;
         < "Kinyarwanda (Rwanda)" ; LANGUAGE_USER_KINYARWANDA ; > ;

@@ -375,18 +375,6 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_YORUBA                     0x046A
 #define LANGUAGE_ZULU                       0x0435
 
-/* Not real, but used for legacy. */
-#define LANGUAGE_USER1                      0x0201
-#define LANGUAGE_USER2                      0x0202
-#define LANGUAGE_USER3                      0x0203
-#define LANGUAGE_USER4                      0x0204
-#define LANGUAGE_USER5                      0x0205
-#define LANGUAGE_USER6                      0x0206
-#define LANGUAGE_USER7                      0x0207
-#define LANGUAGE_USER8                      0x0208
-#define LANGUAGE_USER9                      0x0209
-/* Don't use higher USER values here, we reserve them for extension. */
-
 /*! use only for import/export of MS documents, number formatter maps it to
  *! LANGUAGE_SYSTEM and then to effective system language */
 #define LANGUAGE_SYSTEM_DEFAULT             0x0800

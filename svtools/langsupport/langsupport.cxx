@@ -65,9 +65,6 @@ SAL_IMPLEMENT_MAIN()
         {
             LanguageType eLang = aTable.GetTypeAtIndex(i);
 
-            if (eLang >= LANGUAGE_USER1 && eLang <= LANGUAGE_USER9)
-                continue;
-
             if (eLang == LANGUAGE_DONTKNOW ||
                 eLang == LANGUAGE_NONE ||
                 eLang == LANGUAGE_HID_HUMAN_INTERFACE_DEVICE ||
