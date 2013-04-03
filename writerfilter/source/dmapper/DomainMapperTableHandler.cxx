@@ -362,8 +362,8 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
             }
         }
 
-        PropertyMap::iterator aTblLookIter =
-        aTblLookIter = m_aTableProperties->find( PropertyDefinition( PROP_TBL_LOOK, false ) );
+        PropertyMap::iterator const aTblLookIter =
+            m_aTableProperties->find(PropertyDefinition(PROP_TBL_LOOK, false));
         if(aTblLookIter != m_aTableProperties->end())
         {
             aTblLookIter->second >>= rInfo.nTblLook;
