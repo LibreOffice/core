@@ -643,8 +643,14 @@
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
-        </prop>
+        </prop>        
       </node>
+      <node oor:name=".uno:ImportFromDrawFile" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+
+          <value xml:lang="en-US">~Drawing File...</value>
+        </prop>
+      </node> 
       <node oor:name=".uno:ZoomPanning" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Shift</value>

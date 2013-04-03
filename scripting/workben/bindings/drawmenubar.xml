@@ -197,7 +197,7 @@
    <menu:menuitem menu:id="slot:10140" menu:helpid="10140" menu:label="Chart"/>
    <menu:menuitem menu:id="slot:5563" menu:helpid="5563" menu:label="Float~ing Frame..."/>
    <menu:menuseparator/>
-   <menu:menuitem menu:id="slot:27015" menu:helpid="27015" menu:label="~File..."/>
+   <menu:menuitem menu:id="slot:27015" menu:helpid="27015" menu:label="~Drawing File..."/>
   </menu:menupopup>
  </menu:menu>
  <menu:menu menu:id="slot:22" menu:label="F~ormat">

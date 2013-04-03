@@ -397,7 +397,12 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
             Cancel();
         }
         break;
-
+        case SID_INSERTDRAWFILE:
+        {
+            SetCurrentFunction( FuInsertFile::Create(this, GetActiveWindow(), pOlView, GetDoc(), rReq) );
+            Cancel();
+        }
+        break;
         case SID_PRESENTATIONOBJECT:
         {
             SetCurrentFunction( FuPresentationObjects::Create(this, GetActiveWindow(), pOlView, GetDoc(), rReq) );

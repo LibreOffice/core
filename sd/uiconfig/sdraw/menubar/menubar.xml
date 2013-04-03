@@ -196,7 +196,7 @@
       <menu:menuitem menu:id=".uno:InsertObjectChart"/>
       <menu:menuitem menu:id=".uno:InsertObjectFloatingFrame"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:ImportFromFile"/>
+      <menu:menuitem menu:id=".uno:ImportFromDrawFile"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:FormatMenu">
