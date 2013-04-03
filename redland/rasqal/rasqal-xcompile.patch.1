@@ -1,0 +1,15 @@
+No point in creating util or test executables when cross-compiling.
+(Especially as doing it anyway wouldn't work without tweaks to have it find
+libxml2 and libm, at least for Android.)
+
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -358,7 +358,7 @@
+ top_srcdir = @top_srcdir@
+ noinst_SCRIPTS = rasqal-src-config
+ ACLOCAL_AMFLAGS = -I build
+-SUBDIRS = src utils tests docs data win32 scripts
++SUBDIRS = src docs data win32 scripts
+ pkgconfigdir = $(libdir)/pkgconfig
+ pkgconfig_DATA = rasqal.pc
+ EXTRA_DIST = \

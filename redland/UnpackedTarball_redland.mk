@@ -21,6 +21,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,redland,\
 	$(if $(filter-out WNT,$(OS)),redland/redland/redland-bundled-soname.patch.1) \
 	$(if $(filter ANDROID,$(OS)),redland/redland/redland-android.patch.1) \
 	$(if $(filter WNTGCC,$(OS)$(COM)),redland/redland/redland-mingw.patch.1) \
+	$(if $(filter YES,$(CROSS_COMPILING)),redland/redland/redland-xcompile.patch.1) \
 ))
 
 # vim: set noet sw=4 ts=4:

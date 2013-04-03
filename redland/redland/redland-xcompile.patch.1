@@ -1,0 +1,15 @@
+No point in creating example or util executables when cross-compiling.
+(Especially as doing it anyway wouldn't work without tweaks to have it find
+libxml2 and libm, at least for Android.)
+
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -395,7 +395,7 @@
+ DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc
+ 
+ # Subdirectories to build/install/distribute etc.
+-SUBDIRS = $(subdirs) src examples utils demos docs data scripts
++SUBDIRS = $(subdirs) src docs data scripts
+ EXTRA_DIST = \
+ ChangeLog.1 ChangeLog.2 ChangeLog.3 ChangeLog.4 \
+ ChangeLog.5 ChangeLog.6 ChangeLog.7 ChangeLog.8 ChangeLog.9 ChangeLog.10 \

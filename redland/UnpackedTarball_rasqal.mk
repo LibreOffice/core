@@ -22,6 +22,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,rasqal,\
 	$(if $(filter-out WNT,$(OS)),redland/rasqal/rasqal-bundled-soname.patch.1) \
 	$(if $(filter ANDROID,$(OS)),redland/rasqal/rasqal-android.patch.1) \
 	$(if $(filter WNTGCC,$(OS)$(COM)),redland/rasqal/rasqal-mingw.patch.1) \
+	$(if $(filter YES,$(CROSS_COMPILING)),redland/rasqal/rasqal-xcompile.patch.1) \
 ))
 
 # vim: set noet sw=4 ts=4:
