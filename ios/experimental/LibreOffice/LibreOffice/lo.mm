@@ -133,10 +133,7 @@ extern "C"
 void
 lo_initialize(void)
 {
-    if (UIDeviceOrientationIsPortrait([[UIDevice currentDevice] orientation]))
-        setenv("SAL_LOG", "+WARN+INFO.vcl.headless+INFO.vcl.ios", 1);
-    else
-        setenv("SAL_LOG", "-WARN-INFO", 1);
+    setenv("SAL_LOG", "+WARN+INFO.vcl.headless+INFO.vcl.coretext+INFO.vcl.ios", 1);
 
     const char *argv[] = {
         "placeholder-exe",
