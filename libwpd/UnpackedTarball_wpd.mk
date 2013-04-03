@@ -13,10 +13,10 @@ $(eval $(call gb_UnpackedTarball_set_tarball,wpd,$(WPD_TARBALL)))
 
 # $(eval $(call gb_UnpackedTarball_set_patchlevel,wpd,0))
 
-# wpd_patches :=
+wpd_patches := libwpd-0.9.6.patch
 
-# $(eval $(call gb_UnpackedTarball_add_patches,wpd,\
-# 	$(foreach patch,$(wpd_patches),libwpd/$(patch)) \
-# ))
+$(eval $(call gb_UnpackedTarball_add_patches,wpd,\
+	$(foreach patch,$(wpd_patches),libwpd/$(patch)) \
+)) 
 
 # vim: set noet sw=4 ts=4:

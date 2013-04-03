@@ -1,0 +1,31 @@
+--- misc/libwpd-0.9.6/src/lib/WP42Heuristics.cpp
++++ misc/build/libwpd-0.9.6/src/lib/WP42Heuristics.cpp
+@@ -70,6 +70,28 @@
+ 	WPXEncryption *encryption = 0;
+ 	try
+ 	{
++		// Disregard XML at least right away
++		if (readU8(input, 0) == '<' &&
++		    readU8(input, 0) == '?' &&
++		    readU8(input, 0) == 'x' &&
++		    readU8(input, 0) == 'm' &&
++		    readU8(input, 0) == 'l' &&
++		    readU8(input, 0) == ' ')
++			return WPD_CONFIDENCE_NONE;
++		input->seek(0, WPX_SEEK_SET);
++
++		if (readU8(input, 0) == 0xEF &&
++		    readU8(input, 0) == 0xBB &&
++		    readU8(input, 0) == 0xBF &&
++		    readU8(input, 0) == '<' &&
++		    readU8(input, 0) == '?' &&
++		    readU8(input, 0) == 'x' &&
++		    readU8(input, 0) == 'm' &&
++		    readU8(input, 0) == 'l' &&
++		    readU8(input, 0) == ' ')
++			return WPD_CONFIDENCE_NONE;
++		input->seek(0, WPX_SEEK_SET);
++
+ 		if (readU8(input, 0) == 0xFE && readU8(input, 0) == 0xFF &&
+ 		        readU8(input, 0) == 0x61 && readU8(input, 0) == 0x61)
+ 		{
