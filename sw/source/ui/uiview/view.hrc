@@ -56,6 +56,8 @@
 #define RID_PVIEW_TOOLBOX           (RC_VIEW_BEGIN + 31)
 #define STR_WEBOPTIONS              (RC_VIEW_BEGIN + 32)
 #define STR_TEXTOPTIONS             (RC_VIEW_BEGIN + 33)
+
+#define STR_SAVEACOPY_SRC           (RC_VIEW_BEGIN + 34)
 // MSG -------------------------------------------------------------------
 
 #define MSG_ERR_INSERT_GLOS (RC_VIEW_BEGIN)
