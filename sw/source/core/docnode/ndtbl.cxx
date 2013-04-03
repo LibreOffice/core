@@ -4028,39 +4028,36 @@ void SwDoc::ChkBoxNumFmt( SwTableBox& rBox, sal_Bool bCallUpdate )
             SwTableBoxFmt* pBoxFmt = (SwTableBoxFmt*)rBox.GetFrmFmt();
             SfxItemSet aBoxSet( GetAttrPool(), RES_BOXATR_FORMAT, RES_BOXATR_VALUE );
 
-            sal_Bool bSetNumFmt = IsInsTblFormatNum(), bLockModify = sal_True;
+            sal_Bool bSetNumFmt = IsInsTblFormatNum();
+            sal_Bool bLockModify = sal_True;
+
+            if( bSetNumFmt && !IsInsTblChangeNumFormat() )
+            {
+                if( !pNumFmtItem )
+                    bSetNumFmt = sal_False;
+                else
+                {
+                    sal_uLong nOldNumFmt = ((SwTblBoxNumFormat*)pNumFmtItem)->GetValue();
+                    SvNumberFormatter* pNumFmtr = GetNumberFormatter();
+
+                    short nFmtType = pNumFmtr->GetType( nFmtIdx );
+                    if( nFmtType == pNumFmtr->GetType( nOldNumFmt ) || NUMBERFORMAT_NUMBER == nFmtType )
+                        // Current and specified NumFormat match
+                        // -> keep old Format
+                        nFmtIdx = nOldNumFmt;
+                    else
+                        // Current and specified NumFormat do not match
+                        // -> insert as Text
+                        bLockModify = bSetNumFmt = sal_False;
+                }
+            }
+
             if( bSetNumFmt )
             {
-                if( !IsInsTblChangeNumFormat() )
-                {
-                    if( !pNumFmtItem )
-                        bSetNumFmt = sal_False;
-                    else
-                    {
-                        sal_uLong nOldNumFmt = ((SwTblBoxNumFormat*)pNumFmtItem)->
-                                            GetValue();
-                        SvNumberFormatter* pNumFmtr = GetNumberFormatter();
+                pBoxFmt = (SwTableBoxFmt*)rBox.ClaimFrmFmt();
 
-                        short nFmtType = pNumFmtr->GetType( nFmtIdx );
-                        if( nFmtType == pNumFmtr->GetType( nOldNumFmt ) ||
-                            NUMBERFORMAT_NUMBER == nFmtType )
-                            // Current and specified NumFormat match
-                            // -> keep old Format
-                            nFmtIdx = nOldNumFmt;
-                        else
-                            // Current and specified NumFormat do not match
-                            // -> insert as Text
-                            bLockModify = bSetNumFmt = sal_False;
-                    }
-                }
-
-                if( bSetNumFmt )
-                {
-                    pBoxFmt = (SwTableBoxFmt*)rBox.ClaimFrmFmt();
-
-                    aBoxSet.Put( SwTblBoxValue( fNumber ));
-                    aBoxSet.Put( SwTblBoxNumFormat( nFmtIdx ));
-                }
+                aBoxSet.Put( SwTblBoxValue( fNumber ));
+                aBoxSet.Put( SwTblBoxNumFormat( nFmtIdx ));
             }
 
             // It's not enough to only reset the Formula.
