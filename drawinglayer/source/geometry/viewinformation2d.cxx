@@ -24,6 +24,7 @@
 #include <basegfx/tools/canvastools.hxx>
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
+#include <rtl/instance.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -41,9 +42,6 @@ namespace drawinglayer
             // ViewInformation2D implementation can change refcount, so we have only
             // two memory regions for pairs of ViewInformation2D/ImpViewInformation2D
             friend class ::drawinglayer::geometry::ViewInformation2D;
-
-            // the refcounter. 0 means exclusively used
-            sal_uInt32                                  mnRefCount;
 
         protected:
             // the object transformation
@@ -261,8 +259,7 @@ namespace drawinglayer
                 const uno::Reference< drawing::XDrawPage >& rxDrawPage,
                 double fViewTime,
                 const uno::Sequence< beans::PropertyValue >& rExtendedParameters)
-            :   mnRefCount(0),
-                maObjectTransformation(rObjectTransformation),
+            :   maObjectTransformation(rObjectTransformation),
                 maViewTransformation(rViewTransformation),
                 maObjectToViewTransformation(),
                 maInverseObjectToViewTransformation(),
@@ -278,8 +275,7 @@ namespace drawinglayer
             }
 
             explicit ImpViewInformation2D(const uno::Sequence< beans::PropertyValue >& rViewParameters)
-            :   mnRefCount(0),
-                maObjectTransformation(),
+            :   maObjectTransformation(),
                 maViewTransformation(),
                 maObjectToViewTransformation(),
                 maInverseObjectToViewTransformation(),
@@ -295,8 +291,7 @@ namespace drawinglayer
             }
 
             ImpViewInformation2D()
-            :   mnRefCount(0),
-                maObjectTransformation(),
+            :   maObjectTransformation(),
                 maViewTransformation(),
                 maObjectToViewTransformation(),
                 maInverseObjectToViewTransformation(),
@@ -407,21 +402,6 @@ namespace drawinglayer
                     && mfViewTime == rCandidate.mfViewTime
                     && mxExtendedInformation == rCandidate.mxExtendedInformation);
             }
-
-            static ImpViewInformation2D* get_global_default()
-            {
-                static ImpViewInformation2D* pDefault = 0;
-
-                if(!pDefault)
-                {
-                    pDefault = new ImpViewInformation2D();
-
-                    // never delete; start with RefCount 1, not 0
-                    pDefault->mnRefCount++;
-                }
-
-                return pDefault;
-            }
         };
     } // end of anonymous namespace
 } // end of namespace drawinglayer
@@ -432,6 +412,12 @@ namespace drawinglayer
 {
     namespace geometry
     {
+        namespace
+        {
+            struct theGlobalDefault :
+                public rtl::Static< ViewInformation2D::ImplType, theGlobalDefault > {};
+        }
+
         ViewInformation2D::ViewInformation2D(
             const basegfx::B2DHomMatrix& rObjectTransformation,
             const basegfx::B2DHomMatrix& rViewTransformation,
@@ -439,7 +425,7 @@ namespace drawinglayer
             const uno::Reference< drawing::XDrawPage >& rxDrawPage,
             double fViewTime,
             const uno::Sequence< beans::PropertyValue >& rExtendedParameters)
-        :   mpViewInformation2D(new ImpViewInformation2D(
+        :   mpViewInformation2D(ImpViewInformation2D(
                 rObjectTransformation,
                 rViewTransformation,
                 rViewport,
@@ -450,74 +436,38 @@ namespace drawinglayer
         }
 
         ViewInformation2D::ViewInformation2D(const uno::Sequence< beans::PropertyValue >& rViewParameters)
-        :   mpViewInformation2D(new ImpViewInformation2D(rViewParameters))
+        :   mpViewInformation2D(ImpViewInformation2D(rViewParameters))
         {
         }
 
         ViewInformation2D::ViewInformation2D()
-        :   mpViewInformation2D(ImpViewInformation2D::get_global_default())
+        :   mpViewInformation2D(theGlobalDefault::get())
         {
-            mpViewInformation2D->mnRefCount++;
         }
 
         ViewInformation2D::ViewInformation2D(const ViewInformation2D& rCandidate)
         :   mpViewInformation2D(rCandidate.mpViewInformation2D)
         {
-            ::osl::Mutex m_mutex;
-            mpViewInformation2D->mnRefCount++;
         }
 
         ViewInformation2D::~ViewInformation2D()
         {
-            ::osl::Mutex m_mutex;
-
-            if(mpViewInformation2D->mnRefCount)
-            {
-                mpViewInformation2D->mnRefCount--;
-            }
-            else
-            {
-                delete mpViewInformation2D;
-            }
         }
 
         bool ViewInformation2D::isDefault() const
         {
-            return mpViewInformation2D == ImpViewInformation2D::get_global_default();
+            return mpViewInformation2D.same_object(theGlobalDefault::get());
         }
 
         ViewInformation2D& ViewInformation2D::operator=(const ViewInformation2D& rCandidate)
         {
-            ::osl::Mutex m_mutex;
-
-            if(mpViewInformation2D->mnRefCount)
-            {
-                mpViewInformation2D->mnRefCount--;
-            }
-            else
-            {
-                delete mpViewInformation2D;
-            }
-
             mpViewInformation2D = rCandidate.mpViewInformation2D;
-            mpViewInformation2D->mnRefCount++;
-
             return *this;
         }
 
         bool ViewInformation2D::operator==(const ViewInformation2D& rCandidate) const
         {
-            if(rCandidate.mpViewInformation2D == mpViewInformation2D)
-            {
-                return true;
-            }
-
-            if(rCandidate.isDefault() != isDefault())
-            {
-                return false;
-            }
-
-            return (*rCandidate.mpViewInformation2D == *mpViewInformation2D);
+            return rCandidate.mpViewInformation2D == mpViewInformation2D;
         }
 
         const basegfx::B2DHomMatrix& ViewInformation2D::getObjectTransformation() const
