@@ -14,6 +14,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
+#include <i18npool/mslangid.hxx>
 #include <i18npool/languagetag.hxx>
 
 #include <rtl/ustring.hxx>
@@ -41,9 +42,11 @@ public:
     virtual ~TestLanguageTag() {}
 
     void testAllTags();
+    void testAllIsoLangEntries();
 
     CPPUNIT_TEST_SUITE(TestLanguageTag);
     CPPUNIT_TEST(testAllTags);
+    CPPUNIT_TEST(testAllIsoLangEntries);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -272,6 +275,53 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( uab.isIsoLocale() == false );
         CPPUNIT_ASSERT( uab.isIsoODF() == false );
     }
+}
+
+void TestLanguageTag::testAllIsoLangEntries()
+{
+    const MsLangId::IsoLangEntry* pLangEntry;
+    sal_Int32 nIndex = 0;
+    while (((pLangEntry = MsLangId::getIsoLangEntry( nIndex++ )) != NULL) && (pLangEntry->mnLang != LANGUAGE_DONTKNOW))
+    {
+        LanguageTag aTagString( pLangEntry->getTagString(), true);
+        LanguageTag aTagID( pLangEntry->mnLang);
+        if (pLangEntry->getTagString() != aTagString.getBcp47())
+        {
+            OString aMessage( OUStringToOString( pLangEntry->getTagString(), RTL_TEXTENCODING_ASCII_US));
+            aMessage += " -> " + OUStringToOString( aTagString.getBcp47(), RTL_TEXTENCODING_ASCII_US);
+            CPPUNIT_ASSERT_MESSAGE( aMessage.getStr(), pLangEntry->getTagString() == aTagString.getBcp47());
+        }
+        if (pLangEntry->getTagString() != aTagID.getBcp47())
+        {
+            // There are multiple mappings, ID must be equal after conversions.
+            LanguageTag aTagBack( aTagID.getBcp47(), true);
+            if (aTagString.getLanguageType() != aTagBack.getLanguageType())
+            {
+                OString aMessage( OUStringToOString( pLangEntry->getTagString(), RTL_TEXTENCODING_ASCII_US));
+                aMessage += " " + OString::number( aTagString.getLanguageType(), 16) +
+                    " -> " + OString::number( aTagBack.getLanguageType(), 16);
+                CPPUNIT_ASSERT_MESSAGE( aMessage.getStr(), aTagString.getLanguageType() == aTagBack.getLanguageType());
+            }
+        }
+#if 0
+        // This does not hold, there are cases like 'ar'
+        // LANGUAGE_ARABIC_PRIMARY_ONLY that when mapped back results in
+        // 'ar-SA' as default locale.
+        if (pLangEntry->mnLang != aTagString.getLanguageType())
+        {
+            // There are multiple mappings, string must be equal after conversions.
+            LanguageTag aTagBack( aTagString.getLanguageType());
+            if (aTagID.getBcp47() != aTagBack.getBcp47())
+            {
+                OString aMessage( OUStringToOString( pLangEntry->getTagString(), RTL_TEXTENCODING_ASCII_US));
+                aMessage += " " + OUStringToOString( aTagID.getBcp47(), RTL_TEXTENCODING_ASCII_US) +
+                    " -> " + OUStringToOString( aTagBack.getBcp47(), RTL_TEXTENCODING_ASCII_US);
+                CPPUNIT_ASSERT_MESSAGE( aMessage.getStr(), aTagID.getBcp47() == aTagBack.getBcp47());
+            }
+        }
+#endif
+    }
+
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION( TestLanguageTag );
