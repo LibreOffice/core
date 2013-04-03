@@ -37,13 +37,13 @@ $(call gb_ExternalProject_get_state_target,rasqal,build):
 			--with-digest-library=internal \
 			--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 			lt_cv_cc_dll_switch="-shared" \
+			$(if $(filter NO,$(SYSTEM_LIBXML)),--with-xml2-config=$(call gb_UnpackedTarball_get_dir,xml2)/xml2-config) \
 		&& $(MAKE) \
 	)
 else
 $(call gb_ExternalProject_get_state_target,rasqal,build):
 	$(call gb_ExternalProject_run,build,\
 		CFLAGS="$(if $(filter TRUE,$(DISABLE_DYNLOADING)),-fvisibility=hidden)" \
-		PATH="$(OUTDIR)/bin:$$PATH" \
 		LDFLAGS=" \
 			$(if $(filter LINUX FREEBSD,$(OS)),-Wl$(COMMA)-rpath-link$(COMMA)$(OUTDIR)/lib -Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib") \
 		$(if $(SYSBASE),$(if $(filter LINUX SOLARIS,$(OS)),-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -lpthread -ldl)) \
@@ -60,6 +60,7 @@ $(call gb_ExternalProject_get_state_target,rasqal,build):
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(filter IOS ANDROID,$(OS)),--disable-shared,--disable-static) \
+			$(if $(filter NO,$(SYSTEM_LIBXML)),--with-xml2-config=$(call gb_UnpackedTarball_get_dir,xml2)/xml2-config) \
 		&& $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),&& $(PERL) \
 			$(SOLARENV)/bin/macosx-change-install-names.pl shl OOO \

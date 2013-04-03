@@ -29,6 +29,7 @@ $(call gb_ExternalProject_get_state_target,raptor,build):
 			--without-xslt-config \
 			--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --target=$(HOST_PLATFORM) \
 			lt_cv_cc_dll_switch="-shared" \
+			$(if $(filter NO,$(SYSTEM_LIBXML)),--with-xml2-config=$(call gb_UnpackedTarball_get_dir,xml2)/xml2-config) \
 		&& $(MAKE) \
 	)
 else
@@ -48,7 +49,7 @@ $(call gb_ExternalProject_get_state_target,raptor,build):
 			$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(filter IOS ANDROID,$(OS)),--disable-shared,--disable-static) \
-			$(if $(filter NO,$(SYSTEM_LIBXML)),--with-xml2-config=$(OUTDIR)/bin/xml2-config) \
+			$(if $(filter NO,$(SYSTEM_LIBXML)),--with-xml2-config=$(call gb_UnpackedTarball_get_dir,xml2)/xml2-config) \
 		&& $(MAKE) \
 	)
 endif
