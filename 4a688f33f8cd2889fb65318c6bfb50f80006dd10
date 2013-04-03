@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///9k\u003d",
+        "filename": "vcl/source/gdi/outdev3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 6673,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-04-03T16:51:13Z",
+      "side": 1,
+      "message": "on the first iteration, this will test against nMaxWidth - nEllipsisWidth while the old code tests against nMaxWidth, so it\u0027s possible that new code will replace some text when there is no need; perhaps wrap an \"if (nOrigLength \u003e nMaxWidth)\" around the whole thing?",
+      "revId": "4a688f33f8cd2889fb65318c6bfb50f80006dd10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///9g\u003d",
+        "filename": "vcl/source/gdi/outdev3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 6779,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-04-03T16:51:13Z",
+      "side": 1,
+      "message": "this is right, but since i\u0027m already complaining about the loop above :)\n\none-parameter copy would do the same thing simpler here.",
+      "revId": "4a688f33f8cd2889fb65318c6bfb50f80006dd10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
