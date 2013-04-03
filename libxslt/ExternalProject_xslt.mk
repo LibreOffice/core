@@ -49,7 +49,7 @@ $(call gb_ExternalProject_get_state_target,xslt,build):
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)), \
 			$(if $(filter IOS,$(OS)),LIBS="-liconv") \
 			--disable-shared,--disable-static) \
-			$(if $(filter NO,$(SYSTEM_LIBXML)),--with-libxml-prefix=$(OUTDIR) LIBXML2LIB=-lxml2) \
+			$(if $(filter NO,$(SYSTEM_LIBXML)),--with-libxml-prefix=$(OUTDIR)) \
 		&& chmod 777 xslt-config \
 		&& $(MAKE) \
 	)

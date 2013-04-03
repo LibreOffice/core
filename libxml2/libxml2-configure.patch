@@ -129,7 +129,7 @@
 -	else
 -	    echo @XML_LIBDIR@ @XML_LIBS@ @WIN32_EXTRA_LIBADD@
 -	fi
-+        echo -L${libdir} ${LIBXML2LIB} -lm
++        echo -L${libdir} -lxml2 -lm
 +#        if [ "`uname`" = "Linux" ]
 +#	then
 +#	    if [ "@XML_LIBDIR@" = "-L/usr/lib" -o "@XML_LIBDIR@" = "-L/usr/lib64" ]

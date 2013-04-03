@@ -22,7 +22,6 @@ $(call gb_ExternalProject_get_state_target,raptor,build):
 	$(call gb_ExternalProject_run,build,\
 		CC="$(CC) -mthreads $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
 		LDFLAGS="-Wl$(COMMA)--no-undefined -Wl$(COMMA)--enable-runtime-pseudo-reloc-v2 -Wl$(COMMA)--export-all-symbols $(subst ;, -L,$(ILIB))" \
-		LIBXML2LIB="$(if $(filter YES,$(SYSTEM_LIBXML)),$(LIBXML_LIBS),-lxml2)" \
 		XSLTLIB="$(if $(filter YES,$(SYSTEM_LIBXSLT)),$(LIBXSLT_LIBS),-lxslt)" \
 		OBJDUMP="$(HOST_PLATFORM)-objdump" \
 		./configure --disable-static --enable-shared --disable-gtk-doc \
@@ -49,8 +48,7 @@ $(call gb_ExternalProject_get_state_target,raptor,build):
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(filter IOS ANDROID,$(OS)),--disable-shared,--disable-static) \
 			$(if $(filter NO,$(SYSTEM_LIBXSLT)),--with-xslt-config=$(OUTDIR)/bin/xslt-config) \
-			$(if $(filter NO,$(SYSTEM_LIBXML)), \
-			LIBXML2LIB=-lxml2 --with-xml2-config=$(OUTDIR)/bin/xml2-config) \
+			$(if $(filter NO,$(SYSTEM_LIBXML)),--with-xml2-config=$(OUTDIR)/bin/xml2-config) \
 		&& $(MAKE) \
 	)
 endif
