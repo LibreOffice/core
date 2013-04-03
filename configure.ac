@@ -1930,7 +1930,7 @@ AC_ARG_WITH(macosx-sdk,
     [
                           Usage:     --with-macosx-sdk=<version>
 
-                          e. g.: --with-macosx-sdk=10.4
+                          e. g.: --with-macosx-sdk=10.6
 
                           there are 3 options to control the MacOSX build:
                           --with-macosx-sdk (refered as 'sdk' below)
@@ -1945,10 +1945,10 @@ AC_ARG_WITH(macosx-sdk,
                            command line      || config result
                           ==========================================
                           min  | max  | sdk  || min  | max  | sdk  |
-                          ?    | ?    | ?    || 10.4 | 10.s | 10.s |
-                          ?    | ?    | 10.x || 10.4 | 10.x | 10.x |
-                          ?    | 10.x | ?    || 10.4 | 10.s | 10.s |
-                          ?    | 10.x | 10.y || 10.4 | 10.x | 10.y |
+                          ?    | ?    | ?    || 10.6 | 10.s | 10.s |
+                          ?    | ?    | 10.x || 10.6 | 10.x | 10.x |
+                          ?    | 10.x | ?    || 10.6 | 10.s | 10.s |
+                          ?    | 10.x | 10.y || 10.6 | 10.x | 10.y |
                           10.x | ?    | ?    || 10.x | 10.s | 10.s |
                           10.x | ?    | 10.y || 10.x | 10.y | 10.y |
                           10.x | 10.y | ?    || 10.x | 10.y | 10.y |
@@ -1975,7 +1975,7 @@ AC_ARG_WITH(macosx-version-min-required,
     [
                           Usage:     --with-macosx-version-min-required=<version>
 
-                          e. g.: --with-macos-version-min-required=10.4
+                          e. g.: --with-macos-version-min-required=10.6
                           see --with-macosx-sdk for more info
     ],
 ,)
@@ -2363,12 +2363,9 @@ if test "$_os" = "Darwin"; then
         BITNESS_OVERRIDE=64
     fi
 
-    # If no --with-macosx-sdk option is given, first look for the 10.4u
-    # SDK (which is distributed with the obsolete Xcode 3), then the
-    # 10.6, 10.7 and 10.8 SDKs, in that order. (Don't bother looking
-    # for the 10.5 SDK, unlikely somebody would have that but not
-    # 10.6, I think.) If not found in some (old) default locations,
-    # try the xcode-select tool.
+    # If no --with-macosx-sdk option is given, look for 10.6, 10.7
+    # and 10.8 SDKs, in that order. If not found in some (old)
+    # default locations, try the xcode-select tool.
 
     # The intent is that for "most" Mac-based developers, a suitable
     # SDK will be found automatically without any configure options.
@@ -2513,15 +2510,27 @@ if test "$_os" = "Darwin"; then
             case "$with_macosx_sdk" in
             10.4)
                 ;;
+            10.6)
+                ;;
             *)
-                AC_MSG_WARN([Building with a SDK > 10.4 possibly breaks 10.4 compatibility. Do not use for the TDF build])
-                add_warning "Building with a SDK > 10.4 possibly breaks 10.4 compatibility. Do not use for the TDF build"
+                AC_MSG_WARN([Building with a SDK > 10.6 possibly breaks 10.6 compatibility. Do not use for the TDF build])
+                add_warning "Building with a SDK > 10.6 possibly breaks 10.6 compatibility. Do not use for the TDF build"
+                ;;
+            esac
+            ;;
+        10.6)
+            case "$with_macosx_sdk" in
+            10.6)
+                ;;
+            *)
+                AC_MSG_WARN([Building with a SDK > 10.6 possibly breaks 10.6 compatibility. Do not use for the TDF build])
+                add_warning "Building with a SDK > 10.6 possibly breaks 10.6 compatibility. Do not use for the TDF build"
                 ;;
             esac
             ;;
         *)
-            AC_MSG_WARN([Building with a minimum version requirement > 10.4 breaks 10.4 compatibility. Do not use for the TDF build])
-            add_warning "Building with a minimum version requirement > 10.4 breaks 10.4 compatibility. Do not use for the TDF build"
+            AC_MSG_WARN([Building with a minimum version requirement > 10.6 breaks 10.6 compatibility. Do not use for the TDF build])
+            add_warning "Building with a minimum version requirement > 10.6 breaks 10.6 compatibility. Do not use for the TDF build"
             ;;
         esac
     fi
