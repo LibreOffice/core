@@ -112,14 +112,14 @@ my @cmdline_args = ();
 my $input = "autogen.input";
 my $lastrun = "autogen.lastrun";
 
-if (-f $input) {
-    warn "Ignoring command-line arguments, using $input.\n" if (@ARGV);
-    warn "Ignoring $lastrun, using $input.\n" if (-f $lastrun);
-    @cmdline_args = read_args ($input);
-} elsif (-f $lastrun) {
-    warn "Ignoring command-line arguments, using $lastrun.\n" if (@ARGV);
-    print STDERR "Reading $lastrun. Please rename it to $input to avoid this message.\n";
-    @cmdline_args = read_args ($lastrun);
+if (!@ARGV) {
+    if (-f $input) {
+        warn "Ignoring $lastrun, using $input.\n" if (-f $lastrun);
+        @cmdline_args = read_args ($input);
+    } elsif (-f $lastrun) {
+        print STDERR "Reading $lastrun. Please rename it to $input to avoid this message.\n";
+        @cmdline_args = read_args ($lastrun);
+    }
 } else {
     @cmdline_args = @ARGV;
 }
