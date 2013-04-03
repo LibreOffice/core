@@ -180,6 +180,9 @@ public:
         LanguageType  mnLang;
         sal_Char      maLangStr[4];
         sal_Char      maCountry[3];
+
+        /** Obtain a language tag string with '-' separator. */
+        OUString getTagString() const;
     };
 
     /** @internal - Return a pointer to the IsoLangEntry of the underlying table,

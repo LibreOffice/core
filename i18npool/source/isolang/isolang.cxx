@@ -520,6 +520,14 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
 static MsLangId::IsoLangEntry aLastResortFallbackEntry =
 { LANGUAGE_ENGLISH_US, "en", "US" };
 
+OUString MsLangId::IsoLangEntry::getTagString() const
+{
+    if (maCountry[0])
+        return OUString( OUString::createFromAscii( maLangStr) + "-" + OUString::createFromAscii( maCountry));
+    else
+        return OUString::createFromAscii( maLangStr);
+}
+
 // -----------------------------------------------------------------------
 
 // In this table are the countries which should mapped to a specific
