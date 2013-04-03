@@ -58,15 +58,20 @@ using ::rtl::OUString;
 using ::rtl::OStringBuffer;
 using ::rtl::OStringToOUString;
 
-#define CONVERT_DATETIME( aUnoDT, aToolsDT ) \
-    aToolsDT = DateTime( Date( aUnoDT.Day, aUnoDT.Month, aUnoDT.Year ), \
-                         Time( aUnoDT.Hours, aUnoDT.Minutes, aUnoDT.Seconds, aUnoDT.HundredthSeconds ) );
+namespace {
+
+DateTime convertDateTime( const util::DateTime& rUnoDT )
+{
+    return DateTime( Date( rUnoDT.Day, rUnoDT.Month, rUnoDT.Year ),
+                         Time( rUnoDT.Hours, rUnoDT.Minutes, rUnoDT.Seconds, rUnoDT.HundredthSeconds ) );
+}
+
+}
 
 void AppendDateTime_Impl( const util::DateTime rDT,
                           String& rRow, const LocaleDataWrapper& rWrapper )
 {
-    DateTime aDT( DateTime::EMPTY );
-    CONVERT_DATETIME( rDT, aDT );
+    DateTime aDT = convertDateTime(rDT);
     String aDateStr = rWrapper.getDate( aDT );
     aDateStr += rtl::OUString(", ");
     aDateStr += rWrapper.getTime( aDT );
