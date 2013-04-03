@@ -27,7 +27,4 @@ $(eval $(call gb_ExternalPackage_add_file,raptor,lib/libraptor2-lo.so.$(RAPTOR_M
 $(eval $(call gb_ExternalPackage_add_file,raptor,lib/libraptor2.so,src/.libs/libraptor2-lo.so.$(RAPTOR_MAJOR).0.0))
 endif
 
-$(eval $(call gb_ExternalPackage_add_file,raptor,inc/external/raptor2.h,src/raptor2.h))
-$(eval $(call gb_ExternalPackage_add_file,raptor,inc/external/raptor.h,src/raptor.h))
-
 # vim: set noet sw=4 ts=4:

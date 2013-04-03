@@ -32,9 +32,9 @@ $(call gb_ExternalProject_get_state_target,redland,build):
 		LDFLAGS="-Wl$(COMMA)--no-undefined -Wl$(COMMA)--enable-runtime-pseudo-reloc-v2 -Wl$(COMMA)--export-all-symbols -L$(OUTDIR)/lib" \
 		OBJDUMP="$(HOST_PLATFORM)-objdump" \
 		PKG_CONFIG="" \
-		RAPTOR2_CFLAGS="-I$(OUTDIR)/inc/external" \
+		RAPTOR2_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,raptor)/src" \
 		RAPTOR2_LIBS="-L$(OUTDIR)/lib -lraptor2  $(if $(filter YES,$(SYSTEM_LIBXML)),$(LIBXML_LIBS),-lxml2)" \
-		RASQAL_CFLAGS="-I$(OUTDIR)/inc/external" \
+		RASQAL_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,rasqal)/src" \
 		RASQAL_LIBS="-L$(OUTDIR)/lib -lrasqal" \
 		./configure --disable-static --disable-gtk-doc \
 			--disable-modular \
@@ -55,9 +55,9 @@ $(call gb_ExternalProject_get_state_target,redland,build):
 		$(if $(filter NO,$(SYSTEM_LIBXML)),-Wl$(COMMA)-dylib_file$(COMMA)@loader_path/../ure-link/lib/libxml2.2.dylib:$(OUTDIR)/lib/libxml2.2.dylib))" \
 		CPPFLAGS="-I$(OUTDIR)/inc/external $(if $(SYSBASE),-I$(SYSBASE)/usr/include)" \
 		PKG_CONFIG="" \
-		RAPTOR2_CFLAGS="-I$(OUTDIR)/inc/external" \
+		RAPTOR2_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,raptor)/src" \
 		RAPTOR2_LIBS="-L$(OUTDIR)/lib -lraptor2  $(if $(filter YES,$(SYSTEM_LIBXML)),$(LIBXML_LIBS),-lxml2)" \
-		RASQAL_CFLAGS="-I$(OUTDIR)/inc/external" \
+		RASQAL_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,rasqal)/src" \
 		RASQAL_LIBS="-L$(OUTDIR)/lib -lrasqal" \
 		./configure --disable-gtk-doc \
 			--disable-modular \

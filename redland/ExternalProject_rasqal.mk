@@ -30,7 +30,7 @@ $(call gb_ExternalProject_get_state_target,rasqal,build):
 		XSLTLIB="$(if $(filter YES,$(SYSTEM_LIBXSLT)),$(LIBXSLT_LIBS),-lxslt)" \
 		OBJDUMP="$(HOST_PLATFORM)-objdump" \
 		PKG_CONFIG="" \
-		RAPTOR2_CFLAGS="-I$(OUTDIR)/inc/external" \
+		RAPTOR2_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,raptor)/src" \
 		RAPTOR2_LIBS="-L$(OUTDIR)/lib -lraptor2" \
 		./configure --disable-static --enable-shared --disable-gtk-doc \
 			--disable-pcre \
@@ -52,7 +52,7 @@ $(call gb_ExternalProject_get_state_target,rasqal,build):
 		$(if $(filter MACOSXNO,$(OS)$(SYSTEM_LIBXML)),-Wl$(COMMA)-dylib_file$(COMMA)@loader_path/../ure-link/lib/libxml2.2.dylib:$(OUTDIR)/lib/libxml2.2.dylib)" \
 		$(if $(SYSBASE),CPPFLAGS="-I$(SYSBASE)/usr/include") \
 		PKG_CONFIG="" \
-		RAPTOR2_CFLAGS="-I$(OUTDIR)/inc/external" \
+		RAPTOR2_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,raptor)/src" \
 		RAPTOR2_LIBS="-L$(OUTDIR)/lib -lraptor2" \
 		./configure --disable-gtk-doc \
 			--with-regex-library=posix \

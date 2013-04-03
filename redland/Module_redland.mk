@@ -20,7 +20,7 @@ $(eval $(call gb_Module_add_targets,redland,\
 	Library_raptor \
 	Library_rasqal \
 	Library_rdf \
-))	
+))
 else
 $(eval $(call gb_Module_add_targets,redland,\
 	ExternalPackage_raptor \
