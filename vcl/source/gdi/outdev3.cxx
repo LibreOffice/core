@@ -6645,7 +6645,7 @@ static sal_Bool ImplIsCharIn( sal_Unicode c, const sal_Char* pStr )
     return sal_False;
 }
 
-OUString OutputDevice::GetEllipsisString( const String& rOrigStr, long nMaxWidth,
+OUString OutputDevice::GetEllipsisString( const OUString& rOrigStr, long nMaxWidth,
                                         sal_uInt16 nStyle ) const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -6653,44 +6653,62 @@ OUString OutputDevice::GetEllipsisString( const String& rOrigStr, long nMaxWidth
     return ImplGetEllipsisString( *this, rOrigStr, nMaxWidth, nStyle, aTextLayout );
 }
 
-String OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice, const XubString& rOrigStr, long nMaxWidth,
+OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice, const OUString& rOrigStr, long nMaxWidth,
                                                sal_uInt16 nStyle, const ::vcl::ITextLayout& _rLayout )
 {
-    String aStr = rOrigStr;
-    xub_StrLen nIndex = _rLayout.GetTextBreak( aStr, nMaxWidth, 0, aStr.Len() );
-
+    OUString aStr = rOrigStr;
+    sal_Int32 nIndex = _rLayout.GetTextBreak( aStr, nMaxWidth, 0, aStr.getLength() );
 
     if ( nIndex != STRING_LEN )
     {
         if( (nStyle & TEXT_DRAW_CENTERELLIPSIS) == TEXT_DRAW_CENTERELLIPSIS )
         {
-            String aTmpStr( aStr );
-            xub_StrLen nEraseChars = 4;
-            while( nEraseChars < aStr.Len() && _rLayout.GetTextWidth( aTmpStr, 0, aTmpStr.Len() ) > nMaxWidth )
+            sal_Int32 nOrigWidth = _rLayout.GetTextWidth( aStr, 0, aStr.getLength() );
+            if ( nOrigWidth <= nMaxWidth )
+                return aStr;
+            sal_Int32 nEraseStart = aStr.getLength()/2;
+            sal_Int32 nEraseEnd = nEraseStart;
+            sal_Int32 nEraseChars = nEraseEnd - nEraseStart;
+            sal_Int32 nEllipsisWidth = _rLayout.GetTextWidth( "...", 0, 3 );
+            bool bRemoveForward = true;
+            while( nEraseChars < aStr.getLength() &&
+                   nOrigWidth - _rLayout.GetTextWidth( aStr, nEraseStart, nEraseEnd ) > nMaxWidth - nEllipsisWidth)
             {
-                aTmpStr = aStr;
-                xub_StrLen i = (aTmpStr.Len() - nEraseChars)/2;
-                aTmpStr.Erase( i, nEraseChars++ );
-                aTmpStr.InsertAscii( "...", i );
+                if (bRemoveForward)
+                    ++nEraseEnd;
+                else
+                    --nEraseStart;
+                bRemoveForward = !bRemoveForward;
+                nEraseChars = nEraseEnd - nEraseStart +1;
             }
-            aStr = aTmpStr;
+            OUStringBuffer aTmpStr(aStr);
+            aTmpStr.remove(nEraseStart, nEraseChars);
+            aTmpStr.insert(nEraseStart, "...");
+            aStr = aTmpStr.makeStringAndClear();
         }
         else if ( nStyle & TEXT_DRAW_ENDELLIPSIS )
         {
-            aStr.Erase( nIndex );
+            OUString aTmpStr = aStr.replaceAt( nIndex, aTmpStr.getLength()-nIndex, "" );
+
             if ( nIndex > 1 )
             {
-                aStr.AppendAscii( "..." );
-                while ( aStr.Len() && (_rLayout.GetTextWidth( aStr, 0, aStr.Len() ) > nMaxWidth) )
+                sal_Int32 nTmpStrWidth = _rLayout.GetTextWidth( aTmpStr, 0, aTmpStr.getLength() );
+                if ( nTmpStrWidth <= nMaxWidth )
+                    return aStr;
+
+                sal_Int32 nEllipsisWidth = _rLayout.GetTextWidth( "...", 0, 3 );
+                sal_Int32 nEraseStart = aTmpStr.getLength();
+                while ( nEraseStart > 0 &&
+                        nTmpStrWidth -
+                        (_rLayout.GetTextWidth( aTmpStr, 0, nEraseStart-1 ) > nMaxWidth - nEllipsisWidth) )
                 {
-                    if ( (nIndex > 1) || (nIndex == aStr.Len()) )
-                        nIndex--;
-                    aStr.Erase( nIndex, 1 );
+                    --nEraseStart;
                 }
+                aStr = aTmpStr.replaceAt( nEraseStart, aTmpStr.getLength()-nEraseStart, "...");
             }
 
-            if ( !aStr.Len() && (nStyle & TEXT_DRAW_CLIP) )
-                aStr += rOrigStr.GetChar( 0 );
+            if ( aStr.isEmpty() && (nStyle & TEXT_DRAW_CLIP) )
+                aStr += OUString(rOrigStr[ 0 ]);
         }
         else if ( nStyle & TEXT_DRAW_PATHELLIPSIS )
         {
@@ -6703,71 +6721,70 @@ String OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice, c
         {
             static sal_Char const   pSepChars[] = ".";
             // Letztes Teilstueck ermitteln
-            xub_StrLen nLastContent = aStr.Len();
+            sal_Int32 nLastContent = aStr.getLength();
             while ( nLastContent )
             {
                 nLastContent--;
-                if ( ImplIsCharIn( aStr.GetChar( nLastContent ), pSepChars ) )
+                if ( ImplIsCharIn( aStr[ nLastContent ], pSepChars ) )
                     break;
             }
             while ( nLastContent &&
-                    ImplIsCharIn( aStr.GetChar( nLastContent-1 ), pSepChars ) )
+                    ImplIsCharIn( aStr[ nLastContent-1 ], pSepChars ) )
                 nLastContent--;
 
-            XubString aLastStr( aStr, nLastContent, aStr.Len() );
-            XubString aTempLastStr1( "..." );
+            OUString aLastStr = aStr.copy(nLastContent);
+            OUString aTempLastStr1( "..." );
             aTempLastStr1 += aLastStr;
-            if ( _rLayout.GetTextWidth( aTempLastStr1, 0, aTempLastStr1.Len() ) > nMaxWidth )
+            if ( _rLayout.GetTextWidth( aTempLastStr1, 0, aTempLastStr1.getLength() ) > nMaxWidth )
                 aStr = OutputDevice::ImplGetEllipsisString( rTargetDevice, aStr, nMaxWidth, nStyle | TEXT_DRAW_ENDELLIPSIS, _rLayout );
             else
             {
-                sal_uInt16 nFirstContent = 0;
+                sal_Int32 nFirstContent = 0;
                 while ( nFirstContent < nLastContent )
                 {
                     nFirstContent++;
-                    if ( ImplIsCharIn( aStr.GetChar( nFirstContent ), pSepChars ) )
+                    if ( ImplIsCharIn( aStr[ nFirstContent ], pSepChars ) )
                         break;
                 }
                 while ( (nFirstContent < nLastContent) &&
-                        ImplIsCharIn( aStr.GetChar( nFirstContent ), pSepChars ) )
+                        ImplIsCharIn( aStr[ nFirstContent ], pSepChars ) )
                     nFirstContent++;
-
+                //MEM continue here
                 if ( nFirstContent >= nLastContent )
                     aStr = OutputDevice::ImplGetEllipsisString( rTargetDevice, aStr, nMaxWidth, nStyle | TEXT_DRAW_ENDELLIPSIS, _rLayout );
                 else
                 {
                     if ( nFirstContent > 4 )
                         nFirstContent = 4;
-                    XubString aFirstStr( aStr, 0, nFirstContent );
-                    aFirstStr.AppendAscii( "..." );
-                    XubString aTempStr = aFirstStr;
-                    aTempStr += aLastStr;
-                    if ( _rLayout.GetTextWidth( aTempStr, 0, aTempStr.Len() ) > nMaxWidth )
+                    OUString aFirstStr = aStr.copy( 0, nFirstContent );
+                    aFirstStr += "...";
+                    OUString aTempStr = aFirstStr + aLastStr;
+                    if ( _rLayout.GetTextWidth( aTempStr, 0, aTempStr.getLength() ) > nMaxWidth )
                         aStr = OutputDevice::ImplGetEllipsisString( rTargetDevice, aStr, nMaxWidth, nStyle | TEXT_DRAW_ENDELLIPSIS, _rLayout );
                     else
                     {
                         do
                         {
                             aStr = aTempStr;
-                            if( nLastContent > aStr.Len() )
-                                nLastContent = aStr.Len();
+                            if( nLastContent > aStr.getLength() )
+                                nLastContent = aStr.getLength();
                             while ( nFirstContent < nLastContent )
                             {
                                 nLastContent--;
-                                if ( ImplIsCharIn( aStr.GetChar( nLastContent ), pSepChars ) )
+                                if ( ImplIsCharIn( aStr[ nLastContent ], pSepChars ) )
                                     break;
 
                             }
                             while ( (nFirstContent < nLastContent) &&
-                                    ImplIsCharIn( aStr.GetChar( nLastContent-1 ), pSepChars ) )
+                                    ImplIsCharIn( aStr[ nLastContent-1 ], pSepChars ) )
                                 nLastContent--;
 
                             if ( nFirstContent < nLastContent )
                             {
-                                XubString aTempLastStr( aStr, nLastContent, aStr.Len() );
-                                aTempStr = aFirstStr;
-                                aTempStr += aTempLastStr;
-                                if ( _rLayout.GetTextWidth( aTempStr, 0, aTempStr.Len() ) > nMaxWidth )
+                                OUString aTempLastStr = aStr.copy( nLastContent );
+                                aTempStr = aFirstStr + aTempLastStr;
+
+                                if ( _rLayout.GetTextWidth( aTempStr, 0, aTempStr.getLength() ) > nMaxWidth )
                                     break;
                             }
                         }

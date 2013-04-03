@@ -386,7 +386,7 @@ public:
     SAL_DLLPRIVATE SalLayout*   ImplGlyphFallbackLayout( SalLayout*, ImplLayoutArgs& ) const;
 
     static
-    SAL_DLLPRIVATE XubString    ImplGetEllipsisString( const OutputDevice& rTargetDevice, const XubString& rStr,
+    SAL_DLLPRIVATE OUString    ImplGetEllipsisString( const OutputDevice& rTargetDevice, const OUString& rStr,
                                                        long nMaxWidth, sal_uInt16 nStyle, const ::vcl::ITextLayout& _rLayout );
     static
     SAL_DLLPRIVATE void         ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& rRect,
@@ -617,7 +617,7 @@ public:
                                      const XubString& rStr, sal_uInt16 nStyle = TEXT_DRAW_WORDBREAK,
                                      TextRectInfo* pInfo = NULL,
                                      const ::vcl::ITextLayout* _pTextLayout = NULL ) const;
-    OUString            GetEllipsisString( const XubString& rStr, long nMaxWidth,
+    OUString            GetEllipsisString( const OUString& rStr, long nMaxWidth,
                                            sal_uInt16 nStyle = TEXT_DRAW_ENDELLIPSIS ) const;
     void                DrawCtrlText( const Point& rPos, const XubString& rStr,
                                       xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,
