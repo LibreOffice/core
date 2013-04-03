@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE rdf [
+   <!ENTITY file SYSTEM "file:///etc/passwd">
+]>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+<rdf:RDF
+ xmlns:baz="uri:"
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:about="uri:foo">
+    <baz:bar>EVIL&file;</baz:bar>
+  </rdf:Description>
+</rdf:RDF>

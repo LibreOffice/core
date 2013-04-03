@@ -543,6 +543,20 @@ public class RDFRepositoryTest
         }
     }
 
+    @Test public void checkCVE_2012_0037() throws Exception
+    {
+        XInputStream xIn = new StreamSimulator(
+                TestDocument.getUrl("cve_2012_0037.rdf"), true, param);
+        xRep.importGraph(FileFormat.RDF_XML, xIn, manifest, base);
+        XNamedGraph xGraph = xRep.getGraph(manifest);
+        assertNotNull("no graph", xGraph);
+        XEnumeration xEnum = xGraph.getStatements(foo, bar, null);
+        // there must not be anything more than "EVIL" in the literal
+        XLiteral evil = Literal.create(xContext, "EVIL");
+        Statement FooBarEvil = new Statement(foo, bar, evil, manifest);
+        assertTrue("EVIL", eq(xEnum, new Statement [] { FooBarEvil }));
+    }
+
 // utilities -------------------------------------------------------------
 
     public void report2(Exception e)
