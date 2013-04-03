@@ -206,12 +206,12 @@ private:
     std::set < OString > m_aIds;
 
 public:
-                    SfxHelpOptions_Impl();
-                    ~SfxHelpOptions_Impl();
+    SfxHelpOptions_Impl();
+    ~SfxHelpOptions_Impl();
 
-    bool            HasId( const OString& rId ) { return m_aIds.size() ? m_aIds.find( rId ) != m_aIds.end() : false; }
-    virtual void            Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames );
-    virtual void            Commit();
+    bool HasId( const OString& rId ) { return m_aIds.size() ? m_aIds.find( rId ) != m_aIds.end() : false; }
+    virtual void Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames );
+    virtual void Commit();
 };
 
 static Sequence< OUString > GetPropertyNames()
@@ -298,7 +298,7 @@ void SfxHelpOptions_Impl::Commit()
 class SfxHelp_Impl
 {
 private:
-    SfxHelpOptions_Impl*                m_pOpt;         // the options
+    SfxHelpOptions_Impl* m_pOpt; // the options
 
 public:
     SfxHelp_Impl();
@@ -309,9 +309,7 @@ public:
 };
 
 SfxHelp_Impl::SfxHelp_Impl() :
-
-    m_pOpt          ( NULL )
-
+    m_pOpt ( NULL )
 {
 }
 
@@ -342,10 +340,8 @@ SfxHelpOptions_Impl* SfxHelp_Impl::GetOptions()
 }
 
 SfxHelp::SfxHelp() :
-
     bIsDebug( sal_False ),
     pImp    ( NULL )
-
 {
     // read the environment variable "HELP_DEBUG"
     // if it's set, you will see debug output on active help
