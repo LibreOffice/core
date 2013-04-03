@@ -34,10 +34,10 @@ public:
                                 GetResultSet( const String& rURL );
     static ::com::sun::star::uno::Sequence< ::rtl::OUString >
                                 GetHelpTreeViewContents( const String& rURL );
-    static OUString             GetActiveHelpString( const OUString& rURL );
-    static sal_Bool             IsHelpErrorDocument( const OUString& rURL );
+    static OUString GetActiveHelpString( const OUString& rURL );
+    static sal_Bool IsHelpErrorDocument( const OUString& rURL );
 
-    static sal_uIntPtr              GetSize( const String& rContent );
+    static sal_Int64 GetSize( const String& rContent );
 };
 
 #endif // #ifndef _SFX_HELPER_HXX

@@ -113,18 +113,18 @@ const sal_uInt16 HI_ACTION = 4;
 static const char DOCUMENT_SIGNATURE_MENU_CMD[] = "Signature";
 
 //------------------------------------------------------------------------
-String CreateSizeText( sal_uIntPtr nSize, sal_Bool bExtraBytes = sal_True, sal_Bool bSmartExtraBytes = sal_False );
-String CreateSizeText( sal_uIntPtr nSize, sal_Bool bExtraBytes, sal_Bool bSmartExtraBytes )
+namespace {
+
+String CreateSizeText( sal_Int64 nSize )
 {
     String aUnitStr = rtl::OUString(' ');
     aUnitStr += SfxResId(STR_BYTES).toString();
-    sal_uIntPtr nSize1 = nSize;
-    sal_uIntPtr nSize2 = nSize1;
-    sal_uIntPtr nMega = 1024 * 1024;
-    sal_uIntPtr nGiga = nMega * 1024;
+    sal_Int64 nSize1 = nSize;
+    sal_Int64 nSize2 = nSize1;
+    sal_Int64 nMega = 1024 * 1024;
+    sal_Int64 nGiga = nMega * 1024;
     double fSize = nSize;
     int nDec = 0;
-    sal_Bool bGB = sal_False;
 
     if ( nSize1 >= 10000 && nSize1 < nMega )
     {
@@ -147,7 +147,6 @@ String CreateSizeText( sal_uIntPtr nSize, sal_Bool bExtraBytes, sal_Bool bSmartE
         nSize1 /= nGiga;
         aUnitStr = ' ';
         aUnitStr += SfxResId(STR_GB).toString();
-        bGB = sal_True;
         fSize /= nGiga;
         nDec = 3;
     }
@@ -155,7 +154,7 @@ String CreateSizeText( sal_uIntPtr nSize, sal_Bool bExtraBytes, sal_Bool bSmartE
     const LocaleDataWrapper& rLocaleWrapper = aSysLocale.GetLocaleData();
     String aSizeStr( rLocaleWrapper.getNum( nSize1, 0 ) );
     aSizeStr += aUnitStr;
-    if ( bExtraBytes && ( nSize1 < nSize2 ) )
+    if ( nSize1 < nSize2 )
     {
         aSizeStr = ::rtl::math::doubleToUString( fSize,
                 rtl_math_StringFormat_F, nDec,
@@ -166,14 +165,6 @@ String CreateSizeText( sal_uIntPtr nSize, sal_Bool bExtraBytes, sal_Bool bSmartE
         aSizeStr += rLocaleWrapper.getNum( nSize2, 0 );
         aSizeStr += ' ';
         aSizeStr += SfxResId(STR_BYTES).toString();
-        aSizeStr += ')';
-    }
-    else if ( bGB && bSmartExtraBytes )
-    {
-        nSize1 = nSize / nMega;
-        aSizeStr = " (";
-        aSizeStr += rLocaleWrapper.getNum( nSize1, 0 );
-        aSizeStr += aUnitStr;
         aSizeStr += ')';
     }
     return aSizeStr;
@@ -197,6 +188,7 @@ String ConvertDateTime_Impl( const String& rName,
      return aStr;
 }
 
+}
 //------------------------------------------------------------------------
 
 SfxDocumentInfoItem::SfxDocumentInfoItem()

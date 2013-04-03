@@ -283,16 +283,15 @@ sal_Bool SfxContentHelper::IsHelpErrorDocument( const OUString& rURL )
 
 // -----------------------------------------------------------------------
 
-sal_uIntPtr SfxContentHelper::GetSize( const String& rContent )
+sal_Int64 SfxContentHelper::GetSize( const String& rContent )
 {
-    sal_uIntPtr nSize = 0;
-    sal_Int64 nTemp = 0;
+    sal_Int64 nSize = 0;
     INetURLObject aObj( rContent );
     DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
     try
     {
         ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-        aCnt.getPropertyValue( "Size" ) >>= nTemp;
+        aCnt.getPropertyValue( "Size" ) >>= nSize;
     }
     catch( const ucb::CommandAbortedException& )
     {
@@ -302,7 +301,6 @@ sal_uIntPtr SfxContentHelper::GetSize( const String& rContent )
     {
         SAL_WARN( "sfx2.bastyp", "Any other exception" );
     }
-    nSize = (sal_uInt32)nTemp;
     return nSize;
 }
 
