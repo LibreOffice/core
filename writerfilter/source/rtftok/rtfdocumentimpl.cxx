@@ -3940,11 +3940,14 @@ int RTFDocumentImpl::popState()
                 // extract default text
                 nLength = aStr.toChar();
                 aStr = aStr.copy(1);
-                OString aDefaultText = aStr.copy(0, nLength);
                 RTFValue::Pointer_t pNValue(new RTFValue(OStringToOUString(aName, aState.nCurrentEncoding)));
                 m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFData_name, pNValue);
-                RTFValue::Pointer_t pDValue(new RTFValue(OStringToOUString(aDefaultText, aState.nCurrentEncoding)));
-                m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFTextInput_default, pDValue);
+                if (nLength > 0)
+                {
+                    OString aDefaultText = aStr.copy(0, nLength);
+                    RTFValue::Pointer_t pDValue(new RTFValue(OStringToOUString(aDefaultText, aState.nCurrentEncoding)));
+                    m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFTextInput_default, pDValue);
+                }
 
                 m_bFormField = false;
             }
