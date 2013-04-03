@@ -1010,7 +1010,7 @@ endef
 # gb_LinkTarget_add_grammar(<component>,<grammar file>)
 define gb_LinkTarget_add_grammar
 $(call gb_YaccTarget_YaccTarget,$(2))
-$(call gb_LinkTarget_add_generated_exception_object,$(1),YaccTarget/$(2),$(3))
+$(call gb_LinkTarget_add_generated_exception_object,$(1),YaccTarget/$(2),$(3),$(if $(filter GCC,$(COM)),-Wno-unused-macros))
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_YaccTarget_get_clean_target,$(2))
 $(call gb_LinkTarget_get_headers_target,$(1)) : $(call gb_YaccTarget_get_header_target,$(2))
 $(call gb_LinkTarget__add_include,$(1),$(dir $(call gb_YaccTarget_get_header_target,$(2))))
@@ -1027,7 +1027,7 @@ endef
 # gb_LinkTarget_add_scanner(<component>,<scanner file>)
 define gb_LinkTarget_add_scanner
 $(call gb_LexTarget_LexTarget,$(2))
-$(call gb_LinkTarget_add_generated_exception_object,$(1),LexTarget/$(2),$(3))
+$(call gb_LinkTarget_add_generated_exception_object,$(1),LexTarget/$(2),$(3),$(if $(filter GCC,$(COM)),-Wno-unused-macros))
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_LexTarget_get_clean_target,$(2))
 
 endef
