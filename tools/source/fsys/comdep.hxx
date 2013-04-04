@@ -19,7 +19,7 @@
 #ifndef _COMDEP_HXX
 #define _COMDEP_HXX
 
-#include "tools-internal.hxx"
+#include <tools/fsys.hxx>
 
 #define ACCESSDELIM(e)  ( ( e == FSYS_STYLE_NTFS ) ? "\\" : "/" )
 #define ACCESSDELIM_C(e)(char)\
@@ -86,31 +86,6 @@ struct DirReader_Impl
     sal_uInt16  Read(); ///< Reads one entry and appends it if ok
 };
 
-
-struct FileCopier_Impl
-{
-    FSysAction      nActions;       ///< action command  (Copy/Move/recur)
-    Link            aErrorLink;     ///< link to call upon errors
-    ErrCode         eErr;           ///< current errorcode in the handler
-    const DirEntry* pErrSource;     ///< for Error-Handler in case of Source error
-    const DirEntry* pErrTarget;     ///< for Error-Handler in case of Target error
-
-                    FileCopier_Impl()
-                    :   nActions( 0 ), eErr( 0 ),
-                        pErrSource( 0 ), pErrTarget( 0 )
-                    {}
-                    FileCopier_Impl( const FileCopier_Impl &rOrig )
-                    :   nActions( rOrig.nActions ), eErr( 0 ),
-                        pErrSource( 0 ), pErrTarget( 0 )
-                    {}
-
-    FileCopier_Impl& operator=( const FileCopier_Impl &rOrig )
-                    {
-                        nActions = rOrig.nActions;
-                        eErr = 0; pErrSource = 0; pErrTarget = 0;
-                        return *this;
-                    }
-};
 
 #if defined WNT
 sal_Bool IsRedirectable_Impl( const rtl::OString &rPath );

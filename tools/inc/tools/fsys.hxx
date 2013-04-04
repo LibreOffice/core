@@ -104,14 +104,8 @@ typedef int FSysAccess;
 
 // FSysAction
 typedef int FSysAction;
-#define FSYS_ACTION_COPYFILE        0x01    // not only create hardlink
 #define FSYS_ACTION_RECURSIVE       0x02    // deep through dircetory structure
 #define FSYS_ACTION_USERECYCLEBIN   0x04    // move to recycle bin
-#define FSYS_ACTION_MOVE            0x08    // delete after copy (=> move)
-#define FSYS_ACTION_CONTINUE        0x10    // continue on error
-#define FSYS_ACTION_KEEP_EXISTING   0x20    // do not overwrite objects in
-                                            // target folder in case of name
-                                            // clashes
 #define FSYS_ACTION_STANDARD        0
 
 // RFS
@@ -184,7 +178,6 @@ const char* ImpCheckDirEntry( const void* p );
 class TOOLS_DLLPUBLIC DirEntry
 {
 friend struct DirReader_Impl;
-friend class FileCopier;
 
     FileStat*           pStat;      // optional
 
@@ -264,9 +257,6 @@ public:
     const DirEntry&     operator []( sal_uInt16 nParentLevel ) const;
     sal_Bool            Contains( const DirEntry &rSubEntry ) const;
 
-    FSysError           CopyTo( const DirEntry& rDestDir,
-                                FSysAction nActions = FSYS_ACTION_STANDARD ) const;
-    FSysError           MoveTo( const DirEntry& rDestDir ) const;
     FSysError           Kill( FSysAction nActions = FSYS_ACTION_STANDARD ) const;
 
     DirEntry&           operator =( const DirEntry& rOrigDir );

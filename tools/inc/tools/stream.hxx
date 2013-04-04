@@ -28,7 +28,6 @@
 #include <tools/rtti.hxx>
 #include <rtl/string.hxx>
 
-class FileCopier;
 class StreamData;
 
 inline rtl_TextEncoding GetStoreCharSet( rtl_TextEncoding eEncoding )
@@ -652,8 +651,6 @@ template<typename prefix> sal_Size write_lenPrefixed_uInt8s_FromOUString(SvStrea
 
 class TOOLS_DLLPUBLIC SvFileStream : public SvStream
 {
-    friend class FileCopier;
-
 private:
     StreamData*     pInstanceData;
     String          aFilename;
