@@ -495,8 +495,7 @@ void OSelectionBrowseBox::InitController(CellControllerRef& /*rController*/, lon
             // replace with alias.*
             if (aField.trim() == "*")
             {
-                aField = aTable;
-                aField += ".*";
+                aField = aTable + ".*";
             }
             m_pFieldCell->SetText(aField);
         }   break;
