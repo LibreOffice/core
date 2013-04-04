@@ -276,12 +276,6 @@ my_components += ScriptProviderForJavaScript
 .END
 .END
 
-.IF "$(WITH_BINFILTER)" != "NO"
-my_components += \
-    bf_migratefilter \
-    bindet
-.END
-
 .IF "$(WITH_LDAP)" == "YES"
 my_components += ldapbe2
 .END
