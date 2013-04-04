@@ -36,7 +36,7 @@ TARGET=templates
 COMPLETELANGISO_VAR:=$(uniq $(completelangiso) $(alllangiso))
 .EXPORT : COMPLETELANGISO_VAR
 
-ALLTAR : $(INCCOM)$/alllangmodules.inc $(INCCOM)$/alllangmodules_root.inc $(INCCOM)$/alllangmodules_base.inc $(INCCOM)$/alllangmodules_calc.inc $(INCCOM)$/alllangmodules_draw.inc $(INCCOM)$/alllangmodules_impress.inc $(INCCOM)$/alllangmodules_math.inc $(INCCOM)$/alllangmodules_writer.inc $(INCCOM)$/alllangmodules_binfilter.inc
+ALLTAR : $(INCCOM)$/alllangmodules.inc $(INCCOM)$/alllangmodules_root.inc $(INCCOM)$/alllangmodules_base.inc $(INCCOM)$/alllangmodules_calc.inc $(INCCOM)$/alllangmodules_draw.inc $(INCCOM)$/alllangmodules_impress.inc $(INCCOM)$/alllangmodules_math.inc $(INCCOM)$/alllangmodules_writer.inc
 
 .INCLUDE .IGNORE : $(MISC)$/$(TARGET)_lang_track.mk
 .IF "$(LAST_COMPLETELANGISO_VAR)"!="$(COMPLETELANGISO_VAR)"
