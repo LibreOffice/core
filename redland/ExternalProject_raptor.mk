@@ -37,10 +37,10 @@ $(call gb_ExternalProject_get_state_target,raptor,build):
 	$(call gb_ExternalProject_run,build,\
 		$(if $(filter IOS,$(OS)),LIBS="-liconv") \
 		CFLAGS="$(if $(debug),-g,-O) $(if $(filter TRUE,$(DISABLE_DYNLOADING)),-fvisibility=hidden) \
-		$(if $(filter GCCLINUXPOWERPC64,$(COM)$(OS)$(CPUNAME)),-mminimal-toc)" \
+			$(if $(filter GCCLINUXPOWERPC64,$(COM)$(OS)$(CPUNAME)),-mminimal-toc)" \
 		LDFLAGS="-L$(OUTDIR)/lib \
 			$(if $(filter LINUX FREEBSD,$(OS)),-Wl$(COMMA)-rpath-link$(COMMA)$(OUTDIR)/lib -Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib") \
-		$(if $(SYSBASE),$(if $(filter LINUX SOLARIS,$(OS)),-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -lpthread -ldl))" \
+			$(if $(SYSBASE),$(if $(filter LINUX SOLARIS,$(OS)),-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -lpthread -ldl))" \
 		CPPFLAGS="-I$(OUTDIR)/inc/external $(if $(SYSBASE),-I$(SYSBASE)/usr/include)" \
 		./configure --disable-gtk-doc \
 			 --enable-parsers="rdfxml ntriples turtle trig guess rss-tag-soup" \

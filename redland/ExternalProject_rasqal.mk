@@ -46,7 +46,7 @@ $(call gb_ExternalProject_get_state_target,rasqal,build):
 		CFLAGS="$(if $(filter TRUE,$(DISABLE_DYNLOADING)),-fvisibility=hidden)" \
 		LDFLAGS=" \
 			$(if $(filter LINUX FREEBSD,$(OS)),-Wl$(COMMA)-rpath-link$(COMMA)$(OUTDIR)/lib -Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN:'\'\$$\$$ORIGIN/../ure-link/lib") \
-		$(if $(SYSBASE),$(if $(filter LINUX SOLARIS,$(OS)),-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -lpthread -ldl))" \
+			$(if $(SYSBASE),$(if $(filter LINUX SOLARIS,$(OS)),-L$(SYSBASE)/lib -L$(SYSBASE)/usr/lib -lpthread -ldl))" \
 		$(if $(SYSBASE),CPPFLAGS="-I$(SYSBASE)/usr/include") \
 		PKG_CONFIG="" \
 		RAPTOR2_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,raptor)/src" \
