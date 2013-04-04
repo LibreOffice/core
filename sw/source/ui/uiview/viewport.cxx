@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_features.h>
-
 #include "hintids.hxx"
 #include <vcl/help.hxx>
 #include <svx/ruler.hxx>
@@ -1057,7 +1055,6 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
         return;
     m_bInOuterResizePixel = sal_True;
 
-#if HAVE_FEATURE_DESKTOP
 // feststellen, ob Scrollbars angezeigt werden duerfen
     sal_Bool bShowH = sal_True,
          bShowV = sal_True,
@@ -1092,10 +1089,7 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
     if(m_pVScrollbar->IsVisible(sal_False) != bShowV && !bAuto)
         ShowVScrollbar(bShowV);
     m_pVScrollbar->SetAuto(bAuto);
-#else
-    const sal_Bool bAuto = sal_False;
-    const sal_Bool bHAuto = sal_False;
-#endif
+
     SET_CURR_SHELL( m_pWrtShell );
     sal_Bool bRepeat = sal_False;
     long nCnt = 0;
@@ -1204,9 +1198,6 @@ void SwView::SetZoomFactor( const Fraction &rX, const Fraction &rY )
 
 sal_Bool SwView::UpdateScrollbars()
 {
-#if !HAVE_FEATURE_DESKTOP
-    return sal_True;
-#else
     sal_Bool bRet = sal_False;
     if ( !m_aVisArea.IsEmpty() )
     {
@@ -1251,7 +1242,6 @@ sal_Bool SwView::UpdateScrollbars()
         }
     }
     return bRet;
-#endif
 }
 
 void SwView::Move()

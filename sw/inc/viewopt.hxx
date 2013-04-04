@@ -16,8 +16,12 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef _VIEWOPT_HXX
 #define _VIEWOPT_HXX
+
+#include <config_features.h>
+
 #include <tools/gen.hxx>
 #include <tools/string.hxx>
 #include <tools/color.hxx>
@@ -441,9 +445,21 @@ public:
 ----------------------------------------------------------------------------*/
 
     sal_Bool    IsViewVScrollBar() const
-        { return nUIOptions & VIEWOPT_2_VSCROLLBAR ? sal_True : sal_False;    }
+        {
+#if HAVE_FEATURE_DESKTOP
+            return nUIOptions & VIEWOPT_2_VSCROLLBAR ? sal_True : sal_False;
+#else
+            return sal_False;
+#endif
+        }
     sal_Bool    IsViewHScrollBar() const
-        { return nUIOptions & VIEWOPT_2_HSCROLLBAR ? sal_True : sal_False;    }
+        {
+#if HAVE_FEATURE_DESKTOP
+            return nUIOptions & VIEWOPT_2_HSCROLLBAR ? sal_True : sal_False;
+#else
+            return sal_False;
+#endif
+        }
     sal_Bool    IsKeepRatio()      const
         { return nUIOptions & VIEWOPT_2_KEEPASPECTRATIO ? sal_True : sal_False;   }
     sal_Bool    IsGrfKeepZoom()    const
@@ -479,25 +495,37 @@ public:
     const Color&    GetRetoucheColor() const        { return aRetoucheColor;}
     void            SetRetoucheColor(const Color&r) { aRetoucheColor = r;   }
 
-    sal_Bool            IsViewAnyRuler() const {return 0 != (nUIOptions & VIEWOPT_2_ANY_RULER);}
+    sal_Bool        IsViewAnyRuler() const
+        {
+#if HAVE_FEATURE_DESKTOP
+            return 0 != (nUIOptions & VIEWOPT_2_ANY_RULER);
+#else
+            return sal_False;
+#endif
+        }
     void            SetViewAnyRuler(sal_Bool bSet)
                         { bSet ? (nUIOptions |= VIEWOPT_2_ANY_RULER) : (nUIOptions &= ~VIEWOPT_2_ANY_RULER);}
 
-    sal_Bool            IsViewHRuler(sal_Bool bDirect = sal_False)     const
+    sal_Bool        IsViewHRuler(sal_Bool bDirect = sal_False)     const
                         {
+#if HAVE_FEATURE_DESKTOP
                             sal_Bool bRet = sal::static_int_cast< sal_Bool >( bDirect  ?
                                     0 != (nUIOptions & VIEWOPT_2_H_RULER) :
                                     !bReadonly ?
                                         (nUIOptions & (VIEWOPT_2_ANY_RULER|VIEWOPT_2_H_RULER)) == (VIEWOPT_2_ANY_RULER|VIEWOPT_2_H_RULER)
                                         : sal_False );
                             return bRet;
-
+#else
+                            (void) bDirect;
+                            return sal_False;
+#endif
                         }
     void            SetViewHRuler   (sal_Bool b)
                         {    b ? (nUIOptions |= VIEWOPT_2_H_RULER ) : ( nUIOptions &= ~VIEWOPT_2_H_RULER);}
 
     sal_Bool            IsViewVRuler(sal_Bool bDirect = sal_False) const
                         {
+#if HAVE_FEATURE_DESKTOP
                             sal_Bool bRet = sal::static_int_cast< sal_Bool >( bDirect  ?
                                     0 !=(nUIOptions & VIEWOPT_2_V_RULER) :
                                     !bReadonly ?
@@ -505,6 +533,10 @@ public:
                                             (VIEWOPT_2_ANY_RULER|VIEWOPT_2_V_RULER)) == (VIEWOPT_2_ANY_RULER|VIEWOPT_2_V_RULER)
                                         : sal_False );
                             return bRet;
+#else
+                            (void) bDirect;
+                            return sal_False;
+#endif
                         }
     void            SetViewVRuler     (sal_Bool b)
                         { b ? (nUIOptions |= VIEWOPT_2_V_RULER ) : ( nUIOptions &= ~VIEWOPT_2_V_RULER);}
