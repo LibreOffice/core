@@ -56,18 +56,6 @@ using ::std::vector;
 
 using ::rtl::OStringToOUString;
 
-namespace {
-
-DateTime convertDateTime( const util::DateTime& rUnoDT )
-{
-    return DateTime( Date( rUnoDT.Day, rUnoDT.Month, rUnoDT.Year ),
-                         Time( rUnoDT.Hours, rUnoDT.Minutes, rUnoDT.Seconds, rUnoDT.HundredthSeconds ) );
-}
-
-}
-
-// -----------------------------------------------------------------------
-
 std::vector<OUString> SfxContentHelper::GetResultSet( const OUString& rURL )
 {
     vector<OUString> aList;
