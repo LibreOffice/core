@@ -49,6 +49,7 @@
 #include "rtl/instance.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.hxx"
+#include "i18npool/languagetag.hxx"
 
 namespace {
 
@@ -62,32 +63,11 @@ struct TheConfigurationWrapper:
 OUString getDefaultLocale(
     css::uno::Reference< css::uno::XComponentContext > const & context)
 {
-    css::lang::Locale locale(
+    return LanguageTag(
         css::uno::Reference< css::lang::XLocalizable >(
             css::configuration::theDefaultProvider::get(context),
             css::uno::UNO_QUERY_THROW)->
-        getLocale());
-    OUStringBuffer buf;
-    SAL_WARN_IF(
-        locale.Language.indexOf('-') != -1, "comphelper",
-        "Locale language \"" << locale.Language << "\" contains \"-\"");
-    buf.append(locale.Language);
-    SAL_WARN_IF(
-        locale.Country.isEmpty() && !locale.Variant.isEmpty(), "comphelper",
-        "Locale has empty country but non-empty variant \"" << locale.Variant
-            << '"');
-    if (!locale.Country.isEmpty()) {
-        buf.append('-');
-        SAL_WARN_IF(
-            locale.Country.indexOf('-') != -1, "comphelper",
-            "Locale language \"" << locale.Country << "\" contains \"-\"");
-        buf.append(locale.Country);
-        if (!locale.Variant.isEmpty()) {
-            buf.append('-');
-            buf.append(locale.Variant);
-        }
-    }
-    return buf.makeStringAndClear();
+        getLocale()).getBcp47();
 }
 
 OUString extendLocalizedPath(OUString const & path, OUString const & locale) {
@@ -95,7 +75,7 @@ OUString extendLocalizedPath(OUString const & path, OUString const & locale) {
     buf.append("/['*");
     SAL_WARN_IF(
         locale.match("*"), "comphelper",
-        "Locale \"" << locale << "\" starts with \"-\"");
+        "Locale \"" << locale << "\" starts with \"*\"");
     assert(locale.indexOf('&') == -1);
     assert(locale.indexOf('"') == -1);
     assert(locale.indexOf('\'') == -1);

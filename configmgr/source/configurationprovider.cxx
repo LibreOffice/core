@@ -337,9 +337,7 @@ void Service::setLocale(css::lang::Locale const & eLocale)
 css::lang::Locale Service::getLocale() throw (css::uno::RuntimeException) {
     osl::MutexGuard guard(*lock_);
     css::lang::Locale loc;
-    if ( locale_ == "*" ) {     /* FIXME-BCP47: WTF is this?!? */
-        loc.Language = locale_;
-    } else if (! locale_.isEmpty()) {
+    if (! locale_.isEmpty()) {
         loc = LanguageTag( locale_).getLocale( false);
     }
     return loc;
