@@ -184,7 +184,7 @@ void SdrRectObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bGradientAllowed = (eFillStyle == XFILL_GRADIENT);
 
     rInfo.bShearAllowed     =bNoTextFrame;
-    rInfo.bEdgeRadiusAllowed=sal_True;
+    rInfo.bEdgeRadiusAllowed=sal_False;
 
     bool bCanConv=!HasText() || ImpCanConvTextToCurve();
     if (bCanConv && !bNoTextFrame && !HasText()) {
