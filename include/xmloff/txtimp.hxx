@@ -674,36 +674,53 @@ public:
     // (to be implemented in sw/filter/xml/txtparai.hxx)
 
     virtual void RedlineAdd(
-        const OUString& rType,       /// redline type (insert, del,... )
-        const OUString& rId,         /// use to identify this redline
-        const OUString& rAuthor,     /// name of the author
-        const OUString& rComment,    /// redline comment
-        const ::com::sun::star::util::DateTime& rDateTime,  /// date+time
-        sal_Bool bMergeLastParagraph);      /// merge last paras
+            /// redline type (insert, del,... )
+            const OUString& rType,
+            /// use to identify this redline
+            const OUString& rId,
+            /// name of the author
+            const OUString& rAuthor,
+            /// redline comment
+            const OUString& rComment,
+            /// date+time
+            const ::com::sun::star::util::DateTime& rDateTime,
+            /// merge last paras
+            sal_Bool bMergeLastParagraph);
+
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::text::XTextCursor> RedlineCreateText(
-            ::com::sun::star::uno::Reference<   /// needed to get the document
-                    ::com::sun::star::text::XTextCursor> & rOldCursor,
-            const OUString& rId);    /// ID used to RedlineAdd() call
+            /// needed to get the document
+            ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor > & rOldCursor,
+            /// ID used to RedlineAdd() call
+            const OUString& rId);
+
     virtual void RedlineSetCursor(
-        const OUString& rId,         /// ID used to RedlineAdd() call
-        sal_Bool bStart,                    /// start or end Cursor
-        sal_Bool bIsOutsideOfParagraph);    /// range is not within <text:p>
-    virtual void RedlineAdjustStartNodeCursor(
-        sal_Bool bStart);
+        /// ID used to RedlineAdd() call
+        const OUString& rId,
+        /// start or end Cursor
+        sal_Bool bStart,
+        /// range is not within <text:p>
+        sal_Bool bIsOutsideOfParagraph);
+
+    virtual void RedlineAdjustStartNodeCursor( sal_Bool bStart );
     virtual void SetShowChanges( sal_Bool bShowChanges );
     virtual void SetRecordChanges( sal_Bool bRecordChanges );
     virtual void SetChangesProtectionKey(
         const ::com::sun::star::uno::Sequence<sal_Int8> & rProtectionKey );
 
-    // access to the last open redline ID:
+    /// get the last open redline ID
     OUString GetOpenRedlineId();
+    /// modify the last open redline ID
     void SetOpenRedlineId( OUString& rId);
+    /// reset the last open redline ID
     void ResetOpenRedlineId();
 
     // #107848#
-    // Access methods to the inside_deleted_section flag (redlining)
+    /** redlining : Setter to remember the fact we are inside/outside
+     * a <text:deletion> element (deleted redline section) */
     void SetInsideDeleteContext(bool const bNew);
+    /** redlining : Getter to know if we are inside
+     * a <text:deletion> element (deleted redline section) */
     bool IsInsideDeleteContext() const;
 
     SvXMLImport & GetXMLImport();

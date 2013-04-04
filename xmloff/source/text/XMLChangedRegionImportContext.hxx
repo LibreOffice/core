@@ -34,7 +34,10 @@ namespace com { namespace sun { namespace star {
     } }
 } } }
 
-
+/**
+ * Import <text:changed-region> elements contained in a
+ * <text:tracked-changes> element.
+ */
 class XMLChangedRegionImportContext : public SvXMLImportContext
 {
     const OUString sEmpty;
@@ -44,9 +47,11 @@ class XMLChangedRegionImportContext : public SvXMLImportContext
     ::com::sun::star::uno::Reference<
         ::com::sun::star::text::XTextCursor> xOldCursor;
 
-    OUString sID;        /// redline-ID
+    /// redline-ID
+    OUString sID;
 
-    sal_Bool bMergeLastPara;    /// merge-last-paragraph flag
+    /// merge-last-paragraph flag
+    sal_Bool bMergeLastPara;
 
 public:
 

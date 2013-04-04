@@ -561,7 +561,7 @@ struct SAL_DLLPRIVATE XMLTextImportHelper::Impl
     bool m_bBodyContentStarted : 1;
 
     // #107848#
-    // One more flag to remember if we are inside a deleted redline section
+    /// Are we inside a <text:deletion> element (deleted redline section)
     bool m_bInsideDeleteContext : 1;
 
     typedef ::std::pair< OUString, OUString> field_name_type_t;
@@ -604,7 +604,6 @@ struct SAL_DLLPRIVATE XMLTextImportHelper::Impl
         ,   m_bProgress( bProgress )
         ,   m_bOrganizerMode( bOrganizerMode )
         ,   m_bBodyContentStarted( true )
-            // #107848# Initialize inside_deleted_section flag correctly
         ,   m_bInsideDeleteContext( false )
     {
     }
