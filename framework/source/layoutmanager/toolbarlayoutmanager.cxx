@@ -676,7 +676,16 @@ void ToolbarLayoutManager::setVisible( bool bVisible )
         {
             bool bSetVisible( pIter->m_bVisible & bVisible );
             if ( !bSetVisible )
+            {
                 pWindow->Hide();
+
+                UIElement aUIElement( *pIter );
+                if ( !aUIElement.m_bFloating )
+                    implts_setLayoutDirty();
+
+                aUIElement.m_bVisible = false;
+                implts_setToolbar( aUIElement );
+            }
             else
             {
                 if ( pIter->m_bFloating )
