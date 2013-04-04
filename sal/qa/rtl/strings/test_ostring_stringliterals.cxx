@@ -76,8 +76,6 @@ CPPUNIT_TEST_SUITE_END();
 
 void test::ostring::StringLiterals::checkCtors()
 {
-// string literal ctors do not work with SFINAE broken and are disabled
-#if ! HAVE_SFINAE_ANONYMOUS_BROKEN
     bool result_tmp;
     CPPUNIT_ASSERT( CONST_CTOR_USED( "test" ));
     const char good1[] = "test";
@@ -115,17 +113,6 @@ void test::ostring::StringLiterals::checkCtors()
 // Check that contents are correct and equal to the case when RTL_CONSTASCII_STRINGPARAM is used.
     CPPUNIT_ASSERT( rtl::OString( RTL_CONSTASCII_STRINGPARAM( "" )) == rtl::OString( "" ));
     CPPUNIT_ASSERT( rtl::OString( RTL_CONSTASCII_STRINGPARAM( "ab" )) == rtl::OString( "ab" ));
-#if 0
-// This is currently disabled because it can't be consistent with HAVE_SFINAE_ANONYMOUS_BROKEN.
-// Since the situation wasn't quite consistent even before, there should be no big harm.
-
-// Check also that embedded \0 is included (RTL_CONSTASCII_STRINGPARAM does the same,
-// const char* ctor does not, but it seems to make more sense to include it when
-// it's explicitly mentioned in the string literal).
-    CPPUNIT_ASSERT( rtl::OString( RTL_CONSTASCII_STRINGPARAM( "\0" )) == rtl::OString( "\0" ));
-    CPPUNIT_ASSERT( rtl::OString( RTL_CONSTASCII_STRINGPARAM( "a\0b" )) == rtl::OString( "a\0b" ));
-#endif
-#endif
 }
 
 const char test::ostring::StringLiterals::bad5[] = "test";
@@ -159,11 +146,9 @@ void test::ostring::StringLiterals::checkUsage()
     rtl_string_unittest_const_literal_function = false;
     CPPUNIT_ASSERT_EQUAL( foo, rtl::OString() = "foo" );
     CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
-#if ! HAVE_SFINAE_ANONYMOUS_BROKEN
     rtl_string_unittest_const_literal_function = false;
     CPPUNIT_ASSERT( FoO.equalsIgnoreAsciiCase( "fOo" ));
     CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
-#endif
     rtl_string_unittest_const_literal_function = false;
     CPPUNIT_ASSERT( foobarfoo.match( "bar", 3 ));
     CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
@@ -264,7 +249,6 @@ void test::ostring::StringLiterals::checkNonConstUsage()
 void test::ostring::StringLiterals::checkBuffer()
 {
     rtl::OStringBuffer buf;
-#if ! HAVE_SFINAE_ANONYMOUS_BROKEN
     rtl_string_unittest_const_literal_function = false;
     buf.append( "foo" );
     CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
@@ -277,9 +261,6 @@ void test::ostring::StringLiterals::checkBuffer()
     buf.insert( 3, "baz" );
     CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
     CPPUNIT_ASSERT_EQUAL( rtl::OString( "foobazbar" ), buf.toString());
-#else
-    buf.append( "foobazbar" );
-#endif
 
     rtl::OString foobazbard( "foobazbard" );
     rtl::OString foodbazbard( "foodbazbard" );

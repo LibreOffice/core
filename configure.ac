@@ -5775,42 +5775,6 @@ AC_SUBST(HAVE_GCC_VISIBILITY_FEATURE)
 AC_SUBST(HAVE_GCC_VISIBILITY_BROKEN)
 
 dnl ===================================================================
-dnl SFINAE test
-dnl Pre-C++11 does not allow types without linkage as template arguments.
-dnl Substitution Failure Is Not An Error is an idiom that disables
-dnl template instances that would cause an error, without actually
-dnl causing an error. Old gcc (pre-4.0.2) however causes a real error.
-dnl http://gcc.gnu.org/bugzilla/show_bug.cgi?id=21514
-dnl ===================================================================
-HAVE_SFINAE_ANONYMOUS_BROKEN=
-if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \); then
-
-    AC_LANG_PUSH([C++])
-    AC_MSG_CHECKING([if SFINAE is broken with anonymous types])
-    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-enum { AnonymousEnumValue };
-template< typename T > class TestPredicate {};
-template<> class TestPredicate< int > { public: typedef bool Type; };
-template< typename T >
-bool test( const T&, typename TestPredicate< T >::Type = false )
-    { return true; };
-void test( ... );
-            ]], [[
-    test( 10 );
-    test( AnonymousEnumValue );
-            ]])],[sfinae_anonymous_broken=no],[sfinae_anonymous_broken=yes
-        ])
-        AC_MSG_RESULT([$sfinae_anonymous_broken])
-        if test "$sfinae_anonymous_broken" = "yes"; then
-            HAVE_SFINAE_ANONYMOUS_BROKEN="TRUE"
-            AC_DEFINE(HAVE_SFINAE_ANONYMOUS_BROKEN)
-        fi
-    AC_LANG_POP([C++])
-fi
-
-AC_SUBST(HAVE_SFINAE_ANONYMOUS_BROKEN)
-
-dnl ===================================================================
 dnl  Clang++ tests
 dnl ===================================================================
 

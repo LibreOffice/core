@@ -154,15 +154,6 @@ public:
         @overload
         @since LibreOffice 3.6
      */
-#if HAVE_SFINAE_ANONYMOUS_BROKEN // see the OString ctors
-    OStringBuffer( const char* value )
-        : pData(NULL)
-    {
-        sal_Int32 length = rtl_str_getLength( value );
-        nCapacity = length + 16;
-        rtl_stringbuffer_newFromStr_WithLength( &pData, value, length );
-    }
-#else
     template< typename T >
     OStringBuffer( const T& value, typename internal::CharPtrDetector< T, internal::Dummy >::Type = internal::Dummy())
         : pData(NULL)
@@ -203,7 +194,6 @@ public:
         rtl_string_unittest_const_literal = true;
 #endif
     }
-#endif // HAVE_SFINAE_ANONYMOUS_BROKEN
 
     /**
         Constructs a string buffer so that it represents the same
@@ -458,12 +448,6 @@ public:
         @param   str   the characters to be appended.
         @return  this string buffer.
      */
-#if HAVE_SFINAE_ANONYMOUS_BROKEN
-    OStringBuffer & append( const sal_Char * str )
-    {
-        return append( str, rtl_str_getLength( str ) );
-    }
-#else
     template< typename T >
     typename internal::CharPtrDetector< T, OStringBuffer& >::Type append( const T& str )
     {
@@ -489,7 +473,6 @@ public:
         rtl_stringbuffer_insert( &pData, &nCapacity, getLength(), literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
         return *this;
     }
-#endif
 
     /**
         Appends the string representation of the <code>char</code> array
@@ -669,12 +652,6 @@ public:
         @param      str      a character array.
         @return     this string buffer.
      */
-#if HAVE_SFINAE_ANONYMOUS_BROKEN
-    OStringBuffer & insert( sal_Int32 offset, const sal_Char * str )
-    {
-        return insert( offset, str, rtl_str_getLength( str ) );
-    }
-#else
     template< typename T >
     typename internal::CharPtrDetector< T, OStringBuffer& >::Type insert( sal_Int32 offset, const T& str )
     {
@@ -700,7 +677,6 @@ public:
         rtl_stringbuffer_insert( &pData, &nCapacity, offset, literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
         return *this;
     }
-#endif
 
     /**
         Inserts the string representation of the <code>char</code> array

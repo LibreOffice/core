@@ -193,39 +193,6 @@ public:
 
       @since LibreOffice 3.6
     */
-#if HAVE_SFINAE_ANONYMOUS_BROKEN
-    // Old gcc can try to convert anonymous enums to OUString and give compile error.
-    // So instead have a variant for const and non-const char[].
-    template< int N >
-    OUString( const char (&literal)[ N ] )
-    {
-        // Check that the string literal is in fact N - 1 long (no embedded \0's),
-        // any decent compiler should optimize out calls to strlen with literals.
-        assert( strlen( literal ) == N - 1 );
-        pData = 0;
-        rtl_uString_newFromLiteral( &pData, literal, N - 1, 0 );
-#ifdef RTL_STRING_UNITTEST
-        rtl_string_unittest_const_literal = true;
-#endif
-    }
-
-    /**
-     * It is an error to call this overload. Strings cannot directly use non-const char[].
-     * @internal
-     */
-    template< int N >
-    OUString( char (&value)[ N ] )
-#ifndef RTL_STRING_UNITTEST
-        ; // intentionally not implemented
-#else
-    {
-        (void) value; // unused
-        pData = 0;
-        rtl_uString_newFromLiteral( &pData, "!!br0ken!!", 10, 0 ); // set to garbage
-        rtl_string_unittest_invalid_conversion = true;
-    }
-#endif
-#else // HAVE_SFINAE_ANONYMOUS_BROKEN
     template< typename T >
     OUString( T& literal, typename internal::ConstCharArrayDetector< T, internal::Dummy >::Type = internal::Dummy() )
     {
@@ -239,9 +206,6 @@ public:
         rtl_string_unittest_const_literal = true;
 #endif
     }
-
-#endif // HAVE_SFINAE_ANONYMOUS_BROKEN
-
 
 #ifdef RTL_STRING_UNITTEST
     /**

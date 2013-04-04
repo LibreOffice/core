@@ -18,7 +18,6 @@ Any change in this header will cause a rebuild of almost everything.
 #define HAVE_GCC_BUILTIN_ATOMIC 0
 #define HAVE_GCC_PRAGMA_DIAGNOSTIC_MODIFY 0
 #define HAVE_GCC_PRAGMA_DIAGNOSTIC_SCOPE 0
-#define HAVE_SFINAE_ANONYMOUS_BROKEN 0
 #define HAVE_THREADSAFE_STATICS 0
 #define HAVE_SYSLOG_H 0
 

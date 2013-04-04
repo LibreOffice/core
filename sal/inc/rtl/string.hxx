@@ -165,17 +165,6 @@ public:
 
       @param    value       a NULL-terminated character array.
     */
-#if HAVE_SFINAE_ANONYMOUS_BROKEN
-    // Old gcc can try to convert anonymous enums to OString and give compile error.
-    // So there's no special-cased handling of string literals.
-    // These are inline functions and technically both variants should work
-    // the same in practice, so there should be no compatibility problem.
-    OString( const sal_Char * value ) SAL_THROW(())
-     {
-         pData = 0;
-         rtl_string_newFromStr( &pData, value );
-     }
-#else
     template< typename T >
     OString( const T& value, typename internal::CharPtrDetector< T, internal::Dummy >::Type = internal::Dummy() ) SAL_THROW(())
     {
@@ -213,8 +202,6 @@ public:
         rtl_string_unittest_const_literal = true;
 #endif
     }
-
-#endif // HAVE_SFINAE_ANONYMOUS_BROKEN
 
     /**
       New string from a character buffer array.
@@ -542,12 +529,6 @@ public:
       @return   sal_True if the strings are equal;
                 sal_False, otherwise.
     */
-#if HAVE_SFINAE_ANONYMOUS_BROKEN
-    sal_Bool equalsIgnoreAsciiCase( const sal_Char * asciiStr ) const SAL_THROW(())
-    {
-        return rtl_str_compareIgnoreAsciiCase( pData->buffer, asciiStr ) == 0;
-    }
-#else
     template< typename T >
     typename internal::CharPtrDetector< T, bool >::Type equalsIgnoreAsciiCase( const T& asciiStr ) const SAL_THROW(())
     {
@@ -575,7 +556,6 @@ public:
         return rtl_str_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length,
                                                           literal, internal::ConstCharArrayDetector< T, void >::size - 1 ) == 0;
     }
-#endif
 
     /**
       Perform a ASCII lowercase comparison of two strings.

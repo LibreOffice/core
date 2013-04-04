@@ -146,37 +146,6 @@ public:
         rtl_uStringbuffer_newFromStr_WithLength( &pData, value.getStr(), value.getLength() );
     }
 
-#if HAVE_SFINAE_ANONYMOUS_BROKEN // see OUString ctors
-    template< int N >
-    OUStringBuffer( const char (&literal)[ N ] )
-        : pData(NULL)
-        , nCapacity( N - 1 + 16 )
-    {
-        assert( strlen( literal ) == N - 1 );
-        rtl_uString_newFromLiteral( &pData, literal, N - 1, 16 );
-#ifdef RTL_STRING_UNITTEST
-        rtl_string_unittest_const_literal = true;
-#endif
-    }
-
-    /**
-     * It is an error to call this overload. Strings cannot directly use non-const char[].
-     * @internal
-     */
-    template< int N >
-    OUStringBuffer( char (&value)[ N ] )
-#ifndef RTL_STRING_UNITTEST
-        ; // intentionally not implemented
-#else
-    {
-        (void) value; // unused
-        pData = 0;
-        nCapacity = 10;
-        rtl_uString_newFromLiteral( &pData, "!!br0ken!!", 10, 0 ); // set to garbage
-        rtl_string_unittest_invalid_conversion = true;
-    }
-#endif
-#else // HAVE_SFINAE_ANONYMOUS_BROKEN
     template< typename T >
     OUStringBuffer( T& literal, typename internal::ConstCharArrayDetector< T, internal::Dummy >::Type = internal::Dummy() )
         : pData(NULL)
@@ -188,7 +157,6 @@ public:
         rtl_string_unittest_const_literal = true;
 #endif
     }
-#endif // HAVE_SFINAE_ANONYMOUS_BROKEN
 
 #ifdef RTL_STRING_UNITTEST
     /**
@@ -592,7 +560,7 @@ public:
         sal_Unicode sz[RTL_USTR_MAX_VALUEOFBOOLEAN];
         return append( sz, rtl_ustr_valueOfBoolean( sz, b ) );
     }
-#if ! HAVE_SFINAE_ANONYMOUS_BROKEN
+
     // Pointer can be automatically converted to bool, which is unwanted here.
     // Explicitly delete all pointer append() overloads to prevent this
     // (except for char* and sal_Unicode* overloads, which are handled elsewhere).
@@ -600,7 +568,6 @@ public:
     typename internal::Enable< void,
         !internal::CharPtrDetector< T* >::ok && !internal::SalUnicodePtrDetector< T* >::ok >::Type
         append( T* ) SAL_DELETED_FUNCTION;
-#endif
 
     // This overload is needed because OUString has a ctor from rtl_uString*, but
     // the bool overload above would be prefered to the conversion.
