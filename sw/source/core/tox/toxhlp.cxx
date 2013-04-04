@@ -20,10 +20,9 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/i18n/IndexEntrySupplier.hpp>
-#include <rtl/strbuf.hxx>
 #include <tools/string.hxx>
 #include <toxwrap.hxx>
-#include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 
@@ -37,11 +36,7 @@ IndexEntrySupplierWrapper::IndexEntrySupplierWrapper()
     }
     catch (const uno::Exception& e)
     {
-#if OSL_DEBUG_LEVEL > 0
-        rtl::OStringBuffer aMsg("IndexEntrySupplierWrapper: Caught exception\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        OSL_FAIL( aMsg.getStr() );
-#endif
+        SAL_WARN( "sw.core", "IndexEntrySupplierWrapper: Caught exception: " << e.Message );
     }
 }
 
@@ -57,17 +52,9 @@ String IndexEntrySupplierWrapper::GetIndexKey( const String& rTxt,
     try {
         sRet = xIES->getIndexKey( rTxt, rTxtReading, rLocale );
     }
-    catch (const ::com::sun::star::uno::Exception&
-#if OSL_DEBUG_LEVEL > 0
-        e
-#endif
-        )
+    catch (const uno::Exception& e)
     {
-#if OSL_DEBUG_LEVEL > 0
-        rtl::OStringBuffer aMsg("getIndexKey: Caught exception\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        OSL_FAIL( aMsg.getStr() );
-#endif
+        SAL_WARN( "sw.core", "getIndexKey: Caught exception: " << e.Message );
     }
     return sRet;
 }
@@ -78,17 +65,9 @@ String IndexEntrySupplierWrapper::GetFollowingText( sal_Bool bMorePages ) const
     try {
         sRet = xIES->getIndexFollowPageWord( bMorePages, aLcl );
     }
-    catch (const ::com::sun::star::uno::Exception&
-#if OSL_DEBUG_LEVEL > 0
-        e
-#endif
-        )
+    catch (const uno::Exception& e)
     {
-#if OSL_DEBUG_LEVEL > 0
-        rtl::OStringBuffer aMsg("getIndexFollowPageWord: Caught exception\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        OSL_FAIL( aMsg.getStr() );
-#endif
+        SAL_WARN( "sw.core", "getIndexFollowPageWord: Caught exception: " << e.Message );
     }
     return sRet;
 }
@@ -101,17 +80,9 @@ IndexEntrySupplierWrapper::GetAlgorithmList( const ::com::sun::star::lang::Local
     try {
         sRet = xIES->getAlgorithmList( rLcl );
     }
-    catch (const ::com::sun::star::uno::Exception&
-#if OSL_DEBUG_LEVEL > 0
-        e
-#endif
-        )
+    catch (const uno::Exception& e)
     {
-#if OSL_DEBUG_LEVEL > 0
-        rtl::OStringBuffer aMsg("getAlgorithmList: Caught exception\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        OSL_FAIL( aMsg.getStr() );
-#endif
+        SAL_WARN( "sw.core", "getAlgorithmList: Caught exception: " << e.Message );
     }
     return sRet;
 }
@@ -124,17 +95,9 @@ sal_Bool IndexEntrySupplierWrapper::LoadAlgorithm(
     try {
         bRet = xIES->loadAlgorithm( rLcl, sSortAlgorithm, nOptions );
     }
-    catch (const ::com::sun::star::uno::Exception&
-#if OSL_DEBUG_LEVEL > 0
-        e
-#endif
-        )
+    catch (const uno::Exception& e)
     {
-#if OSL_DEBUG_LEVEL > 0
-        rtl::OStringBuffer aMsg("loadAlgorithm: Caught exception\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        OSL_FAIL( aMsg.getStr() );
-#endif
+        SAL_WARN( "sw.core", "loadAlgorithm: Caught exception: " << e.Message );
     }
     return bRet;
 }
@@ -150,17 +113,9 @@ sal_Int16 IndexEntrySupplierWrapper::CompareIndexEntry(
         nRet = xIES->compareIndexEntry( rTxt1, rTxtReading1, rLocale1,
                                         rTxt2, rTxtReading2, rLocale2 );
     }
-    catch (const ::com::sun::star::uno::Exception&
-#if OSL_DEBUG_LEVEL > 0
-        e
-#endif
-        )
+    catch (const uno::Exception& e)
     {
-#if OSL_DEBUG_LEVEL > 0
-        rtl::OStringBuffer aMsg("compareIndexEntry: Caught exception\n");
-        aMsg.append(rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8));
-        OSL_FAIL( aMsg.getStr() );
-#endif
+        SAL_WARN( "sw.core", "compareIndexEntry: Caught exception: " << e.Message );
     }
     return nRet;
 }
