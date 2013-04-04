@@ -18,7 +18,6 @@
  */
 
 #include <tools/tempfile.hxx>
-#include "comdep.hxx"
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>

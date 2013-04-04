@@ -36,7 +36,6 @@ $(eval $(call gb_Package_add_file,tools_inc,inc/tools/extendapplicationenvironme
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/fldunit.hxx,tools/fldunit.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/fontenum.hxx,tools/fontenum.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/fract.hxx,tools/fract.hxx))
-$(eval $(call gb_Package_add_file,tools_inc,inc/tools/fsys.hxx,tools/fsys.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/gen.hxx,tools/gen.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/getprocessworkingdir.hxx,tools/getprocessworkingdir.hxx))
 $(eval $(call gb_Package_add_file,tools_inc,inc/tools/globname.hxx,tools/globname.hxx))
