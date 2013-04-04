@@ -364,9 +364,6 @@ AC_ARG_ENABLE(kde4,
                           where Qt4 and KDE4 are available. May be used with --enable-kde 
                           if you want to support both KDE3 and KDE4.
 ],,)
-AC_ARG_ENABLE(binfilter,
-[  --enable-binfilter      Enable legacy binary file formats filters
-],,enable_binfilter=no)
 AC_ARG_ENABLE(rpath,
 [  --disable-rpath         Disable the use of relative paths in shared libraries
 ],,)
@@ -1522,20 +1519,6 @@ if test -z "$enable_fetch_external" || test "$enable_fetch_external" = "yes" \
    DO_FETCH_TARBALLS="yes"
 fi
 AC_SUBST(DO_FETCH_TARBALLS)
-
-dnl ===================================================================
-dnl Disable legacy binary file formats filters
-dnl ===================================================================
-AC_MSG_CHECKING([whether to enable filters for legacy binary file formats (StarOffice 5.2)])
-if test "$enable_binfilter" = "yes"; then
-   WITH_BINFILTER="YES"
-   BUILD_TYPE="$BUILD_TYPE BINFILTER"
-   AC_MSG_RESULT([yes])
-else
-   WITH_BINFILTER="NO"
-   AC_MSG_RESULT([no])
-fi
-AC_SUBST(WITH_BINFILTER)
 
 if test "$_os" = "WINNT"; then
    AC_MSG_CHECKING([whether to use DirectX])
