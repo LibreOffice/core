@@ -1906,6 +1906,20 @@ bool Window::set_property(const OString &rKey, const OString &rValue)
 
         SetStyle(nBits);
     }
+    else if (rKey == "justification")
+    {
+        WinBits nBits = GetStyle();
+        nBits &= ~(WB_LEFT | WB_CENTER | WB_RIGHT);
+
+        if (rValue == "left")
+            nBits |= WB_LEFT;
+        else if (rValue == "right")
+            nBits |= WB_RIGHT;
+        else if (rValue == "center")
+            nBits |= WB_CENTER;
+
+        SetStyle(nBits);
+    }
     else if (rKey == "yalign")
     {
         WinBits nBits = GetStyle();
