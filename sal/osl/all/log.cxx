@@ -97,10 +97,10 @@ char const * toString(sal_detail_LogLevel level) {
 
 #endif
 
-// getenv is not thread safe, so minimize use of result; except on Android and
-// iOS, see 60628799633ffde502cb105b98d3f254f93115aa "Notice if SAL_LOG is
+// getenv is not thread safe, so minimize use of result; except on Android,
+// see 60628799633ffde502cb105b98d3f254f93115aa "Notice if SAL_LOG is
 // changed while the process is running":
-#if defined ANDROID || defined IOS
+#if defined ANDROID
 
 char const * getEnvironmentVariable() {
     return std::getenv("SAL_LOG");

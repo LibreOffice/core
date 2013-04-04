@@ -133,8 +133,6 @@ extern "C"
 void
 lo_initialize(void)
 {
-    setenv("SAL_LOG", "+WARN+INFO.vcl.headless+INFO.vcl.coretext+INFO.vcl.ios", 1);
-
     const char *argv[] = {
         "placeholder-exe",
         "-env:URE_INTERNAL_LIB_DIR=file:///",
