@@ -98,12 +98,6 @@ gb_AFLAGS := $(AFLAGS)
 # C4251: 'identifier' : class 'type' needs to have dll-interface to be
 #   used by clients of class 'type2'
 
-# C4255: 'function' : no function prototype given: converting '()' to
-#   '(void)'
-
-# C4265: 'class' : class has virtual functions, but destructor is not
-#   virtual
-
 # C4275: non-DLL-interface classkey 'identifier' used as base for
 #   DLL-interface classkey 'identifier'
 
@@ -119,12 +113,7 @@ gb_AFLAGS := $(AFLAGS)
 #   of the compiler did not override when parameters only differed by
 #   const/volatile qualifiers.
 
-# C4503: 'identifier' : decorated name length exceeded, name was
-#   truncated
-
 # C4505: 'function' : unreferenced local function has been removed
-
-# C4511: 'class' : copy constructor could not be generated
 
 # C4512: 'class' : assignment operator could not be generated
 
@@ -133,8 +122,6 @@ gb_AFLAGS := $(AFLAGS)
 
 # C4626: 'derived class' : assignment operator could not be generated
 #   because a base class assignment operator is inaccessible
-
-# C4640: 'instance' : construction of local static object is not thread-safe
 
 # C4706: assignment within conditional expression
 
@@ -157,19 +144,11 @@ gb_CFLAGS := \
 	-wd4242 \
 	-wd4244 \
 	-wd4245 \
-	-wd4250 \
 	-wd4251 \
-	-wd4255 \
-	-wd4275 \
-	-wd4290 \
 	-wd4355 \
-	-wd4503 \
 	-wd4505 \
-	-wd4511 \
 	-wd4512 \
-	-wd4611 \
 	-wd4626 \
-	-wd4640 \
 	-wd4706 \
 	-wd4800 \
 	-Zc:forScope,wchar_t- \
@@ -187,24 +166,18 @@ gb_CXXFLAGS := \
 	-wd4127 \
 	-wd4180 \
 	-wd4189 \
-	-wd4242 \
 	-wd4244 \
 	-wd4245 \
 	-wd4250 \
 	-wd4251 \
-	-wd4265 \
 	-wd4275 \
 	-wd4290 \
 	-wd4351 \
 	-wd4355 \
 	-wd4373 \
-	-wd4503 \
 	-wd4505 \
-	-wd4511 \
 	-wd4512 \
 	-wd4611 \
-	-wd4626 \
-	-wd4640 \
 	-wd4706 \
 	-wd4800 \
 	-wd4996 \
