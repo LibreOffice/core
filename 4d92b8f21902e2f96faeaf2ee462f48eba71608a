@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///10\u003d",
+        "filename": "sw/source/core/tox/toxhlp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2013-04-04T17:52:41Z",
+      "side": 1,
+      "message": "that is rather ugly legacy way to do it...\n\nmuch better to convert the OSL_FAIL below to SAL_WARN which will always use its arguments even in non-debug build and can also easily concat strings.\n\nsomething like SAL_WARN(\"sw.core\", \"blah exception\" \u003c\u003c  e.Msg);",
+      "revId": "4d92b8f21902e2f96faeaf2ee462f48eba71608a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
