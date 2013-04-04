@@ -13,7 +13,7 @@ Globals
             SERVICETAG_PARENTNAME LibreOffice 4.0
             SERVICETAG_SOURCE {buildsource}{minor}(Build:{buildid})
             SERVICETAG_URN urn:uuid:0187debd-e458-11de-82d6-080020a9ed93
-            HIDELICENSEDIALOG 1
+            HIDELICENSEDIALOG 0
             PACKAGEPREFIX
             BASISPACKAGEPREFIX libobasis
             UREPACKAGEPREFIX libreoffice

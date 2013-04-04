@@ -22,4 +22,6 @@ $(eval $(call gb_Package_add_file,readlicense_oo_files,bin/CREDITS.odt,odt/CREDI
 
 $(eval $(call gb_Package_add_file,readlicense_oo_files,bin/LICENSE.html,html/LICENSE.html))
 
+$(eval $(call gb_Package_add_file,readlicense_oo_files,bin/EULA_en-US.rtf,eula/EULA_en-US.rtf))
+
 # vim: set noet sw=4 ts=4:
