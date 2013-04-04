@@ -69,7 +69,7 @@ $(call gb_JunitTest_get_target,%) :
 	$(CLEAN_CMD)
 
 define gb_JunitTest_JunitTest
-$(call gb_JunitTest_get_target,$(1)) : T_CP := $(value XCLASSPATH)$(gb_CLASSPATHSEP)$(call gb_JavaClassSet_get_classdir,$(call gb_JunitTest_get_classsetname,$(1)))$(gb_CLASSPATHSEP)$(OOO_JUNIT_JAR)$(gb_CLASSPATHSEP)$(OUTDIR)/lib
+$(call gb_JunitTest_get_target,$(1)) : T_CP := $$(value XCLASSPATH)$$(gb_CLASSPATHSEP)$(call gb_JavaClassSet_get_classdir,$(call gb_JunitTest_get_classsetname,$(1)))$$(gb_CLASSPATHSEP)$(OOO_JUNIT_JAR)$$(gb_CLASSPATHSEP)$(OUTDIR)/lib
 $(call gb_JunitTest_get_target,$(1)) : CLASSES :=
 $(eval $(call gb_JunitTest_JunitTest_platform,$(1)))
 
@@ -110,7 +110,7 @@ $(call gb_JunitTest_get_target,$(1)) : T_CP := $(2)
 endef
 
 define gb_JunitTest_add_jar
-$(call gb_JunitTest_get_target,$(1)) : T_CP := $$(T_CP)$(gb_CLASSPATHSEP)$(2)
+$(call gb_JunitTest_get_target,$(1)) : T_CP := $$(T_CP)$$(gb_CLASSPATHSEP)$(2)
 $(call gb_JunitTest_get_target,$(1)) : $(2)
 
 endef

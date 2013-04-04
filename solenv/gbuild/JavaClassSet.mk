@@ -87,13 +87,13 @@ endef
 # build order dependency is a hack to get these prerequisites out of the way in the build command
 define gb_JavaClassSet_add_jar
 $(eval $(call gb_JavaClassSet_get_target,$(1)) : $(2))
-$(eval $(call gb_JavaClassSet_get_target,$(1)) : T_CP := $$(T_CP)$(gb_CLASSPATHSEP)$(strip $(2)))
+$(eval $(call gb_JavaClassSet_get_target,$(1)) : T_CP := $$(T_CP)$$(gb_CLASSPATHSEP)$(strip $(2)))
 $(eval $(call gb_JavaClassSet_get_target,$(1)) : JARDEPS += $(2))
 endef
 
 # this does not generate dependency on the jar
 define gb_JavaClassSet_add_system_jar
-$(eval $(call gb_JavaClassSet_get_target,$(1)) : T_CP := $$(T_CP)$(gb_CLASSPATHSEP)$(strip $(2)))
+$(eval $(call gb_JavaClassSet_get_target,$(1)) : T_CP := $$(T_CP)$$(gb_CLASSPATHSEP)$(strip $(2)))
 $(eval $(call gb_JavaClassSet_get_target,$(1)) : JARDEPS += $(2))
 endef
 
