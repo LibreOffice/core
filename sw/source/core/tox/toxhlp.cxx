@@ -35,7 +35,11 @@ IndexEntrySupplierWrapper::IndexEntrySupplierWrapper()
     try {
         xIES = i18n::IndexEntrySupplier::create(xContext);
     }
-    catch (const uno::Exception& e)
+    catch (const uno::Exception&
+#if OSL_DEBUG_LEVEL > 0
+        e
+#endif
+        )
     {
 #if OSL_DEBUG_LEVEL > 0
         rtl::OStringBuffer aMsg("IndexEntrySupplierWrapper: Caught exception\n");
