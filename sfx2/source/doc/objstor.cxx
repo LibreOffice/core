@@ -1799,8 +1799,6 @@ sal_Bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMediu
         {}
     }
 
-    OSL_ENSURE( bResult, "Storage disconnecting has failed - affects performance!" );
-
     return bResult;
 }
 
