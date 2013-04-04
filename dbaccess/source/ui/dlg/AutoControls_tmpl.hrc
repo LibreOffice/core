@@ -405,7 +405,7 @@
                                                                                                                             \
     String STR_AUTOFIELDSEPARATORLIST                                                                                       \
     {                                                                                                                       \
-        Text [ x-comment ] = "EM Dec 2002: \'Space\' refers to what you get when you hit the space bar on your keyboard.";  \
+        Text [ x-comment ] = "EM Dec 2002: 'Space' refers to what you get when you hit the space bar on your keyboard.";  \
         Text [ en-US ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{Space}\t32" ;                                                     \
     };                                                                                                                      \
                                                                                                                             \

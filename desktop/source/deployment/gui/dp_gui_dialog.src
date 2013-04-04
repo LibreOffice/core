@@ -216,7 +216,7 @@ ModalDialog RID_DLG_LICENSE
         Size = MAP_APPFONT(COL3_WIDTH+COL4_WIDTH, ROW3_HEIGHT);
         WordBreak = TRUE;
         NoLabel = TRUE;
-        Text [ en-US ] = "Read the complete License Agreement. Use the scroll bar or the \'Scroll Down\' button in this dialog to view the entire license text.";
+        Text [ en-US ] = "Read the complete License Agreement. Use the scroll bar or the 'Scroll Down' button in this dialog to view the entire license text.";
     };
 
     FixedText FT_LICENSE_BODY_2
@@ -233,7 +233,7 @@ ModalDialog RID_DLG_LICENSE
         Size = MAP_APPFONT(COL3_WIDTH+COL4_WIDTH, ROW4_HEIGHT);
         WordBreak = TRUE;
         NoLabel = TRUE;
-        Text [ en-US ] = "Accept the License Agreement for the extension by pressing the \'Accept\' button.";
+        Text [ en-US ] = "Accept the License Agreement for the extension by pressing the 'Accept' button.";
 
     };
 
@@ -329,17 +329,17 @@ ModalDialog RID_DLG_SHOW_LICENSE
 WarningBox RID_WARNINGBOX_INSTALL_EXTENSION {
     Buttons = WB_OK_CANCEL;
     DefButton = WB_DEF_OK;
-    Message[en-US] = "You are about to install the extension \'%NAME\'.\n"
-    "Click \'OK\' to proceed with the installation.\n"
-    "Click \'Cancel\' to stop the installation.";
+    Message[en-US] = "You are about to install the extension '%NAME'.\n"
+    "Click 'OK' to proceed with the installation.\n"
+    "Click 'Cancel' to stop the installation.";
 };
 
 WarningBox RID_WARNINGBOX_REMOVE_EXTENSION {
     Buttons = WB_OK_CANCEL;
     DefButton = WB_DEF_CANCEL;
-    Message[en-US] = "You are about to remove the extension \'%NAME\'.\n"
-    "Click \'OK\' to remove the extension.\n"
-    "Click \'Cancel\' to stop removing the extension.";
+    Message[en-US] = "You are about to remove the extension '%NAME'.\n"
+    "Click 'OK' to remove the extension.\n"
+    "Click 'Cancel' to stop removing the extension.";
 };
 
 WARNINGBOX RID_WARNINGBOX_REMOVE_SHARED_EXTENSION
@@ -348,8 +348,8 @@ WARNINGBOX RID_WARNINGBOX_REMOVE_SHARED_EXTENSION
     DefButton = WB_DEF_CANCEL;
     Message[en-US] = "Make sure that no further users are working with the same "
     "%PRODUCTNAME, when changing shared extensions in a multi user environment.\n"
-    "Click \'OK\' to remove the extension.\n"
-    "Click \'Cancel\' to stop removing the extension.";
+    "Click 'OK' to remove the extension.\n"
+    "Click 'Cancel' to stop removing the extension.";
 };
 
 WARNINGBOX RID_WARNINGBOX_ENABLE_SHARED_EXTENSION
@@ -358,8 +358,8 @@ WARNINGBOX RID_WARNINGBOX_ENABLE_SHARED_EXTENSION
     DefButton = WB_DEF_CANCEL;
     Message[en-US] = "Make sure that no further users are working with the same "
     "%PRODUCTNAME, when changing shared extensions in a multi user environment.\n"
-    "Click \'OK\' to enable the extension.\n"
-    "Click \'Cancel\' to stop enabling the extension.";
+    "Click 'OK' to enable the extension.\n"
+    "Click 'Cancel' to stop enabling the extension.";
 };
 
 WARNINGBOX RID_WARNINGBOX_DISABLE_SHARED_EXTENSION
@@ -368,14 +368,14 @@ WARNINGBOX RID_WARNINGBOX_DISABLE_SHARED_EXTENSION
     DefButton = WB_DEF_CANCEL;
     Message[en-US] = "Make sure that no further users are working with the same "
     "%PRODUCTNAME, when changing shared extensions in a multi user environment.\n"
-    "Click \'OK\' to disable the extension.\n"
-    "Click \'Cancel\' to stop disabling the extension.";
+    "Click 'OK' to disable the extension.\n"
+    "Click 'Cancel' to stop disabling the extension.";
 };
 
 
 String RID_STR_UNSUPPORTED_PLATFORM
 {
-    Text [ en-US ] = "The extension \'%Name\' does not work on this computer.";
+    Text [ en-US ] = "The extension '%Name' does not work on this computer.";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

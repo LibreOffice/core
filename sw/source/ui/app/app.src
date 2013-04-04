@@ -541,7 +541,7 @@ ModalDialog DLG_MERGE_SOURCE_UNAVAILABLE
         Pos = MAP_APPFONT ( 12 , 6 ) ;
         Size = MAP_APPFONT ( 178 , 40 ) ;
         WordBreak = TRUE;
-        Text [ en-US ] = "The data source \'%1\' was not found. Thus the connection to the data source could not be established.\n\nPlease check the connections settings.";
+        Text [ en-US ] = "The data source '%1' was not found. Thus the connection to the data source could not be established.\n\nPlease check the connections settings.";
     };
     OKButton PB_MERGE_OK
     {

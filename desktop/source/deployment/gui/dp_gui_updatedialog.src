@@ -261,8 +261,8 @@ WarningBox RID_WARNINGBOX_UPDATE_SHARED_EXTENSION
     DefButton = WB_DEF_CANCEL;
     Message[en-US] = "Make sure that no further users are working with the same "
     "%PRODUCTNAME, when changing shared extensions in a multi user environment.\n"
-    "Click \'OK\' to update the extensions.\n"
-    "Click \'Cancel\' to stop updating the extensions.";
+    "Click 'OK' to update the extensions.\n"
+    "Click 'Cancel' to stop updating the extensions.";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
