@@ -493,7 +493,7 @@ void OSelectionBrowseBox::InitController(CellControllerRef& /*rController*/, lon
             getDesignView()->fillValidFields(aTable, m_pFieldCell);
 
             // replace with alias.*
-            if ((aField[0] == '*') && aTable.Len())
+            if (aField.trim() == "*")
             {
                 aField = aTable;
                 aField += ".*";
