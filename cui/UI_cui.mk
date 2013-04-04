@@ -10,6 +10,7 @@
 $(eval $(call gb_UI_UI,cui))
 
 $(eval $(call gb_UI_add_uifiles,cui,\
+	cui/uiconfig/ui/aboutdialog \
 	cui/uiconfig/ui/asiantypography \
 	cui/uiconfig/ui/backgroundpage \
 	cui/uiconfig/ui/borderpage \

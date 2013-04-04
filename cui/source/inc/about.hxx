@@ -19,10 +19,10 @@
 #ifndef _ABOUT_HXX
 #define _ABOUT_HXX
 
-#include <vcl/button.hxx>
 #include <vcl/accel.hxx>
-#include <svtools/svmedit.hxx>
-#include <svtools/stdctrl.hxx>
+#include <vcl/button.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/vclmedit.hxx>
 #include <sfx2/basedlgs.hxx>        ///< for SfxModalDialog
 #include <vector>
 
@@ -34,43 +34,38 @@ private:
     BitmapEx           aBackgroundBitmap;
     BitmapEx           aLogoBitmap;
 
+    VclMultiLineEdit*    m_pVersion;
+    FixedText*           m_pDescriptionText;
+    FixedText*           m_pCopyrightText;
+    FixedImage*          m_pLogoImage;
+    FixedText*           m_pLogoReplacement;
+    PushButton*          m_pCreditsButton;
+    PushButton*          m_pWebsiteButton;
 
-    MultiLineEdit       aVersionText;
-    MultiLineEdit       aDescriptionText;
-    MultiLineEdit       aCopyrightText;
-    FixedImage          aLogoImage;
-    MultiLineEdit       aLogoReplacement;
-    PushButton          aCreditsButton;
-    PushButton          aWebsiteButton;
-    CancelButton        aCancelButton;
-
-    String aVersionData;
-    rtl::OUString m_aVersionTextStr;
-    String m_aVendorTextStr;
-    String m_aCopyrightTextStr;
-    String m_aBasedTextStr;
-    String m_aBasedDerivedTextStr;
-    String m_aCreditsLinkStr;
-    rtl::OUString m_sBuildStr;
-    String m_aDescriptionTextStr;
+    OUString aVersionData;
+    OUString m_aVersionTextStr;
+    OUString m_aVendorTextStr;
+    OUString m_aCopyrightTextStr;
+    OUString m_aBasedTextStr;
+    OUString m_aBasedDerivedTextStr;
+    OUString m_aCreditsLinkStr;
+    OUString m_sBuildStr;
 
     void StyleControls();
-    void LayoutControls();
-    void LayoutButtons(sal_Int32 aContentWidth, sal_Int32 aDialogBorder,
-                       Point& aButtonPos, Size& aButtonSize, sal_Int32& aButtonsWidth );
-    void MoveControl(Control& rControl, sal_Int32 X, sal_Int32 Y);
-    rtl::OUString GetBuildId();
-    rtl::OUString GetVersionString();
-    rtl::OUString GetCopyrightString();
+    void SetLogo();
+
+    OUString GetBuildId();
+    OUString GetVersionString();
+    OUString GetCopyrightString();
 
 protected:
     virtual sal_Bool Close();
-    virtual void     Paint( const Rectangle& rRect );
+    virtual void Paint( const Rectangle& rRect );
+    virtual void Resize();
 
 public:
-    AboutDialog( Window* pParent, const ResId& rId);
+    AboutDialog(Window* pParent);
 
-    DECL_LINK( CancelHdl, void * );
     DECL_LINK( HandleClick, PushButton* );
 };
 

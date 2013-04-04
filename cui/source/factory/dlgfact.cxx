@@ -1010,7 +1010,7 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateVclDialog( Window* pParent,
     {
         case RID_DEFAULTABOUT:
         {
-            pDlg = new AboutDialog( pParent, CUI_RES( (sal_uInt16) nResId ) );
+            pDlg = new AboutDialog(pParent);
             break;
         }
         case SID_OPTIONS_TREEDIALOG :
