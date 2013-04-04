@@ -17,10 +17,6 @@ $(eval $(call gb_Library_use_external,rasqal,raptor_headers))
 
 $(eval $(call gb_Library_use_libraries,rasqal,raptor2))
 
-#$(eval $(call gb_Library_add_ldflags,rasqal,\
-	/DEF:$(SRCDIR)/redland/rasqal/rasqal.def \
-))
-
 $(eval $(call gb_Library_add_defs,rasqal,\
 	-DRASQAL_INTERNAL \
 	-DWIN32 \

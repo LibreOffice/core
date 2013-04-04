@@ -23,10 +23,6 @@ $(eval $(call gb_Library_use_externals,rdf,\
 	rasqal_headers \
 ))
 
-#$(eval $(call gb_Library_add_ldflags,rdf,\
-	/DEF:$(SRCDIR)/redland/redland/rdf.def \
-))
-
 $(eval $(call gb_Library_add_defs,rdf,\
 	-DLIBRDF_INTERNAL \
 	-DWIN32 \
