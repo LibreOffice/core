@@ -26,7 +26,6 @@
 #include <limits.h>
 
 #include <tools/debug.hxx>
-#include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 #include <vector>
 
