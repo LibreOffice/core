@@ -1441,8 +1441,13 @@ bool VclBuilder::sortIntoBestTabTraversalOrder::operator()(const Window *pA, con
     if (pA->GetParent() == pB->GetParent())
     {
         const VclFrame *pFrameParent = dynamic_cast<const VclFrame*>(pA->GetParent());
-        if (pFrameParent && pA == pFrameParent->get_label_widget())
-            return true;
+        if (pFrameParent)
+        {
+            const Window *pLabel = pFrameParent->get_label_widget();
+            int nFramePosA = (pA == pLabel) ? 0 : 1;
+            int nFramePosB = (pB == pLabel) ? 0 : 1;
+            return nFramePosA < nFramePosB;
+        }
     }
     return false;
 }
