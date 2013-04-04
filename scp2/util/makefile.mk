@@ -87,13 +87,6 @@ SCP1FILES  = installation_ooo.par          \
 SCP1FILES +=                               \
              directory_ooo_macosx.par      
 .ENDIF
- 
-.IF "$(WITH_BINFILTER)" != "NO"
-SCP1FILES +=                               \
-             module_binfilter.par          \
-             registryitem_binfilter.par    \
-             file_binfilter.par
-.ENDIF
 
 .IF "$(ENABLE_OPENGL)" == "TRUE"
 SCP1FILES +=                               \
@@ -241,13 +234,6 @@ SCP2FILES  = installation_ooo.par          \
 .IF "$(OS)"=="MACOSX" 
 SCP2FILES +=                               \
              directory_ooo_macosx.par      
-.ENDIF
- 
-.IF "$(WITH_BINFILTER)" != "NO"
-SCP2FILES +=                               \
-             module_binfilter.par          \
-             registryitem_binfilter.par    \
-             file_binfilter.par
 .ENDIF
 
 .IF "$(SOLAR_JAVA)"!=""
