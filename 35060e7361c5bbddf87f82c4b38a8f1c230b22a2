@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///04\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 3968,
+      "author": {
+        "id": 1000024
+      },
+      "writtenOn": "2013-04-04T22:37:32Z",
+      "side": 1,
+      "message": "I am a little off-topic, but instead of checking, why don\u0027t we apply a permanent sanitizing, like \r\nINSTDIR\u003d$(echo ${formatted_path}/instdir/${INPATH} | tr -s /)\r\n\r\nThis will save some lines and asking ourselves whether if/else are duplicates or not :)",
+      "revId": "35060e7361c5bbddf87f82c4b38a8f1c230b22a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
