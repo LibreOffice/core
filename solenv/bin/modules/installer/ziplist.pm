@@ -104,6 +104,7 @@ sub read_ziplist {
     set_default_productversion_if_required($allvariableshashref);
     add_variables_to_allvariableshashref($allvariableshashref);
     overwrite_branding( $allvariableshashref );
+    startcenter_links_hide_or_not( $allvariableshashref );
 
     return $allsettingsarrayref, $allvariableshashref;
 }
@@ -831,6 +832,16 @@ sub overwrite_branding
     $variableshashref->{'PROGRESSTEXTCOLOR'} = $ENV{'PROGRESSTEXTCOLOR'} , if( defined $ENV{'PROGRESSTEXTCOLOR'}  && $ENV{'PROGRESSTEXTCOLOR'} ne "" );
     $variableshashref->{'PROGRESSTEXTBASELINE'} = $ENV{'PROGRESSTEXTBASELINE'} , if( defined $ENV{'PROGRESSTEXTBASELINE'}  && $ENV{'PROGRESSTEXTBASELINE'} ne "" );
 }
+
+###########################################################
+# For Intel AppUp build hide the links in start center
+###########################################################
+sub startcenter_links_hide_or_not
+{
+    my ($variableshashref) = @_;
+    $variableshashref->{'STARTCENTER_HIDE_EXTERNAL_LINKS'} = "1" , if( defined $ENV{'ENABLE_SILENT_MSI'}  && $ENV{'ENABLE_SILENT_MSI'} eq "TRUE" );
+}
+
 
 ###########################################################
 # Adding the lowercase variables into the variableshashref
