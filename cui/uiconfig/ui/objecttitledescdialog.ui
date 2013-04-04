@@ -125,7 +125,7 @@
                 <property name="vscrollbar_policy">always</property>
                 <property name="shadow_type">in</property>
                 <child>
-                  <object class="GtkTextView" id="desc_entry">
+                  <object class="GtkTextView" id="desc_entry:border">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="wrap_mode">word</property>

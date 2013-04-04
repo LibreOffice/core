@@ -1185,7 +1185,10 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     {
         extractBuffer(id, rMap);
 
-        WinBits nWinStyle = WB_LEFT | WB_BORDER;
+        WinBits nWinStyle = WB_LEFT;
+        OString sBorder = extractCustomProperty(rMap);
+        if (!sBorder.isEmpty())
+            nWinStyle |= WB_BORDER;
         //VclMultiLineEdit manages its own scrolling,
         Window *pRealParent = prepareWidgetOwnScrolling(pParent, nWinStyle);
         pWindow = new VclMultiLineEdit(pRealParent, nWinStyle);

@@ -119,7 +119,7 @@
                 <property name="can_focus">True</property>
                 <property name="shadow_type">in</property>
                 <child>
-                  <object class="GtkTextView" id="textentry">
+                  <object class="GtkTextView" id="textentry:border">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </object>

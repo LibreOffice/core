@@ -165,7 +165,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkTextView" id="namero">
+                      <object class="GtkTextView" id="namero:border">
                         <property name="can_focus">True</property>
                         <property name="no_show_all">True</property>
                         <property name="valign">center</property>
