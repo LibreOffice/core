@@ -277,7 +277,11 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
 
     sal_Int16 nNumberFormat = ConversionHelper::ConvertNumberingType(m_nNFC);
     if( m_nNFC >= 0)
+    {
+        if (!m_sGraphicURL.isEmpty())
+            nNumberFormat = style::NumberingType::BITMAP;
         aNumberingProperties.push_back( MAKE_PROPVAL(PROP_NUMBERING_TYPE, nNumberFormat ));
+    }
 
     if( m_nJC >= 0 && m_nJC <= sal::static_int_cast<sal_Int32>(sizeof(aWWToUnoAdjust) / sizeof(sal_Int16)) )
         aNumberingProperties.push_back( MAKE_PROPVAL(PROP_ADJUST, aWWToUnoAdjust[m_nJC]));
@@ -287,6 +291,8 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
         // todo: this is not the bullet char
         if( nNumberFormat == style::NumberingType::CHAR_SPECIAL && !m_sBulletChar.isEmpty() )
             aNumberingProperties.push_back( MAKE_PROPVAL(PROP_BULLET_CHAR, m_sBulletChar.copy(0,1)));
+        if (!m_sGraphicURL.isEmpty())
+            aNumberingProperties.push_back(MAKE_PROPVAL(PROP_GRAPHIC_URL, m_sGraphicURL));
     }
 
     aNumberingProperties.push_back( MAKE_PROPVAL( PROP_LISTTAB_STOP_POSITION, m_nTabstop ) );
@@ -397,6 +403,35 @@ void ListLevel::AddParaProperties( uno::Sequence< beans::PropertyValue >* props 
         }
 
     }
+}
+
+NumPicBullet::NumPicBullet()
+    : m_nId(0)
+{
+}
+
+NumPicBullet::~NumPicBullet()
+{
+}
+
+void NumPicBullet::SetId(sal_Int32 nId)
+{
+    m_nId = nId;
+}
+
+void NumPicBullet::SetShape(uno::Reference<drawing::XShape> xShape)
+{
+    m_xShape = xShape;
+}
+
+sal_Int32 NumPicBullet::GetId()
+{
+    return m_nId;
+}
+
+uno::Reference<drawing::XShape> NumPicBullet::GetShape()
+{
+    return m_xShape;
 }
 
 //--------------------------------------- AbstractListDef implementation
@@ -687,12 +722,23 @@ ListsManager::~ListsManager( )
 
 void ListsManager::lcl_attribute( Id nName, Value& rVal )
 {
-    OSL_ENSURE( m_pCurrentDefinition.get(), "current entry has to be set here");
-    if(!m_pCurrentDefinition.get())
-        return ;
+    ListLevel::Pointer pCurrentLvl;
+
+    if (nName != NS_ooxml::LN_CT_NumPicBullet_numPicBulletId)
+    {
+        OSL_ENSURE( m_pCurrentDefinition.get(), "current entry has to be set here");
+        if(!m_pCurrentDefinition.get())
+            return ;
+        pCurrentLvl = m_pCurrentDefinition->GetCurrentLevel( );
+    }
+    else
+    {
+        SAL_WARN_IF(!m_pCurrentNumPicBullet.get(), "writerfilter", "current entry has to be set here");
+        if (!m_pCurrentNumPicBullet.get())
+            return;
+    }
     int nIntValue = rVal.getInt();
 
-    ListLevel::Pointer pCurrentLvl = m_pCurrentDefinition->GetCurrentLevel( );
 
 
     switch(nName)
@@ -786,6 +832,9 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
             // TODO Do something of that
         }
         break;
+        case NS_ooxml::LN_CT_NumPicBullet_numPicBulletId:
+            m_pCurrentNumPicBullet->SetId(rVal.getString().toInt32());
+        break;
         default:
         {
 #if OSL_DEBUG_LEVEL > 0
@@ -809,7 +858,9 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
     sal_uInt32 nSprmId = rSprm.getId();
     if( m_pCurrentDefinition.get() ||
         nSprmId == NS_ooxml::LN_CT_Numbering_abstractNum ||
-        nSprmId == NS_ooxml::LN_CT_Numbering_num )
+        nSprmId == NS_ooxml::LN_CT_Numbering_num ||
+        (nSprmId == NS_ooxml::LN_CT_NumPicBullet_pict && m_pCurrentNumPicBullet.get()) ||
+        nSprmId == NS_ooxml::LN_CT_Numbering_numPicBullet)
     {
         sal_Int32 nIntValue = rSprm.getValue()->getInt();
         switch( nSprmId )
@@ -843,6 +894,47 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                     m_aLists.push_back( listDef );
 
                     m_pCurrentDefinition = AbstractListDef::Pointer();
+                }
+            }
+            break;
+            case NS_ooxml::LN_CT_Numbering_numPicBullet:
+            {
+                writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+                if (pProperties.get())
+                {
+                    NumPicBullet::Pointer numPicBullet(new NumPicBullet());
+                    m_pCurrentNumPicBullet = numPicBullet;
+                    pProperties->resolve(*this);
+                    m_aNumPicBullets.push_back(numPicBullet);
+                    m_pCurrentNumPicBullet = NumPicBullet::Pointer();
+                }
+            }
+            break;
+            case NS_ooxml::LN_CT_NumPicBullet_pict:
+            {
+                uno::Reference<drawing::XShape> xShape = m_rDMapper.PopPendingShape();
+                m_pCurrentNumPicBullet->SetShape(xShape);
+            }
+            break;
+            case NS_ooxml::LN_CT_Lvl_lvlPicBulletId:
+            {
+                uno::Reference<drawing::XShape> xShape;
+                for (std::vector<NumPicBullet::Pointer>::iterator it = m_aNumPicBullets.begin(); it != m_aNumPicBullets.end(); ++it)
+                {
+                    if ((*it)->GetId() == nIntValue)
+                    {
+                        xShape = (*it)->GetShape();
+                        break;
+                    }
+                }
+                if (xShape.is())
+                {
+                    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
+                    m_pCurrentDefinition->GetCurrentLevel()->SetGraphicURL(xPropertySet->getPropertyValue("GraphicURL").get<OUString>());
+
+                    // Now that we saved the URL of the graphic, remove it from the document.
+                    uno::Reference<lang::XComponent> xShapeComponent(xShape, uno::UNO_QUERY);
+                    xShapeComponent->dispose();
                 }
             }
             break;

@@ -3425,14 +3425,24 @@ void DomainMapper::markLastParagraphInSection( )
 
 void DomainMapper::lcl_startShape( uno::Reference< drawing::XShape > xShape )
 {
-    m_pImpl->PushShapeContext( xShape );
-    lcl_startParagraphGroup();
+    if (m_pImpl->GetTopContext())
+    {
+        m_pImpl->PushShapeContext( xShape );
+        lcl_startParagraphGroup();
+    }
+    else
+        // No context? Then this image should not appear directly inside the
+        // document, just save it for later usage.
+        m_pImpl->PushPendingShape(xShape);
 }
 
 void DomainMapper::lcl_endShape( )
 {
-    lcl_endParagraphGroup();
-    m_pImpl->PopShapeContext( );
+    if (m_pImpl->GetTopContext())
+    {
+        lcl_endParagraphGroup();
+        m_pImpl->PopShapeContext( );
+    }
 }
 
 void DomainMapper::PushStyleSheetProperties( PropertyMapPtr pStyleProperties, bool bAffectTableMngr )
@@ -3971,6 +3981,11 @@ GraphicZOrderHelper* DomainMapper::graphicZOrderHelper()
     if( zOrderHelper.get() == NULL )
         zOrderHelper.reset( new GraphicZOrderHelper );
     return zOrderHelper.get();
+}
+
+uno::Reference<drawing::XShape> DomainMapper::PopPendingShape()
+{
+    return m_pImpl->PopPendingShape();
 }
 
 bool DomainMapper::IsInHeaderFooter() const

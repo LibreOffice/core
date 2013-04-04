@@ -23390,6 +23390,11 @@
     <resource name="CT_MultiLevelType" resource="Value" tag="numbering">
       <attribute name="val" tokenid="ooxml:CT_MultiLevelType_val" action="setValue"/>
     </resource>
+    <resource name="CT_NumPicBullet" resource="Properties" tag="numbering">
+      <kind name="paragraph"/>
+      <element name="pict" tokenid="ooxml:CT_NumPicBullet_pict"/>
+      <attribute name="numPicBulletId" tokenid="ooxml:CT_NumPicBullet_numPicBulletId"/>
+    </resource>
     <resource name="CT_AbstractNum" resource="Properties" tag="numbering">
       <kind name="paragraph"/>
       <element name="nsid" tokenid="rtf:LSID"/>

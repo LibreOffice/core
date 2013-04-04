@@ -324,6 +324,7 @@ private:
     ContextStack            m_aContextStack;
     FontTablePtr            m_pFontTable;
     ListsManager::Pointer   m_pListTable;
+    std::deque< com::sun::star::uno::Reference< com::sun::star::drawing::XShape > > m_aPendingShapes;
     StyleSheetTablePtr      m_pStyleSheetTable;
     ThemeTablePtr           m_pThemeTable;
     SettingsTablePtr        m_pSettingsTable;
@@ -516,6 +517,10 @@ public:
 
     void PushShapeContext( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
     void PopShapeContext();
+    /// Add a pending shape: it's currently inserted into the document, but it should be removed before the import finishes.
+    void PushPendingShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
+    /// Get the first pending shape, if there are any.
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > PopPendingShape();
 
     void PushPageHeader(SectionPropertyMap::PageType eType);
     void PushPageFooter(SectionPropertyMap::PageType eType);

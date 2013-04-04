@@ -111,6 +111,9 @@ public:
     boost::shared_ptr< StyleSheetTable > GetStyleSheetTable( );
     GraphicZOrderHelper* graphicZOrderHelper();
 
+    /// Return the first from the pending (not inserted to the document) shapes, if there are any.
+    com::sun::star::uno::Reference<com::sun::star::drawing::XShape> PopPendingShape();
+
     bool IsInHeaderFooter() const;
     /**
      @see DomainMapper_Impl::processDeferredCharacterProperties()

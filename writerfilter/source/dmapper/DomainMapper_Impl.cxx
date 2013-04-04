@@ -1614,6 +1614,22 @@ void DomainMapper_Impl::PopAnnotation()
 
 }
 
+void DomainMapper_Impl::PushPendingShape( const uno::Reference< drawing::XShape > xShape )
+{
+    m_aPendingShapes.push_back(xShape);
+}
+
+uno::Reference<drawing::XShape> DomainMapper_Impl::PopPendingShape()
+{
+    uno::Reference<drawing::XShape> xRet;
+    if (!m_aPendingShapes.empty())
+    {
+        xRet = m_aPendingShapes.front();
+        m_aPendingShapes.pop_front();
+    }
+    return xRet;
+}
+
 void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape > xShape )
 {
     if (m_aTextAppendStack.empty())

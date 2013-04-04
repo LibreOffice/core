@@ -322,6 +322,7 @@ const OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_SHADOW_FORMAT: sName = "ShadowFormat"; break;
             case PROP_RELATIVE_WIDTH: sName = "RelativeWidth"; break;
             case PROP_IS_WIDTH_RELATIVE: sName = "IsWidthRelative"; break;
+            case PROP_GRAPHIC_URL: sName = "GraphicURL"; break;
         }
         ::std::pair<PropertyNameMap_t::iterator,bool> aInsertIt =
                 m_pImpl->aNameMap.insert( PropertyNameMap_t::value_type( eId, sName ));

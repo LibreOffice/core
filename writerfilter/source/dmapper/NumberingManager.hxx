@@ -52,6 +52,7 @@ class ListLevel : public PropertyMap
     OUString                               m_sRGBXchNums;     //LN_RGBXCHNUMS
     sal_Int16                                     m_nXChFollow;      //LN_IXCHFOLLOW
     OUString                               m_sBulletChar;
+    OUString                               m_sGraphicURL;
     sal_Int32                                     m_nTabstop;
     boost::shared_ptr< StyleSheetEntry >          m_pParaStyle;
     bool                                          m_outline;
@@ -79,6 +80,7 @@ public:
     // Setters for the import
     void SetValue( Id nId, sal_Int32 nValue );
     void SetBulletChar( OUString sValue ) { m_sBulletChar = sValue; };
+    void SetGraphicURL( OUString sValue ) { m_sGraphicURL = sValue; };
     void SetParaStyle( boost::shared_ptr< StyleSheetEntry > pStyle );
     void AddRGBXchNums( OUString sValue ) { m_sRGBXchNums += sValue; };
 
@@ -104,6 +106,23 @@ private:
         GetLevelProperties(  );
 
     void AddParaProperties( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* props );
+};
+
+/// Represents a numbering picture bullet: an id and a graphic.
+class NumPicBullet
+{
+public:
+    typedef boost::shared_ptr<NumPicBullet> Pointer;
+    NumPicBullet();
+    virtual ~NumPicBullet();
+
+    void SetId(sal_Int32 nId);
+    sal_Int32 GetId();
+    void SetShape(com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xShape);
+    com::sun::star::uno::Reference<com::sun::star::drawing::XShape> GetShape();
+private:
+    sal_Int32 m_nId;
+    com::sun::star::uno::Reference<com::sun::star::drawing::XShape> m_xShape;
 };
 
 class AbstractListDef
@@ -200,12 +219,14 @@ private:
         com::sun::star::lang::XMultiServiceFactory >    m_xFactory;
 
     // The numbering entries
+    std::vector< NumPicBullet::Pointer >                m_aNumPicBullets;
     std::vector< AbstractListDef::Pointer >             m_aAbstractLists;
     std::vector< ListDef::Pointer >                     m_aLists;
 
 
     // These members are used for import only
     AbstractListDef::Pointer                            m_pCurrentDefinition;
+    NumPicBullet::Pointer                               m_pCurrentNumPicBullet;
     bool                                                m_bIsLFOImport;
 
     AbstractListDef::Pointer    GetAbstractList( sal_Int32 nId );
