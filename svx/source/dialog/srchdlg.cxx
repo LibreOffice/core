@@ -2029,7 +2029,7 @@ IMPL_LINK( SvxSearchDialog, FocusHdl_Impl, Control *, pCtrl )
     }
     bSet = sal_True;
 
-    aSearchLB.SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
+    ( (ComboBox*)pCtrl )->SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
 
     ModifyHdl_Impl( (ComboBox*)pCtrl );
 
