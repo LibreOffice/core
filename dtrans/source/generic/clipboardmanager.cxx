@@ -62,7 +62,7 @@ sal_Bool SAL_CALL ClipboardManager::supportsService( const OUString& ServiceName
     Sequence < OUString > SupportedServicesNames = ClipboardManager_getSupportedServiceNames();
 
     for ( sal_Int32 n = 0, nmax = SupportedServicesNames.getLength(); n < nmax; n++ )
-        if (SupportedServicesNames[n].compareTo(ServiceName) == 0)
+        if ( SupportedServicesNames[n] == ServiceName )
             return sal_True;
 
     return sal_False;
@@ -111,7 +111,7 @@ void SAL_CALL ClipboardManager::addClipboard( const Reference< XClipboard >& xCl
 
     // the name "default" is reserved for internal use
     OUString aName = xClipboard->getName();
-    if (m_aDefaultName.compareTo(aName) == 0)
+    if ( m_aDefaultName == aName )
         throw IllegalArgumentException(OUString("name reserved"),
                                        static_cast < XClipboardManager * > (this), 1);
 

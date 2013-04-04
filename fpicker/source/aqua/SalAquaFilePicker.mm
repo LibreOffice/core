@@ -629,7 +629,7 @@ throw( uno::RuntimeException )
     uno::Sequence <rtl::OUString> supportedServicesNames = FilePicker_getSupportedServiceNames();
 
     for( sal_Int32 n = supportedServicesNames.getLength(); n--; ) {
-        if( supportedServicesNames[n].compareTo( sServiceName ) == 0) {
+        if( supportedServicesNames[n] == sServiceName ) {
             retVal = sal_True;
             break;
         }

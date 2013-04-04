@@ -60,12 +60,12 @@ namespace comphelper
         // ................................................................
         inline bool operator()( const ::com::sun::star::beans::Property& lhs, const ::rtl::OUString& rhs ) const
         {
-            return lhs.Name.compareTo(rhs) == 0;
+            return lhs.Name == rhs ;
         }
         // ................................................................
         inline bool operator()( const ::rtl::OUString& lhs, const ::com::sun::star::beans::Property& rhs ) const
         {
-            return lhs.compareTo(rhs.Name) == 0;
+            return lhs == rhs.Name ;
         }
     };
     //--------------------------------------------------------------------------
@@ -74,7 +74,7 @@ namespace comphelper
     {
         bool operator() (const ::com::sun::star::beans::Property& x, const ::com::sun::star::beans::Property& y) const
         {
-            return x.Name.compareTo(y.Name) == 0;
+            return x.Name == y.Name ;
         }
     };
 
