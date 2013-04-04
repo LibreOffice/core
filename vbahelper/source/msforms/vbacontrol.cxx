@@ -192,11 +192,14 @@ void SAL_CALL ScVbaControl::setEnabled( sal_Bool bVisible ) throw (uno::RuntimeE
 sal_Bool SAL_CALL ScVbaControl::getVisible() throw (uno::RuntimeException)
 {
     sal_Bool bVisible( sal_True );
+    m_xProps->getPropertyValue ( "EnableVisible" ) >>= bVisible;
     uno::Reference< drawing::XControlShape > xControlShape( m_xControl, uno::UNO_QUERY );
     if ( xControlShape.is() )
     {
+        bool bEnableVisible = bVisible;
         uno::Reference< beans::XPropertySet > xProps( m_xControl, uno::UNO_QUERY_THROW );
         xProps->getPropertyValue ( "Visible" ) >>= bVisible;
+        bVisible = bVisible && bEnableVisible;
     }
     else
         m_xProps->getPropertyValue ( "EnableVisible" ) >>= bVisible;
