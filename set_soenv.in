@@ -1898,7 +1898,6 @@ ToFile( "WITH_CATB_FONTS",   "@WITH_CATB_FONTS@",  "e" );
 ToFile( "WITH_FONTS",        "@WITH_FONTS@",       "e" );
 ToFile( "WITHOUT_AFMS",      "@WITHOUT_AFMS@",     "e" );
 ToFile( "WITHOUT_PPDS",      "@WITHOUT_PPDS@",     "e" );
-ToFile( "WITH_BINFILTER",    "@WITH_BINFILTER@",   "e" );
 ToFile( "BUILD_TYPE",        "@BUILD_TYPE@",       "e" );
 ToFile( "ADDITIONAL_REPOSITORIES", "@ADDITIONAL_REPOSITORIES@", "e" );
 ToFile( "VERBOSE",           "@VERBOSE@",          "e" );
