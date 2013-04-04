@@ -488,7 +488,7 @@ void OSelectionBrowseBox::InitController(CellControllerRef& /*rController*/, lon
             m_pFieldCell->SetText(String());
 
             OUString aField(pEntry->GetField());
-            String aTable(pEntry->GetAlias());
+            OUString aTable(pEntry->GetAlias());
 
             getDesignView()->fillValidFields(aTable, m_pFieldCell);
 
