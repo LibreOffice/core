@@ -721,7 +721,7 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
     rHeaderFooterBitmap = BitmapEx();
 
     // now read the new values and setup bitmaps
-    OUString aHeader, aFooter, aColor;
+    OUString aHeader, aFooter;
     if ( aPersona == "own" )
     {
         sal_Int32 nIndex = 0;
@@ -732,7 +732,7 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
         // change menu text color, advance nIndex to skip the '#'
         if ( nIndex > 0 )
         {
-            aColor = aPersonaSettings.getToken( 0, ';', ++nIndex );
+            OUString aColor = aPersonaSettings.getToken( 0, ';', ++nIndex );
             maMenuBarTextColor = Color( aColor.toInt64( 16 ) );
         }
     }
