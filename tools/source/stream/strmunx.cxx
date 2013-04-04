@@ -502,9 +502,6 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
     eStreamMode = nOpenMode;
     eStreamMode &= ~STREAM_TRUNC; // don't truncat on reopen
 
-//    !!! NoOp: use ToAbs()
-//    !!! DirEntry aDirEntry( rFilename );
-//    !!! aFilename = aDirEntry.GetFull();
     aFilename = rFilename;
     rtl::OString aLocalFilename(rtl::OUStringToOString(aFilename, osl_getThreadTextEncoding()));
 
