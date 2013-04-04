@@ -97,7 +97,6 @@ struct ParaRstFmt
     bool bResetListAttrs; // #i62575#
     bool bResetAll;
     bool bInclRefToxMark;
-
     bool bKeepOutlineLevelAttr;
 
     ParaRstFmt( const SwPosition* pStt, const SwPosition* pEnd,
@@ -126,7 +125,7 @@ struct ParaRstFmt
           bResetListAttrs( false ), // #i62675#
           bResetAll( true ),
           bInclRefToxMark( false ),
-            bKeepOutlineLevelAttr( false )
+          bKeepOutlineLevelAttr( false )
     {}
 };
 
@@ -1637,74 +1636,74 @@ void SwDoc::DelTxtFmtColl( SwTxtFmtColl *pColl, bool bBroadcast )
 
 static bool lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
 {
-    // ParaSetFmtColl * pPara = (ParaSetFmtColl*)pArgs;
-    SwCntntNode* pCNd = (SwCntntNode*)rpNode->GetTxtNode();
-    if( pCNd )
+    SwCntntNode* pCNd = static_cast<SwCntntNode*>(rpNode->GetTxtNode());
+
+    if( pCNd == NULL)
+        return true;
+
+    ParaRstFmt* pPara = reinterpret_cast<ParaRstFmt*>(pArgs);
+
+    SwTxtFmtColl* pFmt = static_cast<SwTxtFmtColl*>(pPara->pFmtColl);
+    if ( pPara->bReset )
     {
-        ParaRstFmt* pPara = (ParaRstFmt*)pArgs;
 
-        SwTxtFmtColl* pFmt = static_cast<SwTxtFmtColl*>(pPara->pFmtColl);
-        if ( pPara->bReset )
+        if( pFmt->GetAttrOutlineLevel() == 0 && pPara )
+            pPara->bKeepOutlineLevelAttr = true;
+
+        lcl_RstAttr( pCNd, pPara );
+
+        // #i62675# check, if paragraph style has changed
+        if ( pPara->bResetListAttrs &&
+             pFmt != pCNd->GetFmtColl() &&
+             pFmt->GetItemState( RES_PARATR_NUMRULE ) == SFX_ITEM_SET )
         {
-
-            if( pFmt->GetAttrOutlineLevel() == 0 && pPara )
-                pPara->bKeepOutlineLevelAttr = true;
-
-            lcl_RstAttr( pCNd, pPara );
-
-            // #i62675# check, if paragraph style has changed
-            if ( pPara->bResetListAttrs &&
-                 pFmt != pCNd->GetFmtColl() &&
-                 pFmt->GetItemState( RES_PARATR_NUMRULE ) == SFX_ITEM_SET )
+            // Check, if the list style of the paragraph will change.
+            bool bChangeOfListStyleAtParagraph( true );
+            SwTxtNode* pTNd( dynamic_cast<SwTxtNode*>(pCNd) );
+            OSL_ENSURE( pTNd, "<lcl_SetTxtFmtColl(..)> - text node expected -> crash" );
             {
-                // Check, if the list style of the paragraph will change.
-                bool bChangeOfListStyleAtParagraph( true );
-                SwTxtNode* pTNd( dynamic_cast<SwTxtNode*>(pCNd) );
-                OSL_ENSURE( pTNd,
-                        "<lcl_SetTxtFmtColl(..)> - text node expected -> crash" );
+                SwNumRule* pNumRuleAtParagraph( pTNd->GetNumRule() );
+                if ( pNumRuleAtParagraph )
                 {
-                    SwNumRule* pNumRuleAtParagraph( pTNd->GetNumRule() );
-                    if ( pNumRuleAtParagraph )
+                    const SwNumRuleItem& rNumRuleItemAtParagraphStyle =
+                        pFmt->GetNumRule();
+                    if ( rNumRuleItemAtParagraphStyle.GetValue() ==
+                            pNumRuleAtParagraph->GetName() )
                     {
-                        const SwNumRuleItem& rNumRuleItemAtParagraphStyle =
-                                                            pFmt->GetNumRule();
-                        if ( rNumRuleItemAtParagraphStyle.GetValue() ==
-                                                pNumRuleAtParagraph->GetName() )
-                        {
-                            bChangeOfListStyleAtParagraph = false;
-                        }
+                        bChangeOfListStyleAtParagraph = false;
                     }
-                }
-
-                if ( bChangeOfListStyleAtParagraph )
-                {
-                    std::auto_ptr< SwRegHistory > pRegH;
-                    if ( pPara->pHistory )
-                    {
-                        pRegH.reset( new SwRegHistory( pTNd, *pTNd, pPara->pHistory ) );
-                    }
-
-                    pCNd->ResetAttr( RES_PARATR_NUMRULE );
-
-                    // reset all list attributes
-                    pCNd->ResetAttr( RES_PARATR_LIST_LEVEL );
-                    pCNd->ResetAttr( RES_PARATR_LIST_ISRESTART );
-                    pCNd->ResetAttr( RES_PARATR_LIST_RESTARTVALUE );
-                    pCNd->ResetAttr( RES_PARATR_LIST_ISCOUNTED );
-                    pCNd->ResetAttr( RES_PARATR_LIST_ID );
                 }
             }
+
+            if ( bChangeOfListStyleAtParagraph )
+            {
+                std::auto_ptr< SwRegHistory > pRegH;
+                if ( pPara->pHistory )
+                {
+                    pRegH.reset( new SwRegHistory( pTNd, *pTNd, pPara->pHistory ) );
+                }
+
+                pCNd->ResetAttr( RES_PARATR_NUMRULE );
+
+                // reset all list attributes
+                pCNd->ResetAttr( RES_PARATR_LIST_LEVEL );
+                pCNd->ResetAttr( RES_PARATR_LIST_ISRESTART );
+                pCNd->ResetAttr( RES_PARATR_LIST_RESTARTVALUE );
+                pCNd->ResetAttr( RES_PARATR_LIST_ISCOUNTED );
+                pCNd->ResetAttr( RES_PARATR_LIST_ID );
+            }
         }
-
-        // add to History so that old data is saved, if necessary
-        if( pPara->pHistory )
-            pPara->pHistory->Add( pCNd->GetFmtColl(), pCNd->GetIndex(),
-                                    ND_TEXTNODE );
-
-        pCNd->ChgFmtColl( pFmt );
-
-        pPara->nWhich++;
     }
+
+    // add to History so that old data is saved, if necessary
+    if( pPara->pHistory )
+        pPara->pHistory->Add( pCNd->GetFmtColl(), pCNd->GetIndex(),
+                ND_TEXTNODE );
+
+    pCNd->ChgFmtColl( pFmt );
+
+    pPara->nWhich++;
+
     return true;
 }
 

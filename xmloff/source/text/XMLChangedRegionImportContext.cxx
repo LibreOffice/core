@@ -104,6 +104,9 @@ SvXMLImportContext* XMLChangedRegionImportContext::CreateChildContext(
 
     if (XML_NAMESPACE_TEXT == nPrefix)
     {
+        // from the ODF 1.2 standard :
+        // The <text:changed-region> element has the following child elements:
+        // <text:deletion>, <text:format-change> and <text:insertion>.
         if ( IsXMLToken( rLocalName, XML_INSERTION ) ||
              IsXMLToken( rLocalName, XML_DELETION ) ||
              IsXMLToken( rLocalName, XML_FORMAT_CHANGE ) )
@@ -119,10 +122,13 @@ SvXMLImportContext* XMLChangedRegionImportContext::CreateChildContext(
 
     if (NULL == pContext)
     {
+        // illegal element content! TODO: discard the redlines
+        // for the moment -> use text
+
         pContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
                                                           xAttrList);
 
-        // was it a text element? If not, use default!
+        // or default if text fail
         if (NULL == pContext)
         {
             pContext = SvXMLImportContext::CreateChildContext(

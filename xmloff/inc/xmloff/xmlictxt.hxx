@@ -58,37 +58,37 @@ public:
     sal_uInt16 GetPrefix() const { return mnPrefix; }
     const OUString& GetLocalName() const { return maLocalName; }
 
-    // A contexts constructor does anything that is required if an element
-    // starts. Namespace processing has been done already.
-    // Note that virtual methods cannot be used inside constructors. Use
-    // StartElement instead if this is required.
+    /** A contexts constructor does anything that is required if an element
+     * starts. Namespace processing has been done already.
+     * Note that virtual methods cannot be used inside constructors. Use
+     * StartElement instead if this is required. */
     SvXMLImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName );
 
-    // A contexts destructor does anything that is required if an element
-    // ends. By default, nothing is done.
-    // Note that virtual methods cannot be used inside destructors. Use
-    // EndElement instead if this is required.
+    /** A contexts destructor does anything that is required if an element
+     * ends. By default, nothing is done.
+     * Note that virtual methods cannot be used inside destructors. Use
+     * EndElement instead if this is required. */
     virtual ~SvXMLImportContext();
 
-    // Create a children element context. By default, the import's
-    // CreateContext method is called to create a new default context.
+    /** Create a children element context. By default, the import's
+     * CreateContext method is called to create a new default context. */
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
-    // StartElement is called after a context has been constructed and
-    // before a elements context is parsed. It may be used for actions that
-    // require virtual methods. The default is to do nothing.
+    /** StartElement is called after a context has been constructed and
+     * before a elements context is parsed. It may be used for actions that
+     * require virtual methods. The default is to do nothing. */
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
-    // EndElement is called before a context will be destructed, but
-    // after a elements context has been parsed. It may be used for actions
-    // that require virtual methods. The default is to do nothing.
+    /** EndElement is called before a context will be destructed, but
+     * after a elements context has been parsed. It may be used for actions
+     * that require virtual methods. The default is to do nothing. */
     virtual void EndElement();
 
-    // This method is called for all characters that are contained in the
-    // current element. The default is to ignore them.
+    /** This method is called for all characters that are contained in the
+     * current element. The default is to ignore them. */
     virtual void Characters( const OUString& rChars );
 };
 

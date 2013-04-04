@@ -71,14 +71,13 @@ SvXMLImportContext* XMLChangeElementImportContext::CreateChildContext(
 
         if (NULL == pContext)
         {
-            // no text element -> use default
+            // no text element
+            // illegal element content! TODO: discard this redline!
+            // for the moment -> use default
             pContext = SvXMLImportContext::CreateChildContext(
                 nPrefix, rLocalName, xAttrList);
-
-            // illegal element content! TODO: discard this redline!
         }
     }
-
 
     return pContext;
 }
