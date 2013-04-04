@@ -24,16 +24,7 @@
 #include "rtl/ref.hxx"
 #include "salhelper/simplereferenceobject.hxx"
 
-#ifdef SOLAR_JAVA
 #include "jni.h"
-#else
-struct JNIEnv_;
-typedef JNIEnv_ JNIEnv;
-struct JavaVM_;
-typedef JavaVM_ JavaVM;
-typedef int jint;
-typedef void * jobject;
-#endif
 
 namespace jvmaccess {
 

@@ -41,7 +41,8 @@ $(eval $(call gb_Library_use_libraries,desktop_detector,\
     cppuhelper \
     i18nisolang1 \
     i18nutil \
-    jvmaccess \
+    $(if $(filter TRUE,$(SOLAR_JAVA)), \
+        jvmaccess) \
     cppu \
     sal \
 ))

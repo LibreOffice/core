@@ -303,6 +303,8 @@ Unixlink gid_Unixlink_File_Dl_Store
 End
 #endif
 
+#if defined SOLAR_JAVA
+
 File gid_File_Dl_Jvmaccess
     LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
@@ -339,7 +341,6 @@ Unixlink gid_Unixlink_File_Dl_Jvmfwk
 End
 #endif
 
-#if defined SOLAR_JAVA
 File gid_File_Dl_Sunjavaplugin
     LIB_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
@@ -347,9 +348,7 @@ File gid_File_Dl_Sunjavaplugin
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "0AC6C688-876C-40C5-B24E-9257003FDC3E";
 End
-#endif
 
-#if defined SOLAR_JAVA
 File gid_File_Dl_JrepropertiesClass
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
@@ -357,6 +356,7 @@ File gid_File_Dl_JrepropertiesClass
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "0C4B8DCF-18D1-47D9-8BB7-A5C1D9268016";
 End
+
 #endif
 
 File gid_File_Dl_Profile_Jvmfwk3rc

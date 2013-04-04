@@ -53,7 +53,8 @@ $(eval $(call gb_Library_use_libraries,cui,\
     drawinglayer \
     editeng \
     i18nisolang1 \
-    jvmfwk \
+    $(if $(filter TRUE,$(SOLAR_JAVA)), \
+        jvmfwk) \
     lng \
     sal \
     salhelper \
@@ -159,7 +160,8 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/options/optHeaderTabListbox \
     cui/source/options/opthtml \
     cui/source/options/optinet2 \
-    cui/source/options/optjava \
+    $(if $(filter TRUE,$(SOLAR_JAVA)), \
+        cui/source/options/optjava) \
     cui/source/options/optjsearch \
     cui/source/options/optlingu \
     cui/source/options/optmemory \

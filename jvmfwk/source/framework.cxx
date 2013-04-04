@@ -45,8 +45,6 @@ namespace {
 
 static bool g_bEnabledSwitchedOn = false;
 
-#ifdef SOLAR_JAVA
-
 static JavaVM * g_pJavaVM = NULL;
 
 sal_Bool areEqualJavaInfo(
@@ -55,7 +53,6 @@ sal_Bool areEqualJavaInfo(
     return jfw_areEqualJavaInfo(pInfoA, pInfoB);
 }
 
-#endif
 }
 
 #ifdef DISABLE_DYNLOADING
@@ -95,12 +92,6 @@ javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, sal_Bool *exist);
 
 javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSize)
 {
-#ifndef SOLAR_JAVA
-    (void) pparInfo;
-    (void) pSize;
-
-    return JFW_E_JAVA_DISABLED;
-#else
     javaFrameworkError retVal = JFW_E_NONE;
     try
     {
@@ -287,22 +278,12 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
         OSL_FAIL(e.message.getStr());
     }
     return retVal;
-#endif
 }
 
 javaFrameworkError SAL_CALL jfw_startVM(
     JavaInfo const * pInfo, JavaVMOption * arOptions, sal_Int32 cOptions,
     JavaVM ** ppVM, JNIEnv ** ppEnv)
 {
-#ifndef SOLAR_JAVA
-    (void) pInfo;
-    (void) arOptions;
-    (void) cOptions;
-    (void) ppVM;
-    (void) ppEnv;
-
-    return JFW_E_JAVA_DISABLED;
-#else
     javaFrameworkError errcode = JFW_E_NONE;
     if (cOptions > 0 && arOptions == NULL)
         return JFW_E_INVALID_ARG;
@@ -484,7 +465,6 @@ javaFrameworkError SAL_CALL jfw_startVM(
     }
 
     return errcode;
-#endif
 }
 
 /** We do not use here jfw_findAllJREs and then check if a JavaInfo
@@ -495,11 +475,6 @@ javaFrameworkError SAL_CALL jfw_startVM(
  */
 javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
 {
-#ifndef SOLAR_JAVA
-    (void) pInfo;
-
-    return JFW_E_JAVA_DISABLED;
-#else
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
@@ -705,7 +680,6 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
     }
 
     return errcode;
-#endif
 }
 
 sal_Bool SAL_CALL jfw_areEqualJavaInfo(
@@ -799,10 +773,6 @@ javaFrameworkError SAL_CALL jfw_getSelectedJRE(JavaInfo **ppInfo)
 
 javaFrameworkError SAL_CALL jfw_isVMRunning(sal_Bool *bRunning)
 {
-#ifndef SOLAR_JAVA
-    (void) bRunning;
-    return JFW_E_JAVA_DISABLED;
-#else
     osl::MutexGuard guard(jfw::FwkMutex::get());
     if (bRunning == NULL)
         return JFW_E_INVALID_ARG;
@@ -811,18 +781,11 @@ javaFrameworkError SAL_CALL jfw_isVMRunning(sal_Bool *bRunning)
     else
         *bRunning = sal_True;
     return JFW_E_NONE;
-#endif
 }
 
 javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
     rtl_uString *pPath, JavaInfo **ppInfo)
 {
-#ifndef SOLAR_JAVA
-    (void) pPath;
-    (void) ppInfo;
-
-    return JFW_E_JAVA_DISABLED;
-#else
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
@@ -941,7 +904,6 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
     }
 
     return errcode;
-#endif
 }
 
 
@@ -1207,12 +1169,6 @@ javaFrameworkError SAL_CALL jfw_getJRELocations(
 
 javaFrameworkError jfw_existJRE(const JavaInfo *pInfo, sal_Bool *exist)
 {
-#ifndef SOLAR_JAVA
-    (void) pInfo;
-    (void) exist;
-
-    return JFW_E_JAVA_DISABLED;
-#else
     //get the function jfw_plugin_existJRE
     jfw::VendorSettings aVendorSettings;
     jfw::CJavaInfo aInfo;
@@ -1250,7 +1206,6 @@ javaFrameworkError jfw_existJRE(const JavaInfo *pInfo, sal_Bool *exist)
         ret = JFW_E_ERROR;
     }
     return ret;
-#endif
 }
 
 void SAL_CALL jfw_lock()

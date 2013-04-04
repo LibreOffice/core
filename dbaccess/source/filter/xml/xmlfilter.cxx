@@ -22,7 +22,9 @@
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
+#ifdef SOLAR_JAVA
 #include <jvmaccess/virtualmachine.hxx>
+#endif
 #include "xmlfilter.hxx"
 #include "flt_reghelper.hxx"
 #include <vcl/svapp.hxx>
@@ -104,6 +106,7 @@ namespace dbaxml
         {
             if ( m_eWhat == E_JAVA )
             {
+#ifdef SOLAR_JAVA
                 static bool s_bFirstTime = true;
                 if ( s_bFirstTime )
                 {
@@ -117,6 +120,7 @@ namespace dbaxml
                         OSL_ASSERT(0);
                     }
                 }
+#endif
             }
             else if ( m_eWhat == E_CALC )
             {
@@ -187,7 +191,9 @@ namespace dbaxml
 
                 if ( m_aTypeCollection.needsJVM(sURL) )
                 {
+#ifdef SOLAR_JAVA
                     pCreatorThread = new FastLoader(m_xContext, FastLoader::E_JAVA);
+#endif
                 }
                 else if ( sURL.matchIgnoreAsciiCaseAsciiL("sdbc:calc:",10,0) )
                 {

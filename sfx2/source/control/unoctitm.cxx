@@ -355,6 +355,7 @@ void SAL_CALL SfxOfficeDispatch::dispatch( const ::com::sun::star::util::URL& aU
     // ControllerItem is the Impl class
     if ( pControllerItem )
     {
+#ifdef SOLAR_JAVA
         // The JavaContext contains an interaction handler which is used when
         // the creation of a Java Virtual Machine fails. The second parameter
         // indicates, that there shall only be one user notification (message box)
@@ -364,7 +365,7 @@ void SAL_CALL SfxOfficeDispatch::dispatch( const ::com::sun::star::util::URL& aU
         com::sun::star::uno::ContextLayer layer(
             new svt::JavaContext( com::sun::star::uno::getCurrentContext(),
                                   true) );
-
+#endif
         pControllerItem->dispatch( aURL, aArgs, ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatchResultListener >() );
     }
 }
@@ -376,11 +377,12 @@ void SAL_CALL SfxOfficeDispatch::dispatchWithNotification( const ::com::sun::sta
     // ControllerItem is the Impl class
     if ( pControllerItem )
     {
+#ifdef SOLAR_JAVA
         // see comment for SfxOfficeDispatch::dispatch
         com::sun::star::uno::ContextLayer layer(
             new svt::JavaContext( com::sun::star::uno::getCurrentContext(),
                                   true) );
-
+#endif
         pControllerItem->dispatch( aURL, aArgs, rListener );
     }
 }

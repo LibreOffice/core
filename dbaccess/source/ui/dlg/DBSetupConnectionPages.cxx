@@ -33,7 +33,9 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/mnemonic.hxx>
 #include <svl/cjkoptions.hxx>
+#ifdef SOLAR_JAVA
 #include <jvmaccess/virtualmachine.hxx>
+#endif
 #include <connectivity/CommonTools.hxx>
 #include "DriverSettings.hxx"
 #include "dbadmin.hxx"
@@ -552,6 +554,7 @@ DBG_NAME(OMySQLIntroPageSetup)
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
 
         sal_Bool bSuccess = sal_False;
+#ifdef SOLAR_JAVA
         try
         {
             if ( !m_aETDriverClass.GetText().isEmpty() )
@@ -564,7 +567,7 @@ DBG_NAME(OMySQLIntroPageSetup)
         catch(::com::sun::star::uno::Exception&)
         {
         }
-
+#endif
         const sal_uInt16 nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         const OSQLMessageBox::MessageType mt = bSuccess ? OSQLMessageBox::Info : OSQLMessageBox::Error;
         OSQLMessageBox aMsg( this, OUString( ModuleRes( nMessage ) ), OUString(), WB_OK | WB_DEF_OK, mt );
@@ -672,6 +675,7 @@ DBG_NAME(OMySQLIntroPageSetup)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         sal_Bool bSuccess = sal_False;
+#ifdef SOLAR_JAVA
         try
         {
             if ( !m_aETDriverClass.GetText().isEmpty() )
@@ -684,7 +688,7 @@ DBG_NAME(OMySQLIntroPageSetup)
         catch(::com::sun::star::uno::Exception&)
         {
         }
-
+#endif
         sal_uInt16 nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         OSQLMessageBox aMsg( this, OUString( ModuleRes( nMessage ) ), OUString() );
         aMsg.Execute();

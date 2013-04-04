@@ -41,7 +41,9 @@ Any SAL_CALL DesktopContext::getValueByName( const OUString& Name) throw (Runtim
 
     if ( Name == JAVA_INTERACTION_HANDLER_NAME )
     {
+#ifdef SOLAR_JAVA
         retVal = makeAny( Reference< XInteractionHandler >( new svt::JavaInteractionHandler()) );
+#endif
     }
     else if( m_xNextContext.is() )
     {

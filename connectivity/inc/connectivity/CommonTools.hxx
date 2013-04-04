@@ -40,7 +40,10 @@ namespace com { namespace sun { namespace star { namespace util {
     struct Time;
 }
 }}}
+
+#ifdef SOLAR_JAVA
 namespace jvmaccess { class VirtualMachine; }
+#endif
 
 namespace connectivity
 {
@@ -157,7 +160,7 @@ namespace connectivity
 
     OOO_DLLPUBLIC_DBTOOLS void checkDisposed(sal_Bool _bThrow) throw ( ::com::sun::star::lang::DisposedException );
 
-
+#ifdef SOLAR_JAVA
     /** creates a java virtual machine
         @param  _rxContext
             The ORB.
@@ -173,6 +176,7 @@ namespace connectivity
             The class name to look for.
     */
     OOO_DLLPUBLIC_DBTOOLS sal_Bool existsJavaClassByName( const ::rtl::Reference< jvmaccess::VirtualMachine >& _pJVM,const ::rtl::OUString& _sClassName );
+#endif
 }
 
 //==================================================================================

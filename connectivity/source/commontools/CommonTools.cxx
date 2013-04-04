@@ -31,7 +31,9 @@
 #include "TConnection.hxx"
 #include <comphelper/types.hxx>
 #include <com/sun/star/java/JavaVirtualMachine.hpp>
+#ifdef SOLAR_JAVA
 #include <jvmaccess/virtualmachine.hxx>
+#endif
 #include <rtl/process.h>
 
 using namespace ::comphelper;
@@ -153,7 +155,7 @@ namespace connectivity
         return rtl::OUString::createFromAscii(s);
     }
 
-    // -----------------------------------------------------------------------------
+#ifdef SOLAR_JAVA
     ::rtl::Reference< jvmaccess::VirtualMachine > getJavaVM(const Reference<XComponentContext >& _rxContext)
     {
         ::rtl::Reference< jvmaccess::VirtualMachine > aRet;
@@ -199,7 +201,6 @@ namespace connectivity
     sal_Bool existsJavaClassByName( const ::rtl::Reference< jvmaccess::VirtualMachine >& _pJVM,const ::rtl::OUString& _sClassName )
     {
         sal_Bool bRet = sal_False;
-#ifdef SOLAR_JAVA
         if ( _pJVM.is() )
         {
             jvmaccess::VirtualMachine::AttachGuard aGuard(_pJVM);
@@ -213,13 +214,9 @@ namespace connectivity
                 pEnv->DeleteLocalRef( out );
             }
         }
-#else
-        (void)_pJVM;
-        (void)_sClassName;
-#endif
         return bRet;
     }
-
+#endif
 }
 
 #include <ctype.h>      //isdigit

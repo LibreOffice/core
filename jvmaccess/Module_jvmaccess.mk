@@ -27,14 +27,16 @@
 
 $(eval $(call gb_Module_Module,jvmaccess))
 
+ifeq ($(SOLAR_JAVA),TRUE)
+
 $(eval $(call gb_Module_add_targets,jvmaccess,\
     Package_inc \
 ))
 
-ifneq ($(OS),IOS)
 $(eval $(call gb_Module_add_targets,jvmaccess,\
     Library_jvmaccess \
 ))
+
 endif
 
 # vim:set noet sw=4 ts=4:

@@ -22,7 +22,9 @@
 #include "ConnectionPage.hrc"
 #include "dbu_dlg.hrc"
 #include "dsmeta.hxx"
+#ifdef SOLAR_JAVA
 #include <jvmaccess/virtualmachine.hxx>
+#endif
 #include <svl/itemset.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/stritem.hxx>
@@ -315,6 +317,7 @@ namespace dbaui
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
         sal_Bool bSuccess = sal_False;
+#ifdef SOLAR_JAVA
         try
         {
             if ( !m_aJavaDriver.GetText().isEmpty() )
@@ -326,6 +329,7 @@ namespace dbaui
         catch(Exception&)
         {
         }
+#endif
 
         const sal_uInt16 nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         const OSQLMessageBox::MessageType mt = bSuccess ? OSQLMessageBox::Info : OSQLMessageBox::Error;

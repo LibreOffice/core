@@ -45,7 +45,8 @@ $(eval $(call gb_CppunitTest_use_libraries,connectivity_commontools, \
     cppu \
     cppuhelper \
     i18nisolang1 \
-    $(if $(filter IOS,$(OS)),,jvmaccess) \
+    $(if $(filter TRUE,$(SOLAR_JAVA)), \
+        jvmaccess) \
     sal \
     salhelper \
     test \

@@ -24,13 +24,7 @@
 #include "sal/config.h"
 #include "com/sun/star/uno/Reference.hxx"
 
-#if defined SOLAR_JAVA
 #include "jni.h"
-#else
-struct JNIEnv;
-typedef void * jclass;
-typedef void * jobjectArray;
-#endif
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;

@@ -25,9 +25,7 @@
 
 #include "jvmaccess/virtualmachine.hxx"
 
-#if defined SOLAR_JAVA
 #include "jni.h"
-#endif
 
 namespace jvmaccess {
 
@@ -50,15 +48,11 @@ UnoVirtualMachine::UnoVirtualMachine(
     m_virtualMachine(virtualMachine),
     m_classLoader(0)
 {
-#if defined SOLAR_JAVA
     try {
         m_classLoader =
             jvmaccess::VirtualMachine::AttachGuard(m_virtualMachine).
             getEnvironment()->NewGlobalRef(static_cast< jobject >(classLoader));
     } catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &) {}
-#else
-    (void) classLoader;
-#endif
     if (m_classLoader == 0) {
         throw CreationException();
     }
@@ -74,7 +68,6 @@ void * UnoVirtualMachine::getClassLoader() const {
 }
 
 UnoVirtualMachine::~UnoVirtualMachine() {
-#if defined SOLAR_JAVA
     try {
         jvmaccess::VirtualMachine::AttachGuard(m_virtualMachine).
             getEnvironment()->DeleteGlobalRef(
@@ -84,7 +77,6 @@ UnoVirtualMachine::~UnoVirtualMachine() {
             "jvmaccess::UnoVirtualMachine::~UnoVirtualMachine:"
             " jvmaccess::VirtualMachine::AttachGuard::CreationException" );
     }
-#endif
 }
 
 }

@@ -45,7 +45,8 @@ $(eval $(call gb_Library_use_libraries,svt,\
     cppuhelper \
     i18nisolang1 \
     i18nutil \
-    jvmfwk \
+    $(if $(filter TRUE,$(SOLAR_JAVA)), \
+        jvmfwk) \
     salhelper \
     sal \
     sot \
@@ -155,8 +156,9 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/graphic/provider \
     svtools/source/graphic/renderer \
     svtools/source/graphic/transformer \
-    svtools/source/java/javacontext \
-    svtools/source/java/javainteractionhandler \
+    $(if $(filter TRUE,$(SOLAR_JAVA)), \
+        svtools/source/java/javacontext \
+        svtools/source/java/javainteractionhandler) \
     svtools/source/misc/acceleratorexecute \
     svtools/source/misc/bindablecontrolhelper \
     svtools/source/misc/cliplistener \

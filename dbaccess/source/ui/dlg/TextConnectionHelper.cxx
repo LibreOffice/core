@@ -34,7 +34,9 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/mnemonic.hxx>
 #include <svl/cjkoptions.hxx>
+#ifdef SOLAR_JAVA
 #include <jvmaccess/virtualmachine.hxx>
+#endif
 #include <connectivity/CommonTools.hxx>
 #include "DriverSettings.hxx"
 #include "dbadmin.hxx"

@@ -24,9 +24,7 @@
 #include "jvmfwkplugindllapi.h"
 #include "jvmfwk/framework.h"
 #include "rtl/ustring.h"
-#ifdef SOLAR_JAVA
 #include "jni.h"
-#endif
 
 #ifdef __cplusplus
 extern "C" {

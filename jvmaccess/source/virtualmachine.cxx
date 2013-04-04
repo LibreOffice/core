@@ -61,10 +61,8 @@ VirtualMachine::VirtualMachine(JavaVM * pVm, int nVersion, bool bDestroy,
     m_pVm(pVm), m_nVersion(nVersion), m_bDestroy(bDestroy)
 {
     (void) pMainThreadEnv; // avoid warnings
-#ifdef SOLAR_JAVA
     OSL_ENSURE(pVm != 0 && nVersion >= JNI_VERSION_1_2 && pMainThreadEnv != 0,
                "bad parameter");
-#endif
 }
 
 VirtualMachine::~VirtualMachine()
@@ -84,10 +82,6 @@ VirtualMachine::~VirtualMachine()
 
 JNIEnv * VirtualMachine::attachThread(bool * pAttached) const
 {
-#ifndef SOLAR_JAVA
-    (void) pAttached;
-    return 0;
-#else
     OSL_ENSURE(pAttached != 0, "bad parameter");
     JNIEnv * pEnv;
     jint n = m_pVm->GetEnv(reinterpret_cast< void ** >(&pEnv), m_nVersion);
@@ -113,16 +107,13 @@ JNIEnv * VirtualMachine::attachThread(bool * pAttached) const
     else
         *pAttached = false;
     return pEnv;
-#endif
 }
 
 void VirtualMachine::detachThread() const
 {
-#ifdef SOLAR_JAVA
     if (m_pVm->DetachCurrentThread() != JNI_OK) {
         OSL_FAIL("JNI: DetachCurrentThread failed");
     }
-#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

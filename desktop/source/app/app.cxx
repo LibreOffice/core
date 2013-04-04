@@ -1719,11 +1719,12 @@ int Desktop::Main()
 
         try
         {
+#ifdef SOLAR_JAVA
             // The JavaContext contains an interaction handler which is used when
             // the creation of a Java Virtual Machine fails
             com::sun::star::uno::ContextLayer layer2(
                 new svt::JavaContext( com::sun::star::uno::getCurrentContext() ) );
-
+#endif
             // check whether the shutdown is caused by restart just before entering the Execute
             pExecGlobals->bRestartRequested = pExecGlobals->bRestartRequested ||
                 xRestartManager->isRestartRequested(true);

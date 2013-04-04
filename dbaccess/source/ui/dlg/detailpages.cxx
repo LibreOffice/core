@@ -39,7 +39,9 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/mnemonic.hxx>
 #include <svl/cjkoptions.hxx>
+#ifdef SOLAR_JAVA
 #include <jvmaccess/virtualmachine.hxx>
+#endif
 #include <connectivity/CommonTools.hxx>
 #include "DriverSettings.hxx"
 #include "dbadmin.hxx"
@@ -622,6 +624,7 @@ namespace dbaui
         OSL_ENSURE(m_bUseClass,"Who called me?");
 
         sal_Bool bSuccess = sal_False;
+#ifdef SOLAR_JAVA
         try
         {
             if ( !m_aEDDriverClass.GetText().isEmpty() )
@@ -634,7 +637,7 @@ namespace dbaui
         catch(Exception&)
         {
         }
-
+#endif
         const sal_uInt16 nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         const OSQLMessageBox::MessageType mt = bSuccess ? OSQLMessageBox::Info : OSQLMessageBox::Error;
         OSQLMessageBox aMsg( this, String( ModuleRes( nMessage ) ), String(), WB_OK | WB_DEF_OK, mt );

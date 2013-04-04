@@ -56,7 +56,8 @@ $(eval $(call gb_Library_use_libraries,svl,\
     cppuhelper \
     i18nisolang1 \
     i18nutil \
-    jvmfwk \
+    $(if $(filter TRUE,$(SOLAR_JAVA)), \
+        jvmfwk) \
     sal \
     sot \
     tl \

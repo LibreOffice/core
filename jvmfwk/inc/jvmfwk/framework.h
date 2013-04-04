@@ -25,13 +25,7 @@
 #include "jvmfwkdllapi.h"
 #include "rtl/ustring.h"
 #include "osl/mutex.h"
-#ifdef SOLAR_JAVA
 #include "jni.h"
-#else
-struct JavaVMOption;
-struct JavaVM;
-struct JNIEnv;
-#endif
 
 #ifdef __cplusplus
 extern "C" {

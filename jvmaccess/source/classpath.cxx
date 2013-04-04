@@ -36,16 +36,13 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
-#if defined SOLAR_JAVA
 #include "jni.h"
-#endif
 
 void * ::jvmaccess::ClassPath::doTranslateToUrls(
     css::uno::Reference< css::uno::XComponentContext > const & context,
     void * environment, ::rtl::OUString const & classPath)
 {
     OSL_ASSERT(context.is() && environment != 0);
-#if defined SOLAR_JAVA
     ::JNIEnv * const env = static_cast< ::JNIEnv * >(environment);
     jclass classUrl(env->FindClass("java/net/URL"));
     if (classUrl == 0) {
@@ -104,12 +101,6 @@ void * ::jvmaccess::ClassPath::doTranslateToUrls(
         env->SetObjectArrayElement(result, idx++, *i);
     }
     return result;
-#else
-    (void) context;
-    (void) environment;
-    (void) classPath;
-    return 0;
-#endif
 }
 
 void * ::jvmaccess::ClassPath::doLoadClass(
@@ -118,7 +109,6 @@ void * ::jvmaccess::ClassPath::doLoadClass(
     ::rtl::OUString const & name)
 {
     OSL_ASSERT(context.is() && environment != 0);
-#if defined SOLAR_JAVA
     ::JNIEnv * const env = static_cast< ::JNIEnv * >(environment);
     jclass classLoader(env->FindClass("java/net/URLClassLoader"));
     if (classLoader == 0) {
@@ -151,13 +141,6 @@ void * ::jvmaccess::ClassPath::doLoadClass(
         return 0;
     }
     return env->CallObjectMethodA(cl, methLoadClass, &arg);
-#else
-    (void) context;
-    (void) environment;
-    (void) classPath;
-    (void) name;
-    return 0;
-#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

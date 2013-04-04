@@ -52,7 +52,8 @@ $(eval $(call gb_Library_use_libraries,dbtools,\
 	cppuhelper \
 	sal \
 	salhelper \
-	$(if $(filter IOS,$(OS)),,jvmaccess) \
+	$(if $(filter TRUE,$(SOLAR_JAVA)), \
+		jvmaccess) \
 	utl \
 	tl \
 	comphelper \
