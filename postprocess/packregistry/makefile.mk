@@ -434,28 +434,6 @@ MY_FILES_xsltfilter = \
     $(MY_MOD)/fcfg_xslt_filters.xcu \
     $(MY_MOD)/fcfg_xslt_types.xcu
 
-.IF "$(WITH_BINFILTER)" != "NO"
-MY_XCDS += $(MISC)/binfilter.xcd
-MY_DEPS_binfilter = main
-MY_FILES_binfilter = \
-    $(MY_MOD)/fcfg_chart_bf_filters.xcu \
-    $(MY_MOD)/fcfg_chart_bf_types.xcu \
-    $(MY_MOD)/fcfg_calc_bf_filters.xcu \
-    $(MY_MOD)/fcfg_calc_bf_types.xcu \
-    $(MY_MOD)/fcfg_draw_bf_filters.xcu \
-    $(MY_MOD)/fcfg_draw_bf_types.xcu \
-    $(MY_MOD)/fcfg_global_bf_filters.xcu \
-    $(MY_MOD)/fcfg_global_bf_types.xcu \
-    $(MY_MOD)/fcfg_impress_bf_filters.xcu \
-    $(MY_MOD)/fcfg_impress_bf_types.xcu \
-    $(MY_MOD)/fcfg_math_bf_filters.xcu \
-    $(MY_MOD)/fcfg_math_bf_types.xcu \
-    $(MY_MOD)/fcfg_web_bf_filters.xcu \
-    $(MY_MOD)/fcfg_web_bf_types.xcu \
-    $(MY_MOD)/fcfg_writer_bf_filters.xcu \
-    $(MY_MOD)/fcfg_writer_bf_types.xcu
-.END
-
 .IF "$(GUIBASE)" == "unx" && \
         (("$(ENABLE_GCONF)" == "TRUE" && "$(ENABLE_LOCKDOWN)" == "YES") || \
          "$(ENABLE_GIO)" == "TRUE")
