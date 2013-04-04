@@ -16,6 +16,24 @@
       "revId": "4b941584f34858cdda1eda1f9cf65d26930acc9a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///1s\u003d",
+        "filename": "vcl/source/gdi/outdev3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6941,
+      "author": {
+        "id": 1000032
+      },
+      "writtenOn": "2013-04-04T19:16:55Z",
+      "side": 1,
+      "message": "In outdev.hxx I\u0027ve changed the default value for nLen if it isn\u0027t passed in to -1 in order to get rid of STRING_LEN someday.",
+      "parentUuid": "AAAAW3//95o\u003d",
+      "revId": "4b941584f34858cdda1eda1f9cf65d26930acc9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
