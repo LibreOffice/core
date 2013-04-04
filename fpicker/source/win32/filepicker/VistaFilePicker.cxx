@@ -619,7 +619,7 @@ sal_Bool SAL_CALL VistaFilePicker::supportsService(const ::rtl::OUString& sServi
     css::uno::Sequence< ::rtl::OUString > lSupportedServicesNames = VistaFilePicker_getSupportedServiceNames();
 
     for (sal_Int32 n = lSupportedServicesNames.getLength(); n--;)
-        if (lSupportedServicesNames[n].compareTo(sServiceName) == 0)
+        if (lSupportedServicesNames[n] == sServiceName)
             return sal_True;
 
     return sal_False;

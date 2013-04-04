@@ -121,7 +121,7 @@ rtl::OUString PackageInformationProvider::getPackageLocation(
             try
             {
                 const beans::Optional< rtl::OUString > aID = packages[ pos ]->getIdentifier();
-                if ( aID.IsPresent && aID.Value.compareTo( _rExtensionId ) == 0 )
+                if ( aID.IsPresent && (aID.Value == _rExtensionId ) )
                 {
                     aLocationURL = packages[ pos ]->getURL();
                     break;

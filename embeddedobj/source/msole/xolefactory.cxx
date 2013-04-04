@@ -317,7 +317,7 @@ sal_Bool SAL_CALL OleEmbeddedObjectFactory::supportsService( const ::rtl::OUStri
     uno::Sequence< ::rtl::OUString > aSeq = impl_staticGetSupportedServiceNames();
 
     for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
-        if ( ServiceName.compareTo( aSeq[nInd] ) == 0 )
+        if ( ServiceName == aSeq[nInd] )
             return sal_True;
 
     return sal_False;
