@@ -197,6 +197,7 @@ private:
     OString m_sID;
     OString m_sHelpRoot;
     OString m_sProductName;
+    OString m_sVendor;
     Window *m_pParent;
     bool m_bToplevelHasDeferredInit;
     bool m_bToplevelParentFound;
