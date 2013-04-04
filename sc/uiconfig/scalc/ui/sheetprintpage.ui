@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkAdjustment" id="adjustmentFirstPage">
+    <property name="lower">1.05</property>
+    <property name="upper">9999.0400000000009</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkAdjustment" id="adjustmentPage">
-    <property name="upper">999</property>
+    <property name="lower">1</property>
+    <property name="upper">1000</property>
+    <property name="value">1</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="adjustmentScalingFactor">
-    <property name="upper">100</property>
+    <property name="lower">10</property>
+    <property name="upper">400</property>
+    <property name="value">15</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
@@ -110,7 +120,7 @@
                         <property name="can_focus">True</property>
                         <property name="max_length">5</property>
                         <property name="invisible_char">•</property>
-                        <property name="adjustment">adjustmentPage</property>
+                        <property name="adjustment">adjustmentFirstPage</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -311,18 +321,6 @@
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
                   <object class="GtkCheckButton" id="checkBTN_NULLVALS">
                     <property name="label" translatable="yes">_Zero values</property>
                     <property name="visible">True</property>
@@ -338,6 +336,18 @@
                     <property name="width">1</property>
                     <property name="height">1</property>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
               </object>
             </child>
@@ -382,6 +392,7 @@
                   <object class="GtkLabel" id="labelScalingMode">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">Scaling _mode:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">comboLB_SCALEMODE</property>
@@ -403,12 +414,12 @@
                       <object class="GtkHBox" id="boxSCALEALL">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="spacing">6</property>
-                        <property name="homogeneous">True</property>
+                        <property name="spacing">12</property>
                         <child>
                           <object class="GtkLabel" id="labelSF">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Scaling factor:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">spinED_SCALEALL:0%</property>
@@ -445,13 +456,13 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="row_spacing">6</property>
-                        <property name="column_spacing">6</property>
+                        <property name="column_spacing">12</property>
                         <property name="row_homogeneous">True</property>
-                        <property name="column_homogeneous">True</property>
                         <child>
                           <object class="GtkLabel" id="labelWP">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Width in pages:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">spinED_SCALEPAGEWIDTH</property>
@@ -467,8 +478,10 @@
                           <object class="GtkLabel" id="labelHP">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Height in pages:</property>
                             <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">spinED_SCALEPAGEHEIGHT</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -519,12 +532,12 @@
                       <object class="GtkHBox" id="boxNP">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="spacing">6</property>
-                        <property name="homogeneous">True</property>
+                        <property name="spacing">12</property>
                         <child>
                           <object class="GtkLabel" id="labelNP">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">N_umber of pages:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">spinED_SCALEPAGENUM</property>
@@ -569,10 +582,16 @@
                   <placeholder/>
                 </child>
                 <child>
-                  <object class="GtkComboBox" id="comboLB_SCALEMODE">
+                  <object class="GtkComboBoxText" id="comboLB_SCALEMODE">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="model">liststoreScaleMode</property>
+                    <property name="entry_text_column">0</property>
+                    <property name="id_column">1</property>
+                    <items>
+                      <item translatable="yes">Reduce/enlarge printout</item>
+                      <item translatable="yes">Fit print range(s) to width/height</item>
+                      <item translatable="yes">Fit print range(s) on number of pages</item>
+                    </items>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -604,26 +623,12 @@
       </packing>
     </child>
   </object>
-  <object class="GtkListStore" id="liststoreScaleMode">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-      <!-- column-name gint1 -->
-      <column type="gint"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Reduce/enlarge printout</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Fit print range(s) to width/height</col>
-        <col id="1">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Fit print range(s) on number of pages</col>
-        <col id="1">0</col>
-      </row>
-    </data>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <widgets>
+      <widget name="labelSF"/>
+      <widget name="labelWP"/>
+      <widget name="labelHP"/>
+      <widget name="labelNP"/>
+    </widgets>
   </object>
 </interface>

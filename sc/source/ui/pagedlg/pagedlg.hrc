@@ -19,7 +19,6 @@
 
 
 #include "sc.hrc"   // -> RID_SCDLG_PAGE
-                    // -> RID_SCPAGE_TABLE
                     // -> RID_SCPAGE_AREAS
 
 #define TP_PAGE_STD     1
