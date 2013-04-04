@@ -28,6 +28,7 @@
 $(eval $(call gb_CustomTarget_CustomTarget,postprocess/images))
 
 packimages_DIR := $(call gb_CustomTarget_get_workdir,postprocess/images)
+helpimages_DIR := $(call gb_CustomTarget_get_workdir,helpcontent2/source/auxiliary)
 
 # Custom sets, at 24x24 & 16x16 fall-back to Tango preferentially
 # (Tango fallbacks to Industrial for the missing icons)
@@ -50,6 +51,7 @@ $(packimages_DIR)/images.zip : \
 	$(call gb_Helper_abbreviate_dirs, \
 		$(PERL) $(SOLARENV)/bin/packimages.pl -g $(SRCDIR)/icon-themes/galaxy \
 			-m $(SRCDIR)/icon-themes/galaxy -c $(packimages_DIR) \
+			$(call gb_Helper_optional,HELP,-l $(helpimages_DIR) ) \
 			-l $(packimages_DIR) -l $(dir $(call gb_ResTarget_get_imagelist_target)) -s $< -o $@ \
 			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
 
@@ -62,6 +64,7 @@ $(packimages_DIR)/images_%.zip : \
 		$(PERL) $(SOLARENV)/bin/packimages.pl -g $(SRCDIR)/icon-themes/galaxy \
 			-m $(SRCDIR)/icon-themes/galaxy -c $(SRCDIR)/icon-themes/$* \
 			$(packimages_CUSTOM_FALLBACK_1) $(packimages_CUSTOM_FALLBACK_2) \
+			$(call gb_Helper_optional,HELP,-l $(helpimages_DIR) ) \
 			-l $(packimages_DIR) -l $(dir $(call gb_ResTarget_get_imagelist_target)) -s $< -o $@ \
 			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
 
