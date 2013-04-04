@@ -203,7 +203,7 @@ public:
         if( !pEndPtr ) pEndPtr = End();
         *pEndPtr = rPos;
     }
-    // Do we have a valid selection?
+    /// Do we have a valid selection?
     sal_Bool HasValidRange() const;
 
     const SwRedlineData& GetRedlineData(sal_uInt16 nPos = 0) const;
@@ -224,8 +224,8 @@ public:
 
     void SetComment( const String& rS ) { pRedlineData->SetComment( rS ); }
 
-    // ExtraData gets copied, the pointer is therefor not taken over by
-    // the RedLineObject.
+    /** ExtraData gets copied, the pointer is therefor not taken over by
+     *  the RedLineObject.*/
     void SetExtraData( const SwRedlineExtraData* pData )
         { pRedlineData->SetExtraData( pData ); }
     const SwRedlineExtraData* GetExtraData() const
@@ -246,10 +246,11 @@ public:
     void Hide( sal_uInt16 nLoop = 0 );
     void ShowOriginal( sal_uInt16 nLoop = 0 );
 
-    // Calculates the intersection with text node number nNdIdx.
+    /// Calculates the intersection with text node number nNdIdx.
     void CalcStartEnd( sal_uLong nNdIdx, sal_uInt16& nStart, sal_uInt16& nEnd ) const;
 
-    void InvalidateRange();     // Initiate the layout.
+    /// Initiate the layout.
+    void InvalidateRange();
 
     sal_Bool IsOwnRedline( const SwRedline& rRedl ) const
         { return GetAuthor() == rRedl.GetAuthor(); }

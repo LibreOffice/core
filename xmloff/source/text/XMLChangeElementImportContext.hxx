@@ -40,7 +40,21 @@ class XMLChangedRegionImportContext;
  */
 class XMLChangeElementImportContext : public SvXMLImportContext
 {
+    /**
+     * accept text content (paragraphs) in element as redline content?
+     *
+     * From the "5.5.4 <text:deletion>" section of the ODF 1.2 standard :
+     *   The <text:deletion> element may also contain content that was
+     *   deleted while change tracking was enabled.
+     *
+     * No other section in the "5.5 Change Tracking" chapter contain
+     * this sentence.
+     *
+     * So if bAcceptContent is true, we are importing a <text:deletion> element
+     */
     sal_Bool bAcceptContent;
+
+    /// context of enclosing <text:changed-region> element
     XMLChangedRegionImportContext& rChangedRegion;
 
 public:

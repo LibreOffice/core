@@ -878,7 +878,7 @@ public:
     virtual SwDrawFrmFmt* Insert(const SwPaM &rRg, SdrObject& rDrawObj, const SfxItemSet* pFlyAttrSet, SwFrmFmt*);
     virtual SwFlyFrmFmt* Insert(const SwPaM &rRg, const svt::EmbeddedObjectRef& xObj, const SfxItemSet* pFlyAttrSet,
                         const SfxItemSet* pGrfAttrSet, SwFrmFmt*);
-    //Add a para for the char attribute exp...
+    /// Add a para for the char attribute exp...
     virtual bool InsertPoolItem(const SwPaM &rRg, const SfxPoolItem&,
                                 const SetAttrMode nFlags,bool bExpandCharToPara=false);
     virtual bool InsertItemSet (const SwPaM &rRg, const SfxItemSet&,
@@ -1183,9 +1183,11 @@ public:
                      const bool bSendDataChangedEvents = true );
     void RstTxtAttrs(const SwPaM &rRg, bool bInclRefToxMark = false );
 
-    /** Set attribute in given format.
-     If Undo is activated, the old one is listed in Undo-History. */
+    /** Set attribute in given format.1y
+     *  If Undo is enabled, the old values is added to the Undo history. */
     void SetAttr( const SfxPoolItem&, SwFmt& );
+    /** Set attribute in given format.1y
+     *  If Undo is enabled, the old values is added to the Undo history. */
     void SetAttr( const SfxItemSet&, SwFmt& );
 
     /// method to reset a certain attribute at the given format
