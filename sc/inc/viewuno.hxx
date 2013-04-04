@@ -205,7 +205,8 @@ private:
     void                    EndMouseListening();
     void                    StartActivationListening();
     void                    EndActivationListening();
-
+    bool                    mbLeftMousePressed;
+    bool                    mbPendingSelectionChanged;
     ScTabViewObj(); // disabled
 public:
                             ScTabViewObj(ScTabViewShell* pViewSh);
