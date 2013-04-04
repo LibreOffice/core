@@ -11,6 +11,7 @@
 #define _VCLBUILDER_HXX
 
 #include <typeinfo>
+#include <tools/resmgr.hxx> //for poxy ResHookProc typedef
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
 #include <xmlreader/xmlreader.hxx>
@@ -196,8 +197,7 @@ private:
 
     OString m_sID;
     OString m_sHelpRoot;
-    OString m_sProductName;
-    OString m_sVendor;
+    ResHookProc m_pStringReplace;
     Window *m_pParent;
     bool m_bToplevelHasDeferredInit;
     bool m_bToplevelParentFound;

@@ -138,8 +138,7 @@ namespace
 VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OString sID)
     : m_sID(sID)
     , m_sHelpRoot(OUStringToOString(sUIFile, RTL_TEXTENCODING_UTF8))
-    , m_sProductName(OUStringToOString(utl::ConfigManager::getProductName(), RTL_TEXTENCODING_UTF8))
-    , m_sVendor(OUStringToOString(utl::ConfigManager::getVendor(), RTL_TEXTENCODING_UTF8))
+    , m_pStringReplace(ResMgr::GetReadStringHook())
     , m_pParent(pParent)
     , m_bToplevelParentFound(false)
     , m_pParserState(new ParserState)
@@ -2403,9 +2402,15 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, const OString &rI
     if (!sProperty.isEmpty())
     {
         sProperty = sProperty.replace('_', '-');
-        rMap[sProperty] = sValue.
-            replaceAll("%PRODUCTNAME", m_sProductName).
-            replaceAll("%OOOVENDOR", m_sVendor);
+        if (m_pStringReplace)
+        {
+            OUString sTmp = (*m_pStringReplace)(OStringToOUString(sValue, RTL_TEXTENCODING_UTF8));
+            rMap[sProperty] = OUStringToOString(sTmp, RTL_TEXTENCODING_UTF8);
+        }
+        else
+        {
+            rMap[sProperty] = sValue;
+        }
     }
 }
 
