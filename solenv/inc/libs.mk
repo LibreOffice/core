@@ -296,24 +296,6 @@ REDLANDLIB=-lrdf
 .ENDIF
 
 
-# #110743#
-# For BinFilters, some libs were added.
-#
-
-BFSVXLIB=-lbf_svx$(DLLPOSTFIX)
-BFSCHLIB=-lbf_ysch
-BFSMLIB=-lbf_ysm
-BFSCLIB=-lbf_sclib
-BFSDLIB=-lbf_sdlib
-BFSWLIB=-lbf_swlib
-BFOFALIB=-lbf_ofa$(DLLPOSTFIX)
-LEGACYSMGRLIB=-llegacy_binfilters$(DLLPOSTFIX)
-BFXMLOFFLIB=-lbf_xo$(DLLPOSTFIX)
-BFGOODIESLIB=-lbf_go$(DLLPOSTFIX)
-BFBASICLIB=-lbf_sb$(DLLPOSTFIX)
-BFSO3LIB=-lbf_so$(DLLPOSTFIX)
-BFSVTOOLLIB=-lbf_svt$(DLLPOSTFIX)
-
 #
 # USED_%NAME%_LIBS
 # Variablen, in denen in gueltiger Reihenfolge ALLE Libraries,
