@@ -28,6 +28,7 @@ $(eval $(call gb_Library_set_componentfile,comphelper,comphelper/util/comphelp))
 
 $(eval $(call gb_Library_set_include,comphelper,\
     -I$(SRCDIR)/comphelper/source/inc \
+    -I$(SRCDIR)/comphelper/inc \
     $$(INCLUDE) \
 ))
 
