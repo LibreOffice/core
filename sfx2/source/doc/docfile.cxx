@@ -2619,36 +2619,7 @@ sal_uInt32 SfxMedium::CreatePasswordToModifyHash( const ::rtl::OUString& aPasswd
         }
         else
         {
-            rtl_TextEncoding nEncoding = RTL_TEXTENCODING_UTF8;
-
-            // if the MS-filter should be used
-            // use the inconsistent algorithm to find the encoding specified by MS
-            nEncoding = osl_getThreadTextEncoding();
-            switch( nEncoding )
-            {
-                case RTL_TEXTENCODING_ISO_8859_15:
-                case RTL_TEXTENCODING_MS_874:
-                case RTL_TEXTENCODING_MS_1250:
-                case RTL_TEXTENCODING_MS_1251:
-                case RTL_TEXTENCODING_MS_1252:
-                case RTL_TEXTENCODING_MS_1253:
-                case RTL_TEXTENCODING_MS_1254:
-                case RTL_TEXTENCODING_MS_1255:
-                case RTL_TEXTENCODING_MS_1256:
-                case RTL_TEXTENCODING_MS_1257:
-                case RTL_TEXTENCODING_MS_1258:
-                case RTL_TEXTENCODING_SHIFT_JIS:
-                case RTL_TEXTENCODING_GB_2312:
-                case RTL_TEXTENCODING_BIG5:
-                    // in case the system uses an encoding from the list above, it should be used
-                    break;
-
-                default:
-                    // in case other encoding is used, use one of the encodings from the list
-                    nEncoding = RTL_TEXTENCODING_MS_1250;
-                    break;
-            }
-
+            rtl_TextEncoding nEncoding = osl_getThreadTextEncoding();
             nHash = ::comphelper::DocPasswordHelper::GetXLHashAsUINT16( aPasswd, nEncoding );
         }
     }
