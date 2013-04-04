@@ -12,6 +12,7 @@
 
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Frontend/FrontendPluginRegistry.h>
+#include <clang/Lex/PPCallbacks.h>
 #include <stdio.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -65,7 +66,11 @@ PluginHandler::~PluginHandler()
          i < pluginCount;
          ++i )
         if( plugins[ i ].object != NULL )
-            delete plugins[ i ].object;
+            {
+            // PPCallbacks is owned by preprocessor object, don't delete those
+            if( dynamic_cast< PPCallbacks* >( plugins[ i ].object ) == NULL )
+                delete plugins[ i ].object;
+            }
     }
 
 void PluginHandler::handleOption( const string& option )
