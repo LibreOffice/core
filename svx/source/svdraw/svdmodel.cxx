@@ -1390,7 +1390,7 @@ void SdrModel::TakePercentStr(const Fraction& rVal, XubString& rStr, bool bNoPer
 {
     sal_Int32 nMul(rVal.GetNumerator());
     sal_Int32 nDiv(rVal.GetDenominator());
-    sal_Bool bNeg(nMul < 0);
+    bool bNeg(nMul < 0);
 
     if(nDiv < 0)
         bNeg = !bNeg;

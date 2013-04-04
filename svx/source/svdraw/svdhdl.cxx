@@ -629,11 +629,11 @@ BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd
     ::sdr::overlay::OverlayObject* pRetval = 0L;
 
     // support bigger sizes
-    sal_Bool bForceBiggerSize(sal_False);
+    bool bForceBiggerSize(false);
 
     if(pHdlList->GetHdlSize() > 3)
     {
-        bForceBiggerSize = sal_True;
+        bForceBiggerSize = true;
     }
 
     if(bForceBiggerSize)
@@ -761,9 +761,9 @@ bool SdrHdl::IsHdlHit(const Point& rPnt) const
 Pointer SdrHdl::GetPointer() const
 {
     PointerStyle ePtr=POINTER_MOVE;
-    const sal_Bool bSize=eKind>=HDL_UPLFT && eKind<=HDL_LWRGT;
-    const sal_Bool bRot=pHdlList!=NULL && pHdlList->IsRotateShear();
-    const sal_Bool bDis=pHdlList!=NULL && pHdlList->IsDistortShear();
+    const bool bSize=eKind>=HDL_UPLFT && eKind<=HDL_LWRGT;
+    const bool bRot=pHdlList!=NULL && pHdlList->IsRotateShear();
+    const bool bDis=pHdlList!=NULL && pHdlList->IsDistortShear();
     if (bSize && pHdlList!=NULL && (bRot || bDis)) {
         switch (eKind) {
             case HDL_UPLFT: case HDL_UPRGT:

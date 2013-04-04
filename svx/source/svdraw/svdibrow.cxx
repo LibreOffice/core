@@ -87,9 +87,9 @@ public:
     sal_Int32                       nMin;
     sal_Int32                       nMax;
 
-    sal_Bool                        bComment;
-    sal_Bool                        bIsNum;
-    sal_Bool                        bCanNum;
+    bool                            bComment;
+    bool                            bIsNum;
+    bool                            bCanNum;
 
 public:
     ImpItemListRow()
@@ -100,14 +100,14 @@ public:
         nVal(0),
         nMin(0),
         nMax(0),
-        bComment(sal_False),
-        bIsNum(sal_False),
-        bCanNum(sal_False)
+        bComment(false),
+        bIsNum(false),
+        bCanNum(false)
     {}
 
     XubString GetItemTypeStr() const;
-    sal_Bool operator==(const ImpItemListRow& rEntry) const;
-    sal_Bool operator!=(const ImpItemListRow& rEntry) const { return !operator==(rEntry); }
+    bool operator==(const ImpItemListRow& rEntry) const;
+    bool operator!=(const ImpItemListRow& rEntry) const { return !operator==(rEntry); }
 };
 
 XubString ImpItemListRow::GetItemTypeStr() const
@@ -142,7 +142,7 @@ XubString ImpItemListRow::GetItemTypeStr() const
     return aStr;
 }
 
-sal_Bool ImpItemListRow::operator==(const ImpItemListRow& rEntry) const
+bool ImpItemListRow::operator==(const ImpItemListRow& rEntry) const
 {
     return (aName.equals(rEntry.aName)
         && aValue.equals(rEntry.aValue)

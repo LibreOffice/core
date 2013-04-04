@@ -323,7 +323,7 @@ const SdrLayer* SdrLayerAdmin::GetLayerPerID(sal_uInt16 nID) const
 SdrLayerID SdrLayerAdmin::GetUniqueLayerID() const
 {
     SetOfByte aSet;
-    sal_Bool bDown = (pParent == NULL);
+    bool bDown = (pParent == NULL);
     sal_uInt16 j;
     for (j=0; j<GetLayerCount(); j++)
     {

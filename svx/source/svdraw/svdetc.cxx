@@ -465,7 +465,7 @@ sal_Bool SearchOutlinerItems(const SfxItemSet& rSet, sal_Bool bInklDefaults, sal
 {
     sal_Bool bHas=sal_False;
     sal_Bool bOnly=sal_True;
-    sal_Bool bLookOnly=pbOnlyEE!=NULL;
+    bool bLookOnly=pbOnlyEE!=NULL;
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich=aIter.FirstWhich();
     while (((bLookOnly && bOnly) || !bHas) && nWhich!=0) {

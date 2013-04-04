@@ -519,7 +519,7 @@ sal_Bool SdrMarkView::ImpIsFrameHandles() const
 {
     sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
     sal_Bool bFrmHdl=nMarkAnz>nFrameHandlesLimit || bForceFrameHandles;
-    sal_Bool bStdDrag=eDragMode==SDRDRAG_MOVE;
+    bool bStdDrag=eDragMode==SDRDRAG_MOVE;
     if (nMarkAnz==1 && bStdDrag && bFrmHdl)
     {
         const SdrObject* pObj=GetMarkedObjectByIndex(0);
@@ -559,7 +559,7 @@ void SdrMarkView::SetMarkHandles()
 {
     // remember old focus handle values to search for it again
     const SdrHdl* pSaveOldFocusHdl = aHdl.GetFocusHdl();
-    sal_Bool bSaveOldFocus(sal_False);
+    bool bSaveOldFocus(false);
     sal_uInt32 nSavePolyNum(0L), nSavePointNum(0L);
     SdrHdlKind eSaveKind(HDL_MOVE);
     SdrObject* pSaveObj = NULL;
@@ -569,7 +569,7 @@ void SdrMarkView::SetMarkHandles()
         && pSaveOldFocusHdl->GetObj()->ISA(SdrPathObj)
         && (pSaveOldFocusHdl->GetKind() == HDL_POLY || pSaveOldFocusHdl->GetKind() == HDL_BWGT))
     {
-        bSaveOldFocus = sal_True;
+        bSaveOldFocus = true;
         nSavePolyNum = pSaveOldFocusHdl->GetPolyNum();
         nSavePointNum = pSaveOldFocusHdl->GetPointNum();
         pSaveObj = pSaveOldFocusHdl->GetObj();
@@ -587,8 +587,8 @@ void SdrMarkView::SetMarkHandles()
     if(!areMarkHandlesHidden())
     {
         sal_uIntPtr nMarkAnz=GetMarkedObjectCount();
-        sal_Bool bStdDrag=eDragMode==SDRDRAG_MOVE;
-        sal_Bool bSingleTextObjMark=sal_False;
+        bool bStdDrag=eDragMode==SDRDRAG_MOVE;
+        bool bSingleTextObjMark=false;
 
         if (nMarkAnz==1)
         {
@@ -624,7 +624,7 @@ void SdrMarkView::SetMarkHandles()
         {
             Rectangle aRect(GetMarkedObjRect());
             // #i33755#
-            const sal_Bool bHideHandlesWhenInTextEdit(
+            const bool bHideHandlesWhenInTextEdit(
                 ((SdrView*)this)->IsTextEdit()
                 && pMarkedObj
                 && pMarkedObj->ISA(SdrTextObj)
@@ -669,8 +669,8 @@ void SdrMarkView::SetMarkHandles()
                 }
                 else
                 {
-                    sal_Bool bWdt0=aRect.Left()==aRect.Right();
-                    sal_Bool bHgt0=aRect.Top()==aRect.Bottom();
+                    bool bWdt0=aRect.Left()==aRect.Right();
+                    bool bHgt0=aRect.Top()==aRect.Bottom();
                     if (bWdt0 && bHgt0)
                     {
                         aHdl.AddHdl(new SdrHdl(aRect.TopLeft(),HDL_UPLFT));
@@ -1123,7 +1123,7 @@ void SdrMarkView::CheckMarked()
         SdrObject* pObj=pM->GetMarkedSdrObj();
         SdrPageView* pPV=pM->GetPageView();
         SdrLayerID nLay=pObj->GetLayer();
-        sal_Bool bRaus=!pObj->IsInserted(); // Obj deleted?
+        bool bRaus=!pObj->IsInserted(); // Obj deleted?
         if (!pObj->Is3DObj()) {
             bRaus=bRaus || pObj->GetPage()!=pPV->GetPage();   // Obj suddenly in different Page or Group
         }
@@ -1585,13 +1585,13 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
 }
 SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList* pOL, SdrPageView* pPV, sal_uIntPtr nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj,const SdrMarkList * pMarkList) const
 {
-    sal_Bool bBack=(nOptions & SDRSEARCH_BACKWARD)!=0;
-    sal_Bool bBefMrk=(nOptions & SDRSEARCH_BEFOREMARK)!=0;
+    bool bBack=(nOptions & SDRSEARCH_BACKWARD)!=0;
+    bool bBefMrk=(nOptions & SDRSEARCH_BEFOREMARK)!=0;
     SdrObject* pRet=NULL;
     rpRootObj=NULL;
     if (pOL!=NULL)
     {
-        sal_Bool bRemap(pOL->GetOwnerObj() && pOL->GetOwnerObj()->ISA(E3dScene));
+        bool bRemap(pOL->GetOwnerObj() && pOL->GetOwnerObj()->ISA(E3dScene));
         E3dScene* pRemapScene = (bRemap ? (E3dScene*)pOL->GetOwnerObj() : 0L);
 
         sal_uIntPtr nObjAnz=pOL->GetObjCount();
@@ -1639,14 +1639,14 @@ sal_Bool SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, 
     if (pnPassNum!=NULL) *pnPassNum=0;
     rpObj=NULL;
     rpPV=NULL;
-    sal_Bool bWholePage=(nOptions & SDRSEARCH_WHOLEPAGE) !=0;
-    sal_Bool bMarked=(nOptions & SDRSEARCH_MARKED) !=0;
-    sal_Bool bMasters=!bMarked && (nOptions & SDRSEARCH_ALSOONMASTER) !=0;
-    sal_Bool bBack=(nOptions & SDRSEARCH_BACKWARD) !=0;
+    bool bWholePage=(nOptions & SDRSEARCH_WHOLEPAGE) !=0;
+    bool bMarked=(nOptions & SDRSEARCH_MARKED) !=0;
+    bool bMasters=!bMarked && (nOptions & SDRSEARCH_ALSOONMASTER) !=0;
+    bool bBack=(nOptions & SDRSEARCH_BACKWARD) !=0;
 #if OSL_DEBUG_LEVEL > 0
-    sal_Bool bNext=(nOptions & SDRSEARCH_NEXT) !=0; (void)bNext; // n.i.
-    sal_Bool bBoundCheckOn2ndPass=(nOptions & SDRSEARCH_PASS2BOUND) !=0; (void)bBoundCheckOn2ndPass;// n.i.
-    sal_Bool bCheckNearestOn3rdPass=(nOptions & SDRSEARCH_PASS3NEAREST) !=0; (void)bCheckNearestOn3rdPass;// n.i.
+    bool bNext=(nOptions & SDRSEARCH_NEXT) !=0; (void)bNext; // n.i.
+    bool bBoundCheckOn2ndPass=(nOptions & SDRSEARCH_PASS2BOUND) !=0; (void)bBoundCheckOn2ndPass;// n.i.
+    bool bCheckNearestOn3rdPass=(nOptions & SDRSEARCH_PASS3NEAREST) !=0; (void)bCheckNearestOn3rdPass;// n.i.
 #endif
     if (nTol<0) nTol=ImpGetHitTolLogic(nTol,NULL);
     Point aPt(rPnt);
@@ -1684,7 +1684,7 @@ sal_Bool SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, 
                 nPgAnz++;
             }
 
-            sal_Bool bExtraPassForWholePage=bWholePage && pPage!=pPV->GetObjList();
+            bool bExtraPassForWholePage=bWholePage && pPage!=pPV->GetObjList();
             if (bExtraPassForWholePage) nPgAnz++; // First search in AktObjList, then on the entire page
             sal_uInt16 nPgNum=bBack ? 0 : nPgAnz;
             while (pHitObj==NULL && (bBack ? nPgNum<nPgAnz : nPgNum>0)) {
@@ -1753,8 +1753,8 @@ sal_Bool SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, 
 sal_Bool SdrMarkView::PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageView*& rpPV, sal_uIntPtr* pnMarkNum, sal_uIntPtr nOptions) const
 {
     SortMarkedObjects();
-    sal_Bool bBoundCheckOn2ndPass=(nOptions & SDRSEARCH_PASS2BOUND) !=0;
-    sal_Bool bCheckNearestOn3rdPass=(nOptions & SDRSEARCH_PASS3NEAREST) !=0;
+    bool bBoundCheckOn2ndPass=(nOptions & SDRSEARCH_PASS2BOUND) !=0;
+    bool bCheckNearestOn3rdPass=(nOptions & SDRSEARCH_PASS3NEAREST) !=0;
     rpObj=NULL;
     rpPV=NULL;
     if (pnMarkNum!=NULL) *pnMarkNum=CONTAINER_ENTRY_NOTFOUND;
@@ -1970,7 +1970,7 @@ sal_Bool SdrMarkView::EnterMarkedGroup()
 
     if(pPV)
     {
-        sal_Bool bEnter=sal_False;
+        bool bEnter=false;
         for (sal_uInt32 nm(GetMarkedObjectCount()); nm > 0 && !bEnter;)
         {
             nm--;
@@ -1980,7 +1980,7 @@ sal_Bool SdrMarkView::EnterMarkedGroup()
                 if (pObj->IsGroupObject()) {
                     if (pPV->EnterGroup(pObj)) {
                         bRet=sal_True;
-                        bEnter=sal_True;
+                        bEnter=true;
                     }
                 }
             }

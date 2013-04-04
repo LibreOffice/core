@@ -117,7 +117,7 @@ protected:
 
     // Eine neue OutlinerView auf dem Heap anlegen und alle erforderlichen Parameter setzen.
     // pTextEditObj, pTextEditPV und pTextEditOutliner muessen initiallisiert sein.
-    OutlinerView* ImpMakeOutlinerView(Window* pWin, sal_Bool bNoPaint, OutlinerView* pGivenView) const;
+    OutlinerView* ImpMakeOutlinerView(Window* pWin, bool bNoPaint, OutlinerView* pGivenView) const;
     void ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectangle& rRect, OutputDevice& rTargetDevice) const;
     void ImpInvalidateOutlinerView(OutlinerView& rOutlView) const;
 
