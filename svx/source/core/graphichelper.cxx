@@ -206,7 +206,6 @@ void GraphicHelper::SaveShapeAsGraphic( const Reference< drawing::XShape >& xSha
         Reference< XPropertySet > xShapeSet( xShape, UNO_QUERY_THROW );
 
         OUString aMimeType;
-        OUString sGraphicURL;
 
         SvtPathOptions aPathOpt;
         String sGraphicPath( aPathOpt.GetGraphicPath() );
