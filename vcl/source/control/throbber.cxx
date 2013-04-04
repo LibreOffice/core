@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "vcl/throbber.hxx"
 #include "vcl/svapp.hxx"
 
@@ -44,7 +43,6 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Exception;
 namespace ImageScaleMode = ::com::sun::star::awt::ImageScaleMode;
 
-//----------------------------------------------------------------------------------------------------------------------
 Throbber::Throbber( Window* i_parentWindow, WinBits i_style, const ImageSet i_imageSet )
     :ImageControl( i_parentWindow, i_style )
     ,mbRepeat( sal_True )
@@ -60,7 +58,6 @@ Throbber::Throbber( Window* i_parentWindow, WinBits i_style, const ImageSet i_im
     initImages();
 }
 
-//--------------------------------------------------------------------
 Throbber::Throbber( Window* i_parentWindow, const ResId& i_resId, const ImageSet i_imageSet )
     :ImageControl( i_parentWindow, i_resId )
     ,mbRepeat( sal_True )
@@ -76,38 +73,14 @@ Throbber::Throbber( Window* i_parentWindow, const ResId& i_resId, const ImageSet
     initImages();
 }
 
-//----------------------------------------------------------------------------------------------------------------------
 Throbber::~Throbber()
 {
     maWaitTimer.Stop();
 }
 
-//----------------------------------------------------------------------------------------------------------------------
 namespace
 {
-    //..................................................................................................................
-    ::rtl::OUString lcl_getHighContrastURL( OUString const& i_imageURL )
-    {
-        INetURLObject aURL( i_imageURL );
-        if ( aURL.GetProtocol() != INET_PROT_PRIV_SOFFICE )
-        {
-            OSL_VERIFY( aURL.insertName( "hicontrast", false, 0 ) );
-            return aURL.GetMainURL( INetURLObject::NO_DECODE );
-        }
-        // the private: scheme is not considered to be hierarchical by INetURLObject, so manually insert the
-        // segment
-        const sal_Int32 separatorPos = i_imageURL.indexOf( '/' );
-        ENSURE_OR_RETURN( separatorPos != -1, "lcl_getHighContrastURL: unsipported URL scheme - cannot automatically determine HC version!", i_imageURL );
-
-        ::rtl::OUStringBuffer composer;
-        composer.append( i_imageURL.copy( 0, separatorPos ) );
-        composer.appendAscii( "/hicontrast" );
-        composer.append( i_imageURL.copy( separatorPos ) );
-        return composer.makeStringAndClear();
-    }
-
-    //..................................................................................................................
-    ::std::vector< Image > lcl_loadImageSet( const Throbber::ImageSet i_imageSet, const bool i_isHiContrast )
+    ::std::vector< Image > lcl_loadImageSet( const Throbber::ImageSet i_imageSet )
     {
         ::std::vector< Image > aImages;
         ENSURE_OR_RETURN( i_imageSet != Throbber::IMAGES_NONE, "lcl_loadImageSet: illegal image set", aImages );
@@ -125,16 +98,8 @@ namespace
             )
         {
             Reference< XGraphic > xGraphic;
-            if ( i_isHiContrast )
-            {
-                aMediaProperties.put( "URL", lcl_getHighContrastURL( *imageURL ) );
-                xGraphic.set( xGraphicProvider->queryGraphic( aMediaProperties.getPropertyValues() ), UNO_QUERY );
-            }
-            if ( !xGraphic.is() )
-            {
-                aMediaProperties.put( "URL", *imageURL );
-                xGraphic.set( xGraphicProvider->queryGraphic( aMediaProperties.getPropertyValues() ), UNO_QUERY );
-            }
+            aMediaProperties.put( "URL", *imageURL );
+            xGraphic.set( xGraphicProvider->queryGraphic( aMediaProperties.getPropertyValues() ), UNO_QUERY );
             aImages.push_back( Image( xGraphic ) );
         }
 
@@ -142,7 +107,6 @@ namespace
     }
 }
 
-//----------------------------------------------------------------------------------------------------------------------
 void Throbber::Resize()
 {
     ImageControl::Resize();
@@ -151,7 +115,6 @@ void Throbber::Resize()
         initImages();
 }
 
-//----------------------------------------------------------------------------------------------------------------------
 void Throbber::initImages()
 {
     if ( meImageSet == IMAGES_NONE )
@@ -160,16 +123,15 @@ void Throbber::initImages()
     try
     {
         ::std::vector< ::std::vector< Image > > aImageSets;
-        const bool isHiContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
         if ( meImageSet == IMAGES_AUTO )
         {
-            aImageSets.push_back( lcl_loadImageSet( IMAGES_16_PX, isHiContrast ) );
-            aImageSets.push_back( lcl_loadImageSet( IMAGES_32_PX, isHiContrast ) );
-            aImageSets.push_back( lcl_loadImageSet( IMAGES_64_PX, isHiContrast ) );
+            aImageSets.push_back( lcl_loadImageSet( IMAGES_16_PX ) );
+            aImageSets.push_back( lcl_loadImageSet( IMAGES_32_PX ) );
+            aImageSets.push_back( lcl_loadImageSet( IMAGES_64_PX ) );
         }
         else
         {
-            aImageSets.push_back( lcl_loadImageSet( meImageSet, isHiContrast ) );
+            aImageSets.push_back( lcl_loadImageSet( meImageSet ) );
         }
 
         // find the best matching image set (size-wise)
@@ -281,7 +243,7 @@ void Throbber::setImageList( const Sequence< Reference< XGraphic > >& rImageList
     for ( size_t i=0; i<nImageCounts[index]; ++i )
     {
         ::rtl::OUStringBuffer aURL;
-        aURL.appendAscii( "private:graphicrepository/shared/spinner-" );
+        aURL.appendAscii( "private:graphicrepository/vcl/res/spinner-" );
         aURL.appendAscii( pResolutions[index] );
         aURL.appendAscii( "-" );
         if ( i < 9 )

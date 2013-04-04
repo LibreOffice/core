@@ -43,6 +43,7 @@ $(eval $(call gb_SrsTarget_add_files,vcl/source/src,\
     vcl/source/src/menu.src \
     vcl/source/src/print.src \
     vcl/source/src/stdtext.src \
+    vcl/source/src/throbber.src \
     vcl/source/src/units.src \
     vcl/source/src/fpicker.src \
     vcl/source/edit/textundo.src \
