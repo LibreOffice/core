@@ -6688,7 +6688,7 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
         }
         else if ( nStyle & TEXT_DRAW_ENDELLIPSIS )
         {
-            OUString aTmpStr = aStr.replaceAt( nIndex, aTmpStr.getLength()-nIndex, "" );
+            OUString aTmpStr = aStr.replaceAt( nIndex, aStr.getLength()-nIndex, "" );
 
             if ( nIndex > 1 )
             {
