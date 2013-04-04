@@ -87,7 +87,7 @@ sal_Bool SAL_CALL CMimeContentTypeFactory::supportsService( const OUString& Serv
     Sequence < OUString > SupportedServicesNames = MimeContentTypeFactory_getSupportedServiceNames();
 
     for ( sal_Int32 n = SupportedServicesNames.getLength(); n--; )
-        if (SupportedServicesNames[n].compareTo(ServiceName) == 0)
+        if ( SupportedServicesNames[n] == ServiceName )
             return sal_True;
 
     return sal_False;

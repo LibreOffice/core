@@ -287,7 +287,7 @@ void OCollectionView::initCurrentPath()
             const ::rtl::OUString sCID = m_xContent->getIdentifier()->getContentIdentifier();
             const static ::rtl::OUString s_sFormsCID("private:forms");
             const static ::rtl::OUString s_sReportsCID("private:reports");
-            m_bCreateForm = s_sFormsCID.compareTo(sCID) == 0;
+            m_bCreateForm = s_sFormsCID == sCID ;
             ::rtl::OUString sPath("/");
             if ( m_bCreateForm && sCID.getLength() != s_sFormsCID.getLength())
                 sPath = sCID.copy(s_sFormsCID.getLength());

@@ -203,7 +203,7 @@ void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArg
     uno::Sequence< ::rtl::OUString > aSeq = getSupportedServiceNames();
 
     for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
-        if ( ServiceName.compareTo( aSeq[nInd] ) == 0 )
+        if ( ServiceName == aSeq[nInd] )
             return sal_True;
 
     return sal_False;
