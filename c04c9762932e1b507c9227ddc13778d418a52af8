@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///7M\u003d",
+        "filename": "comphelper/inc/comphelper/property.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2013-04-04T07:31:38Z",
+      "side": 1,
+      "message": "I\u0027m not sure about those in this file. Because they are Property, not OUString. But it compiles fine. Hm.",
+      "revId": "c04c9762932e1b507c9227ddc13778d418a52af8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
