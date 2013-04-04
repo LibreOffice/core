@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///44\u003d",
+        "filename": "extensions/source/plugin/base/context.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2013-04-04T12:19:18Z",
+      "side": 1,
+      "message": "Does this produce a URL ?",
+      "revId": "11b5469fd11e604ac57a2286a582ee0e013729a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///40\u003d",
+        "filename": "extensions/source/plugin/base/context.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2013-04-04T12:19:18Z",
+      "side": 1,
+      "message": "Because this needs a URL not a filename :-) it seems the whole terminology is quite unhelpful if these are paths or names not urls - might be good to clean that up.",
+      "revId": "11b5469fd11e604ac57a2286a582ee0e013729a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
