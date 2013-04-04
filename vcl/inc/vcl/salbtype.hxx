@@ -123,9 +123,7 @@ public:
     inline              BitmapColor( const BitmapColor& rBitmapColor );
     inline              BitmapColor( sal_uInt8 cRed, sal_uInt8 cGreen, sal_uInt8 cBlue );
     inline              BitmapColor( const Color& rColor );
-#ifndef BINFILTER_COMPAT
     explicit
-#endif // BINFILTER_COMPAT
     inline              BitmapColor( sal_uInt8 cIndex );
 
     inline              ~BitmapColor() {};
