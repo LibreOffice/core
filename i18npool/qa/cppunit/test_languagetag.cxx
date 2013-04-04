@@ -232,6 +232,26 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( xfoobar.getLanguageType() == LANGUAGE_SYSTEM );
     }
 
+    // '*' the dreaded jolly joker is a "privateuse" known "locale"
+    {
+        OUString s_joker( "*" );
+        LanguageTag joker( s_joker );
+        lang::Locale aLocale = joker.getLocale();
+        CPPUNIT_ASSERT( joker.getBcp47() == s_joker );
+        CPPUNIT_ASSERT( aLocale.Language == "qlt" );
+        CPPUNIT_ASSERT( aLocale.Country == "" );
+        CPPUNIT_ASSERT( aLocale.Variant == "*" );
+        CPPUNIT_ASSERT( joker.getLanguageType() == LANGUAGE_USER_PRIV_JOKER );
+
+        joker.reset( LANGUAGE_USER_PRIV_JOKER );
+        aLocale = joker.getLocale();
+        CPPUNIT_ASSERT( joker.getBcp47() == s_joker );
+        CPPUNIT_ASSERT( aLocale.Language == "qlt" );
+        CPPUNIT_ASSERT( aLocale.Country == "" );
+        CPPUNIT_ASSERT( aLocale.Variant == "*" );
+        CPPUNIT_ASSERT( joker.getLanguageType() == LANGUAGE_USER_PRIV_JOKER );
+    }
+
     // test reset() methods
     {
         LanguageTag aTag( LANGUAGE_DONTKNOW );

@@ -376,7 +376,8 @@ private:
     {
         EXTRACTED_NONE,
         EXTRACTED_LSC,
-        EXTRACTED_X
+        EXTRACTED_X,
+        EXTRACTED_X_JOKER
     };
 
     /** Of a simple language tag of the form lll[-Ssss][-CC] (i.e. one that
@@ -385,7 +386,8 @@ private:
         Does not check case or content!
 
         @return EXTRACTED_LSC if simple tag was detected, EXTRACTED_X if x-...
-        privateuse tag was detected, else EXTRACTED_NONE.
+        privateuse tag was detected, EXTRACTED_X_JOKER if "*" joker was
+        detected, else EXTRACTED_NONE.
      */
     static Extraction   simpleExtract( const OUString& rBcp47,
                                        OUString& rLanguage,

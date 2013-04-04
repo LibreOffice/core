@@ -430,7 +430,7 @@ bool LanguageTag::canonicalize()
                 // locale.
                 OUString aLanguage, aScript, aCountry;
                 Extraction eExt = simpleExtract( maBcp47, aLanguage, aScript, aCountry);
-                if (eExt == EXTRACTED_LSC || eExt == EXTRACTED_X)
+                if (eExt != EXTRACTED_NONE)
                 {
                     if (eExt == EXTRACTED_LSC && aScript.isEmpty())
                     {
@@ -1160,7 +1160,12 @@ LanguageTag::Extraction LanguageTag::simpleExtract( const OUString& rBcp47,
     Extraction eRet = EXTRACTED_NONE;
     const sal_Int32 nLen = rBcp47.getLength();
     const sal_Int32 nHyph1 = rBcp47.indexOf( '-');
-    if (nHyph1 == 1 && rBcp47[0] == 'x')            // x-... privateuse
+    if (nLen == 1 && rBcp47[0] == '*')              // * the dreaded jolly joker
+    {
+        // It's f*d up but we need to recognize this.
+        eRet = EXTRACTED_X_JOKER;
+    }
+    else if (nHyph1 == 1 && rBcp47[0] == 'x')       // x-... privateuse
     {
         // x-... privateuse tags MUST be known to us by definition.
         eRet = EXTRACTED_X;

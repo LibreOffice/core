@@ -555,6 +555,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_YOMBE_CONGO           0x8284  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_USER_YOMBE)) */
 #define LANGUAGE_USER_SIDAMA                0x0685
 
+#define LANGUAGE_USER_PRIV_JOKER            0xFFEB  /* privateuse "*" (sic! bad! nasty!), primary 0x3eb, sub 0x3f */
 #define LANGUAGE_USER_PRIV_COMMENT          0xFFEC  /* privateuse "x-comment", primary 0x3ec, sub 0x3f */
 #define LANGUAGE_USER_PRIV_DEFAULT          0xFFED  /* privateuse "x-default", primary 0x3ed, sub 0x3f */
 #define LANGUAGE_USER_PRIV_NOTRANSLATE      0xFFEE  /* privateuse "x-no-translate" (sic!), primary 0x3ee, sub 0x3f */
