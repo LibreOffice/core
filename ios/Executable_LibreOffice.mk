@@ -40,11 +40,16 @@ $(eval $(call gb_Executable_add_objcobjects,LibreOffice,\
 # it likely that all necessary libraries are built before this
 # executable is.
 $(eval $(call gb_Executable_use_libraries,LibreOffice,\
+	for \
+	msfilter \
 	msword \
+	oox \
 	sal \
 	sc \
 	scfilt \
 	sdfilt \
+	svt \
+	svx \
 	swui \
 ))
 
