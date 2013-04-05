@@ -19,298 +19,143 @@
 
 #include <svtools/svtools.hrc>
 #include "addresstemplate.hrc"
-#include <svtools/controldims.hrc>
 
-#define FIELD_ROW_HEIGHT    17
-
-ModalDialog DLG_ADDRESSBOOKSOURCE
+String STR_LOGICAL_FIELD_NAMES
 {
-    HelpID = "svtools:ModalDialog:DLG_ADDRESSBOOKSOURCE";
-    SVLook = TRUE ;
-    OutputSize = TRUE ;
-    Size = MAP_APPFONT ( 300 , 88 + FIELD_ROW_HEIGHT * FIELD_PAIRS_VISIBLE ) ;
-    Hide = TRUE ;
-    Moveable = TRUE ;
-    Text [ en-US ] = "Templates: Address Book Assignment";
+    Text = "FirstName;LastName;Company;Department;Street;Zip;City;State;Country;PhonePriv;PhoneComp;PhoneOffice;PhoneCell;PhoneOther;Pager;Fax;EMail;URL;Title;Position;Code;AddrForm;AddrFormMail;Id;CalendarURL;InviteParticipant;Note;Altfield1;Altfield2;Altfield3;Altfield4";
+    // no need to translate this
+    // the items in this string have to be in the same order as the STR_FIELD_* strings are added to the
+    // field label list of the dialog
+};
 
-    FixedLine FL_DATASOURCEFRAME
-    {
-        Text [ en-US ] = "Address Book Source";
-        SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 2 ) ;
-        Size = MAP_APPFONT ( 288 , RSC_CD_FIXEDLINE_HEIGHT ) ;
-    };
-    FixedText FT_DATASOURCE
-    {
-        Text [ en-US ] = "Data source";
-        SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 15 ) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+String STR_NO_FIELD_SELECTION
+{
+    Text [ en-US ] = "<none>";
+};
 
-        Group = TRUE;
-    };
-    ComboBox CB_DATASOURCE
-    {
-        HelpID = "svtools:ComboBox:DLG_ADDRESSBOOKSOURCE:CB_DATASOURCE";
-        SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 105, 13 ) ;
-        Size = MAP_APPFONT ( 96, 55 ) ;
-
-        DropDown = TRUE;
-        TabStop = TRUE;
-    };
-    PushButton PB_ADMINISTATE_DATASOURCES
-    {
-        HelpID = "svtools:PushButton:DLG_ADDRESSBOOKSOURCE:PB_ADMINISTATE_DATASOURCES";
-        Text [ en-US ] = "~Address Data Source...";
-        SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 204, 13 ) ;
-        Size = MAP_APPFONT ( 90, 14 ) ;
-        TabStop = TRUE;
-    };
-    FixedText FT_TABLE
-    {
-        Text [ en-US ] = "Table";
-        SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 32 ) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
-
-        Group = TRUE;
-    };
-    ComboBox CB_TABLE
-    {
-        HelpID = "svtools:ComboBox:DLG_ADDRESSBOOKSOURCE:CB_TABLE";
-        SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 105, 30 ) ;
-        Size = MAP_APPFONT ( 96, 55 ) ;
-
-        DropDown = TRUE;
-        TabStop = TRUE;
-    };
-    FixedText FT_FIELDS
-    {
-        Text [ en-US ] = "Field assignment";
-        SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 6, 30 + RSC_CD_DROPDOWN_HEIGHT + RSC_SP_CTRL_Y  ) ;
-        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-    };
-    Window CT_BORDER
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 6, 30 + RSC_CD_DROPDOWN_HEIGHT + RSC_SP_CTRL_Y + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y ) ;
-        Size = MAP_APPFONT ( 288 , 5 + FIELD_ROW_HEIGHT * FIELD_PAIRS_VISIBLE ) ;
-    };
-
-#define DECLARE_FIELD( row, column )    \
-        FixedText FT_FIELD_BASE + row * 2 + column  \
-        {   \
-            SVLook = TRUE ; \
-            Pos = MAP_APPFONT ( 3 + column * 134, RSC_SP_CTRL_GROUP_Y + 2 + row * FIELD_ROW_HEIGHT ) ;   \
-            Size = MAP_APPFONT ( 79 , 10 ) ; \
-            Group = TRUE;   \
-        };  \
-        ListBox LB_FIELD_BASE + row * 2 + column    \
-        {   \
-            SVLook = TRUE;  \
-            Pos = MAP_APPFONT ( 89 + column * 134, RSC_SP_CTRL_GROUP_Y + row * FIELD_ROW_HEIGHT ) ;  \
-            Size = MAP_APPFONT ( 42 , 14 ) ;    \
-            Border = TRUE;  \
-            DropDown = TRUE;    \
-            TabStop = TRUE;  \
-        }
-
-#if FIELD_PAIRS_VISIBLE > 0
-    DECLARE_FIELD( 0, 0 );
-    DECLARE_FIELD( 0, 1 );
-#endif
-#if FIELD_PAIRS_VISIBLE > 1
-    DECLARE_FIELD( 1, 0 );
-    DECLARE_FIELD( 1, 1 );
-#endif
-#if FIELD_PAIRS_VISIBLE > 2
-    DECLARE_FIELD( 3, 0 );
-    DECLARE_FIELD( 3, 1 );
-#endif
-#if FIELD_PAIRS_VISIBLE > 3
-    DECLARE_FIELD( 2, 0 );
-    DECLARE_FIELD( 2, 1 );
-#endif
-#if FIELD_PAIRS_VISIBLE > 4
-    DECLARE_FIELD( 4, 0 );
-    DECLARE_FIELD( 4, 1 );
-#endif
-#if FIELD_PAIRS_VISIBLE > 5
-    DECLARE_FIELD( 5, 0 );
-    DECLARE_FIELD( 5, 1 );
-#endif
-
-    ScrollBar SB_FIELDSCROLLER
-    {
-        SVLook = TRUE;
-        Pos = MAP_APPFONT ( 275, RSC_SP_CTRL_GROUP_Y ) ;
-        Size = MAP_APPFONT ( 8 , 16 - RSC_SP_CTRL_GROUP_Y + FIELD_ROW_HEIGHT * (FIELD_PAIRS_VISIBLE - 1) ) ;
-    };
-
-    OKButton PB_OK
-    {
-        SVLook = TRUE;
-        DefButton = TRUE;
-        Pos = MAP_APPFONT ( 137, 70 + FIELD_ROW_HEIGHT * FIELD_PAIRS_VISIBLE ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-
-    CancelButton PB_CANCEL
-    {
-        SVLook = TRUE;
-        Pos = MAP_APPFONT ( 190, 70 + FIELD_ROW_HEIGHT * FIELD_PAIRS_VISIBLE ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-
-    HelpButton PB_HELP
-    {
-        SVLook = TRUE;
-        Pos = MAP_APPFONT ( 244, 70 + FIELD_ROW_HEIGHT * FIELD_PAIRS_VISIBLE ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-
-    String STR_LOGICAL_FIELD_NAMES
-    {
-        Text = "FirstName;LastName;Company;Department;Street;Zip;City;State;Country;PhonePriv;PhoneComp;PhoneOffice;PhoneCell;PhoneOther;Pager;Fax;EMail;URL;Title;Position;Code;AddrForm;AddrFormMail;Id;CalendarURL;InviteParticipant;Note;Altfield1;Altfield2;Altfield3;Altfield4";
-        // no need to translate this
-        // the items in this string have to be in the same order as the STR_FIELD_* strings are added to the
-        // field label list of the dialog
-    };
-
-    String STR_NO_FIELD_SELECTION
-    {
-        Text [ en-US ] = "<none>";
-        };
-
-    String STR_FIELD_COMPANY
-    {
-        Text [ en-US ] = "Company";
-        };
-    String STR_FIELD_DEPARTMENT
-    {
-        Text [ en-US ] = "Department";
-        };
-    String STR_FIELD_FIRSTNAME
-    {
-        Text [ en-US ] = "First name";
-        };
-    String STR_FIELD_LASTNAME
-    {
-        Text [ en-US ] = "Last name";
-        };
-    String STR_FIELD_STREET
-    {
-        Text [ en-US ] = "Street";
-        };
-    String STR_FIELD_COUNTRY
-    {
-        Text [ en-US ] = "Country";
-        };
-    String STR_FIELD_ZIPCODE
-    {
-        Text [ en-US ] = "ZIP Code";
-        };
-    String STR_FIELD_CITY
-    {
-        Text [ en-US ] = "City";
-        };
-    String STR_FIELD_TITLE
-    {
-        Text [ en-US ] = "Title";
-        };
-    String STR_FIELD_POSITION
-    {
-        Text [ en-US ] = "Position";
-        };
-    String STR_FIELD_ADDRFORM
-    {
-        Text [ en-US ] = "Addr. Form";
-        };
-    String STR_FIELD_INITIALS
-    {
-        Text [ en-US ] = "Initials";
-        };
-    String STR_FIELD_SALUTATION
-    {
-        Text [ en-US ] = "Complimentary close";
-        };
-    String STR_FIELD_HOMETEL
-    {
-        Text [ en-US ] = "Tel: Home";
-        };
-    String STR_FIELD_WORKTEL
-    {
-        Text [ en-US ] = "Tel: Work";
-        };
-    String STR_FIELD_FAX
-    {
-        Text [ en-US ] = "FAX";
-        };
-    String STR_FIELD_EMAIL
-    {
-        Text [ en-US ] = "E-mail";
-        };
-    String STR_FIELD_URL
-    {
-        Text [ en-US ] = "URL";
-        };
-    String STR_FIELD_NOTE
-    {
-        Text [ en-US ] = "Note";
-        };
-    String STR_FIELD_USER1
-    {
-        Text [ en-US ] = "User 1";
-        };
-    String STR_FIELD_USER2
-    {
-        Text [ en-US ] = "User 2";
-        };
-    String STR_FIELD_USER3
-    {
-        Text [ en-US ] = "User 3";
-        };
-    String STR_FIELD_USER4
-    {
-        Text [ en-US ] = "User 4";
-        };
-
-    String STR_FIELD_ID
-    {
-        Text [ en-US ] = "ID";
-        };
-    String STR_FIELD_STATE
-    {
-        Text [ en-US ] = "State";
-        };
-    String STR_FIELD_OFFICETEL
-    {
-        Text [ en-US ] = "Tel: Office";
-        };
-    String STR_FIELD_PAGER
-    {
-        Text [ en-US ] = "Pager";
-        };
-    String STR_FIELD_MOBILE
-    {
-        Text [ en-US ] = "Mobile";
-        };
-    String STR_FIELD_TELOTHER
-    {
-        Text [ en-US ] = "Tel: Other";
-        };
-    String STR_FIELD_CALENDAR
-    {
-        Text [ en-US ] = "Calendar";
-        };
-    String STR_FIELD_INVITE
-    {
-        Text [ en-US ] = "Invite";
-        };
+String STR_FIELD_COMPANY
+{
+    Text [ en-US ] = "Company";
+};
+String STR_FIELD_DEPARTMENT
+{
+    Text [ en-US ] = "Department";
+};
+String STR_FIELD_FIRSTNAME
+{
+    Text [ en-US ] = "First name";
+};
+String STR_FIELD_LASTNAME
+{
+    Text [ en-US ] = "Last name";
+};
+String STR_FIELD_STREET
+{
+    Text [ en-US ] = "Street";
+};
+String STR_FIELD_COUNTRY
+{
+    Text [ en-US ] = "Country";
+};
+String STR_FIELD_ZIPCODE
+{
+    Text [ en-US ] = "ZIP Code";
+};
+String STR_FIELD_CITY
+{
+    Text [ en-US ] = "City";
+};
+String STR_FIELD_TITLE
+{
+    Text [ en-US ] = "Title";
+};
+String STR_FIELD_POSITION
+{
+    Text [ en-US ] = "Position";
+};
+String STR_FIELD_ADDRFORM
+{
+    Text [ en-US ] = "Addr. Form";
+};
+String STR_FIELD_INITIALS
+{
+    Text [ en-US ] = "Initials";
+};
+String STR_FIELD_SALUTATION
+{
+    Text [ en-US ] = "Complimentary close";
+};
+String STR_FIELD_HOMETEL
+{
+    Text [ en-US ] = "Tel: Home";
+};
+String STR_FIELD_WORKTEL
+{
+    Text [ en-US ] = "Tel: Work";
+};
+String STR_FIELD_FAX
+{
+    Text [ en-US ] = "FAX";
+};
+String STR_FIELD_EMAIL
+{
+    Text [ en-US ] = "E-mail";
+};
+String STR_FIELD_URL
+{
+    Text [ en-US ] = "URL";
+};
+String STR_FIELD_NOTE
+{
+    Text [ en-US ] = "Note";
+};
+String STR_FIELD_USER1
+{
+    Text [ en-US ] = "User 1";
+};
+String STR_FIELD_USER2
+{
+    Text [ en-US ] = "User 2";
+};
+String STR_FIELD_USER3
+{
+    Text [ en-US ] = "User 3";
+};
+String STR_FIELD_USER4
+{
+    Text [ en-US ] = "User 4";
+};
+String STR_FIELD_ID
+{
+    Text [ en-US ] = "ID";
+};
+String STR_FIELD_STATE
+{
+    Text [ en-US ] = "State";
+};
+String STR_FIELD_OFFICETEL
+{
+    Text [ en-US ] = "Tel: Office";
+};
+String STR_FIELD_PAGER
+{
+    Text [ en-US ] = "Pager";
+};
+String STR_FIELD_MOBILE
+{
+    Text [ en-US ] = "Mobile";
+};
+String STR_FIELD_TELOTHER
+{
+    Text [ en-US ] = "Tel: Other";
+};
+String STR_FIELD_CALENDAR
+{
+    Text [ en-US ] = "Calendar";
+};
+String STR_FIELD_INVITE
+{
+    Text [ en-US ] = "Invite";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

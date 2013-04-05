@@ -24,58 +24,6 @@
 #define FIELD_PAIRS_VISIBLE         5
 #define FIELD_CONTROLS_VISIBLE      2 * FIELD_PAIRS_VISIBLE
 
-#define FL_DATASOURCEFRAME          1
-#define FT_DATASOURCE               2
-#define CB_DATASOURCE               3
-#define CT_BORDER                   1
-#define PB_ADMINISTATE_DATASOURCES  4
-#define FT_TABLE                    5
-#define CB_TABLE                    6
-#define FT_FIELDS                   7
-#define SB_FIELDSCROLLER            8
-#define PB_OK                       9
-#define PB_CANCEL                   10
-#define PB_HELP                     11
-
-#define FT_FIELD_BASE               50
-#define LB_FIELD_BASE               50
-
-#define STR_NO_FIELD_SELECTION      1
-#define STR_FIELD_COMPANY           2
-#define STR_FIELD_DEPARTMENT        3
-#define STR_FIELD_FIRSTNAME         4
-#define STR_FIELD_LASTNAME          5
-#define STR_FIELD_STREET            6
-#define STR_FIELD_COUNTRY           7
-#define STR_FIELD_ZIPCODE           8
-#define STR_FIELD_CITY              9
-#define STR_FIELD_TITLE             10
-#define STR_FIELD_POSITION          11
-#define STR_FIELD_ADDRFORM          12
-#define STR_FIELD_INITIALS          13
-#define STR_FIELD_SALUTATION        14
-#define STR_FIELD_HOMETEL           15
-#define STR_FIELD_WORKTEL           16
-#define STR_FIELD_FAX               17
-#define STR_FIELD_EMAIL             18
-#define STR_FIELD_URL               19
-#define STR_FIELD_NOTE              20
-#define STR_FIELD_USER1             21
-#define STR_FIELD_USER2             22
-#define STR_FIELD_USER3             23
-#define STR_FIELD_USER4             24
-#define STR_FIELD_ID                25
-#define STR_FIELD_STATE             26
-#define STR_FIELD_OFFICETEL         27
-#define STR_FIELD_PAGER             28
-#define STR_FIELD_MOBILE            29
-#define STR_FIELD_TELOTHER          30
-#define STR_FIELD_CALENDAR          31
-#define STR_FIELD_INVITE            32
-
-#define STR_LOGICAL_FIELD_NAMES     33
-
-
 #endif // _SVT_ADDRESSTEMPLATE_HRC_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

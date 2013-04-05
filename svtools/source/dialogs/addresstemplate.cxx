@@ -545,28 +545,14 @@ void AssignmentPersistentData::Commit()
     // ===================================================================
     // = AddressBookSourceDialog
     // ===================================================================
-#define INIT_FIELDS()   \
-         ModalDialog(_pParent, SvtResId( DLG_ADDRESSBOOKSOURCE ))\
-        ,m_aDatasourceFrame         (this, SvtResId(FL_DATASOURCEFRAME))\
-        ,m_aDatasourceLabel         (this, SvtResId(FT_DATASOURCE))\
-        ,m_aDatasource              (this, SvtResId(CB_DATASOURCE))\
-        ,m_aAdministrateDatasources (this, SvtResId(PB_ADMINISTATE_DATASOURCES))\
-        ,m_aTableLabel              (this, SvtResId(FT_TABLE))\
-        ,m_aTable                   (this, SvtResId(CB_TABLE))\
-        ,m_aFieldsTitle             (this, SvtResId(FT_FIELDS))\
-        ,m_aFieldsFrame             (this, SvtResId(CT_BORDER))\
-        ,m_aFieldScroller           (&m_aFieldsFrame, SvtResId(SB_FIELDSCROLLER))\
-        ,m_aOK                      (this, SvtResId(PB_OK))\
-        ,m_aCancel                  (this, SvtResId(PB_CANCEL))\
-        ,m_aHelp                    (this, SvtResId(PB_HELP))\
-        ,m_sNoFieldSelection(SVT_RESSTR(STR_NO_FIELD_SELECTION))\
-        ,m_xORB(_rxORB)
 
     // -------------------------------------------------------------------
     AddressBookSourceDialog::AddressBookSourceDialog(Window* _pParent,
             const Reference< XComponentContext >& _rxORB )
-        :INIT_FIELDS()
-        ,m_pImpl( new AddressBookSourceDialogData )
+        : ModalDialog(_pParent, "AddressTemplateDialog", "svt/ui/addresstemplatedialog.ui")
+        , m_sNoFieldSelection(SVT_RESSTR(STR_NO_FIELD_SELECTION))
+        , m_xORB(_rxORB)
+        , m_pImpl( new AddressBookSourceDialogData )
     {
         implConstruct();
     }
@@ -575,8 +561,10 @@ void AssignmentPersistentData::Commit()
     AddressBookSourceDialog::AddressBookSourceDialog( Window* _pParent, const Reference< XComponentContext >& _rxORB,
         const Reference< XDataSource >& _rxTransientDS, const OUString& _rDataSourceName,
         const OUString& _rTable, const Sequence< AliasProgrammaticPair >& _rMapping )
-        :INIT_FIELDS()
-        ,m_pImpl( new AddressBookSourceDialogData( _rxTransientDS, _rDataSourceName, _rTable, _rMapping ) )
+        : ModalDialog(_pParent, "AddressTemplateDialog", "svt/ui/addresstemplatedialog.ui")
+        , m_sNoFieldSelection(SVT_RESSTR(STR_NO_FIELD_SELECTION))
+        , m_xORB(_rxORB)
+        , m_pImpl( new AddressBookSourceDialogData( _rxTransientDS, _rDataSourceName, _rTable, _rMapping ) )
     {
         implConstruct();
     }
@@ -584,27 +572,24 @@ void AssignmentPersistentData::Commit()
     // -------------------------------------------------------------------
     void AddressBookSourceDialog::implConstruct()
     {
+        get(m_pDatasource, "datasource");
+        get(m_pAdministrateDatasources, "admin");
+        get(m_pTable, "datatable");
+        m_pFieldScroller = &get<VclScrolledWindow>("scrollwindow")->getVertScrollBar();
+
         for (sal_Int32 row=0; row<FIELD_PAIRS_VISIBLE; ++row)
         {
             for (sal_Int32 column=0; column<2; ++column)
             {
                 // the label
-                m_pImpl->pFieldLabels[row * 2 + column] = new FixedText(&m_aFieldsFrame, SvtResId((sal_uInt16)(FT_FIELD_BASE + row * 2 + column)));
+                m_pImpl->pFieldLabels[row * 2 + column] = get<FixedText>(OString("label") + OString::number(row * 2 + column));
                 // the listbox
-                m_pImpl->pFields[row * 2 + column] = new ListBox(&m_aFieldsFrame, SvtResId((sal_uInt16)(LB_FIELD_BASE + row * 2 + column)));
-                m_pImpl->pFields[row * 2 + column]->SetDropDownLineCount(15);
+                m_pImpl->pFields[row * 2 + column] = get<ListBox>(OString("box") + OString::number(row * 2 + column));
                 m_pImpl->pFields[row * 2 + column]->SetSelectHdl(LINK(this, AddressBookSourceDialog, OnFieldSelect));
 
-                m_pImpl->pFields[row * 2 + column]->SetHelpId(HID_ADDRTEMPL_FIELD_ASSIGNMENT);
+                m_pImpl->pFields[row * 2 + column]->SetHelpId("svt/ui/addresstemplatedialog/assign");
             }
         }
-
-        m_aFieldsFrame.SetStyle((m_aFieldsFrame.GetStyle() | WB_TABSTOP | WB_DIALOGCONTROL) & ~WB_NODIALOGCONTROL);
-
-        // correct the z-order
-        m_aFieldScroller.SetZOrder(m_pImpl->pFields[FIELD_CONTROLS_VISIBLE - 1], WINDOW_ZORDER_BEHIND);
-        m_aOK.SetZOrder(&m_aFieldsFrame, WINDOW_ZORDER_BEHIND);
-        m_aCancel.SetZOrder(&m_aOK, WINDOW_ZORDER_BEHIND);
 
         initializeDatasources();
 
@@ -648,39 +633,53 @@ void AssignmentPersistentData::Commit()
         m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_USER3));
         m_pImpl->aFieldLabels.push_back( SVT_RESSTR( STR_FIELD_USER4));
 
+        long nLabelWidth = 0;
+        long nListBoxWidth = m_pImpl->pFields[0]->approximate_char_width() * 20;
+        for (ConstStringArrayIterator aI = m_pImpl->aFieldLabels.begin(), aEnd = m_pImpl->aFieldLabels.end(); aI != aEnd; ++aI)
+        {
+            nLabelWidth = std::max(nLabelWidth, FixedText::getTextDimensions(m_pImpl->pFieldLabels[0], *aI, 0x7FFFFFFF).Width());
+        }
+        for (sal_Int32 row=0; row<FIELD_PAIRS_VISIBLE; ++row)
+        {
+            for (sal_Int32 column=0; column<2; ++column)
+            {
+                m_pImpl->pFieldLabels[row * 2 + column]->set_width_request(nLabelWidth);
+                m_pImpl->pFields[row * 2 + column]->set_width_request(nListBoxWidth);
+            }
+        }
+
+
         // force a even number of known fields
         m_pImpl->bOddFieldNumber = (m_pImpl->aFieldLabels.size() % 2) != 0;
         if (m_pImpl->bOddFieldNumber)
-            m_pImpl->aFieldLabels.push_back( String() );
+            m_pImpl->aFieldLabels.push_back( OUString() );
 
         // limit the scrollbar range accordingly
         sal_Int32 nOverallFieldPairs = m_pImpl->aFieldLabels.size() / 2;
-        m_aFieldScroller.SetRange( Range(0, nOverallFieldPairs - FIELD_PAIRS_VISIBLE) );
-        m_aFieldScroller.SetLineSize(1);
-        m_aFieldScroller.SetPageSize(FIELD_PAIRS_VISIBLE);
+        m_pFieldScroller->SetRange( Range(0, nOverallFieldPairs - FIELD_PAIRS_VISIBLE) );
+        m_pFieldScroller->SetLineSize(1);
+        m_pFieldScroller->SetPageSize(FIELD_PAIRS_VISIBLE);
 
         // reset the current field assignments
         m_pImpl->aFieldAssignments.resize(m_pImpl->aFieldLabels.size());
             // (empty strings mean "no assignment")
 
         // some knittings
-        m_aFieldScroller.SetScrollHdl(LINK(this, AddressBookSourceDialog, OnFieldScroll));
-        m_aAdministrateDatasources.SetClickHdl(LINK(this, AddressBookSourceDialog, OnAdministrateDatasources));
-        m_aDatasource.EnableAutocomplete(sal_True);
-        m_aTable.EnableAutocomplete(sal_True);
-        m_aTable.SetGetFocusHdl(LINK(this, AddressBookSourceDialog, OnComboGetFocus));
-        m_aDatasource.SetGetFocusHdl(LINK(this, AddressBookSourceDialog, OnComboGetFocus));
-        m_aTable.SetLoseFocusHdl(LINK(this, AddressBookSourceDialog, OnComboLoseFocus));
-        m_aDatasource.SetLoseFocusHdl(LINK(this, AddressBookSourceDialog, OnComboLoseFocus));
-        m_aTable.SetSelectHdl(LINK(this, AddressBookSourceDialog, OnComboSelect));
-        m_aDatasource.SetSelectHdl(LINK(this, AddressBookSourceDialog, OnComboSelect));
-        m_aOK.SetClickHdl(LINK(this, AddressBookSourceDialog, OnOkClicked));
-
-        m_aDatasource.SetDropDownLineCount(15);
+        m_pFieldScroller->SetScrollHdl(LINK(this, AddressBookSourceDialog, OnFieldScroll));
+        m_pAdministrateDatasources->SetClickHdl(LINK(this, AddressBookSourceDialog, OnAdministrateDatasources));
+        m_pDatasource->EnableAutocomplete(sal_True);
+        m_pTable->EnableAutocomplete(sal_True);
+        m_pTable->SetGetFocusHdl(LINK(this, AddressBookSourceDialog, OnComboGetFocus));
+        m_pDatasource->SetGetFocusHdl(LINK(this, AddressBookSourceDialog, OnComboGetFocus));
+        m_pTable->SetLoseFocusHdl(LINK(this, AddressBookSourceDialog, OnComboLoseFocus));
+        m_pDatasource->SetLoseFocusHdl(LINK(this, AddressBookSourceDialog, OnComboLoseFocus));
+        m_pTable->SetSelectHdl(LINK(this, AddressBookSourceDialog, OnComboSelect));
+        m_pDatasource->SetSelectHdl(LINK(this, AddressBookSourceDialog, OnComboSelect));
+        get<OKButton>("ok")->SetClickHdl(LINK(this, AddressBookSourceDialog, OnOkClicked));
 
         // initialize the field controls
         resetFields();
-        m_aFieldScroller.SetThumbPos(0);
+        m_pFieldScroller->SetThumbPos(0);
         m_pImpl->nFieldScrollPos = -1;
         implScrollFields(0, sal_False, sal_False);
 
@@ -697,22 +696,20 @@ void AssignmentPersistentData::Commit()
             // so the dialog will at least show up before we do the loading of the
             // configuration data and the (maybe time consuming) analysis of the data source/table to select
 
-        FreeResource();
-
         if ( !m_pImpl->bWorkingPersistent )
         {
             StyleSettings aSystemStyle = GetSettings().GetStyleSettings();
             const ::Color& rNewColor = aSystemStyle.GetDialogColor();
 
-            m_aDatasource.SetReadOnly( sal_True );
-            m_aDatasource.SetBackground( Wallpaper( rNewColor ) );
-            m_aDatasource.SetControlBackground( rNewColor );
+            m_pDatasource->SetReadOnly( sal_True );
+            m_pDatasource->SetBackground( Wallpaper( rNewColor ) );
+            m_pDatasource->SetControlBackground( rNewColor );
 
-            m_aTable.SetReadOnly( sal_True );
-            m_aTable.SetBackground( Wallpaper( rNewColor ) );
-            m_aTable.SetControlBackground( rNewColor );
+            m_pTable->SetReadOnly( sal_True );
+            m_pTable->SetBackground( Wallpaper( rNewColor ) );
+            m_pTable->SetControlBackground( rNewColor );
 
-            m_aAdministrateDatasources.Hide( );
+            m_pAdministrateDatasources->Hide( );
         }
     }
 
@@ -752,8 +749,8 @@ void AssignmentPersistentData::Commit()
             sName = aFileNotation.get(OFileNotation::N_SYSTEM);
         }
 
-        m_aDatasource.SetText(sName);
-        m_aTable.SetText(m_pImpl->pConfigData->getCommand());
+        m_pDatasource->SetText(sName);
+        m_pTable->SetText(m_pImpl->pConfigData->getCommand());
         // we ignore the CommandType: only tables are supported
 
         // the logical names for the fields
@@ -772,13 +769,6 @@ void AssignmentPersistentData::Commit()
     // -------------------------------------------------------------------
     AddressBookSourceDialog::~AddressBookSourceDialog()
     {
-        sal_Int32 i;
-        for (i=0; i<FIELD_CONTROLS_VISIBLE; ++i)
-        {
-            delete m_pImpl->pFieldLabels[i];
-            delete m_pImpl->pFields[i];
-        }
-
         delete m_pImpl;
     }
 
@@ -803,7 +793,7 @@ void AssignmentPersistentData::Commit()
                 return;
             }
         }
-        m_aDatasource.Clear();
+        m_pDatasource->Clear();
 
         // fill the datasources listbox
         Sequence< OUString > aDatasourceNames;
@@ -818,7 +808,7 @@ void AssignmentPersistentData::Commit()
         const OUString* pDatasourceNames = aDatasourceNames.getConstArray();
         const OUString* pEnd = pDatasourceNames + aDatasourceNames.getLength();
         for (; pDatasourceNames < pEnd; ++pDatasourceNames)
-            m_aDatasource.InsertEntry(*pDatasourceNames);
+            m_pDatasource->InsertEntry(*pDatasourceNames);
     }
 
     // -------------------------------------------------------------------
@@ -837,7 +827,7 @@ void AssignmentPersistentData::Commit()
         WaitObject aWaitCursor(this);
 
         // no matter what we do here, we handled the currently selected data source (no matter if successful or not)
-        m_aDatasource.SaveValue();
+        m_pDatasource->SaveValue();
 
         // create an interaction handler (may be needed for connecting)
         Reference< XInteractionHandler > xHandler;
@@ -856,9 +846,9 @@ void AssignmentPersistentData::Commit()
         }
 
         // the currently selected table
-        OUString sOldTable = m_aTable.GetText();
+        OUString sOldTable = m_pTable->GetText();
 
-        m_aTable.Clear();
+        m_pTable->Clear();
 
         m_xCurrentDatasourceTables= NULL;
 
@@ -870,7 +860,7 @@ void AssignmentPersistentData::Commit()
             Reference< XCompletedConnection > xDS;
             if ( m_pImpl->bWorkingPersistent )
             {
-                String sSelectedDS = lcl_getSelectedDataSource(  m_aDatasource );
+                String sSelectedDS = lcl_getSelectedDataSource(*m_pDatasource);
 
                 // get the data source the user has chosen and let it build a connection
                 INetURLObject aURL( sSelectedDS );
@@ -921,7 +911,7 @@ void AssignmentPersistentData::Commit()
         const OUString* pEnd = pTableNames + aTableNames.getLength();
         for (;pTableNames != pEnd; ++pTableNames)
         {
-            m_aTable.InsertEntry(*pTableNames);
+            m_pTable->InsertEntry(*pTableNames);
             if (0 == pTableNames->compareTo(sOldTable))
                 bKnowOldTable = sal_True;
         }
@@ -929,7 +919,7 @@ void AssignmentPersistentData::Commit()
         // set the old table, if the new data source knows a table with this name, too. Else reset the tables edit field.
         if (!bKnowOldTable)
             sOldTable = OUString();
-        m_aTable.SetText(sOldTable);
+        m_pTable->SetText(sOldTable);
 
         resetFields();
     }
@@ -940,9 +930,9 @@ void AssignmentPersistentData::Commit()
         WaitObject aWaitCursor(this);
 
         // no matter what we do here, we handled the currently selected table (no matter if successful or not)
-        m_aDatasource.SaveValue();
+        m_pDatasource->SaveValue();
 
-        String sSelectedTable = m_aTable.GetText();
+        String sSelectedTable = m_pTable->GetText();
         Sequence< OUString > aColumnNames;
         try
         {
@@ -959,7 +949,7 @@ void AssignmentPersistentData::Commit()
                     aColumnNames = xColumns->getElementNames();
             }
         }
-        catch(Exception&)
+        catch (const Exception&)
         {
             OSL_FAIL("AddressBookSourceDialog::resetFields: could not retrieve the table columns!");
         }
@@ -1128,7 +1118,7 @@ void AssignmentPersistentData::Commit()
         m_pImpl->nFieldScrollPos = _nPos;
 
         if (_bAdjustScrollbar)
-            m_aFieldScroller.SetThumbPos(m_pImpl->nFieldScrollPos);
+            m_pFieldScroller->SetThumbPos(m_pImpl->nFieldScrollPos);
     }
 
     // -------------------------------------------------------------------
@@ -1160,7 +1150,7 @@ void AssignmentPersistentData::Commit()
     // -------------------------------------------------------------------
     IMPL_LINK(AddressBookSourceDialog, OnComboSelect, ComboBox*, _pBox)
     {
-        if (_pBox == &m_aDatasource)
+        if (_pBox == m_pDatasource)
             resetTables();
         else
             resetFields();
@@ -1179,7 +1169,7 @@ void AssignmentPersistentData::Commit()
     {
         if (_pBox->GetSavedValue() != _pBox->GetText())
         {
-            if (_pBox == &m_aDatasource)
+            if (_pBox == m_pDatasource)
                 resetTables();
             else
                 resetFields();
@@ -1190,11 +1180,11 @@ void AssignmentPersistentData::Commit()
     // -------------------------------------------------------------------
     IMPL_LINK_NOARG(AddressBookSourceDialog, OnOkClicked)
     {
-        String sSelectedDS = lcl_getSelectedDataSource(  m_aDatasource );
+        String sSelectedDS = lcl_getSelectedDataSource(*m_pDatasource);
         if ( m_pImpl->bWorkingPersistent )
         {
             m_pImpl->pConfigData->setDatasourceName(sSelectedDS);
-            m_pImpl->pConfigData->setCommand(m_aTable.GetText());
+            m_pImpl->pConfigData->setCommand(m_pTable->GetText());
         }
 
         // set the field assignments
@@ -1244,7 +1234,7 @@ void AssignmentPersistentData::Commit()
                         OFileNotation aFileNotation( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
                         sName = aFileNotation.get(OFileNotation::N_SYSTEM);
                     }
-                    m_aDatasource.InsertEntry(sName);
+                    m_pDatasource->InsertEntry(sName);
                     delete m_pImpl->pConfigData;
                     m_pImpl->pConfigData = new AssignmentPersistentData();
                     loadConfiguration();
@@ -1285,7 +1275,7 @@ void AssignmentPersistentData::Commit()
                     {   // it's really the only the key (no modifiers)
                         if (m_pImpl->pFields[m_pImpl->nLastVisibleListIndex]->HasChildPathFocus())
                             // the last of our visible list boxes has the focus
-                            if (m_pImpl->nFieldScrollPos < m_aFieldScroller.GetRangeMax())
+                            if (m_pImpl->nFieldScrollPos < m_pFieldScroller->GetRangeMax())
                             {   // we can still scroll down
                                 sal_Int32 nNextFocusList = m_pImpl->nLastVisibleListIndex + 1 - 2;
                                 // -> scroll down

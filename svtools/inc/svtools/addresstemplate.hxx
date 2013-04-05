@@ -22,10 +22,10 @@
 
 #include "svtools/svtdllapi.h"
 #include <vcl/dialog.hxx>
-#include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/button.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/scrbar.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -47,20 +47,10 @@ namespace svt
     {
     protected:
         // Controls
-        FixedLine       m_aDatasourceFrame;
-        FixedText       m_aDatasourceLabel;
-        ComboBox        m_aDatasource;
-        PushButton      m_aAdministrateDatasources;
-        FixedText       m_aTableLabel;
-        ComboBox        m_aTable;
-
-        FixedText       m_aFieldsTitle;
-        Window          m_aFieldsFrame;
-
-        ScrollBar       m_aFieldScroller;
-        OKButton        m_aOK;
-        CancelButton    m_aCancel;
-        HelpButton      m_aHelp;
+        ComboBox*       m_pDatasource;
+        PushButton*     m_pAdministrateDatasources;
+        ComboBox*       m_pTable;
+        ScrollBar*      m_pFieldScroller;
 
         // string to display for "no selection"
         const String    m_sNoFieldSelection;

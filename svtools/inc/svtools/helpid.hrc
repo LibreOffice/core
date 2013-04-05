@@ -59,8 +59,6 @@
 #define HID_TEMPLATEDLG_TB_DOCINFO                             "SVT_HID_TEMPLATEDLG_TB_DOCINFO"
 #define HID_TEMPLATEDLG_TB_PREVIEW                             "SVT_HID_TEMPLATEDLG_TB_PREVIEW"
 
-#define HID_ADDRTEMPL_FIELD_ASSIGNMENT                         "SVT_HID_ADDRTEMPL_FIELD_ASSIGNMENT"
-
 // Help ids for the filepicker dialogs
 #define HID_EXPLORERDLG_FILE                                   "SVT_HID_EXPLORERDLG_FILE"
 
