@@ -1926,15 +1926,39 @@ void ScColumn::UpdateSelectionFunction(
     const ScMarkData& rMark, ScFunctionData& rData, ScFlatBoolRowSegments& rHiddenRows,
     bool bDoExclude, SCROW nExStartRow, SCROW nExEndRow) const
 {
-    SCSIZE nIndex;
-    ScMarkedDataIter aDataIter(this, &rMark, false);
-    while (aDataIter.Next( nIndex ))
+    if ( rData.eFunc != SUBTOTAL_FUNC_SELECTION_COUNT )
     {
-        SCROW nRow = maItems[nIndex].nRow;
-        bool bRowHidden = rHiddenRows.getValue(nRow);
-        if ( !bRowHidden )
-            if ( !bDoExclude || nRow < nExStartRow || nRow > nExEndRow )
-                lcl_UpdateSubTotal( rData, maItems[nIndex].pCell );
+        SCSIZE nIndex;
+        ScMarkedDataIter aDataIter(this, &rMark, false);
+        while (aDataIter.Next( nIndex ))
+        {
+            SCROW nRow = maItems[nIndex].nRow;
+            bool bRowHidden = rHiddenRows.getValue(nRow);
+            if ( !bRowHidden )
+                if ( !bDoExclude || nRow < nExStartRow || nRow > nExEndRow )
+                    lcl_UpdateSubTotal( rData, maItems[nIndex].pCell );
+        }
+    }
+    else
+    {
+        SCROW nTop, nBottom;
+        sal_Int32 nHiddenCellCount = 0;    // to get the count of cells which are hidden as well as selected (both)
+
+        ScMarkArrayIter aIter(rMark.GetArray() + nCol);
+        ScFlatBoolRowSegments::RangeIterator aHiddenRangeItr (rHiddenRows);
+        ScFlatBoolRowSegments::RangeData aData;
+
+        while (aIter.Next( nTop, nBottom ))
+        {
+            for (bool bFound = aHiddenRangeItr.getFirst(aData); bFound; bFound = aHiddenRangeItr.getNext(aData))
+            {
+                if ( !aData.mbValue )
+                    continue;
+                if ((aData.mnRow1 >= nTop) && (aData.mnRow2 <= nBottom))    // to ensure that we compute the nHiddenCellCount value only for the hidden cells that are under selection
+                    nHiddenCellCount += aData.mnRow2 - aData.mnRow1 + 1;
+            }
+            rData.nCount += (nBottom - nTop + 1) - nHiddenCellCount;
+        }
     }
 }
 
@@ -1942,15 +1966,34 @@ void ScColumn::UpdateSelectionFunction(
 void ScColumn::UpdateAreaFunction(
     ScFunctionData& rData, ScFlatBoolRowSegments& rHiddenRows, SCROW nStartRow, SCROW nEndRow) const
 {
-    SCSIZE nIndex;
-    Search( nStartRow, nIndex );
-    while ( nIndex<maItems.size() && maItems[nIndex].nRow<=nEndRow )
+    if ( rData.eFunc != SUBTOTAL_FUNC_SELECTION_COUNT )
     {
-        SCROW nRow = maItems[nIndex].nRow;
-        bool bRowHidden = rHiddenRows.getValue(nRow);
-        if ( !bRowHidden )
-            lcl_UpdateSubTotal( rData, maItems[nIndex].pCell );
-        ++nIndex;
+        SCSIZE nIndex;
+        Search( nStartRow, nIndex );
+        while ( nIndex<maItems.size() && maItems[nIndex].nRow<=nEndRow )
+        {
+            SCROW nRow = maItems[nIndex].nRow;
+            bool bRowHidden = rHiddenRows.getValue(nRow);
+            if ( !bRowHidden )
+                if ( rData.eFunc != SUBTOTAL_FUNC_SELECTION_COUNT )
+                    lcl_UpdateSubTotal( rData, maItems[nIndex].pCell );
+            ++nIndex;
+        }
+    }
+    else
+    {
+        sal_Int32 nHiddenCellCount = 0;    // to get the count of cells which are hidden as well as selected (both)
+        ScFlatBoolRowSegments::RangeIterator aHiddenRangeItr (rHiddenRows);
+        ScFlatBoolRowSegments::RangeData aData;
+
+        for (bool bFound = aHiddenRangeItr.getFirst(aData); bFound; bFound = aHiddenRangeItr.getNext(aData))
+        {
+            if ( !aData.mbValue )
+                continue;
+            if ((aData.mnRow1 >= nStartRow) && (aData.mnRow2 <= nEndRow))   // to ensure that we compute the nHiddenCellCount value only for the hidden cells that are under selection
+                nHiddenCellCount += aData.mnRow2 - aData.mnRow1 + 1;
+        }
+        rData.nCount += (nEndRow - nStartRow + 1) - nHiddenCellCount;
     }
 }
 

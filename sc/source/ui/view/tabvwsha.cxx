@@ -80,6 +80,8 @@ sal_Bool ScTabViewShell::GetFunction( String& rFuncStr, sal_uInt16 nErrCode )
         case SUBTOTAL_FUNC_MAX:  nGlobStrId = STR_FUN_TEXT_MAX; break;
         case SUBTOTAL_FUNC_MIN:  nGlobStrId = STR_FUN_TEXT_MIN; break;
         case SUBTOTAL_FUNC_SUM:  nGlobStrId = STR_FUN_TEXT_SUM; break;
+        case SUBTOTAL_FUNC_SELECTION_COUNT: nGlobStrId = STR_FUN_TEXT_SELECTION_COUNT; break;
+
         default:
         {
             // added to avoid warnings
@@ -106,7 +108,7 @@ sal_Bool ScTabViewShell::GetFunction( String& rFuncStr, sal_uInt16 nErrCode )
                 // Number in the standard format, the other on the cursor position
                 SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
                 sal_uInt32 nNumFmt = 0;
-                if ( eFunc != SUBTOTAL_FUNC_CNT && eFunc != SUBTOTAL_FUNC_CNT2 )
+                if ( eFunc != SUBTOTAL_FUNC_CNT && eFunc != SUBTOTAL_FUNC_CNT2 && eFunc != SUBTOTAL_FUNC_SELECTION_COUNT)
                 {
                     //  Zahlformat aus Attributen oder Formel
                     pDoc->GetNumberFormat( nPosX, nPosY, nTab, nNumFmt );
