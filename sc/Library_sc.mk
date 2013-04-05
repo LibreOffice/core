@@ -44,6 +44,7 @@ $(eval $(call gb_Library_add_defs,sc,\
 
 $(eval $(call gb_Library_use_packages,sc,\
 	oox_inc \
+	vbahelper_inc \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,sc))
