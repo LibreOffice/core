@@ -1025,7 +1025,7 @@ protected:
 public:
                             ScTableSheetObj(ScDocShell* pDocSh, SCTAB nTab);
     virtual                 ~ScTableSheetObj();
-
+    virtual void            RefChanged();
     void                    InitInsertSheet(ScDocShell* pDocSh, SCTAB nTab);
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(

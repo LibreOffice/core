@@ -6959,6 +6959,17 @@ ScTableSheetObj::~ScTableSheetObj()
 {
 }
 
+void ScTableSheetObj::RefChanged()
+{
+    // skip calling immediate base
+    // class ScCellRangeObj::RefChanged as
+    // it changes the Sheets range ( which shouldn't
+    // happen ) - hmm maybe we don't even need to
+    // call ScCellRangesBase::RefChanged() :/
+
+    ScCellRangesBase::RefChanged();
+}
+
 void ScTableSheetObj::InitInsertSheet(ScDocShell* pDocSh, SCTAB nTab)
 {
     InitInsertRange( pDocSh, ScRange(0,0,nTab, MAXCOL,MAXROW,nTab) );
