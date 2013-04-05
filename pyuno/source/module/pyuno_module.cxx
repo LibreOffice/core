@@ -320,6 +320,47 @@ static PyObject* getComponentContext(
     return ret.getAcquired();
 }
 
+static PyObject* initPoniesMode(
+    SAL_UNUSED_PARAMETER PyObject*, SAL_UNUSED_PARAMETER PyObject*)
+{
+    // this tries to bootstrap enough of the soffice from python to run
+    // unit tests, which is only possible indirectly because pyuno is URE
+    // so load "test" library and invoke a function there to do the work
+    try
+    {
+        PyObject *const ctx(getComponentContext(0, 0));
+        if (!ctx) { abort(); }
+        Runtime const runtime;
+        Any const a(runtime.pyObject2Any(ctx));
+        Reference<XComponentContext> xContext;
+        a >>= xContext;
+        if (!xContext.is()) { abort(); }
+        using com::sun::star::lang::XMultiServiceFactory;
+        Reference<XMultiServiceFactory> const xMSF(
+            xContext->getServiceManager(),
+            com::sun::star::uno::UNO_QUERY_THROW);
+        if (!xMSF.is()) { abort(); }
+        char *const outdir = getenv("OUTDIR");
+        if (!outdir) { abort(); }
+        OStringBuffer libname(outdir);
+        libname.append("/lib/");
+        libname.append(SAL_DLLPREFIX "test" SAL_DLLEXTENSION);
+        oslModule const mod( osl_loadModuleAscii(libname.getStr(),
+                                SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL) );
+        if (!mod) { abort(); }
+        oslGenericFunction const pFunc(
+                osl_getAsciiFunctionSymbol(mod, "test_init"));
+        if (!pFunc) { abort(); }
+        // guess casting pFunc is undefined behavior but don't see a better way
+        ((void (SAL_CALL *)(XMultiServiceFactory*)) pFunc) (xMSF.get());
+    }
+    catch (const com::sun::star::uno::Exception & e)
+    {
+        abort();
+    }
+    return Py_None;
+}
+
 PyObject * extractOneStringArg( PyObject *args, char const *funcName )
 {
     if( !PyTuple_Check( args ) || PyTuple_Size( args) != 1 )
@@ -797,6 +838,7 @@ static PyObject *setCurrentContext(
 
 struct PyMethodDef PyUNOModule_methods [] =
 {
+    {"experimentalExtraMagic", initPoniesMode, METH_VARARGS, NULL},
     {"getComponentContext", getComponentContext, METH_VARARGS, NULL},
     {"_createUnoStructHelper", reinterpret_cast<PyCFunction>(createUnoStructHelper), METH_VARARGS | METH_KEYWORDS, NULL},
     {"getTypeByName", getTypeByName, METH_VARARGS, NULL},

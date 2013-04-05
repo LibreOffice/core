@@ -1,5 +1,5 @@
 import unittest
-from org.libreoffice.unotest import UnoConnection
+from org.libreoffice.unotest import UnoNotConnection as UnoConnection
 
 #@unittest.skip("that seems to work")
 class TestSetExpresion(unittest.TestCase):
