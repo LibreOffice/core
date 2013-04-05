@@ -41,6 +41,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 	external \
 	i18nlangtag \
 	i18nutil \
+	i18npool \
 	idl \
 	idlc \
 	io \
