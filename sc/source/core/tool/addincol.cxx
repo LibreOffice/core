@@ -52,18 +52,7 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
-
 #define SC_CALLERPOS_NONE   (-1)
-
-#define SCADDINSUPPLIER_SERVICE "com.sun.star.sheet.AddIn"
-
-//------------------------------------------------------------------------
-
-
-
-
-//------------------------------------------------------------------------
 
 ScUnoAddInFuncData::ScUnoAddInFuncData( const ::rtl::OUString& rNam, const ::rtl::OUString& rLoc,
                                         const ::rtl::OUString& rDesc,
@@ -282,8 +271,7 @@ void ScUnoAddInCollection::Initialize()
     if ( xEnAc.is() )
     {
         uno::Reference<container::XEnumeration> xEnum =
-                        xEnAc->createContentEnumeration(
-                            rtl::OUString(SCADDINSUPPLIER_SERVICE) );
+                        xEnAc->createContentEnumeration( "com.sun.star.sheet.AddIn" );
         if ( xEnum.is() )
         {
             //  loop through all AddIns
@@ -291,6 +279,7 @@ void ScUnoAddInCollection::Initialize()
             {
                 uno::Any aAddInAny = xEnum->nextElement();
 
+                try
                 {
                     uno::Reference<uno::XInterface> xIntFac;
                     aAddInAny >>= xIntFac;
@@ -321,6 +310,8 @@ void ScUnoAddInCollection::Initialize()
                             }
                         }
                     }
+                } catch ( const uno::Exception& ) {
+                    SAL_WARN ( "sc", "Failed to initialize create instance of sheet.AddIn" );
                 }
             }
         }
