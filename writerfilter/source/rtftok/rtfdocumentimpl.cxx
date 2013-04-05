@@ -289,7 +289,8 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_bWasInFrame(false),
     m_bHadPicture(false),
     m_bHadSect(false),
-    m_nCellxMax(0)
+    m_nCellxMax(0),
+    m_nListPictureId(0)
 {
     OSL_ASSERT(xInputStream.is());
     m_pInStream.reset(utl::UcbStreamHelper::CreateStream(xInputStream, sal_True));
@@ -755,6 +756,14 @@ int RTFDocumentImpl::resolvePict(bool bInline)
 
     if (xPropertySet.is())
         xPropertySet->setPropertyValue("GraphicURL", uno::Any(aGraphicUrl));
+
+    if (m_aStates.top().bInListpicture)
+    {
+        // Send the shape directly, no section is started, to additional properties will be ignored anyway.
+        Mapper().startShape(xShape);
+        Mapper().endShape();
+        return 0;
+    }
 
     // Send it to the dmapper.
     RTFSprms aSprms;
@@ -1260,6 +1269,10 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             break;
         case RTF_LISTTABLE:
             m_aStates.top().nDestinationState = DESTINATION_LISTTABLE;
+            break;
+        case RTF_LISTPICTURE:
+            m_aStates.top().nDestinationState = DESTINATION_LISTPICTURE;
+            m_aStates.top().bInListpicture = true;
             break;
         case RTF_LIST:
             m_aStates.top().nDestinationState = DESTINATION_LISTENTRY;
@@ -2691,6 +2704,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         case RTF_LEVELJC: nSprm = NS_ooxml::LN_CT_Lvl_lvlJc; break;
         case RTF_LEVELNFC: nSprm = NS_rtf::LN_NFC; break;
         case RTF_LEVELSTARTAT: nSprm = NS_rtf::LN_ISTARTAT; break;
+        case RTF_LEVELPICTURE: nSprm = NS_ooxml::LN_CT_Lvl_lvlPicBulletId; break;
         default: break;
     }
     if (nSprm > 0)
@@ -3873,7 +3887,7 @@ int RTFDocumentImpl::popState()
             break;
         case DESTINATION_PICPROP:
         case DESTINATION_SHAPEINSTRUCTION:
-            if (!m_bObject)
+            if (!m_bObject && !aState.bInListpicture)
                 m_pSdrImport->resolve(m_aStates.top().aShape);
             break;
         case DESTINATION_BOOKMARKSTART:
@@ -4557,6 +4571,16 @@ int RTFDocumentImpl::popState()
         case DESTINATION_SHPPICT:
         case DESTINATION_SHAPE:
             m_aStates.top().aFrame = aState.aFrame;
+            if (aState.nDestinationState == DESTINATION_SHPPICT && m_aStates.size() && m_aStates.top().nDestinationState == DESTINATION_LISTPICTURE)
+            {
+                RTFSprms aAttributes;
+                aAttributes.set(NS_ooxml::LN_CT_NumPicBullet_numPicBulletId, RTFValue::Pointer_t(new RTFValue(m_nListPictureId++)));
+                RTFSprms aSprms;
+                // Dummy value, real picture is already sent to dmapper.
+                aSprms.set(NS_ooxml::LN_CT_NumPicBullet_pict, RTFValue::Pointer_t(new RTFValue(0)));
+                RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
+                m_aListTableSprms.set(NS_ooxml::LN_CT_Numbering_numPicBullet, pValue, false);
+            }
             break;
         case DESTINATION_TITLE:
             {
@@ -4697,7 +4721,8 @@ RTFParserState::RTFParserState(RTFDocumentImpl *pDocumentImpl)
     nMinute(0),
     nCurrentStyleIndex(-1),
     pCurrentBuffer(0),
-    bHasTableStyle(false)
+    bHasTableStyle(false),
+    bInListpicture(false)
 {
 }
 

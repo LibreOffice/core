@@ -71,6 +71,7 @@ namespace writerfilter {
             DESTINATION_FIELDINSTRUCTION,
             DESTINATION_FIELDRESULT,
             DESTINATION_LISTTABLE,
+            DESTINATION_LISTPICTURE,
             DESTINATION_LISTENTRY,
             DESTINATION_LISTOVERRIDETABLE,
             DESTINATION_LISTOVERRIDEENTRY,
@@ -414,6 +415,9 @@ namespace writerfilter {
 
                 /// If a table style was requested to be used.
                 bool bHasTableStyle;
+
+                /// If we're inside a \listpicture group.
+                bool bInListpicture;
         };
 
         class RTFTokenizer;
@@ -607,6 +611,8 @@ namespace writerfilter {
                 bool m_bHadSect;
                 /// Max width of the rows in the current table.
                 int m_nCellxMax;
+                /// ID of the next \listlevel picture.
+                int m_nListPictureId;
         };
     } // namespace rtftok
 } // namespace writerfilter
