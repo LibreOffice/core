@@ -1570,7 +1570,7 @@ sal_Bool SvStream::EncryptBuffer(void* pStart, sal_Size nLen)
     return sal_True;
 }
 
-unsigned char implGetCryptMask(const sal_Char* pStr, sal_Int32 nLen, long nVersion)
+static unsigned char implGetCryptMask(const sal_Char* pStr, sal_Int32 nLen, long nVersion)
 {
     unsigned char nCryptMask = 0;
 
