@@ -28,9 +28,6 @@
 #include <ooo/vba/excel/XlDVAlertStyle.hpp>
 
 #include "unonames.hxx"
-#include "rangelst.hxx"
-#include "excelvbahelper.hxx"
-#include "vbarange.hxx"
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -310,21 +307,7 @@ ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const un
 ScVbaValidation::getFormula1() throw (uno::RuntimeException)
 {
     uno::Reference< sheet::XSheetCondition > xCond( lcl_getValidationProps( m_xRange ), uno::UNO_QUERY_THROW );
-    rtl::OUString sString = xCond->getFormula1();
-
-    sal_uInt16 nFlags = 0;
-    ScRangeList aCellRanges;
-    formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_XL_A1;
-
-    ScDocShell* pDocSh = excel::GetDocShellFromRange( m_xRange );
-    // in calc validation formula is either a range or formula
-    // that results in range.
-    // In VBA both formula and address can have a leading '='
-    // in result of getFormula1, however it *seems* that a named range or
-    // real formula has to (or is expected to) have the '='
-    if ( pDocSh && !ScVbaRange::getCellRangesForAddress(  nFlags, sString, pDocSh, aCellRanges, eConv ) )
-        sString = "=" + sString;
-    return sString;
+    return xCond->getFormula1();
 }
 
 ::rtl::OUString SAL_CALL

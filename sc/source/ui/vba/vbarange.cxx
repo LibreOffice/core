@@ -1146,7 +1146,7 @@ public:
 };
 
 bool
-ScVbaRange::getCellRangesForAddress( sal_uInt16& rResFlags, const rtl::OUString& sAddress, ScDocShell* pDocSh, ScRangeList& rCellRanges, formula::FormulaGrammar::AddressConvention& eConv, char cDelimiter )
+getCellRangesForAddress( sal_uInt16& rResFlags, const rtl::OUString& sAddress, ScDocShell* pDocSh, ScRangeList& rCellRanges, formula::FormulaGrammar::AddressConvention& eConv, char cDelimiter = 0 )
 {
 
     ScDocument* pDoc = NULL;
@@ -1221,7 +1221,7 @@ bool getScRangeListForAddress( const rtl::OUString& sName, ScDocShell* pDocSh, S
         }
 
         sal_uInt16 nFlags = 0;
-        if ( !ScVbaRange::getCellRangesForAddress( nFlags, sAddress, pDocSh, aCellRanges, eConv, aChar ) )
+        if ( !getCellRangesForAddress( nFlags, sAddress, pDocSh, aCellRanges, eConv, aChar ) )
             return false;
 
         bool bTabFromReferrer = !( nFlags & SCA_TAB_3D );
