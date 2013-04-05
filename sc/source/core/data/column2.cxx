@@ -1927,15 +1927,36 @@ void ScColumn::UpdateSelectionFunction(
     bool bDoExclude, SCROW nExStartRow, SCROW nExEndRow) const
 {
     SCSIZE nIndex;
+    double nhiddenCellCount = 0;    // to get the count of hidden cells
+
     ScMarkedDataIter aDataIter(this, &rMark, false);
     while (aDataIter.Next( nIndex ))
     {
         SCROW nRow = maItems[nIndex].nRow;
         bool bRowHidden = rHiddenRows.getValue(nRow);
         if ( !bRowHidden )
+        {
             if ( !bDoExclude || nRow < nExStartRow || nRow > nExEndRow )
-                lcl_UpdateSubTotal( rData, maItems[nIndex].pCell );
+            {
+                if ( rData.eFunc != SUBTOTAL_FUNC_SELECTION_COUNT )
+                        lcl_UpdateSubTotal( rData, maItems[nIndex].pCell );
+            }
+        }
     }
+
+    SCROW ncellIndex = nExStartRow;
+    while ( ncellIndex <= nExEndRow )   // iterate through all rows to check if the cell is empty or not
+    {
+        bool bRowHidden = rHiddenRows.getValue( ncellIndex );
+        if ( bRowHidden )
+        {
+            ++nhiddenCellCount;
+        }
+        ++ncellIndex;
+    }
+
+    if ( rData.eFunc == SUBTOTAL_FUNC_SELECTION_COUNT )
+        rData.nCount += (nExEndRow - nExStartRow + 1) - nhiddenCellCount ;
 }
 
 //  with bNoMarked ignore the multiple selections
@@ -1943,15 +1964,34 @@ void ScColumn::UpdateAreaFunction(
     ScFunctionData& rData, ScFlatBoolRowSegments& rHiddenRows, SCROW nStartRow, SCROW nEndRow) const
 {
     SCSIZE nIndex;
+    double nhiddenCellCount = 0;    // to get the count of hidden cells
+
     Search( nStartRow, nIndex );
     while ( nIndex<maItems.size() && maItems[nIndex].nRow<=nEndRow )
     {
         SCROW nRow = maItems[nIndex].nRow;
         bool bRowHidden = rHiddenRows.getValue(nRow);
         if ( !bRowHidden )
-            lcl_UpdateSubTotal( rData, maItems[nIndex].pCell );
+        {
+            if ( rData.eFunc != SUBTOTAL_FUNC_SELECTION_COUNT )
+                lcl_UpdateSubTotal( rData, maItems[nIndex].pCell );
+        }
         ++nIndex;
     }
+
+    SCROW ncellIndex = nStartRow;
+    while ( ncellIndex <= nEndRow )     // iterate through all rows to check if the cell is empty or not
+    {
+        bool bRowHidden = rHiddenRows.getValue( ncellIndex );
+        if ( bRowHidden )
+        {
+            ++nhiddenCellCount ;
+        }
+        ++ncellIndex;
+    }
+
+    if ( rData.eFunc == SUBTOTAL_FUNC_SELECTION_COUNT )
+        rData.nCount += (nEndRow - nStartRow + 1) - nhiddenCellCount ;
 }
 
 sal_uInt32 ScColumn::GetWeightedCount() const

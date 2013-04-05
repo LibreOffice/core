@@ -218,6 +218,12 @@ Menu RID_SVXMNU_PSZ_FUNC
         };
         MenuItem
         {
+            Identifier = PSZ_FUNC_SELECTION_COUNT ;
+            HelpId = HID_MNU_FUNC_SELECTION_COUNT ;
+            Text [ en-US ] = "Selection count" ;
+        };
+        MenuItem
+        {
             Identifier = PSZ_FUNC_NONE ;
             HelpId = HID_MNU_FUNC_NONE ;
             Text [ en-US ] = "None" ;

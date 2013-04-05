@@ -31,15 +31,16 @@
 #define ZOOM_PAGE_WIDTH     7
 #define ZOOM_WHOLE_PAGE     8
 
-//  IDs wie SUBTOTAL_FUNC im Calc
+// IDs as in SUBTOTAL_FUNC of Calc
 
-#define PSZ_FUNC_AVG        1
-#define PSZ_FUNC_COUNT2     3
-#define PSZ_FUNC_COUNT      2
-#define PSZ_FUNC_MAX        4
-#define PSZ_FUNC_MIN        5
-#define PSZ_FUNC_SUM        9
-#define PSZ_FUNC_NONE       16
+#define PSZ_FUNC_AVG                1
+#define PSZ_FUNC_COUNT2             3
+#define PSZ_FUNC_COUNT              2
+#define PSZ_FUNC_MAX                4
+#define PSZ_FUNC_MIN                5
+#define PSZ_FUNC_SUM                9
+#define PSZ_FUNC_SELECTION_COUNT    12
+#define PSZ_FUNC_NONE               16
 
 #define XMLSEC_CALL         1
 
