@@ -3204,7 +3204,7 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
         sal_Int16 nFirstLineIndex,
         sal_Int16 nListTabPos,
         const String &rNumberingString,
-        const SvxBrushItem* )
+        const SvxBrushItem* pBrush)
 {
     m_pSerializer->startElementNS( XML_w, XML_lvl,
             FSNS( XML_w, XML_ilvl ), OString::valueOf( sal_Int32( nLevel ) ).getStr(),
@@ -3263,6 +3263,18 @@ void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
     m_pSerializer->singleElementNS( XML_w, XML_lvlText,
             FSNS( XML_w, XML_val ), OUStringToOString( aBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ).getStr(),
             FSEND );
+
+    // bullet
+    if (nNumberingType == SVX_NUM_BITMAP && pBrush)
+    {
+        int nIndex = m_rExport.GetGrfIndex(*pBrush);
+        if (nIndex != -1)
+        {
+            m_pSerializer->singleElementNS(XML_w, XML_lvlPicBulletId,
+                    FSNS(XML_w, XML_val), OString::number(nIndex).getStr(),
+                    FSEND);
+        }
+    }
 
     // justification
     const char *pJc;
@@ -4921,6 +4933,35 @@ bool DocxAttributeOutput::HasEndnotes() const
 bool DocxAttributeOutput::HasPostitFields() const
 {
     return !m_postitFields.empty();
+}
+
+void DocxAttributeOutput::BulletDefinition(int nId, const Graphic& rGraphic, Size aSize)
+{
+    m_pSerializer->startElementNS(XML_w, XML_numPicBullet,
+            FSNS(XML_w, XML_numPicBulletId), OString::number(nId).getStr(),
+            FSEND);
+
+    OStringBuffer aStyle;
+    // Size is in twips, we need it in points.
+    aStyle.append("width:").append(double(aSize.Width()) / 20);
+    aStyle.append("pt;height:").append(double(aSize.Height()) / 20).append("pt");
+    m_pSerializer->startElementNS( XML_w, XML_pict, FSEND);
+    m_pSerializer->startElementNS( XML_v, XML_shape,
+            XML_style, aStyle.getStr(),
+            FSNS(XML_o, XML_bullet), "t",
+            FSEND);
+
+    m_rDrawingML.SetFS(m_pSerializer);
+    OUString aRelId = m_rDrawingML.WriteImage(rGraphic);
+    m_pSerializer->singleElementNS( XML_v, XML_imagedata,
+            FSNS(XML_r, XML_id), OUStringToOString(aRelId, RTL_TEXTENCODING_UTF8),
+            FSNS(XML_o, XML_title), "",
+            FSEND);
+
+    m_pSerializer->endElementNS(XML_v, XML_shape);
+    m_pSerializer->endElementNS(XML_w, XML_pict);
+
+    m_pSerializer->endElementNS(XML_w, XML_numPicBullet);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

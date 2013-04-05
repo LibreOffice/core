@@ -47,6 +47,7 @@
 
 #include <editeng/editobj.hxx>
 #include <editeng/outlobj.hxx>
+#include <editeng/brushitem.hxx>
 
 #include <docary.hxx>
 #include <numrule.hxx>
@@ -60,6 +61,7 @@
 #include <comphelper/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/font.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace sax_fastparser;
 using namespace ::comphelper;
@@ -154,7 +156,8 @@ void DocxExport::AppendBookmark( const OUString& rName, bool /*bSkip*/ )
 
 void DocxExport::ExportGrfBullet(const SwTxtNode&)
 {
-    SAL_INFO("sw.docx", "TODO: " << OSL_THIS_FUNC);
+    // Just collect the bullets for now, numbering.xml is not yet started.
+    CollectGrfsOfBullets();
 }
 
 ::rtl::OString DocxExport::AddRelation( const OUString& rType, const OUString& rTarget )
@@ -525,6 +528,81 @@ void DocxExport::WritePostitFields()
     }
 }
 
+int DocxExport::CollectGrfsOfBullets()
+{
+    m_vecBulletPic.clear();
+
+    if ( pDoc )
+    {
+        int nCountRule = pDoc->GetNumRuleTbl().size();
+        for (int n = 0; n < nCountRule; ++n)
+        {
+            const SwNumRule &rRule = *( pDoc->GetNumRuleTbl().at(n) );
+            sal_uInt16 nLevels = rRule.IsContinusNum() ? 1 : 9;
+            for (sal_uInt16 nLvl = 0; nLvl < nLevels; ++nLvl)
+            {
+                const SwNumFmt &rFmt = rRule.Get(nLvl);
+                if (SVX_NUM_BITMAP != rFmt.GetNumberingType())
+                {
+                    continue;
+                }
+                const Graphic *pGraf = rFmt.GetBrush()? rFmt.GetBrush()->GetGraphic():0;
+                if ( pGraf )
+                {
+                    bool bHas = false;
+                    for (unsigned i = 0; i < m_vecBulletPic.size(); ++i)
+                    {
+                        if (m_vecBulletPic[i]->GetChecksum() == pGraf->GetChecksum())
+                        {
+                            bHas = true;
+                            break;
+                        }
+                    }
+                    if (!bHas)
+                    {
+                        m_vecBulletPic.push_back(pGraf);
+                    }
+                }
+            }
+        }
+    }
+
+    return m_vecBulletPic.size();
+}
+
+int DocxExport::GetGrfIndex(const SvxBrushItem& rBrush)
+{
+    int nIndex = -1;
+    if ( rBrush.GetGraphic() )
+    {
+        for (unsigned i = 0; i < m_vecBulletPic.size(); ++i)
+        {
+            if (m_vecBulletPic[i]->GetChecksum() == rBrush.GetGraphic()->GetChecksum())
+            {
+                nIndex = i;
+                break;
+            }
+        }
+    }
+
+    return nIndex;
+}
+
+void DocxExport::BulletDefinitions()
+{
+    for (size_t i = 0; i < m_vecBulletPic.size(); ++i)
+    {
+        const MapMode aMapMode(MAP_TWIP);
+        const Graphic& rGraphic = *m_vecBulletPic[i];
+        Size aSize(rGraphic.GetPrefSize());
+        if (MAP_PIXEL == rGraphic.GetPrefMapMode().GetMapUnit())
+            aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, aMapMode);
+        else
+            aSize = OutputDevice::LogicToLogic(aSize,rGraphic.GetPrefMapMode(), aMapMode);
+        m_pAttrOutput->BulletDefinition(i, rGraphic, aSize);
+    }
+}
+
 void DocxExport::WriteNumbering()
 {
     if ( !pUsedNumTbl )
@@ -542,7 +620,12 @@ void DocxExport::WriteNumbering()
 
     pNumberingFS->startElementNS( XML_w, XML_numbering,
             FSNS( XML_xmlns, XML_w ), "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
+            FSNS( XML_xmlns, XML_o ), "urn:schemas-microsoft-com:office:office",
+            FSNS( XML_xmlns, XML_r ), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+            FSNS( XML_xmlns, XML_v ), "urn:schemas-microsoft-com:vml",
             FSEND );
+
+    BulletDefinitions();
 
     AbstractNumberingDefinitions();
 

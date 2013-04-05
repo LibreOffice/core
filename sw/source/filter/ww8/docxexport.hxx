@@ -85,6 +85,8 @@ class DocxExport : public MSWordExportBase
 
     DocxSettingsData settings;
 
+    std::vector<const Graphic*> m_vecBulletPic;
+
 public:
 
     DocxExportFilter& GetFilter() { return *m_pFilter; };
@@ -146,6 +148,9 @@ public:
 
     void WriteOutliner(const OutlinerParaObject& rOutliner, sal_uInt8 nTyp);
 
+    int CollectGrfsOfBullets();
+    int GetGrfIndex(const SvxBrushItem& rBrush);
+
 protected:
     /// Format-dependant part of the actual export.
     virtual void ExportDocument_Impl();
@@ -201,6 +206,9 @@ private:
 
     /// Write word/settings.xml
     void WriteSettings();
+
+    /// Write the numbering picture bullets part of word/numbering.xml
+    void BulletDefinitions();
 
     /// All xml namespaces to be used at the top of any text .xml file (main doc, headers, footers,...)
     sax_fastparser::XFastAttributeListRef MainXmlNamespaces( sax_fastparser::FSHelperPtr serializer );
