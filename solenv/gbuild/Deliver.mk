@@ -29,8 +29,8 @@
 gb_Deliver_GNUCOPY := $(GNUCOPY)
 
 # if ($true) then old files will get removed from the target location before
-# they are copied there. In multi-user environments, this is needed you need to
-# be the owner of the target file to be able to modify timestamps
+# they are copied there. In multi-user environments, if this is needed you need
+# to be the owner of the target file to be able to modify timestamps
 ifeq ($(strip gb_Deliver_HARDLINK),)
 gb_Deliver_CLEARONDELIVER := $(false)
 else
