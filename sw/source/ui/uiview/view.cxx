@@ -961,12 +961,11 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     m_bVScrollbarEnabled = aUsrPref.IsViewVScrollBar();
     m_bHScrollbarEnabled = aUsrPref.IsViewHScrollBar();
     m_pHScrollbar->SetAuto(bBrowse);
-#if HAVE_FEATURE_DESKTOP
     if( aUsrPref.IsViewHRuler() )
         CreateTab();
     if( aUsrPref.IsViewVRuler() )
         CreateVRuler();
-#endif
+
     m_pWrtShell->SetUIOptions( aUsrPref );
     m_pWrtShell->SetReadOnlyAvailable( aUsrPref.IsCursorInProtectedArea() );
     m_pWrtShell->ApplyAccessiblityOptions(SW_MOD()->GetAccessibilityOptions());
