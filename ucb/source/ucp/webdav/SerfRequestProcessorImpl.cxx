@@ -96,9 +96,9 @@ void SerfRequestProcessorImpl::setRequestHeaders( serf_bucket_t* inoutSerfHeader
         if ( !bHasUserAgent )
             bHasUserAgent = aHeaderIter->first == "User-Agent";
 
-        serf_bucket_headers_set( inoutSerfHeaderBucket,
-                                 aHeader.getStr(),
-                                 aValue.getStr() );
+        serf_bucket_headers_setc( inoutSerfHeaderBucket,
+                                  aHeader.getStr(),
+                                  aValue.getStr() );
 
         ++aHeaderIter;
     }
