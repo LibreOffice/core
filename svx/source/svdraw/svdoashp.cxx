@@ -1409,11 +1409,6 @@ void SdrObjCustomShape::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
                 {
                     rInfo.bShearAllowed = aInfo.bShearAllowed;
                 }
-
-                if(rInfo.bEdgeRadiusAllowed != aInfo.bEdgeRadiusAllowed)
-                {
-                    rInfo.bEdgeRadiusAllowed = aInfo.bEdgeRadiusAllowed;
-                }
             }
         }
     }
