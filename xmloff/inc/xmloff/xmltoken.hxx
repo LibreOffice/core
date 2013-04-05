@@ -1743,6 +1743,7 @@ namespace xmloff { namespace token {
         XML_SUB_VIEW_SIZE,
         XML_SUFFIX,
         XML_SUM,
+        XML_SELECTION_COUNT,
         XML_SVGLINEARGRADIENT,
         XML_SWISS,
         XML_SYMBOL,

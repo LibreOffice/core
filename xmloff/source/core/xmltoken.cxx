@@ -1748,6 +1748,7 @@ namespace xmloff { namespace token {
         TOKEN( "sub-view-size",                   XML_SUB_VIEW_SIZE ),
         TOKEN( "suffix",                          XML_SUFFIX ),
         TOKEN( "sum",                             XML_SUM ),
+        TOKEN( "selection-count",                 XML_SELECTION_COUNT ),
         TOKEN( "linearGradient",                  XML_SVGLINEARGRADIENT ),
         TOKEN( "swiss",                           XML_SWISS ),
         TOKEN( "symbol",                          XML_SYMBOL ),
