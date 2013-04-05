@@ -45,7 +45,6 @@ $(eval $(call gb_Module_add_targets,jfreereport,\
 	UnpackedTarball_jfreereport_flow_engine \
 	ExternalProject_jfreereport_flow_engine \
 	Package_jfreereport_flow_engine \
-	Package_jfreereport_version \
 ))
 endif
 endif
