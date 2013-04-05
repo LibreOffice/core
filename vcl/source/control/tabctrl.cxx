@@ -2201,6 +2201,7 @@ Size TabControl::calculateRequisition() const
 {
     Size aOptimalPageSize(0, 0);
 
+    sal_uInt16 nOrigPageId = GetCurPageId();
     for( std::vector< ImplTabItem >::const_iterator it = mpTabCtrlData->maItemList.begin();
          it != mpTabCtrlData->maItemList.end(); ++it )
     {
@@ -2210,10 +2211,8 @@ Size TabControl::calculateRequisition() const
         if (!pPage)
         {
             TabControl *pThis = const_cast<TabControl*>(this);
-            sal_uInt16 nLastPageId = pThis->GetCurPageId();
             pThis->SetCurPageId(it->mnId);
             pThis->ActivatePage();
-            pThis->SetCurPageId(nLastPageId);
             pPage = it->mpTabPage;
         }
 
@@ -2226,6 +2225,16 @@ Size TabControl::calculateRequisition() const
             aOptimalPageSize.Width() = aPageSize.Width();
         if (aPageSize.Height() > aOptimalPageSize.Height())
             aOptimalPageSize.Height() = aPageSize.Height();
+    }
+
+    //fdo#61940 If we were forced to activate pages in order to on-demand
+    //create them to get their optimal size, then switch back to the original
+    //page and re-activate it
+    if (nOrigPageId != GetCurPageId())
+    {
+        TabControl *pThis = const_cast<TabControl*>(this);
+        pThis->SetCurPageId(nOrigPageId);
+        pThis->ActivatePage();
     }
 
     long nTabLabelsBottom = 0, nTabLabelsRight = 0;
