@@ -86,6 +86,7 @@ public:
     void testTableStylerPrSz();
     void testMathLiteral();
     void testFdo48557();
+    void testI120928();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -132,6 +133,7 @@ void Test::run()
         {"table-style-rPr-sz.docx", &Test::testTableStylerPrSz},
         {"math-literal.docx", &Test::testMathLiteral},
         {"fdo48557.odt", &Test::testFdo48557},
+        {"i120928.docx", &Test::testI120928},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -672,6 +674,26 @@ void Test::testFdo48557()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(150), getProperty<sal_Int32>(xFrame, "BottomBorderDistance"));
 }
 
+void Test::testI120928()
+{
+    // w:numPicBullet was ignored, leading to missing graphic bullet in numbering.
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProps;
+    xLevels->getByIndex(0) >>= aProps; // 1st level
+
+    bool bIsGraphic = false;
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+
+        if (rProp.Name == "NumberingType")
+            CPPUNIT_ASSERT_EQUAL(style::NumberingType::BITMAP, rProp.Value.get<sal_Int16>());
+        else if (rProp.Name == "GraphicURL")
+            bIsGraphic = true;
+    }
+    CPPUNIT_ASSERT_EQUAL(true, bIsGraphic);
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 

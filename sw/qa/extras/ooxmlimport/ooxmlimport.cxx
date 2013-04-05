@@ -124,7 +124,6 @@ public:
     void testFdo60922();
     void testFdo59273();
     void testTableWidth();
-    void testI120928();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -200,7 +199,6 @@ void Test::run()
         {"fdo60922.docx", &Test::testFdo60922},
         {"fdo59273.docx", &Test::testFdo59273},
         {"table_width.docx", &Test::testTableWidth},
-        {"i120928.docx", &Test::testI120928},
     };
     header();
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
@@ -1313,27 +1311,6 @@ void Test::testTableWidth()
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     // Relative width wasn't recognized during import.
     CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(xTables->getByIndex(0), "IsWidthRelative")));
-}
-
-void Test::testI120928()
-{
-    // w:numPicBullet was ignored, leading to missing graphic bullet in numbering.
-    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aProps;
-    xLevels->getByIndex(0) >>= aProps; // 1st level
-
-    bool bIsGraphic = false;
-    for (int i = 0; i < aProps.getLength(); ++i)
-    {
-        const beans::PropertyValue& rProp = aProps[i];
-
-        if (rProp.Name == "NumberingType")
-            CPPUNIT_ASSERT_EQUAL(style::NumberingType::BITMAP, rProp.Value.get<sal_Int16>());
-        else if (rProp.Name == "GraphicURL")
-            bIsGraphic = true;
-    }
-    CPPUNIT_ASSERT_EQUAL(true, bIsGraphic);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
