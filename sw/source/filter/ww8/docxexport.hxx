@@ -85,8 +85,6 @@ class DocxExport : public MSWordExportBase
 
     DocxSettingsData settings;
 
-    std::vector<const Graphic*> m_vecBulletPic;
-
 public:
 
     DocxExportFilter& GetFilter() { return *m_pFilter; };
@@ -147,9 +145,6 @@ public:
     rtl::OString OutputChart( com::sun::star::uno::Reference< com::sun::star::frame::XModel >& xModel, sal_Int32 nCount );
 
     void WriteOutliner(const OutlinerParaObject& rOutliner, sal_uInt8 nTyp);
-
-    int CollectGrfsOfBullets();
-    int GetGrfIndex(const SvxBrushItem& rBrush);
 
 protected:
     /// Format-dependant part of the actual export.

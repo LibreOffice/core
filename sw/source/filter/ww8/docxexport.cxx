@@ -528,66 +528,6 @@ void DocxExport::WritePostitFields()
     }
 }
 
-int DocxExport::CollectGrfsOfBullets()
-{
-    m_vecBulletPic.clear();
-
-    if ( pDoc )
-    {
-        int nCountRule = pDoc->GetNumRuleTbl().size();
-        for (int n = 0; n < nCountRule; ++n)
-        {
-            const SwNumRule &rRule = *( pDoc->GetNumRuleTbl().at(n) );
-            sal_uInt16 nLevels = rRule.IsContinusNum() ? 1 : 9;
-            for (sal_uInt16 nLvl = 0; nLvl < nLevels; ++nLvl)
-            {
-                const SwNumFmt &rFmt = rRule.Get(nLvl);
-                if (SVX_NUM_BITMAP != rFmt.GetNumberingType())
-                {
-                    continue;
-                }
-                const Graphic *pGraf = rFmt.GetBrush()? rFmt.GetBrush()->GetGraphic():0;
-                if ( pGraf )
-                {
-                    bool bHas = false;
-                    for (unsigned i = 0; i < m_vecBulletPic.size(); ++i)
-                    {
-                        if (m_vecBulletPic[i]->GetChecksum() == pGraf->GetChecksum())
-                        {
-                            bHas = true;
-                            break;
-                        }
-                    }
-                    if (!bHas)
-                    {
-                        m_vecBulletPic.push_back(pGraf);
-                    }
-                }
-            }
-        }
-    }
-
-    return m_vecBulletPic.size();
-}
-
-int DocxExport::GetGrfIndex(const SvxBrushItem& rBrush)
-{
-    int nIndex = -1;
-    if ( rBrush.GetGraphic() )
-    {
-        for (unsigned i = 0; i < m_vecBulletPic.size(); ++i)
-        {
-            if (m_vecBulletPic[i]->GetChecksum() == rBrush.GetGraphic()->GetChecksum())
-            {
-                nIndex = i;
-                break;
-            }
-        }
-    }
-
-    return nIndex;
-}
-
 void DocxExport::BulletDefinitions()
 {
     for (size_t i = 0; i < m_vecBulletPic.size(); ++i)

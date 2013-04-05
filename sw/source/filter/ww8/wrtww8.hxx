@@ -747,6 +747,8 @@ public:
 
     const SfxPoolItem* HasItem( sal_uInt16 nWhich ) const;
 
+    /// Returns the index of a picture bullet, used in numberings.
+    int GetGrfIndex(const SvxBrushItem& rBrush);
 
 protected:
     /// Format-dependant part of the actual export.
@@ -784,7 +786,6 @@ protected:
     /// Return value indicates if an inherited outline numbering is suppressed.
     virtual bool DisallowInheritingOutlineNumbering(const SwFmt &rFmt) = 0;
 
-protected:
     /// Output SwStartNode
     virtual void OutputStartNode( const SwStartNode& );
 
@@ -822,6 +823,10 @@ protected:
             IMarkVector& rArr );
 
     const NfKeywordTable & GetNfKeywordTable();
+
+    /// Populates m_vecBulletPic with all the bullet graphics used by numberings.
+    int CollectGrfsOfBullets();
+    std::vector<const Graphic*> m_vecBulletPic; ///< Vector to record all the graphics of bullets
 
 public:
     MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam );
@@ -911,8 +916,6 @@ public:
     WW8_WrPlcSepx* pSepx;               ///< Sections/headers/footers
 
     sal_uInt8 bWrtWW8 : 1;                   ///< Write WW95 (false) or WW97 (true) file format
-
-    mutable std::vector<const Graphic*> m_vecBulletPic; ///< Vector to record all the graphics of bullets
 
 protected:
     SwWW8Writer        *m_pWriter;      ///< Pointer to the writer
@@ -1009,9 +1012,7 @@ public:
     virtual void AppendBookmark( const rtl::OUString& rName, bool bSkip = false );
 
     virtual void ExportGrfBullet(const SwTxtNode& rNd);
-    int CollectGrfsOfBullets() const;
     void OutGrfBullets(const sw::Frame &rFrame);
-    int GetGrfIndex(const SvxBrushItem& rBrush);
 
     void MoveFieldMarks(sal_uLong nFrom, sal_uLong nTo);
 

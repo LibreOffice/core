@@ -1406,7 +1406,7 @@ void WW8Export::AppendBookmark( const rtl::OUString& rName, bool bSkip )
 }
 
 // #i120928 collect all the graphics of bullets applied to paragraphs
-int WW8Export::CollectGrfsOfBullets() const
+int MSWordExportBase::CollectGrfsOfBullets()
 {
     m_vecBulletPic.clear();
 
@@ -1505,8 +1505,8 @@ void WW8Export::OutGrfBullets(const sw::Frame & rFrame)
     Set_UInt8( pArr, nAttrMagicIdx++ );
     pChpPlc->AppendFkpEntry( Strm().Tell(), static_cast< short >(pArr - aArr), aArr );
 }
-//Achieve the index position
-int WW8Export::GetGrfIndex(const SvxBrushItem& rBrush)
+
+int MSWordExportBase::GetGrfIndex(const SvxBrushItem& rBrush)
 {
     int nIndex = -1;
     if ( rBrush.GetGraphic() )
