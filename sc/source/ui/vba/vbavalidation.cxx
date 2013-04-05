@@ -334,6 +334,46 @@ ScVbaValidation::getFormula2() throw (uno::RuntimeException)
     return xCond->getFormula2();
 }
 
+sal_Int32 SAL_CALL
+ScVbaValidation::getType() throw (uno::RuntimeException)
+{
+    uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
+    sheet::ValidationType nValType = sheet::ValidationType_ANY;
+    xProps->getPropertyValue( STYPE )  >>= nValType;
+    sal_Int32 nExcelType = excel::XlDVType::xlValidateList; // pick a default
+    if ( xProps.is() )
+    {
+        switch ( nValType )
+        {
+            case sheet::ValidationType_LIST:
+                nExcelType = excel::XlDVType::xlValidateList;
+                break;
+            case sheet::ValidationType_ANY: // not ANY not really a great match for anything I fear:-(
+                nExcelType = excel::XlDVType::xlValidateInputOnly;
+                break;
+            case sheet::ValidationType_CUSTOM:
+                nExcelType = excel::XlDVType::xlValidateCustom;
+                break;
+            case sheet::ValidationType_WHOLE:
+                nExcelType = excel::XlDVType::xlValidateWholeNumber;
+                break;
+            case sheet::ValidationType_DECIMAL:
+                nExcelType = excel::XlDVType::xlValidateDecimal;
+                break;
+            case sheet::ValidationType_DATE:
+                nExcelType = excel::XlDVType::xlValidateDate;
+                break;
+            case sheet::ValidationType_TIME:
+                nExcelType = excel::XlDVType::xlValidateTime;
+                break;
+            case sheet::ValidationType_TEXT_LEN:
+                nExcelType = excel::XlDVType::xlValidateTextLength;
+                break;
+        };
+    }
+    return nExcelType;
+}
+
 rtl::OUString
 ScVbaValidation::getServiceImplName()
 {

@@ -40,7 +40,7 @@ namespace svt
         BindableControlHelper();    // never implemented
 
     public:
-        SVT_DLLPUBLIC static  void ApplyListSourceAndBindableData( const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& xModel, const com::sun::star::uno::Reference< com::sun::star::uno::XInterface >& rObj, const rtl::OUString& rsCtrlSource, const rtl::OUString& rsRowSource );
+        SVT_DLLPUBLIC static  void ApplyListSourceAndBindableData( const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& xModel, const com::sun::star::uno::Reference< com::sun::star::uno::XInterface >& rObj, const rtl::OUString& rsCtrlSource, const rtl::OUString& rsRowSource, sal_uInt16 nRefTab = 0 );
     };
 
 //........................................................................

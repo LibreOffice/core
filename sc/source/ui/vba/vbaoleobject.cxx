@@ -25,7 +25,10 @@
 #include <ooo/vba/XControlProvider.hpp>
 
 #include "vbaoleobject.hxx"
-
+#include <svx/svdobj.hxx>
+#include "drwlayer.hxx"
+#include "excelvbahelper.hxx"
+#include <svtools/bindablecontrolhelper.hxx>
 using namespace com::sun::star;
 using namespace ooo::vba;
 
@@ -38,7 +41,7 @@ ScVbaOLEObject::ScVbaOLEObject( const uno::Reference< XHelperInterface >& xParen
     uno::Reference< container::XChild > xChild( xControlModel, uno::UNO_QUERY_THROW );
     xChild.set( xChild->getParent(), uno::UNO_QUERY_THROW );
     xChild.set( xChild->getParent(), uno::UNO_QUERY_THROW );
-    css::uno::Reference< css::frame::XModel > xModel( xChild->getParent(), uno::UNO_QUERY_THROW );
+    uno::Reference<frame::XModel> xModel( xChild->getParent(), uno::UNO_QUERY_THROW );
     uno::Reference<lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
     uno::Reference< XControlProvider > xControlProvider( xServiceManager->createInstanceWithContext( rtl::OUString( "ooo.vba.ControlProvider" ), mxContext ), uno::UNO_QUERY_THROW );
     m_xControl.set( xControlProvider->createControl(  xControlShape, xModel ) );
@@ -123,6 +126,16 @@ void SAL_CALL
 ScVbaOLEObject::setWidth( double _width ) throw (uno::RuntimeException)
 {
     m_xControl->setWidth( _width );
+}
+
+rtl::OUString SAL_CALL ScVbaOLEObject::getLinkedCell() throw (uno::RuntimeException)
+{
+    return m_xControl->getControlSource();
+}
+
+void SAL_CALL ScVbaOLEObject::setLinkedCell( const ::rtl::OUString& _linkedcell ) throw (uno::RuntimeException)
+{
+    m_xControl->setControlSource( _linkedcell );
 }
 
 rtl::OUString
