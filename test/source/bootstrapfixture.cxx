@@ -65,12 +65,13 @@ test::BootstrapFixture::BootstrapFixture( bool bAssertOnDialog, bool bNeedUCB )
 {
 }
 
-void test::BootstrapFixture::setUp()
+extern "C"
 {
-    test::BootstrapFixtureBase::setUp();
 
+void test_init_impl(bool bAssertOnDialog, bool bNeedUCB,
+        lang::XMultiServiceFactory * pSFactory)
+{
     // force locale (and resource files loaded) to en-US
-
     OUString aLangISO( "en-US" );
     ResMgr::SetDefaultLocale( LanguageTag( aLangISO) );
 
@@ -82,24 +83,45 @@ void test::BootstrapFixture::setUp()
     if (Application::IsHeadlessModeRequested())
         Application::EnableHeadlessMode(true);
 
-    if( m_bAssertOnDialog )
+    if (bAssertOnDialog)
         ErrorHandler::RegisterDisplay( aBasicErrorFunc );
 
     // Make GraphicConverter work, normally done in desktop::Desktop::Main()
-    Application::SetFilterHdl( LINK( this, test::BootstrapFixture, ImplInitFilterHdl ) );
+    Application::SetFilterHdl(
+            STATIC_LINK(0, test::BootstrapFixture, ImplInitFilterHdl));
 
-    if (m_bNeedUCB)
+    if (bNeedUCB)
     {
         // initialise unconfigured UCB:
-        uno::Reference<ucb::XUniversalContentBroker> xUcb(m_xSFactory->createInstance("com.sun.star.ucb.UniversalContentBroker"), uno::UNO_QUERY_THROW);
-        uno::Reference<ucb::XContentProvider> xFileProvider(m_xSFactory->createInstance("com.sun.star.ucb.FileContentProvider"), uno::UNO_QUERY_THROW);
+        uno::Reference<ucb::XUniversalContentBroker> xUcb(pSFactory->createInstance("com.sun.star.ucb.UniversalContentBroker"), uno::UNO_QUERY_THROW);
+        uno::Reference<ucb::XContentProvider> xFileProvider(pSFactory->createInstance("com.sun.star.ucb.FileContentProvider"), uno::UNO_QUERY_THROW);
         xUcb->registerContentProvider(xFileProvider, "file", sal_True);
-        uno::Reference<ucb::XContentProvider> xTdocProvider(m_xSFactory->createInstance("com.sun.star.ucb.TransientDocumentsContentProvider"), uno::UNO_QUERY);
+        uno::Reference<ucb::XContentProvider> xTdocProvider(pSFactory->createInstance("com.sun.star.ucb.TransientDocumentsContentProvider"), uno::UNO_QUERY);
         if (xTdocProvider.is())
         {
             xUcb->registerContentProvider(xTdocProvider, "vnd.sun.star.tdoc", sal_True);
         }
     }
+}
+
+// this is called from pyuno
+SAL_DLLPUBLIC_EXPORT void test_init(lang::XMultiServiceFactory *pFactory)
+{
+    try
+    {
+        ::comphelper::setProcessServiceFactory(pFactory);
+        test_init_impl(false, true, pFactory);
+    }
+    catch (...) { abort(); }
+}
+
+} // extern "C"
+
+void test::BootstrapFixture::setUp()
+{
+    test::BootstrapFixtureBase::setUp();
+
+    test_init_impl(m_bAssertOnDialog, m_bNeedUCB, m_xSFactory.get());
 }
 
 void test::BootstrapFixture::tearDown()
@@ -111,7 +133,8 @@ test::BootstrapFixture::~BootstrapFixture()
 {
 }
 
-IMPL_LINK( test::BootstrapFixture, ImplInitFilterHdl, ConvertData*, pData )
+IMPL_STATIC_LINK_NOINSTANCE(
+        test::BootstrapFixture, ImplInitFilterHdl, ConvertData*, pData)
 {
     return GraphicFilter::GetGraphicFilter().GetFilterCallback().Call( pData );
 }

@@ -161,6 +161,37 @@ class UnoConnection:
             finally:
                 self.connection = None
 
+class UnoNotConnection:
+    def __init__(self, args):
+        self.args = args
+    def getContext(self):
+        return self.xContext
+    def getDoc(self):
+        return self.xDoc
+    def setUp(self):
+        self.xContext = pyuno.getComponentContext()
+        pyuno.experimentalExtraMagic()
+    def openEmptyWriterDoc(self):
+        assert(self.xContext)
+        smgr = self.getContext().ServiceManager
+        desktop = smgr.createInstanceWithContext("com.sun.star.frame.Desktop", self.getContext())
+        props = [("Hidden", True), ("ReadOnly", False)]
+        loadProps = tuple([mkPropertyValue(name, value) for (name, value) in props])
+        self.xDoc = desktop.loadComponentFromURL("private:factory/swriter", "_blank", 0, loadProps)
+        assert(self.xDoc)
+        return self.xDoc
+
+    def checkProperties(self, obj, dict, test):
+        for k,v in dict.items():
+            obj.setPropertyValue(k, v)
+            value = obj.getPropertyValue(k)
+            test.assertEqual(value, v)
+
+    def postTest(self):
+        assert(self.xContext)
+    def tearDown(self):
+        self.xDoc.close(True)
+
 def simpleInvoke(connection, test):
     try:
         connection.preTest()
