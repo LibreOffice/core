@@ -291,6 +291,7 @@ void ScUnoAddInCollection::Initialize()
             {
                 uno::Any aAddInAny = xEnum->nextElement();
 
+                try
                 {
                     uno::Reference<uno::XInterface> xIntFac;
                     aAddInAny >>= xIntFac;
@@ -321,6 +322,8 @@ void ScUnoAddInCollection::Initialize()
                             }
                         }
                     }
+                } catch ( const uno::Exception& ) {
+                    SAL_WARN ( "sc", "Failed to initialize create instance of sheet.AddIn" );
                 }
             }
         }
