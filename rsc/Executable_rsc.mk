@@ -42,7 +42,7 @@ $(eval $(call gb_Executable_add_defs,rsc,\
 ))
 
 $(eval $(call gb_Executable_use_libraries,rsc,\
-	i18nisolang1 \
+	i18nlangtag \
 	comphelper \
 	sal \
 	tl \

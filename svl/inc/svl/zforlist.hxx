@@ -23,7 +23,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/string.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/i18n/NumberFormatCode.hpp>

@@ -67,7 +67,7 @@
 #include <editeng/bulletitem.hxx>
 #include <editeng/unolingu.hxx>
 #include <linguistic/lngprops.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <rtl/strbuf.hxx>
 #include <vcl/help.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>

@@ -48,7 +48,7 @@
 
 #include <sal/macros.h>
 
-#include "i18npool/mslangid.hxx"
+#include "i18nlangtag/mslangid.hxx"
 
 
 #include "parseAFM.hxx"

@@ -21,7 +21,7 @@
 #include <svl/ctloptions.hxx>
 
 #include <svl/languageoptions.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <unotools/configitem.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/uno/Any.h>

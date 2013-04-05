@@ -25,7 +25,7 @@
 #include "tools/resmgr.hxx"
 #include "rtl/ustring.hxx"
 #include "unotools/configmgr.hxx"
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #define APP_NAME "unopkg"
 

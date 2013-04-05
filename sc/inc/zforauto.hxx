@@ -21,7 +21,7 @@
 #define _ZFORAUTO_HXX_
 
 #include <tools/string.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 
 
 class SvStream;

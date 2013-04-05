@@ -45,7 +45,7 @@ $(eval $(call gb_Library_use_libraries,frm,\
     cppuhelper \
     dbtools \
     editeng \
-    i18nisolang1 \
+    i18nlangtag \
     sal \
     salhelper \
     sfx \

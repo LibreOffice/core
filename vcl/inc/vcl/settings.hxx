@@ -27,7 +27,7 @@
 #include "vcl/font.hxx"
 #include "vcl/accel.hxx"
 #include "vcl/wall.hxx"
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <unotools/syslocale.hxx>
 
 class CollatorWrapper;

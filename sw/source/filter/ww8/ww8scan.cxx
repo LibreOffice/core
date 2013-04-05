@@ -23,7 +23,7 @@
 #include <algorithm>
 
 #include <string.h>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <rtl/tencinfo.h>
 #include <sal/macros.h>
 
@@ -40,7 +40,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <editeng/unolingu.hxx>
 #include <vcl/svapp.hxx>    // Application  #i90932#
 

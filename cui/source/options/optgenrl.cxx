@@ -18,7 +18,7 @@
  */
 
 #include <comphelper/string.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <tools/shl.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>

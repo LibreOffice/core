@@ -19,7 +19,7 @@
 #ifndef SW_FLDBAS_HXX
 #define SW_FLDBAS_HXX
 
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <tools/string.hxx>
 #include "swdllapi.h"
 #include <calbck.hxx>

@@ -20,7 +20,7 @@
 
 #include <com/sun/star/embed/ElementModes.hpp>
 
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <rtl/random.h>

@@ -26,46 +26,11 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Library_Library,i18nisolang1))
+$(eval $(call gb_Package_Package,i18nlangtag_inc,$(SRCDIR)/i18nlangtag/inc))
 
-$(eval $(call gb_Library_use_packages,i18nisolang1,\
-	cppu_odk_headers \
-	i18npool_inc \
-))
-
-$(eval $(call gb_Library_set_include,i18nisolang1,\
-	-I$(SRCDIR)/i18npool/inc \
-	$$(INCLUDE) \
-))
-
-$(eval $(call gb_Library_use_sdk_api,i18nisolang1))
-
-$(eval $(call gb_Library_add_defs,i18nisolang1,\
-	-DI18NISOLANG_DLLIMPLEMENTATION \
-))
-
-$(eval $(call gb_Library_use_libraries,i18nisolang1,\
-	sal \
-	$(gb_UWINAPI) \
-))
-
-$(eval $(call gb_Library_add_exception_objects,i18nisolang1,\
-	i18npool/source/isolang/insys \
-	i18npool/source/isolang/isolang \
-	i18npool/source/isolang/mslangid \
-	i18npool/source/languagetag/languagetag \
-))
-
-
-ifeq ($(ENABLE_LIBLANGTAG),YES)
-$(eval $(call gb_Library_add_defs,i18nisolang1,-DENABLE_LIBLANGTAG))
-$(eval $(call gb_Library_use_external,i18nisolang1,liblangtag))
-$(eval $(call gb_Library_use_external,i18nisolang1,libxml2))
-$(eval $(call gb_Library_use_system_win32_libs,i18nisolang1,\
-        $(if $(filter $(COM),MSC), \
-                kernel32 \
-        ) \
-))
-endif
+$(eval $(call gb_Package_add_file,i18nlangtag_inc,inc/i18nlangtag/i18nlangtagdllapi.h,i18nlangtag/i18nlangtagdllapi.h))
+$(eval $(call gb_Package_add_file,i18nlangtag_inc,inc/i18nlangtag/lang.h,i18nlangtag/lang.h))
+$(eval $(call gb_Package_add_file,i18nlangtag_inc,inc/i18nlangtag/languagetag.hxx,i18nlangtag/languagetag.hxx))
+$(eval $(call gb_Package_add_file,i18nlangtag_inc,inc/i18nlangtag/mslangid.hxx,i18nlangtag/mslangid.hxx))
 
 # vim: set noet sw=4 ts=4:

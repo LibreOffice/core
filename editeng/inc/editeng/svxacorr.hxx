@@ -24,7 +24,7 @@
 
 #include <o3tl/sorted_vector.hxx>
 #include <tools/rtti.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <tools/time.hxx>
 #include <tools/date.hxx>
 #include <tools/string.hxx>

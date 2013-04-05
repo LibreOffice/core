@@ -24,7 +24,7 @@
 #include <vcl/wrkwin.hxx>
 #include <svx/svxids.hrc>
 #include <sfx2/sfx.hrc>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <svl/stritem.hxx>
 #include <svl/urihelper.hxx>
 #include <editeng/fhgtitem.hxx>

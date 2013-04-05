@@ -22,7 +22,7 @@
 #include <svl/itemprop.hxx>
 #include <svx/unomid.hxx>
 #include <vcl/svapp.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 

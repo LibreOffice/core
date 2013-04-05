@@ -56,7 +56,7 @@
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include "components.hxx"
 #include "configurationprovider.hxx"

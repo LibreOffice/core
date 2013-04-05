@@ -22,7 +22,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 
-#include "i18npool/mslangid.hxx"
+#include "i18nlangtag/mslangid.hxx"
 
 // =======================================================================
 

@@ -21,7 +21,7 @@
 #include <svl/zforlist.hxx>
 #include <tools/errcode.hxx>
 #include <tools/color.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <basic/sbx.hxx>
 #include "sbxconv.hxx"
 #include "math.h"

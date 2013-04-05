@@ -48,7 +48,7 @@ $(eval $(call gb_Library_use_libraries,rptui,\
     for \
     forui \
     fwe \
-    i18nisolang1 \
+    i18nlangtag \
     rpt \
     sal \
     salhelper \

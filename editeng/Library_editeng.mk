@@ -139,7 +139,7 @@ $(eval $(call gb_Library_use_libraries,editeng,\
     cppu \
     sal \
     salhelper \
-    i18nisolang1 \
+    i18nlangtag \
     i18nutil \
 	$(gb_UWINAPI) \
 ))

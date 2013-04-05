@@ -35,7 +35,7 @@ $(eval $(call gb_Executable_use_sdk_api,lngconvex))
 
 $(eval $(call gb_Executable_use_libraries,lngconvex,\
 	comphelper \
-	i18nisolang1 \
+	i18nlangtag \
 	sal \
 	tl \
 	$(gb_UWINAPI) \

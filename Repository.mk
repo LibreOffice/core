@@ -556,7 +556,7 @@ endif
 
 $(eval $(call gb_Helper_register_libraries,RTLIBS, \
     comphelper \
-    i18nisolang1 \
+    i18nlangtag \
     i18nutil \
     ucbhelper \
 ))

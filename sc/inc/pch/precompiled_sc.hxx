@@ -53,8 +53,8 @@
 #include "formula/grammar.hxx"
 #include "formula/opcode.hxx"
 #include "formula/token.hxx"
-#include "i18npool/lang.h"
-#include "i18npool/mslangid.hxx"
+#include "i18nlangtag/lang.h"
+#include "i18nlangtag/mslangid.hxx"
 #include "rtl/math.hxx"
 #include "rtl/strbuf.hxx"
 #include "rtl/ustrbuf.hxx"
@@ -565,9 +565,9 @@
 #include <formula/formulahelper.hxx>
 #include <formula/token.hxx>
 #include <functional>
-#include <i18npool/lang.h>
-#include <i18npool/languagetag.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/lang.h>
+#include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <iostream>
 #include <limits.h>
 #include <limits>

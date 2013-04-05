@@ -45,7 +45,7 @@ $(eval $(call gb_Library_use_system_darwin_frameworks,fps_aqua,\
 $(eval $(call gb_Library_use_libraries,fps_aqua,\
 	cppu \
 	cppuhelper \
-	i18nisolang1 \
+	i18nlangtag \
 	sal \
 	tl \
 	vcl \

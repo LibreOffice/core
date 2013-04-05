@@ -69,7 +69,7 @@ copy-stuff:
 		  fastsax.uno \
 		  frmlo \
 		  gcc3_uno \
-		  i18nisolang1gcc3 \
+		  i18nlangtaggcc3 \
 		  icudatalo \
 		  icui18nlo \
 		  iculelo \

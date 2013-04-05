@@ -55,8 +55,8 @@
 #include <editeng/outlobj.hxx>
 #include <unotools/saveopt.hxx>
 #include <comphelper/extract.hxx>
-#include <i18npool/mslangid.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/pathoptions.hxx>

@@ -34,7 +34,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
 #include <tools/wintypes.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <rtl/textenc.h>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>

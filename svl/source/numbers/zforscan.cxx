@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <comphelper/string.hxx>
 #include <tools/debug.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/numberformatcodewrapper.hxx>

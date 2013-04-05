@@ -148,7 +148,7 @@ public:
         // case the arbitrary id has to be passed again when the
         // actual link annotation is created via SetLinkPropertyID
         LinkAnnotation,
-        // Language currently sets a LanguageType (see i18npool/lang.h)
+        // Language currently sets a LanguageType (see i18nlangtag/lang.h)
         // which will be internally changed to a corresponding locale
         Language
     };

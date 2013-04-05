@@ -71,7 +71,7 @@ $(eval $(call gb_Library_use_libraries,ucpchelp1,\
 	sal \
 	ucbhelper \
 	utl \
-	i18nisolang1 \
+	i18nlangtag \
 	vcl \
 ))
 

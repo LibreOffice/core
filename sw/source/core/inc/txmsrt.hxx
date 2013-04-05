@@ -19,7 +19,7 @@
 #ifndef SW_TXMSRT_HXX
 #define SW_TXMSRT_HXX
 
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <tox.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>

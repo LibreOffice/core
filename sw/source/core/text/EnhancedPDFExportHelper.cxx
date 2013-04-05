@@ -68,7 +68,7 @@
 #include <porfld.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <itrpaint.hxx>
-#include "i18npool/languagetag.hxx"
+#include "i18nlangtag/languagetag.hxx"
 #include <IMark.hxx>
 #include <SwNodeNum.hxx>
 #include <switerator.hxx>

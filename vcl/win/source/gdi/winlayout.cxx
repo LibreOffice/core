@@ -52,7 +52,7 @@ typedef boost::unordered_map<int,int> IntMap;
 // Graphite headers
 #include <config_graphite.h>
 #if ENABLE_GRAPHITE
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <graphite_layout.hxx>
 #include <graphite_features.hxx>
 #endif

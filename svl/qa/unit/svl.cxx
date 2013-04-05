@@ -48,7 +48,7 @@
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 
 #include "svl/zforlist.hxx"
 #include "svl/zformat.hxx"

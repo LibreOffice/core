@@ -23,7 +23,7 @@
 
 #include <boost/static_assert.hpp>
 
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 
 #include <vcl/svapp.hxx>
 

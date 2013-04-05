@@ -25,7 +25,7 @@
 #include <comphelper/string.hxx>
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <rtl/math.hxx>
 #include <rtl/instance.hxx>
 #include <unotools/charclass.hxx>

@@ -20,7 +20,7 @@
 #define _TOOLS_RESMGR_HXX
 
 #include "tools/toolsdllapi.h"
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <tools/string.hxx>
 #include <tools/resid.hxx>
 

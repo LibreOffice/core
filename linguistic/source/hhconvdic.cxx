@@ -18,7 +18,7 @@
  */
 
 #include <unicode/uscript.h>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 #include <osl/mutex.hxx>

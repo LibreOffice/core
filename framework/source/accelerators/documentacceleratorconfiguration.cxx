@@ -44,7 +44,7 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 
 namespace framework

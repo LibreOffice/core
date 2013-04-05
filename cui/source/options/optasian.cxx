@@ -24,7 +24,7 @@
 #include <optasian.hrc>
 #include <dialmgr.hxx>
 #include <cuires.hrc>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <tools/shl.hxx>
 #include <svl/asiancfg.hxx>
 #include <com/sun/star/lang/Locale.hpp>

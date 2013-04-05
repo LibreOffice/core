@@ -20,7 +20,7 @@
 #define _SVX_LANGITEM_HXX
 
 #include <svl/eitem.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <editeng/editengdllapi.h>
 
 class SvXMLUnitConverter;

@@ -21,7 +21,7 @@
 #define SC_CONVUNO_HXX
 
 #include <algorithm>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/lang/Locale.hpp>

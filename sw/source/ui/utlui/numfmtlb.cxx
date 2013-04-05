@@ -22,7 +22,7 @@
 #include <comphelper/processfactory.hxx>
 #include <editeng/unolingu.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <svl/zformat.hxx>
 #include <svl/eitem.hxx>
 #include <svx/svxids.hrc>

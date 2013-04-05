@@ -44,7 +44,7 @@
 #include <frmatr.hxx>            //GetLRSpace...
 #include <ndtxt.hxx>             //SwTxtNode
 #include <breakit.hxx>           //pBreakIt
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 
 #define ASSIGN_CONST_ASC(s) AssignAscii(s)
 

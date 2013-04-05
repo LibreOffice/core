@@ -23,7 +23,7 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <svtools/parhtml.hxx>
 #include <svl/macitem.hxx>
 

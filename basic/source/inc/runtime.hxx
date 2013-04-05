@@ -28,7 +28,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/file.hxx>
 #include <rtl/math.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 
 #include <vector>
 #include <com/sun/star/lang/XComponent.hpp>

@@ -51,7 +51,7 @@
 #include <comphelper/string.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 
 #include <rtl/math.hxx>
 #include <svtools/calendar.hxx>

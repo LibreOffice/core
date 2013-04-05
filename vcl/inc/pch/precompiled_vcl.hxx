@@ -84,8 +84,8 @@
 #include "cppuhelper/compbase1.hxx"
 #include "cppuhelper/compbase2.hxx"
 #include "cppuhelper/implbase1.hxx"
-#include "i18npool/languagetag.hxx"
-#include "i18npool/mslangid.hxx"
+#include "i18nlangtag/languagetag.hxx"
+#include "i18nlangtag/mslangid.hxx"
 #include "i18nutil/unicode.hxx"
 #include "osl/diagnose.h"
 #include "osl/file.h"
@@ -285,9 +285,9 @@
 #include <ctype.h>
 #include <fcntl.h>
 #include <functional>
-#include <i18npool/lang.h>
-#include <i18npool/languagetag.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/lang.h>
+#include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <i18nutil/unicode.hxx>
 #include <iostream>
 #include <jerror.h>

@@ -32,7 +32,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/confignode.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <rtl/ustrbuf.hxx>
 
 

@@ -20,7 +20,7 @@
 #ifndef _SWSCANNER_HXX
 #define _SWSCANNER_HXX
 
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <modeltoviewhelper.hxx>
 
 class SwTxtNode;

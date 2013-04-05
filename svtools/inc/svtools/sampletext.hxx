@@ -31,7 +31,7 @@
 #include "svtools/svtdllapi.h"
 #include <rtl/ustring.hxx>
 #include <unicode/uscript.h>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <vcl/fontcapabilities.hxx>
 

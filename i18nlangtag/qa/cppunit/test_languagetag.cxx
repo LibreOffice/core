@@ -14,8 +14,8 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#include <i18npool/mslangid.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>

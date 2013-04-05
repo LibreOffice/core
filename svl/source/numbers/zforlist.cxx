@@ -20,7 +20,7 @@
 #include <comphelper/string.hxx>
 #include <tools/debug.hxx>
 #include <unotools/charclass.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/numberformatcodewrapper.hxx>
 #include <unotools/calendarwrapper.hxx>

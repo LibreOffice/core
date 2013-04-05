@@ -41,8 +41,8 @@
 #include <sal/log.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/bootstrap.hxx>
-#include <i18npool/languagetag.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <tools/simplerm.hxx>
 
 #include <functional>

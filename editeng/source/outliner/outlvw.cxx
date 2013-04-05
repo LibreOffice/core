@@ -28,7 +28,7 @@
 #include <editeng/fhgtitem.hxx>
 
 #include <svl/style.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #define _OUTLINER_CXX
 #include <editeng/outliner.hxx>

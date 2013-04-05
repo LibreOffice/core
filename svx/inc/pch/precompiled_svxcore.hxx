@@ -429,8 +429,8 @@
 #include <editeng/wrlmitem.hxx>
 #include <float.h>
 #include <framework/interaction.hxx>
-#include <i18npool/lang.h>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/lang.h>
+#include <i18nlangtag/mslangid.hxx>
 #include <limits>
 #include <linguistic/misc.hxx>
 #include <map>

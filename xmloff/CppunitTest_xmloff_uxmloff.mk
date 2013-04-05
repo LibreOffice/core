@@ -39,7 +39,7 @@ $(eval $(call gb_CppunitTest_use_libraries,xmloff_uxmloff, \
     comphelper \
     cppu \
     cppuhelper \
-    i18nisolang1 \
+    i18nlangtag \
     sal \
     salhelper \
 	sax \

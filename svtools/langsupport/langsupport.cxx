@@ -31,7 +31,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <sal/main.h>
 #include <svtools/langtab.hxx>
 #include <tools/extendapplicationenvironment.hxx>

@@ -20,7 +20,7 @@
 #ifndef SVX_SPELL_PORTIONS_HXX
 #define SVX_SPELL_PORTIONS_HXX
 
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/linguistic2/SingleProofreadingError.hpp>

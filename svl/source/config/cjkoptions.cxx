@@ -21,7 +21,7 @@
 #include <svl/cjkoptions.hxx>
 
 #include <svl/languageoptions.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <unotools/configitem.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/uno/Any.h>

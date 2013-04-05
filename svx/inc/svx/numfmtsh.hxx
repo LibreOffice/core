@@ -20,7 +20,7 @@
 #define _SVX_NUMFMTSH_HXX
 
 #include <tools/string.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 
 #include "svx/svxdllapi.h"
 

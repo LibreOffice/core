@@ -22,7 +22,7 @@
 
 #include <rtl/math.hxx>
 #include <basegfx/numeric/ftools.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <vcl/metric.hxx>
 
 #include <com/sun/star/rendering/PanoseProportion.hpp>

@@ -44,7 +44,7 @@ $(eval $(call gb_CppunitTest_use_libraries,connectivity_commontools, \
     comphelper \
     cppu \
     cppuhelper \
-    i18nisolang1 \
+    i18nlangtag \
     $(if $(filter TRUE,$(SOLAR_JAVA)), \
         jvmaccess) \
     sal \

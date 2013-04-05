@@ -29,7 +29,7 @@
 
 #include "sal/config.h"
 
-#include "i18npool/lang.h"
+#include "i18nlangtag/lang.h"
 #include "svl/ctloptions.hxx"
 #include "vcl/svapp.hxx"
 

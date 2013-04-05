@@ -24,7 +24,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/font.hxx>
 #include <vcl/metric.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <vcl/svapp.hxx>
 

@@ -28,7 +28,7 @@ $(eval $(call gb_Library_use_libraries,eps,\
 	vcl \
 	utl \
 	tl \
-	i18nisolang1 \
+	i18nlangtag \
 	cppu \
 	sal \
 	$(gb_UWINAPI) \

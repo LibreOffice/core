@@ -37,7 +37,7 @@
 #include "sal/types.h"
 #include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/document/XDocumentLanguages.hpp>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/frame/XModule.hpp>
 #include <com/sun/star/frame/XModel.hpp>

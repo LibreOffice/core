@@ -64,7 +64,7 @@ $(eval $(call gb_Library_use_libraries,dbu,\
     fwe \
     sal \
     salhelper \
-	i18nisolang1 \
+	i18nlangtag \
     sfx \
     sot \
     svl \

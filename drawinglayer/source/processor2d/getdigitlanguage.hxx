@@ -32,7 +32,7 @@
 
 #include "sal/config.h"
 
-#include "i18npool/lang.h"
+#include "i18nlangtag/lang.h"
 
 namespace drawinglayer { namespace detail {
 

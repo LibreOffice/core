@@ -22,7 +22,7 @@
 
 #include "tools/string.hxx"
 #include "tools/resid.hxx"
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include "dp_misc.h"
 #include <memory>
 #include "dp_misc_api.hxx"

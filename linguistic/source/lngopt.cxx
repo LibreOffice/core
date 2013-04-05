@@ -34,7 +34,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 
 using namespace utl;
 using namespace osl;

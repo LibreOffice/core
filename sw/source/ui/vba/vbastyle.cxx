@@ -21,7 +21,7 @@
 #include <ooo/vba/word/WdStyleType.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include "vbafont.hxx"
 #include "vbapalette.hxx"
 #include "vbaparagraphformat.hxx"

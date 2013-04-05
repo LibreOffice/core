@@ -21,7 +21,7 @@
 //
 
 // Platform
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <sallayout.hxx>
 // Module
 #include "gcach_ftyp.hxx"

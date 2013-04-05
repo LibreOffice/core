@@ -35,7 +35,7 @@ $(eval $(call gb_CppunitTest_use_libraries,svl_qa_cppunit, \
 	comphelper \
 	cppu \
 	cppuhelper \
-	i18nisolang1 \
+	i18nlangtag \
 	sal \
 	sot \
 	svl \

@@ -25,7 +25,7 @@
 
 #include <vcl/unohelp.hxx>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 
 using namespace ::com::sun::star;
 

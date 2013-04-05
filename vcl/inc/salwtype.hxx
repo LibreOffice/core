@@ -20,7 +20,7 @@
 #ifndef _SV_SALWTYPE_HXX
 #define _SV_SALWTYPE_HXX
 
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <tools/string.hxx>
 #include <tools/solar.h>
 

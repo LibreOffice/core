@@ -25,7 +25,7 @@
 #include <basegfx/numeric/ftools.hxx>
 
 #include <vcl/metric.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include "cairo_canvasfont.hxx"
 #include "cairo_textlayout.hxx"

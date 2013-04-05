@@ -43,7 +43,7 @@ $(eval $(call gb_Library_use_libraries,deploymentgui,\
     cppu \
     cppuhelper \
     deploymentmisc \
-    i18nisolang1 \
+    i18nlangtag \
     sal \
     salhelper \
     sfx \

@@ -86,7 +86,7 @@ $(eval $(call gb_Library_use_libraries,sd,\
     cppuhelper \
     drawinglayer \
     editeng \
-    i18nisolang1 \
+    i18nlangtag \
     msfilter \
     oox \
     sal \

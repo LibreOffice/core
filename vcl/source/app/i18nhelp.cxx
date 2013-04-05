@@ -22,7 +22,7 @@
 #include "unotools/localedatawrapper.hxx"
 #include "unotools/transliterationwrapper.hxx"
 
-#include "i18npool/languagetag.hxx"
+#include "i18nlangtag/languagetag.hxx"
 
 #include "rtl/ustrbuf.hxx"
 

@@ -27,7 +27,7 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <xmloff/xmlstyle.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <vector>
 #include <unotools/localedatawrapper.hxx>
 

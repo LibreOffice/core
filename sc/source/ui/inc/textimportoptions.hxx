@@ -23,7 +23,7 @@
 #include "vcl/dialog.hxx"
 #include "vcl/button.hxx"
 #include "vcl/fixed.hxx"
-#include "i18npool/lang.h"
+#include "i18nlangtag/lang.h"
 #include "svx/langbox.hxx"
 
 class ScTextImportOptionsDlg : public ModalDialog

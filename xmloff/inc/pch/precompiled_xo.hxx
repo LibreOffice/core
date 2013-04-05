@@ -498,8 +498,8 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <functional>
-#include <i18npool/languagetag.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <iterator>
 #include <limits.h>
 #include <list>

@@ -46,9 +46,9 @@ svl/qa/unit/test_URIHelper \
 $(eval $(call gb_CppunitTest_use_libraries,svl_urihelper, \
     cppu \
     cppuhelper \
-    i18nisolang1 \
+    i18nlangtag \
     sal \
-	i18nisolang1 \
+	i18nlangtag \
     svl \
     tl \
     utl \

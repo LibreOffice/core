@@ -42,7 +42,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_chart_regression_test, \
     fileacc \
     for \
     forui \
-    i18nisolang1 \
+    i18nlangtag \
     msfilter \
     oox \
     sal \

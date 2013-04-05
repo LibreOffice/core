@@ -34,7 +34,7 @@
 #include <unotools/bootstrap.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/uri.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>

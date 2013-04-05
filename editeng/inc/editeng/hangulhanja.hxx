@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include "editeng/editengdllapi.h"
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 
 //.............................................................................
 namespace editeng

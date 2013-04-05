@@ -23,7 +23,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/linguistic2/LinguServiceManager.hpp>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>

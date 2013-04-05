@@ -19,7 +19,7 @@
 #ifndef _SVX_FLDITEM_HXX
 #define _SVX_FLDITEM_HXX
 
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <tools/time.hxx>
 #include <tools/date.hxx>
 #include <svl/poolitem.hxx>

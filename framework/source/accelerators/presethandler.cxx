@@ -38,7 +38,7 @@
 #include <vcl/svapp.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 
 #define SUBSTORAGE_GLOBAL       DECLARE_ASCII("global" )

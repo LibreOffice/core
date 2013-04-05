@@ -28,7 +28,7 @@
 
 #include <rsc/rscsfx.hxx>
 #include <editeng/editdata.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include "editeng/editengdllapi.h"
 
 #include <tools/rtti.hxx>   // due to typedef TypeId

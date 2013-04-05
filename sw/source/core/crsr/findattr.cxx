@@ -20,7 +20,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/itemiter.hxx>

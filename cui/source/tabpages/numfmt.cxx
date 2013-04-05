@@ -23,7 +23,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <svx/dialogs.hrc>
 #include <svtools/colorcfg.hxx>
 

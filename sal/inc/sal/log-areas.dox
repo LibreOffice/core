@@ -128,10 +128,13 @@ certain functionality.
 @li @c fwk.desktop
 @li @c fwk.session
 
+@section i18nlangtag
+
+@li @c i18nlangtag - language tags
+
 @section i18npool
 
 @li @c i18npool - general i18npool
-@li @c i18npool.langtag - language tags
 
 @section i18n
 

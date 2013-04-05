@@ -18,7 +18,7 @@
  */
 
 #include <comphelper/processfactory.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/objsh.hxx>
 #include <unotools/charclass.hxx>

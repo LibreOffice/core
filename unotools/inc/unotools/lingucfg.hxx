@@ -31,7 +31,7 @@
 #include <unotools/configitem.hxx>
 #include <osl/mutex.hxx>
 #include <unotools/options.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 
 #include <vector>
 

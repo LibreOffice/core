@@ -33,7 +33,7 @@
 #include <unotools/charclass.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/wldcrd.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
 

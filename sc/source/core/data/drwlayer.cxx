@@ -42,7 +42,7 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdundo.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <editeng/unolingu.hxx>
 #include <svx/drawitem.hxx>
 #include <editeng/fhgtitem.hxx>

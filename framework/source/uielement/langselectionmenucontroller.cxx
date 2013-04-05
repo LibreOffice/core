@@ -40,7 +40,7 @@
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <svl/languageoptions.hxx>
 #include <svtools/langtab.hxx>
 #include <classes/fwlresid.hxx>

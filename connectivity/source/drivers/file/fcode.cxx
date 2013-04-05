@@ -20,7 +20,7 @@
 #include "file/fcode.hxx"
 #include <osl/diagnose.h>
 #include "connectivity/sqlparse.hxx"
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <tools/debug.hxx>
 #include <tools/string.hxx>
 #include "TConnection.hxx"

@@ -44,7 +44,7 @@ $(eval $(call gb_Library_use_libraries,sb,\
 	cppuhelper \
 	sal \
 	salhelper \
-	i18nisolang1 \
+	i18nlangtag \
 	sot \
 	svl \
 	svt \

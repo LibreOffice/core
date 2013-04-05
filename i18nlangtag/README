@@ -1,0 +1,3 @@
+Code for language tags, LanguageTag wrapper for liblangtag and converter between BCP47 language tags, Locale(Language,Country,Variant) and MS-LangIDs.
+
+Basic functionality used by almost every other module including comphelper, so even don't use that string helpers in this code to not create circular dependencies. Stick with sal!

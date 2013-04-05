@@ -44,7 +44,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_uwriter, \
     cppuhelper \
     drawinglayer \
     editeng \
-    i18nisolang1 \
+    i18nlangtag \
     i18nutil \
     lng \
     oox \

@@ -34,7 +34,7 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <sfx2/request.hxx>
 
 #include "fileobj.hxx"

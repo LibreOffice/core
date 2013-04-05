@@ -51,7 +51,7 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <iterator>
 #include <osl/diagnose.h>
 #include <osl/nlsupport.h>

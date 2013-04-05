@@ -19,7 +19,7 @@
 
 
 #include <hintids.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <editeng/paperinf.hxx>
 #include <editeng/wghtitem.hxx>

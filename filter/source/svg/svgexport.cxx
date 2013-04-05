@@ -38,7 +38,7 @@
 #include <editeng/flditem.hxx>
 #include <editeng/numitem.hxx>
 #include <comphelper/processfactory.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <svl/zforlist.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <xmloff/animationexport.hxx>

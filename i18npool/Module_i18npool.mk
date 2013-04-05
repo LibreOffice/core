@@ -37,7 +37,6 @@ $(eval $(call gb_Module_add_targets,i18npool,\
 	Library_collator_data \
 	Library_dict_ja \
 	Library_dict_zh \
-	Library_i18nisolang1 \
 	Library_i18npool \
 	Library_i18nsearch \
 	Library_index_data \
@@ -46,7 +45,6 @@ $(eval $(call gb_Module_add_targets,i18npool,\
 	Library_localedata_euro \
 	Library_localedata_others \
 	Library_textconv_dict \
-	Package_inc \
 ))
 
 $(eval $(call gb_Module_add_targets_for_build,i18npool,\
@@ -60,7 +58,6 @@ $(eval $(call gb_Module_add_targets_for_build,i18npool,\
 $(eval $(call gb_Module_add_check_targets,i18npool,\
 	CppunitTest_i18npool_test_breakiterator \
 	CppunitTest_i18npool_test_characterclassification \
-	CppunitTest_i18npool_test_languagetag \
 	CppunitTest_i18npool_test_ordinalsuffix \
 	CppunitTest_i18npool_test_textsearch \
 ))

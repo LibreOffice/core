@@ -40,7 +40,7 @@
 #include <svx/langbox.hxx>
 #include <svtools/langtab.hxx>
 #include <unotools/lingucfg.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <osl/file.hxx>

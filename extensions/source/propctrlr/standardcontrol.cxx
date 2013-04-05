@@ -41,7 +41,7 @@
 #include <svtools/colorcfg.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/datetime.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <vcl/button.hxx>
 #include <vcl/svapp.hxx>
 //==================================================================

@@ -21,7 +21,7 @@
 #include <hintids.hxx>
 
 #include <svx/dialogs.hrc>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <sot/storinfo.hxx>
 #include <sot/storage.hxx>
 #include <svl/zforlist.hxx>

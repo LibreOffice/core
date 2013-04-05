@@ -44,7 +44,7 @@ $(eval $(call gb_Library_use_libraries,sm,\
         cppuhelper \
         editeng \
         i18nutil \
-		i18nisolang1 \
+		i18nlangtag \
         msfilter \
         oox \
         sal \

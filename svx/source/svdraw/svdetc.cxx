@@ -49,7 +49,7 @@
 #include <svl/itempool.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <com/sun/star/lang/Locale.hpp>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <unotools/syslocale.hxx>
 #include <svx/xflbckit.hxx>
 #include <svx/extrusionbar.hxx>

@@ -57,7 +57,7 @@ $(eval $(call gb_Library_use_libraries,sdui,\
     cppu \
     cppuhelper \
     editeng \
-    i18nisolang1 \
+    i18nlangtag \
     fwk \
     fwl \
     fwe \

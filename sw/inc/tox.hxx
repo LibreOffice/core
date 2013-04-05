@@ -21,7 +21,7 @@
 
 #include <cppuhelper/weakref.hxx>
 
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <svl/poolitem.hxx>
 #include <tools/string.hxx>
 #include <osl/diagnose.h>

@@ -32,7 +32,7 @@
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 
 #include <rtl/string.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 
 #include <set>
 #include <map>

@@ -39,7 +39,7 @@ $(eval $(call gb_Library_use_sdk_api,spell))
 $(eval $(call gb_Library_use_libraries,spell,\
 	cppu \
 	cppuhelper \
-	i18nisolang1 \
+	i18nlangtag \
 	lng \
 	sal \
 	tl \

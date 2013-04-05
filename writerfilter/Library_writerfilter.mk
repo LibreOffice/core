@@ -71,7 +71,7 @@ $(eval $(call gb_Library_use_libraries,writerfilter,\
     cppu \
     cppuhelper \
     editeng \
-    i18nisolang1 \
+    i18nlangtag \
     i18nutil \
     msfilter \
     oox \

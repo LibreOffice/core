@@ -20,7 +20,7 @@
 #ifndef _SBXBASE_HXX
 #define _SBXBASE_HXX
 
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <basic/sbxdef.hxx>
 #include "basicdllapi.h"
 #include <boost/ptr_container/ptr_vector.hpp>

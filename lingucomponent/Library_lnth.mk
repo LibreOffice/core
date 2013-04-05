@@ -40,7 +40,7 @@ $(eval $(call gb_Library_use_libraries,lnth,\
 	comphelper \
 	cppu \
 	cppuhelper \
-	i18nisolang1 \
+	i18nlangtag \
 	lng \
 	sal \
 	tl \

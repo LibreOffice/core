@@ -19,7 +19,7 @@
 
 #include <config_features.h>
 
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 
 #include "tools/time.hxx"
 #include "tools/debug.hxx"

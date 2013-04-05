@@ -66,7 +66,7 @@
 #include <editeng/pgrditem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/charhiddenitem.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <fmtpdsc.hxx>
 #include <node.hxx>
 #include <ndtxt.hxx> // SwTxtNode, siehe unten: JoinNode()

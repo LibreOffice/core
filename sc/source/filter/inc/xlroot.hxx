@@ -22,7 +22,7 @@
 
 #include <com/sun/star/beans/NamedValue.hpp>
 
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <sot/storage.hxx>
 #include "xlconst.hxx"
 #include "xltools.hxx"

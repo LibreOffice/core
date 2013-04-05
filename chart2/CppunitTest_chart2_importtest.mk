@@ -47,7 +47,7 @@ $(eval $(call gb_CppunitTest_use_libraries,chart2_import, \
     fileacc \
     for \
     forui \
-    i18nisolang1 \
+    i18nlangtag \
     msfilter \
     oox \
     sal \

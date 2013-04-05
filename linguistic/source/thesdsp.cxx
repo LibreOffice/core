@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <tools/debug.hxx>
 #include <svl/lngmisc.hxx>
 

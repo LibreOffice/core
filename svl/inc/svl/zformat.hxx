@@ -20,7 +20,7 @@
 #define _ZFORMAT_HXX
 
 #include "svl/svldllapi.h"
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/nfversi.hxx>
 #include <svl/nfkeytab.hxx>
@@ -566,7 +566,7 @@ private:
      * @param nPos position (see above).
      *
      * @return struct containing numeral shape, calendar type, and LCID that
-     *         specifies language type. See i18npool/lang.h for a complete
+     *         specifies language type. See i18nlangtag/lang.h for a complete
      *         list of language types. These numbers also correspond with the
      *         numbers used by Microsoft Office.
      */

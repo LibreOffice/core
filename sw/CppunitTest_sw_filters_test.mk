@@ -49,7 +49,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_filters_test, \
     unotest \
     utl \
     vcl \
-    i18nisolang1 \
+    i18nlangtag \
     comphelper \
     cppu \
     cppuhelper \

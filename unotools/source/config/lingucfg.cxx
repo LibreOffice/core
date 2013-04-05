@@ -28,8 +28,8 @@
 #include <rtl/uri.hxx>
 #include <rtl/instance.hxx>
 #include <osl/mutex.hxx>
-#include <i18npool/mslangid.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <tools/debug.hxx>
 #include <tools/string.hxx>
 #include <unotools/lingucfg.hxx>

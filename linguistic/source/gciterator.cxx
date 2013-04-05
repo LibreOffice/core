@@ -52,7 +52,7 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/factory.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/extract.hxx>
 

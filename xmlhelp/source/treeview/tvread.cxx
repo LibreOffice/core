@@ -34,7 +34,7 @@
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <comphelper/string.hxx>
 
 namespace treeview {

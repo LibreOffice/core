@@ -22,7 +22,7 @@
 #define _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
 #include <tools/string.hxx>
 #include <tools/solar.h>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <com/sun/star/i18n/XExtendedTransliteration.hpp>
 
 namespace com { namespace sun { namespace star {

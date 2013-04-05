@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_I18NPOOL_LANG_H
-#define INCLUDED_I18NPOOL_LANG_H
+#ifndef INCLUDED_I18NLANGTAG_LANG_H
+#define INCLUDED_I18NLANGTAG_LANG_H
 
 /**
    These are MS LANGIDs, the lower 10 bits (mask 0x03ff, values below 0x0400
@@ -395,7 +395,7 @@ typedef unsigned short LanguageType;
  *
  * Obsolete OOo user defines now have other values assigned by MS, and
  * different name. Mapping an obsolete value to ISO code should work provided
- * that such a mapping exists in i18npool/source/isolang/isolang.cxx, but
+ * that such a mapping exists in i18nlangtag/source/isolang/isolang.cxx, but
  * mapping ISO back to LANGID will return the new value.
  */
 #define LANGUAGE_OBSOLETE_USER_LATIN        0x0610
@@ -563,6 +563,6 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_UNDETERMINED               0xFFF0  /* undetermined language, primary 0x3f0, sub 0x3f */
 #define LANGUAGE_USER_SYSTEM_CONFIG         0xFFFE  /* not a locale, to be used only in configuration context to obtain system default, primary 0x3fe, sub 0x3f */
 
-#endif /* INCLUDED_I18NPOOL_LANG_H */
+#endif /* INCLUDED_I18NLANGTAG_LANG_H */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

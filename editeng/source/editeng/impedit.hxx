@@ -48,7 +48,7 @@
 #include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <rtl/ref.hxx>
 
 #include <boost/noncopyable.hpp>

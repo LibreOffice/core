@@ -34,7 +34,7 @@ $(eval $(call gb_Library_use_sdk_api,migrationoo2))
 $(eval $(call gb_Library_use_libraries,migrationoo2,\
     cppu \
     cppuhelper \
-    i18nisolang1 \
+    i18nlangtag \
     $(if $(filter TRUE,$(SOLAR_JAVA)), \
         jvmfwk) \
     sal \

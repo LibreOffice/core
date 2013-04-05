@@ -41,7 +41,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <com/sun/star/lang/XLocalizable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 

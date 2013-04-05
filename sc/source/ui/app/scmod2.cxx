@@ -19,8 +19,8 @@
 
 #include <editeng/unolingu.hxx>
 #include <unotools/lingucfg.hxx>
-#include <i18npool/mslangid.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/lang/Locale.hpp>

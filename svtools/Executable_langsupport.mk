@@ -44,7 +44,7 @@ $(eval $(call gb_Executable_use_libraries,langsupport,\
     comphelper \
 	cppu \
 	cppuhelper \
-	i18nisolang1 \
+	i18nlangtag \
     sal \
     svt \
     tl \

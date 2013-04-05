@@ -19,7 +19,7 @@
 
 
 #include <fontcfg.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <vcl/outdev.hxx>
 #include <unotools/lingucfg.hxx>
 #include <com/sun/star/uno/Any.hxx>

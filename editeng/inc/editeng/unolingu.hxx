@@ -20,7 +20,7 @@
 #ifndef _UNO_LINGU_HXX
 #define _UNO_LINGU_HXX
 
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <tools/string.hxx>
 #include <com/sun/star/util/Language.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceManager2.hpp>

@@ -50,7 +50,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_filters_test, \
     drawinglayer \
     editeng \
     fileacc \
-    i18nisolang1 \
+    i18nlangtag \
     i18nutil \
     msfilter \
     oox \

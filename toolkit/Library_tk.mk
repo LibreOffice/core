@@ -51,7 +51,7 @@ $(eval $(call gb_Library_use_libraries,tk,\
     cppu \
     cppuhelper \
     sal \
-	i18nisolang1 \
+	i18nlangtag \
     tl \
     utl \
     vcl \

@@ -21,7 +21,7 @@
 
 #define _SVX_NUMFMTSH_CXX
 #include <tools/debug.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>

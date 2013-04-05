@@ -39,7 +39,7 @@ $(eval $(call gb_Library_use_libraries,qstart_gtk,\
     cppu \
     cppuhelper \
     fwe \
-    i18nisolang1 \
+    i18nlangtag \
     sal \
     sax \
     sb \

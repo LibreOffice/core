@@ -20,8 +20,8 @@
 #include <string.h>
 #include <stdio.h>                      // sscanf
 #include <hintids.hxx>
-#include <i18npool/lang.h>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/lang.h>
+#include <i18nlangtag/languagetag.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/parhtml.hxx>
 #include <sot/storage.hxx>

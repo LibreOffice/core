@@ -23,7 +23,7 @@
 #include <com/sun/star/accessibility/TextSegment.hpp>
 
 #include <tools/solar.h>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <tools/gen.hxx>
 #include <vcl/mapmod.hxx>
 #include <tools/string.hxx>

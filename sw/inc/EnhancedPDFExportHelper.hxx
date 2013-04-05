@@ -21,7 +21,7 @@
 #define _ENHANCEDPDFEXPORTHELPER_HXX
 
 #include <vcl/pdfextoutdevdata.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <swrect.hxx>
 #include <swtypes.hxx>
 

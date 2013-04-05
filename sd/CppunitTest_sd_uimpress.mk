@@ -49,7 +49,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_uimpress,\
     cppuhelper \
     drawinglayer \
     editeng \
-    i18nisolang1 \
+    i18nlangtag \
     msfilter \
     sal \
     sax \

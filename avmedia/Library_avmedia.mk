@@ -52,7 +52,7 @@ $(eval $(call gb_Library_use_libraries,avmedia,\
 	cppu \
 	cppuhelper \
 	sal \
-	i18nisolang1 \
+	i18nlangtag \
 	sfx \
 	svl \
 	svt \

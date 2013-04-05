@@ -23,7 +23,7 @@
 #include <string.h>
 
 #include <tools/rc.h>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <sal/macros.h>

@@ -32,7 +32,7 @@ $(eval $(call gb_StaticLibrary_use_packages,pdfimport_s,\
     comphelper_inc \
     cppu_odk_headers \
     cppuhelper_odk_headers \
-	i18npool_inc \
+	i18nlangtag_inc \
     o3tl_inc \
 	rsc_inc \
 	sal_generated \

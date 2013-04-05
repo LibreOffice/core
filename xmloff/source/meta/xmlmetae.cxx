@@ -18,7 +18,7 @@
  */
 
 #include <tools/debug.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <rtl/ustrbuf.hxx>
 
 #include <xmloff/xmlmetae.hxx>

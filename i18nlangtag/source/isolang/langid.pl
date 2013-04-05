@@ -102,8 +102,8 @@ sub grepFile($$$$@)
     my $file;
     # Try module under current working directory first to catch local
     # modifications. A Not yet delivered lang.h is a special case.
-    if ("$path/$module/$name" eq "$SOLENVINC/i18npool/lang.h") {
-        $file = "./$module/inc/i18npool/lang.h"; }
+    if ("$path/$module/$name" eq "$SOLENVINC/i18nlangtag/lang.h") {
+        $file = "./$module/inc/i18nlangtag/lang.h"; }
     else {
         $file = "./$module/$name"; }
     if (!($found = open( IN, $file)))
@@ -232,7 +232,7 @@ sub main()
         # #define LANGUAGE_AFRIKAANS                  0x0436
         @resultlist = grepFile(
             $modifier . '^\s*#\s*define\s+[A-Z_]*' . $grepdef,
-            $SOLENVINC, "i18npool", "lang.h", ());
+            $SOLENVINC, "i18nlangtag", "lang.h", ());
     }
     else
     {
@@ -241,7 +241,7 @@ sub main()
         my $buf = sprintf( "0x%04X", $lcid);
         @resultlist = grepFile(
             '^\s*#\s*define\s+\w+\s+' . $buf,
-            $SOLENVINC, "i18npool", "lang.h", ());
+            $SOLENVINC, "i18nlangtag", "lang.h", ());
     }
     for $result (@resultlist)
     {
@@ -270,7 +270,7 @@ sub main()
         #     { LANGUAGE_AFRIKAANS,                   "af", "ZA" },
         @resultlist = grepFile(
             '^\s*\{\s*\w+\s*,\s*\"' . $lang . '\"\s*,\s*\"'  . $coun . '\"\s*\}\s*,',
-            "$SRC_ROOT", "i18npool", "source/isolang/isolang.cxx", ());
+            "$SRC_ROOT", "i18nlangtag", "source/isolang/isolang.cxx", ());
         for $result (@resultlist)
         {
             if ($result =~ /^\s*\{\s*(\w+)\s*,\s*\"\w+\"\s*,\s*\"(\w+)?\"\s*\}\s*,/)
@@ -294,7 +294,7 @@ sub main()
         # #define LANGUAGE_AFRIKAANS                  0x0436
         @resultlist = grepFile(
             $modifier . '^\s*#\s*define\s+[A-Z_]*' . $grepdef,
-            $SOLENVINC, "i18npool", "lang.h", ());
+            $SOLENVINC, "i18nlangtag", "lang.h", ());
         my @lcidlist;
         for $result (@resultlist)
         {
@@ -308,7 +308,7 @@ sub main()
         #     { LANGUAGE_AFRIKAANS,                   "af", "ZA" },
         @resultlist = grepFile(
             $modifier . '^\s*\{\s*.*' . $grepdef . '.*\s*,\s*\".*\"\s*,\s*\".*\"\s*\}\s*,',
-            "$SRC_ROOT", "i18npool", "source/isolang/isolang.cxx", ());
+            "$SRC_ROOT", "i18nlangtag", "source/isolang/isolang.cxx", ());
 
         my @langcoungreplist;
         for $result (@resultlist)
@@ -363,7 +363,7 @@ sub main()
         #         case LANGUAGE_ARABIC:
         grepFile(
             $modifier . '^\s*case\s*.*' . $grepdef . '.*\s*:',
-            "$SRC_ROOT", "i18npool", "source/isolang/mslangid.cxx", ());
+            "$SRC_ROOT", "i18nlangtag", "source/isolang/mslangid.cxx", ());
 
         # With CWS 'langstatusbar' the language listbox resource file gets a new location.
         my $module = "svx";

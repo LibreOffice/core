@@ -102,7 +102,7 @@
 #include <mailmergehelper.hxx>
 #include <maildispatcher.hxx>
 #include <svtools/htmlcfg.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <editeng/langitem.hxx>
 #include <svl/numuno.hxx>

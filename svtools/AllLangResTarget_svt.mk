@@ -28,7 +28,7 @@ $(eval $(call gb_AllLangResTarget_add_srs,svt,\
 $(eval $(call gb_SrsTarget_SrsTarget,svt/res))
 
 $(eval $(call gb_SrsTarget_use_packages,svt/res,\
-    i18npool_inc \
+    i18nlangtag_inc \
     svl_inc \
     svtools_inc \
     vcl_inc \

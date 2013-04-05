@@ -152,9 +152,9 @@
 #include <filter/msfilter/svxmsbas.hxx>
 #include <fstream>
 #include <functional>
-#include <i18npool/lang.h>
-#include <i18npool/languagetag.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/lang.h>
+#include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <iostream>
 #include <iterator>
 #include <list>

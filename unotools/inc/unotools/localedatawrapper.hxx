@@ -26,7 +26,7 @@
 #include <com/sun/star/i18n/LocaleItem.hpp>
 #include <com/sun/star/i18n/reservedWords.hpp>
 #include <rtl/ustring.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <unotools/readwritemutexguard.hxx>
 #include "unotools/unotoolsdllapi.h"
 

@@ -37,7 +37,7 @@
 #include <tools/tenccvt.hxx>
 
 #include <rtl/ustring.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <svl/itemset.hxx>
 
 #include <svtools/langtab.hxx>

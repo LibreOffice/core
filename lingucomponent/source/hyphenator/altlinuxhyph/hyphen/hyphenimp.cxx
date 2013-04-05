@@ -22,7 +22,7 @@
 
 #include <cppuhelper/factory.hxx>   // helper for factories
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
 

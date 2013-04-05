@@ -66,7 +66,7 @@
 #include <com/sun/star/i18n/InputSequenceChecker.hpp>
 #include <com/sun/star/text/CharacterCompressionType.hpp>
 #include <vcl/pdfextoutdevdata.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>

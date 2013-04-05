@@ -59,7 +59,7 @@ $(eval $(call gb_Library_use_libraries,sfx,\
     cppuhelper \
     drawinglayer \
     fwe \
-    i18nisolang1 \
+    i18nlangtag \
     sal \
     sax \
     sb \

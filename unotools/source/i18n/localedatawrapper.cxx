@@ -27,7 +27,7 @@
 #include <unotools/digitgroupingiterator.hxx>
 #include <tools/string.hxx>
 #include <tools/debug.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <com/sun/star/i18n/KNumberFormatUsage.hpp>
 #include <com/sun/star/i18n/KNumberFormatType.hpp>

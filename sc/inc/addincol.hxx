@@ -28,7 +28,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/reflection/XIdlMethod.hpp>
 #include <com/sun/star/sheet/LocalizedName.hpp>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <rtl/ustring.h>
 #include "scdllapi.h"
 #include <rtl/ustring.hxx>

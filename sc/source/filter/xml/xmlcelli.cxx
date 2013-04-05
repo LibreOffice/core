@@ -108,7 +108,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <tools/date.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <comphelper/extract.hxx>
 #include <tools/string.hxx>
 

@@ -23,7 +23,7 @@
 #include <unotools/pathoptions.hxx>
 #include <svl/lngmisc.hxx>
 #include <ucbhelper/content.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>

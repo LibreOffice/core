@@ -23,7 +23,7 @@
 
 #include "boost/noncopyable.hpp"
 #include "boost/scoped_ptr.hpp"
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include "rtl/instance.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.hxx"

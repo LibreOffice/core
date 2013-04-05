@@ -22,7 +22,7 @@
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #include <rtl/ustrbuf.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <unotools/localedatawrapper.hxx>
 #include <tools/debug.hxx>
 #include <svl/lngmisc.hxx>

@@ -439,8 +439,8 @@
 #include <filter/msfilter/msdffimp.hxx>
 #include <filter/msfilter/msoleexp.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
-#include <i18npool/languagetag.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <iterator>
 #include <limits.h>
 #include <linguistic/lngprops.hxx>

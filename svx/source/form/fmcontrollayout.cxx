@@ -31,8 +31,8 @@
 #include <com/sun/star/container/XChild.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <i18npool/mslangid.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <unotools/syslocale.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>

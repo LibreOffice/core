@@ -28,7 +28,7 @@
 #include <svtools/optionsdrawinglayer.hxx>
 #include <com/sun/star/rendering/ViewState.hpp>
 #include <com/sun/star/rendering/RenderState.hpp>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <vcl/mapmod.hxx>
 

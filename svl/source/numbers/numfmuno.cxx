@@ -19,7 +19,7 @@
 
 
 #include <tools/color.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 

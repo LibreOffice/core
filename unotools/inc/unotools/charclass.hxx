@@ -23,7 +23,7 @@
 
 #include <ctype.h>      // isdigit(), isalpha()
 #include <boost/noncopyable.hpp>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <tools/string.hxx>
 #include <tools/solar.h>
 #include <com/sun/star/i18n/KCharacterType.hpp>

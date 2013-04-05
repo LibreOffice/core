@@ -26,7 +26,7 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <vcl/field.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <tools/stream.hxx>
 #include <o3tl/sorted_vector.hxx>
 

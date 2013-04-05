@@ -21,7 +21,7 @@ $(eval $(call gb_CppunitTest_use_libraries,basic_vba, \
     comphelper \
     cppu \
     cppuhelper \
-    i18nisolang1 \
+    i18nlangtag \
     sal \
     salhelper \
     sb \

@@ -22,7 +22,7 @@
 
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <svl/poolitem.hxx>
 
 //============================================================================

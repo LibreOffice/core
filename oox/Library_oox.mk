@@ -66,7 +66,7 @@ $(eval $(call gb_Library_use_libraries,oox,\
     editeng \
     msfilter \
     sal \
-	i18nisolang1 \
+	i18nlangtag \
     sax \
     sfx \
     svl \

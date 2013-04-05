@@ -23,7 +23,7 @@
 #include <ConversionHelper.hxx>
 #include <ModelEventListener.hxx>
 #include <MeasureHandler.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <i18nutil/paper.hxx>
 #include <ooxml/OOXMLFastTokens.hxx>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>

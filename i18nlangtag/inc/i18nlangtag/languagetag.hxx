@@ -7,14 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_I18NPOOL_LANGUAGETAG_HXX
-#define INCLUDED_I18NPOOL_LANGUAGETAG_HXX
+#ifndef INCLUDED_I18NLANGTAG_LANGUAGETAG_HXX
+#define INCLUDED_I18NLANGTAG_LANGUAGETAG_HXX
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/lang/Locale.hpp>
-#include <i18npool/i18npooldllapi.h>
-#include <i18npool/lang.h>
+#include <i18nlangtag/i18nlangtagdllapi.h>
+#include <i18nlangtag/lang.h>
 
 #include <vector>
 
@@ -28,7 +28,7 @@ typedef struct _rtl_Locale rtl_Locale;  // as in rtl/locale.h
     const methods. Getter methods return either the original value or matching
     converted values.
  */
-class I18NISOLANG_DLLPUBLIC LanguageTag
+class I18NLANGTAG_DLLPUBLIC LanguageTag
 {
 public:
 
@@ -395,6 +395,6 @@ private:
                                        OUString& rCountry );
 };
 
-#endif  // INCLUDED_I18NPOOL_LANGUAGETAG_HXX
+#endif  // INCLUDED_I18NLANGTAG_LANGUAGETAG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

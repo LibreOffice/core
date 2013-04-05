@@ -259,7 +259,7 @@
 #include <editeng/unotext.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/wrlmitem.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <limits.h>
 #include <limits>
 #include <list>

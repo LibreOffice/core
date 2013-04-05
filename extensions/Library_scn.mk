@@ -45,7 +45,7 @@ $(eval $(call gb_Library_use_libraries,scn,\
 	cppuhelper \
 	cppu \
 	sal \
-	i18nisolang1 \
+	i18nlangtag \
 	$(gb_UWINAPI) \
 ))
 

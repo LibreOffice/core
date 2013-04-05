@@ -21,7 +21,7 @@
 #include "userinformation.hxx"
 
 #include <osl/diagnose.h>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <unotools/configmgr.hxx>
 
 using namespace ::utl;

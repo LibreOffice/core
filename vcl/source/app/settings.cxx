@@ -25,8 +25,8 @@
 #include "tools/debug.hxx"
 #include <vcl/graphicfilter.hxx>
 
-#include "i18npool/mslangid.hxx"
-#include "i18npool/languagetag.hxx"
+#include "i18nlangtag/mslangid.hxx"
+#include "i18nlangtag/languagetag.hxx"
 
 #include "vcl/svapp.hxx"
 #include "vcl/event.hxx"

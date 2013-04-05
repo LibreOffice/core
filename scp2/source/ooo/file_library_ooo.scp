@@ -621,9 +621,9 @@ End
 
 File gid_File_Lib_I18nisolang
   #ifdef UNX
-    Name = STRING(CONCAT3(libi18nisolang1,COMID,UNXSUFFIX));
+    Name = STRING(CONCAT3(libi18nlangtag,COMID,UNXSUFFIX));
   #else
-    Name = STRING(CONCAT3(i18nisolang1,COMID,.dll));
+    Name = STRING(CONCAT3(i18nlangtag,COMID,.dll));
   #endif
     PACKED_LIB_FILE_BODY;
 End

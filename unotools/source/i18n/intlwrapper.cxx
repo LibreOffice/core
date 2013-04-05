@@ -20,7 +20,7 @@
 
 #include "unotools/intlwrapper.hxx"
 #include <com/sun/star/i18n/CollatorOptions.hpp>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <comphelper/processfactory.hxx>
 
 IntlWrapper::IntlWrapper(

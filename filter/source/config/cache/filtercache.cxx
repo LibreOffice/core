@@ -48,7 +48,7 @@
 #include <rtl/uri.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/wldcrd.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <comphelper/configurationhelper.hxx>
 

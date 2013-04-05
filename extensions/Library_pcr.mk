@@ -51,7 +51,7 @@ $(eval $(call gb_Library_use_libraries,pcr,\
 	utl \
 	tl \
 	dbtools \
-	i18nisolang1 \
+	i18nlangtag \
 	comphelper \
 	cppuhelper \
 	cppu \

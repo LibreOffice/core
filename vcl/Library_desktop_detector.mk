@@ -39,7 +39,7 @@ $(eval $(call gb_Library_use_libraries,desktop_detector,\
     basegfx \
     comphelper \
     cppuhelper \
-    i18nisolang1 \
+    i18nlangtag \
     i18nutil \
     $(if $(filter TRUE,$(SOLAR_JAVA)), \
         jvmaccess) \

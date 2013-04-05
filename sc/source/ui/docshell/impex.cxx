@@ -20,7 +20,7 @@
 #include "sc.hrc"
 
 #include <comphelper/processfactory.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <sot/formats.hxx>
 #include <sfx2/mieclip.hxx>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>

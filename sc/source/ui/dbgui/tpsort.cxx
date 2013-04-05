@@ -21,7 +21,7 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <vcl/msgbox.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <svtools/collatorres.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>

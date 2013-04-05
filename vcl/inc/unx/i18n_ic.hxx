@@ -20,7 +20,7 @@
 #ifndef _SAL_I18N_INPUTCONTEXT_HXX
 #define _SAL_I18N_INPUTCONTEXT_HXX
 
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include "i18n_cb.hxx"
 
 class SalI18N_InputContext

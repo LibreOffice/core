@@ -36,8 +36,8 @@
 #include <svx/optgrid.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-#include <i18npool/mslangid.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <fontcfg.hxx>
 #include <optload.hxx>
 #include <optcomp.hxx>

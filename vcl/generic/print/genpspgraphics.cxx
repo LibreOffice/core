@@ -53,7 +53,7 @@
 #endif
 
 #include <comphelper/string.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 
 using namespace psp;
 

@@ -52,7 +52,7 @@ $(eval $(call gb_Library_use_libraries,cui,\
     cppuhelper \
     drawinglayer \
     editeng \
-    i18nisolang1 \
+    i18nlangtag \
     $(if $(filter TRUE,$(SOLAR_JAVA)), \
         jvmfwk) \
     lng \

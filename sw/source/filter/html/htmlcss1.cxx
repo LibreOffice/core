@@ -21,7 +21,7 @@
 #include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>
 #include <svl/urihelper.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <sfx2/docfile.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/fhgtitem.hxx>

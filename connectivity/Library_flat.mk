@@ -47,7 +47,7 @@ $(eval $(call gb_Library_use_libraries,flat,\
 	tl \
 	svl \
 	utl \
-	i18nisolang1 \
+	i18nlangtag \
 	sal \
 	salhelper \
 	dbtools \

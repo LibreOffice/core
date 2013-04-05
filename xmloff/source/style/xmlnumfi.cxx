@@ -26,7 +26,7 @@
 #include <svl/zformat.hxx>
 #include <svl/numuno.hxx>
 #include <rtl/math.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>

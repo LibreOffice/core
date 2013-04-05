@@ -20,7 +20,7 @@
 #ifndef _SWCALWRP_HXX
 #define _SWCALWRP_HXX
 
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <tools/string.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <salhelper/singletonref.hxx>

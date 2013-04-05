@@ -40,7 +40,7 @@ $(eval $(call gb_Library_use_libraries,vbaswobj,\
     cppu \
     cppuhelper \
     editeng \
-    i18nisolang1 \
+    i18nlangtag \
     sal \
     sb \
     sfx \

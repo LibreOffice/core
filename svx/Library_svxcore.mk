@@ -60,7 +60,7 @@ $(eval $(call gb_Library_use_libraries,svxcore,\
     drawinglayer \
     editeng \
     fwe \
-    i18nisolang1 \
+    i18nlangtag \
     lng \
     sal \
     salhelper \

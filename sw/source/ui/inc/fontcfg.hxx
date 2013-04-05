@@ -21,7 +21,7 @@
 
 #include <unotools/configitem.hxx>
 #include <tools/string.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <osl/diagnose.h>
 #include "swdllapi.h"
 

@@ -47,7 +47,7 @@ $(eval $(call gb_CppunitTest_use_libraries,connectivity_ado, \
     cppu \
     cppuhelper \
 	dbtools \
-    i18nisolang1 \
+    i18nlangtag \
     ado \
     sal \
     salhelper \

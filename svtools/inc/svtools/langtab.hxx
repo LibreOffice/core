@@ -21,7 +21,7 @@
 
 
 #include <tools/resary.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <svtools/svtdllapi.h>
 
 //========================================================================

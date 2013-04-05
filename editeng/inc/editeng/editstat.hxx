@@ -21,7 +21,7 @@
 #define _EDITSTAT_HXX
 
 #include <tools/string.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 
 #define EE_CNTRL_USECHARATTRIBS     0x00000001  // Use of hard character attributes
 #define EE_CNTRL_USEPARAATTRIBS     0x00000002  // Using paragraph attributes.

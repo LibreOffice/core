@@ -55,7 +55,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/bigint.hxx>
 #include <unotools/charclass.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <charfmt.hxx>
 #include <fmtclds.hxx>
 #include <fmtcol.hxx>

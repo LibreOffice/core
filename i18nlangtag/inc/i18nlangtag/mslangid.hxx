@@ -17,18 +17,18 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_I18NISOLANG_MSLANGID_HXX
-#define INCLUDED_I18NISOLANG_MSLANGID_HXX
+#ifndef INCLUDED_I18NLANGTAG_MSLANGID_HXX
+#define INCLUDED_I18NLANGTAG_MSLANGID_HXX
 
 #include <sal/config.h>
 
-#include "i18npool/i18npooldllapi.h"
-#include "i18npool/lang.h"
+#include "i18nlangtag/i18nlangtagdllapi.h"
+#include "i18nlangtag/lang.h"
 #include <com/sun/star/lang/Locale.hpp>
 
 /** Methods related to Microsoft language IDs. For details about MS-LANGIDs
     please see lang.h */
-class I18NISOLANG_DLLPUBLIC MsLangId
+class I18NLANGTAG_DLLPUBLIC MsLangId
 {
 public:
 
@@ -182,7 +182,7 @@ public:
         sal_Char      maCountry[3];
 
         /** Obtain a language tag string with '-' separator. */
-        I18NISOLANG_DLLPUBLIC OUString getTagString() const;
+        I18NLANGTAG_DLLPUBLIC OUString getTagString() const;
     };
 
     /** @internal - Return a pointer to the IsoLangEntry of the underlying table,
@@ -215,20 +215,20 @@ public:
         /** Convert a Locale to a LanguageType with handling of an empty
             language name designating LANGUAGE_SYSTEM.
           */
-        I18NISOLANG_DLLPRIVATE static LanguageType convertLocaleToLanguage(
+        I18NLANGTAG_DLLPRIVATE static LanguageType convertLocaleToLanguage(
                 const ::com::sun::star::lang::Locale & rLocale );
 
         /** Convert x-... privateuse, used by convertLocaleToLanguage(Locale) */
-        I18NISOLANG_DLLPRIVATE static LanguageType convertPrivateUseToLanguage(
+        I18NLANGTAG_DLLPRIVATE static LanguageType convertPrivateUseToLanguage(
                 const OUString& rPriv );
 
         /** Used by convertLocaleToLanguage(Locale) */
-        I18NISOLANG_DLLPRIVATE static LanguageType convertIsoNamesToLanguage(
+        I18NLANGTAG_DLLPRIVATE static LanguageType convertIsoNamesToLanguage(
                 const OUString& rLang, const OUString& rCountry );
 
 
         /** Used by convertUnxByteStringToLanguage(OString) */
-        I18NISOLANG_DLLPRIVATE static LanguageType convertIsoNamesToLanguage(
+        I18NLANGTAG_DLLPRIVATE static LanguageType convertIsoNamesToLanguage(
                 const OString& rLang, const OString& rCountry );
 
 
@@ -239,24 +239,24 @@ public:
                    If bResolveSystem==false, a LANGUAGE_SYSTEM results in an
                    empty Locale.
           */
-        I18NISOLANG_DLLPRIVATE static ::com::sun::star::lang::Locale convertLanguageToLocale(
+        I18NLANGTAG_DLLPRIVATE static ::com::sun::star::lang::Locale convertLanguageToLocale(
                 LanguageType nLang, bool bResolveSystem );
 
         /** Convert a LanguageType to a Locale, resolving LANGUAGE_SYSTEM.
 
             Used by convertLanguageToLocale(LanguageType,bool)
           */
-        I18NISOLANG_DLLPRIVATE static void convertLanguageToLocale(
+        I18NLANGTAG_DLLPRIVATE static void convertLanguageToLocale(
                 LanguageType nLang, ::com::sun::star::lang::Locale & rLocale );
 
         /** Used by convertLanguageToLocale(LanguageType,Locale) */
-        I18NISOLANG_DLLPRIVATE static void convertLanguageToIsoNames(
+        I18NLANGTAG_DLLPRIVATE static void convertLanguageToIsoNames(
                 LanguageType nLang, OUString& rLangStr, OUString& rCountry );
 
 
-        I18NISOLANG_DLLPRIVATE static LanguageType lookupFallbackLanguage( LanguageType nLang );
+        I18NLANGTAG_DLLPRIVATE static LanguageType lookupFallbackLanguage( LanguageType nLang );
 
-        I18NISOLANG_DLLPRIVATE static ::com::sun::star::lang::Locale lookupFallbackLocale(
+        I18NLANGTAG_DLLPRIVATE static ::com::sun::star::lang::Locale lookupFallbackLocale(
                 const ::com::sun::star::lang::Locale & rLocale );
 
 
@@ -265,11 +265,11 @@ public:
 
             Used by getFallbackLocale(Locale)
           */
-        I18NISOLANG_DLLPRIVATE static ::com::sun::star::lang::Locale convertLanguageToLocaleWithFallback(
+        I18NLANGTAG_DLLPRIVATE static ::com::sun::star::lang::Locale convertLanguageToLocaleWithFallback(
                 LanguageType nLang );
 
         /** Used by convertLanguageToLocaleWithFallback(LanguageType) */
-        I18NISOLANG_DLLPRIVATE static ::com::sun::star::lang::Locale lookupFallbackLocale(
+        I18NLANGTAG_DLLPRIVATE static ::com::sun::star::lang::Locale lookupFallbackLocale(
                 LanguageType nLang );
     };
 
@@ -287,7 +287,7 @@ private:
 
     // Substitute LANGUAGE_SYSTEM for LANGUAGE_SYSTEM_DEFAULT and
     // LANGUAGE_PROCESS_OR_USER_DEFAULT, other values aren't touched.
-    I18NISOLANG_DLLPRIVATE static inline LanguageType simplifySystemLanguages( LanguageType nLang );
+    I18NLANGTAG_DLLPRIVATE static inline LanguageType simplifySystemLanguages( LanguageType nLang );
 };
 
 
@@ -304,6 +304,6 @@ inline LanguageType MsLangId::getSystemUILanguage()
     return getPlatformSystemUILanguage();
 }
 
-#endif // INCLUDED_I18NISOLANG_MSLANGID_HXX
+#endif // INCLUDED_I18NLANGTAG_MSLANGID_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

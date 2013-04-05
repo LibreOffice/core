@@ -49,7 +49,7 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/contnr.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include "WCopyTable.hxx"
 #include "WExtendPages.hxx"

@@ -25,8 +25,8 @@
 #include <tools/urlobj.hxx>
 #include <svtools/langtab.hxx>
 #include <tools/shl.hxx>
-#include <i18npool/mslangid.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/mslangid.hxx>
+#include <i18nlangtag/lang.h>
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/unolingu.hxx>
 #include <svx/langbox.hxx>

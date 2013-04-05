@@ -45,7 +45,7 @@
 #include <numeric>
 
 
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>

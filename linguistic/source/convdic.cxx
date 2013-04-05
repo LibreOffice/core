@@ -19,7 +19,7 @@
 
 
 #include <cppuhelper/factory.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <osl/mutex.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>

@@ -298,9 +298,9 @@
 #include <cstdio>
 #include <ctype.h>
 #include <functional>
-#include <i18npool/lang.h>
-#include <i18npool/languagetag.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/lang.h>
+#include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <i18nutil/unicode.hxx>
 #include <jvmfwk/framework.h>
 #include <limits.h>

@@ -53,7 +53,7 @@ $(eval $(call gb_Library_use_libraries,xmlsecurity,\
 	utl \
 	vcl \
 	xo \
-	i18nisolang1 \
+	i18nlangtag \
 	$(gb_UWINAPI) \
 ))
 

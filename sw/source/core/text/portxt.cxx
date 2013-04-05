@@ -20,7 +20,7 @@
 #include <ctype.h>
 
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <hintids.hxx>     // CH_TXTATR
 #include <EnhancedPDFExportHelper.hxx>
 #include <SwPortionHandler.hxx>

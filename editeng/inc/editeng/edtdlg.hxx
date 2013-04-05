@@ -22,7 +22,7 @@
 #include <tools/solar.h>
 #include <tools/string.hxx>
 #include <editeng/editengdllapi.h>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <vcl/abstdlg.hxx>
 #include <editeng/hangulhanja.hxx>

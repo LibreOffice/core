@@ -39,7 +39,7 @@
 #include <canvas/debug.hxx>
 #include "dx_impltools.hxx"
 #include <vcl/sysdata.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include "dx_textlayout_drawhelper.hxx"
 #include "dx_bitmap.hxx"
 #include "dx_canvasfont.hxx"

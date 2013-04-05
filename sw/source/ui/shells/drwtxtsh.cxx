@@ -19,7 +19,7 @@
 
 
 #include <hintids.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <svl/slstitm.hxx>
 #include <svl/cjkoptions.hxx>
 #include <editeng/fontitem.hxx>

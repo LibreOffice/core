@@ -37,7 +37,7 @@ $(eval $(call gb_Library_use_sdk_api,tl))
 $(eval $(call gb_Library_use_libraries,tl,\
     basegfx \
     comphelper \
-    i18nisolang1 \
+    i18nlangtag \
     cppu \
     sal \
 	$(gb_UWINAPI) \

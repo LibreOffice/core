@@ -21,7 +21,7 @@ $(eval $(call gb_CppunitTest_use_libraries,basic_scanner, \
     cppuhelper \
     sal \
     salhelper \
-	i18nisolang1 \
+	i18nlangtag \
     sb \
     sot \
     svl \

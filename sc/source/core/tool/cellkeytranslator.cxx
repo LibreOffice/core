@@ -20,8 +20,8 @@
 
 #include "cellkeytranslator.hxx"
 #include "comphelper/processfactory.hxx"
-#include "i18npool/mslangid.hxx"
-#include "i18npool/lang.h"
+#include "i18nlangtag/mslangid.hxx"
+#include "i18nlangtag/lang.h"
 #include "rtl/ustring.hxx"
 
 #include <com/sun/star/i18n/TransliterationModules.hpp>

@@ -23,7 +23,7 @@
 #define INCLUDED_SVX_COUNTRYID_HXX
 
 #include <sal/types.h>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include "filter/msfilter/msfilterdllapi.h"
 
 // ----------------------------------------------------------------------------

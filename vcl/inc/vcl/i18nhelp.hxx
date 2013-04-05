@@ -22,7 +22,7 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <osl/mutex.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <tools/string.hxx>
 #include <vcl/dllapi.h>
 

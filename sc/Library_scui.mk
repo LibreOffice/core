@@ -45,7 +45,7 @@ $(eval $(call gb_Library_use_libraries,scui,\
 	editeng \
 	for \
 	forui \
-	i18nisolang1 \
+	i18nlangtag \
 	sal \
 	sc \
 	sfx \

@@ -49,7 +49,7 @@ $(eval $(call gb_Library_use_libraries,basctl,\
 	editeng \
 	fwe \
 	sal \
-	i18nisolang1 \
+	i18nlangtag \
 	sb \
 	sfx \
 	sot \

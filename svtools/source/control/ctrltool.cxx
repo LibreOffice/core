@@ -24,7 +24,7 @@
 
 #include <comphelper/string.hxx>
 #include <tools/debug.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>

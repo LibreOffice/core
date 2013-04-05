@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "i18npool/languagetag.hxx"
-#include "i18npool/mslangid.hxx"
+#include "i18nlangtag/languagetag.hxx"
+#include "i18nlangtag/mslangid.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
 #include <osl/file.hxx>
@@ -108,7 +108,7 @@ LiblantagDataRef::~LiblantagDataRef()
 
 void LiblantagDataRef::setup()
 {
-    SAL_INFO( "i18npool.langtag", "LiblantagDataRef::setup: initializing database");
+    SAL_INFO( "i18nlangtag", "LiblantagDataRef::setup: initializing database");
     if (maDataPath.isEmpty())
         setupDataPath();
     lt_db_initialize();
@@ -118,7 +118,7 @@ void LiblantagDataRef::setup()
 
 void LiblantagDataRef::teardown()
 {
-    SAL_INFO( "i18npool.langtag", "LiblantagDataRef::teardown: finalizing database");
+    SAL_INFO( "i18nlangtag", "LiblantagDataRef::teardown: finalizing database");
     lt_db_finalize();
 }
 
@@ -490,7 +490,7 @@ bool LanguageTag::canonicalize()
         return true;                // that's it
     }
     meIsLiblangtagNeeded = DECISION_YES;
-    SAL_INFO( "i18npool.langtag", "LanguageTag::canonicalize: using liblangtag for " << maBcp47);
+    SAL_INFO( "i18nlangtag", "LanguageTag::canonicalize: using liblangtag for " << maBcp47);
 
     if (!mpImplLangtag)
     {
@@ -503,7 +503,7 @@ bool LanguageTag::canonicalize()
     if (lt_tag_parse( MPLANGTAG, OUStringToOString( maBcp47, RTL_TEXTENCODING_UTF8).getStr(), &aError.p))
     {
         char* pTag = lt_tag_canonicalize( MPLANGTAG, &aError.p);
-        SAL_WARN_IF( !pTag, "i18npool.langtag", "LanguageTag::canonicalize: could not canonicalize " << maBcp47);
+        SAL_WARN_IF( !pTag, "i18nlangtag", "LanguageTag::canonicalize: could not canonicalize " << maBcp47);
         if (pTag)
         {
             OUString aOld( maBcp47);
@@ -514,7 +514,7 @@ bool LanguageTag::canonicalize()
             {
                 if (!lt_tag_parse( MPLANGTAG, pTag, &aError.p))
                 {
-                    SAL_WARN( "i18npool.langtag", "LanguageTag::canonicalize: could not reparse " << maBcp47);
+                    SAL_WARN( "i18nlangtag", "LanguageTag::canonicalize: could not reparse " << maBcp47);
                     free( pTag);
                     meIsValid = DECISION_NO;
                     return false;
@@ -527,7 +527,7 @@ bool LanguageTag::canonicalize()
     }
     else
     {
-        SAL_INFO( "i18npool.langtag", "LanguageTag::canonicalize: could not parse " << maBcp47);
+        SAL_INFO( "i18nlangtag", "LanguageTag::canonicalize: could not parse " << maBcp47);
     }
     meIsValid = DECISION_NO;
     return false;
@@ -674,7 +674,7 @@ void LanguageTag::convertFromRtlLocale()
         mnLangID = MsLangId::convertUnxByteStringToLanguage( aStr);
         if (mnLangID == LANGUAGE_DONTKNOW)
         {
-            SAL_WARN( "i18npool.langtag", "LanguageTag(rtl_Locale) - unknown: " << aStr);
+            SAL_WARN( "i18nlangtag", "LanguageTag(rtl_Locale) - unknown: " << aStr);
             mnLangID = LANGUAGE_ENGLISH_US;     // we need _something_ here
         }
         mbInitializedLangID = true;
@@ -710,11 +710,11 @@ OUString LanguageTag::getLanguageFromLangtag()
     if (mpImplLangtag)
     {
         const lt_lang_t* pLangT = lt_tag_get_language( MPLANGTAG);
-        SAL_WARN_IF( !pLangT, "i18npool.langtag", "LanguageTag::getLanguageFromLangtag: pLangT==NULL");
+        SAL_WARN_IF( !pLangT, "i18nlangtag", "LanguageTag::getLanguageFromLangtag: pLangT==NULL");
         if (!pLangT)
             return aLanguage;
         const char* pLang = lt_lang_get_tag( pLangT);
-        SAL_WARN_IF( !pLang, "i18npool.langtag", "LanguageTag::getLanguageFromLangtag: pLang==NULL");
+        SAL_WARN_IF( !pLang, "i18nlangtag", "LanguageTag::getLanguageFromLangtag: pLang==NULL");
         if (pLang)
             aLanguage = OUString::createFromAscii( pLang);
     }
@@ -741,7 +741,7 @@ OUString LanguageTag::getScriptFromLangtag()
         if (!pScriptT)
             return aScript;
         const char* pScript = lt_script_get_tag( pScriptT);
-        SAL_WARN_IF( !pScript, "i18npool.langtag", "LanguageTag::getScriptFromLangtag: pScript==NULL");
+        SAL_WARN_IF( !pScript, "i18nlangtag", "LanguageTag::getScriptFromLangtag: pScript==NULL");
         if (pScript)
             aScript = OUString::createFromAscii( pScript);
     }
@@ -771,11 +771,11 @@ OUString LanguageTag::getRegionFromLangtag()
         SAL_WARN_IF( !pRegionT &&
                 maBcp47.getLength() != 2 && maBcp47.getLength() != 3 &&
                 maBcp47.getLength() != 7 && maBcp47.getLength() != 8,
-                "i18npool.langtag", "LanguageTag::getRegionFromLangtag: pRegionT==NULL");
+                "i18nlangtag", "LanguageTag::getRegionFromLangtag: pRegionT==NULL");
         if (!pRegionT)
             return aRegion;
         const char* pRegion = lt_region_get_tag( pRegionT);
-        SAL_WARN_IF( !pRegion, "i18npool.langtag", "LanguageTag::getRegionFromLangtag: pRegion==NULL");
+        SAL_WARN_IF( !pRegion, "i18nlangtag", "LanguageTag::getRegionFromLangtag: pRegion==NULL");
         if (pRegion)
             aRegion = OUString::createFromAscii( pRegion);
     }
@@ -859,7 +859,7 @@ bool LanguageTag::isIsoLanguage( const OUString& rLanguage )
         return true;
     SAL_WARN_IF( ((rLanguage.getLength() == 2 || rLanguage.getLength() == 3) &&
                 (isUpperAscii( rLanguage[0]) || isUpperAscii( rLanguage[1]))) ||
-            (rLanguage.getLength() == 3 && isUpperAscii( rLanguage[2])), "i18npool.langtag",
+            (rLanguage.getLength() == 3 && isUpperAscii( rLanguage[2])), "i18nlangtag",
             "LanguageTag::isIsoLanguage: rejecting upper case " << rLanguage);
     return false;
 }
@@ -873,7 +873,7 @@ bool LanguageTag::isIsoCountry( const OUString& rRegion )
             (rRegion.getLength() == 2 && isUpperAscii( rRegion[0]) && isUpperAscii( rRegion[1])))
         return true;
     SAL_WARN_IF( rRegion.getLength() == 2 && (isLowerAscii( rRegion[0]) || isLowerAscii( rRegion[1])),
-            "i18npool.langtag", "LanguageTag::isIsoCountry: rejecting lower case " << rRegion);
+            "i18nlangtag", "LanguageTag::isIsoCountry: rejecting lower case " << rRegion);
     return false;
 }
 
@@ -890,7 +890,7 @@ bool LanguageTag::isIsoScript( const OUString& rScript )
     SAL_WARN_IF( rScript.getLength() == 4 &&
             (isLowerAscii( rScript[0]) || isUpperAscii( rScript[1]) ||
              isUpperAscii( rScript[2]) || isUpperAscii( rScript[3])),
-            "i18npool.langtag", "LanguageTag::isIsoScript: rejecting case mismatch " << rScript);
+            "i18nlangtag", "LanguageTag::isIsoScript: rejecting case mismatch " << rScript);
     return false;
 }
 
@@ -964,8 +964,8 @@ OUString LanguageTag::getGlibcLocaleString( const OUString & rEncoding ) const
     else
     {
         /* FIXME: use the aImplIsoLangGLIBCModifiersEntries table from
-         * i18npool/source/isolang/isolang.cxx or let liblangtag handle it. So
-         * far no code was prepared for anything else than a simple
+         * i18nlangtag/source/isolang/isolang.cxx or let liblangtag handle it.
+         * So far no code was prepared for anything else than a simple
          * language_country locale so we don't loose anything here right now.
          * */
     }
@@ -1039,7 +1039,7 @@ bool LanguageTag::isValidBcp47() const
     {
         if (meIsLiblangtagNeeded != DECISION_NO && !mpImplLangtag)
            const_cast<LanguageTag*>(this)->canonicalize();
-        SAL_WARN_IF( meIsValid == DECISION_DONTKNOW, "i18npool.langtag",
+        SAL_WARN_IF( meIsValid == DECISION_DONTKNOW, "i18nlangtag",
                 "LanguageTag::isValidBcp47: canonicalize() didn't set meIsValid");
     }
     return meIsValid == DECISION_YES;

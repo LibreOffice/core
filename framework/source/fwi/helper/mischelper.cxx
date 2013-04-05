@@ -28,7 +28,7 @@
 #include <tools/debug.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <svtools/langtab.hxx>
 #include <comphelper/processfactory.hxx>
 #include <helper/mischelper.hxx>

@@ -168,7 +168,7 @@
 #include <filter/msfilter/util.hxx>
 #include <fstream>
 #include <functional>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <i18nutil/paper.hxx>
 #include <iostream>
 #include <iterator>

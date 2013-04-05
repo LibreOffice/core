@@ -25,7 +25,7 @@
 #include <svl/brdcst.hxx>
 
 #include <editeng/editdata.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <tools/color.hxx>
 #include <tools/contnr.hxx>
 #include <vcl/graph.hxx>

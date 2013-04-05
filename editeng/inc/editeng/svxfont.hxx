@@ -21,7 +21,7 @@
 
 #include <limits.h>     // USHRT_MAX
 #include <editeng/svxenum.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <vcl/font.hxx>
 #include "editeng/editengdllapi.h"
 

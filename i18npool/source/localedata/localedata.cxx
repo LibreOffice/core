@@ -19,7 +19,7 @@
 
 
 #include <localedata.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <string.h>
 #include <stdio.h>

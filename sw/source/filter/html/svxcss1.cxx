@@ -20,7 +20,7 @@
 #include <stdlib.h>
 
 #include <svx/svxids.hrc>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svl/urihelper.hxx>
 #include <editeng/udlnitem.hxx>

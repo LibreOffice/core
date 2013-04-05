@@ -27,7 +27,7 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <vcl/metric.hxx>
 
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <svl/languageoptions.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/langtab.hxx>
@@ -46,7 +46,7 @@
 #include <eerdll2.hxx>
 #include <editeng.hrc>
 #include <helpid.hrc>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <vcl/menu.hxx>
 #include <vcl/window.hxx>
 #include <editeng/acorrcfg.hxx>

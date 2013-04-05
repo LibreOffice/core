@@ -41,7 +41,7 @@ $(eval $(call gb_CppunitTest_use_libraries,editeng_lookuptree, \
     cppu \
     sal \
     salhelper \
-    i18nisolang1 \
+    i18nlangtag \
     i18nutil \
 	$(gb_UWINAPI) \
 ))

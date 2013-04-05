@@ -19,7 +19,7 @@
 #include "cppuhelper/implementationentry.hxx"
 #include "editeng/frmdiritem.hxx"
 #include "editeng/unolingu.hxx"
-#include "i18npool/languagetag.hxx"
+#include "i18nlangtag/languagetag.hxx"
 #include "rtl/ref.hxx"
 #include "sal/config.h"
 #include "sal/types.h"
@@ -588,9 +588,9 @@
 #include <editeng/xmlcnitm.hxx>
 #include <float.h>
 #include <functional>
-#include <i18npool/lang.h>
-#include <i18npool/languagetag.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/lang.h>
+#include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <i18nutil/scripttypedetector.hxx>
 #include <i18nutil/unicode.hxx>
 #include <iostream>

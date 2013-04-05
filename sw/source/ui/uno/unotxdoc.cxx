@@ -108,7 +108,7 @@
 
 #include <editeng/langitem.hxx>
 #include <docary.hxx>      //SwCharFmts
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <format.hxx>
 #include <charfmt.hxx>    //SwCharFmt

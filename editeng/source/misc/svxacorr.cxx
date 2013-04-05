@@ -20,7 +20,7 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <tools/urlobj.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <vcl/svapp.hxx>
 #include <sot/storinfo.hxx>
 #include <svl/fstathelper.hxx>

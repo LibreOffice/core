@@ -20,7 +20,7 @@
 #define _SVX_SPELL_ATTRIB
 
 #include <vcl/txtattr.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/lang/Locale.hpp>

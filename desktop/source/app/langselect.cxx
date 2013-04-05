@@ -28,8 +28,8 @@
 #include <unotools/pathoptions.hxx>
 #include <tools/resid.hxx>
 #include <tools/config.hxx>
-#include <i18npool/mslangid.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

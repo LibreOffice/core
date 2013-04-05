@@ -43,7 +43,7 @@
 #include <rtl/ustring.hxx>
 #include <unotools/configitem.hxx>
 #include <tools/link.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 
 namespace framework
 {

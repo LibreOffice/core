@@ -39,7 +39,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 	cppu \
 	cppuhelper \
 	external \
-	i18npool \
+	i18nlangtag \
 	i18nutil \
 	idl \
 	idlc \

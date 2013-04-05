@@ -30,7 +30,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 
 #include <tools/debug.hxx>
 

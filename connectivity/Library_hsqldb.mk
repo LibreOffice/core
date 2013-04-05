@@ -49,7 +49,7 @@ $(eval $(call gb_Library_use_libraries,hsqldb,\
 	salhelper \
 	tl \
 	utl \
-	i18nisolang1 \
+	i18nlangtag \
 	$(gb_UWINAPI) \
 ))
 

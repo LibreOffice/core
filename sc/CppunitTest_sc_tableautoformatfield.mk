@@ -45,7 +45,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_tableautoformatfield, \
     fileacc \
     for \
     forui \
-    i18nisolang1 \
+    i18nlangtag \
     msfilter \
     oox \
     sal \

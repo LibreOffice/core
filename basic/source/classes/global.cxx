@@ -28,7 +28,7 @@
 
 #include "basic/global.hxx"
 #include <comphelper/processfactory.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <rtl/instance.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <vcl/svapp.hxx>

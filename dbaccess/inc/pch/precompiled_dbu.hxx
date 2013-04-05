@@ -332,7 +332,7 @@
 #include <framework/titlehelper.hxx>
 #include <framework/undomanagerhelper.hxx>
 #include <functional>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <jvmaccess/virtualmachine.hxx>
 #include <limits>
 #include <list>

@@ -65,7 +65,7 @@ copy-stuff:
 	for F in $(strip \
 		  comphelpgcc3 \
 		  gcc3_uno \
-		  i18nisolang1gcc3 \
+		  i18nlangtaggcc3 \
 		  icudatalo \
 		  icui18nlo \
 		  icuuclo \

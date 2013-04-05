@@ -48,7 +48,7 @@ $(eval $(call gb_CppunitTest_use_libraries,starmath_qa_cppunit,\
     cppu \
     cppuhelper \
     editeng \
-    i18nisolang1 \
+    i18nlangtag \
     i18nutil \
     msfilter \
     oox \

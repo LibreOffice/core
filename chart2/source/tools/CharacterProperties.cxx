@@ -44,8 +44,8 @@
 
 // header for struct SvtLinguConfig
 #include <unotools/lingucfg.hxx>
-#include <i18npool/mslangid.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <vcl/outdev.hxx>
 
 using namespace ::com::sun::star;

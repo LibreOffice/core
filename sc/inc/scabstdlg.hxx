@@ -29,7 +29,7 @@
 #include "sc.hrc"
 #include "global.hxx"
 #include "pivot.hxx"
-#include "i18npool/lang.h"
+#include "i18nlangtag/lang.h"
 #include "asciiopt.hxx"
 
 #include <tabvwsh.hxx>

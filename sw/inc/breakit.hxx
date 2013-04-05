@@ -26,7 +26,7 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/XScriptTypeDetector.hpp>
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <swdllapi.h>
 
 /*************************************************************************

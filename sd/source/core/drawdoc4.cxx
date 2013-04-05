@@ -20,7 +20,7 @@
 
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
 #include "Outliner.hxx"

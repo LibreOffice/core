@@ -20,7 +20,7 @@
 #include <stdio.h>
 
 #include <com/sun/star/i18n/UnicodeType.hpp>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <unotools/charclass.hxx>
 #include <editeng/unolingu.hxx>
 #include <unotools/syslocale.hxx>

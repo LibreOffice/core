@@ -30,8 +30,8 @@
 
 #endif  // MACOSX
 #include <rtl/instance.hxx>
-#include "i18npool/languagetag.hxx"
-#include "i18npool/mslangid.hxx"
+#include "i18nlangtag/languagetag.hxx"
+#include "i18nlangtag/mslangid.hxx"
 
 // =======================================================================
 

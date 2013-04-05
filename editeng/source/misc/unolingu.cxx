@@ -42,7 +42,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx> // helper for implementations
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/localfilehelper.hxx>

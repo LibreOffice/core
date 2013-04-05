@@ -20,7 +20,7 @@
 #include "supservs.hxx"
 #include <com/sun/star/lang/Locale.hpp>
 #include <comphelper/sharedmutex.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
 #include <tools/stream.hxx>

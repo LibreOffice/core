@@ -33,7 +33,7 @@
 #include <oox/export/utils.hxx>
 #include <oox/mathml/export.hxx>
 
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <editeng/fontitem.hxx>
 #include <editeng/tstpitem.hxx>

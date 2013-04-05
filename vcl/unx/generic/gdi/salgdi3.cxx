@@ -42,7 +42,7 @@
 
 #include "basegfx/polygon/b2dpolypolygon.hxx"
 
-#include "i18npool/mslangid.hxx"
+#include "i18nlangtag/mslangid.hxx"
 
 #include <boost/unordered_set.hpp>
 

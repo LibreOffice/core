@@ -46,7 +46,7 @@
 ///////////////////////////////////////////////////////////////////////
 #include <vcl/ctrl.hxx>
 #include <tools/color.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlineit0.hxx>

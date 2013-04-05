@@ -94,7 +94,7 @@
 #include <com/sun/star/report/Function.hpp>
 #include <com/sun/star/sdb/XParametersSupplier.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include "dlgpage.hxx"
 #include <vcl/msgbox.hxx>
 #include "rptui_slotid.hrc"

@@ -32,8 +32,8 @@
 #include <editeng/unolingu.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/lingucfg.hxx>
-#include <i18npool/mslangid.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 // =============================================================================
 namespace reportdesign

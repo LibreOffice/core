@@ -69,8 +69,8 @@
 #include <editeng/langitem.hxx>
 #include <editeng/outliner.hxx>
 
-#include <i18npool/mslangid.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/mslangid.hxx>
+#include <i18nlangtag/lang.h>
 
 #include "swevent.hxx"
 #include "switerator.hxx"

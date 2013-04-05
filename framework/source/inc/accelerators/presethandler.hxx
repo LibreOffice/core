@@ -31,7 +31,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <salhelper/singletonref.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 namespace framework
 {

@@ -22,8 +22,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <i18npool/mslangid.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <comphelper/string.hxx>
 #include <tools/rc.h>
 #include <tools/color.hxx>

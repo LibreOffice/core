@@ -28,7 +28,7 @@
 #include <com/sun/star/util/XReplaceDescriptor.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <svl/memberid.hrc>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 using namespace utl;
 using namespace com::sun::star::beans;

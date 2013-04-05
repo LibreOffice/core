@@ -40,7 +40,7 @@
 #include <editeng/blinkitem.hxx>
 #include <tools/multisel.hxx>
 #include <unotools/charclass.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <charfmt.hxx>
 #include <fchrfmt.hxx>
 #include <docary.hxx>   // SwRedlineTbl

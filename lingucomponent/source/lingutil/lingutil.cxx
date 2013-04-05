@@ -26,8 +26,8 @@
 #include <osl/file.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
-#include <i18npool/languagetag.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/pathoptions.hxx>
 #include <rtl/ustring.hxx>

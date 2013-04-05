@@ -62,7 +62,7 @@
 #include <vcl/metric.hxx>
 #include <vcl/graphictools.hxx>
 #include <tools/poly.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <implrenderer.hxx>
 #include <tools.hxx>
 #include <outdevstate.hxx>

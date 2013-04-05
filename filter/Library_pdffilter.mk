@@ -38,7 +38,7 @@ $(eval $(call gb_Library_use_libraries,pdffilter,\
 	utl \
 	tl \
 	svl \
-	i18nisolang1 \
+	i18nlangtag \
 	comphelper \
 	basegfx \
 	cppuhelper \

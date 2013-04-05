@@ -21,8 +21,8 @@
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svl/numuno.hxx>
-#include <i18npool/mslangid.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
 #include <unotools/calendarwrapper.hxx>

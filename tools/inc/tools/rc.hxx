@@ -20,7 +20,7 @@
 #define _TOOLS_RC_HXX
 
 #include "tools/toolsdllapi.h"
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <tools/string.hxx>
 #include <tools/resmgr.hxx>
 

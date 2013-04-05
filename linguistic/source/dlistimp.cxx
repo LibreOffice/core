@@ -19,7 +19,7 @@
 
 
 #include <cppuhelper/factory.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <osl/file.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>

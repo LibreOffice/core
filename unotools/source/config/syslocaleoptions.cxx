@@ -21,8 +21,8 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/logfile.hxx>
-#include <i18npool/mslangid.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <tools/string.hxx>
 #include <tools/debug.hxx>
 #include <unotools/syslocaleoptions.hxx>

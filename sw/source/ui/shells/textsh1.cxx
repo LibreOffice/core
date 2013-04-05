@@ -26,7 +26,7 @@
 #include <cmdid.h>
 #include <helpid.h>
 
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <svl/languageoptions.hxx>
 #include <editeng/langitem.hxx>
 #include <svtools/langtab.hxx>

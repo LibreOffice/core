@@ -11,7 +11,7 @@
 #include <osl/file.hxx>
 #include "basic/sbmod.hxx"
 #include "basic/sbmeth.hxx"
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <unotools/syslocaleoptions.hxx>
 
 namespace

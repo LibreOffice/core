@@ -34,7 +34,7 @@ $(eval $(call gb_CppunitTest_use_libraries,connectivity_mork, \
     comphelper \
     cppu \
     cppuhelper \
-    i18nisolang1 \
+    i18nlangtag \
     mork \
     sal \
     salhelper \

@@ -34,7 +34,7 @@
 
 #include <linguistic/lngprops.hxx>
 #include <linguistic/spelldta.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/useroptions.hxx>

@@ -23,7 +23,7 @@
 #include "unotools/unotoolsdllapi.h"
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/charclass.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <sal/types.h>
 #include <rtl/textenc.h>
 

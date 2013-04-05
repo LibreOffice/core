@@ -30,8 +30,8 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 
 #include <tools/diagnose_ex.h>
-#include <i18npool/mslangid.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <comphelper/numbers.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <unotools/sharedunocomponent.hxx>

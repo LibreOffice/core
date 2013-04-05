@@ -34,7 +34,7 @@
 #include <osl/security.hxx>
 #include <osl/socket.hxx>
 #include <osl/process.h>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/wldcrd.hxx>

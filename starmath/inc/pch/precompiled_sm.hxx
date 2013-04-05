@@ -87,7 +87,7 @@
 #include <filter/msfilter/rtfutil.hxx>
 #include <float.h>
 #include <fstream>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <iterator>
 #include <map>
 #include <math.h>

@@ -125,7 +125,7 @@
 #include "ww8attributeoutput.hxx"
 #include "fields.hxx"
 #include <vcl/outdev.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;

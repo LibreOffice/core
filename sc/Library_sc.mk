@@ -73,7 +73,7 @@ $(eval $(call gb_Library_use_libraries,sc,\
 	editeng \
 	for \
 	forui \
-	i18nisolang1 \
+	i18nlangtag \
 	sal \
 	salhelper \
 	sax \

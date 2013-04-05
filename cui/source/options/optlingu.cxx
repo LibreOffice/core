@@ -21,7 +21,7 @@
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <tools/shl.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <unotools/lingucfg.hxx>
 #include <editeng/unolingu.hxx>
 #include <svx/dlgutil.hxx>

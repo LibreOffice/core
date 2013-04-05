@@ -19,7 +19,7 @@
 
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <svx/algitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>

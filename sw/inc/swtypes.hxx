@@ -25,7 +25,7 @@
 #include <limits.h>     //For LONG_MAX.
 #include <com/sun/star/uno/Reference.h>
 #include "swdllapi.h"
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace linguistic2{

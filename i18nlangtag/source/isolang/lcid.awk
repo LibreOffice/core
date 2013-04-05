@@ -16,8 +16,8 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-# Utility to compare MS-LANGID definitions with those defined in ../../inc/i18npool/lang.h
-# Run in i18npool/source/isolang
+# Utility to compare MS-LANGID definitions with those defined in ../../inc/i18nlangtag/lang.h
+# Run in i18nlangtag/source/isolang
 #
 # outputs new #define LANGUAGE_... 0x... and also some commented out substrings
 # that were matched in already existing defines.
@@ -70,7 +70,7 @@
 #
 
 BEGIN {
-    while ((getline < "../../inc/i18npool/lang.h") > 0)
+    while ((getline < "../../inc/i18nlangtag/lang.h") > 0)
     {
         if ($0 ~ /^#define[ ]*LANGUAGE_[_A-Za-z0-9]*[ ]*0x[0-9a-fA-F]/)
         {

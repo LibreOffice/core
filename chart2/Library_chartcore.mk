@@ -34,7 +34,7 @@ $(eval $(call gb_Library_use_libraries,chartcore,\
 	drawinglayer \
 	editeng \
     fwe \
-    i18nisolang1 \
+    i18nlangtag \
     sal \
 	sfx \
     svl \

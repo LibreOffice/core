@@ -28,7 +28,7 @@
 
 $(eval $(call gb_Library_Library,i18nsearch))
 
-$(eval $(call gb_Library_use_package,i18nsearch,i18npool_inc))
+$(eval $(call gb_Library_use_package,i18nsearch,i18nlangtag_inc))
 
 $(eval $(call gb_Library_set_componentfile,i18nsearch,i18npool/source/search/i18nsearch))
 

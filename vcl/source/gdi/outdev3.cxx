@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "i18npool/mslangid.hxx"
-#include "i18npool/languagetag.hxx"
+#include "i18nlangtag/mslangid.hxx"
+#include "i18nlangtag/languagetag.hxx"
 
 #include "rtl/tencinfo.h"
 #include "rtl/logfile.hxx"

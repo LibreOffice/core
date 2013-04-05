@@ -44,7 +44,7 @@
 #include <tools/zcodec.hxx>
 #include <tools/stream.hxx>
 
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <vcl/virdev.hxx>
 #include <vcl/bmpacc.hxx>

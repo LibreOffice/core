@@ -20,7 +20,7 @@
 #define _EXTINPUT_HXX
 
 #include <pam.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <vector>
 
 class CommandExtTextInputData;

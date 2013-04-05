@@ -41,7 +41,7 @@
 #include <comphelper/types.hxx>
 #include <cppuhelper/factory.hxx>
 #include <ctype.h>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <osl/thread.h>
 #include <rtl/logfile.hxx>
 #include <rtl/math.hxx>

@@ -44,7 +44,7 @@ $(eval $(call gb_Library_use_libraries,vclplug_svp,\
     basebmp \
     comphelper \
     cppuhelper \
-    i18nisolang1 \
+    i18nlangtag \
     i18nutil \
     jvmaccess \
     cppu \

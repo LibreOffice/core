@@ -35,7 +35,7 @@
 
 #include "sc.hrc"
 #include "scabstdlg.hxx"
-#include "i18npool/lang.h"
+#include "i18nlangtag/lang.h"
 
 #include <memory>
 

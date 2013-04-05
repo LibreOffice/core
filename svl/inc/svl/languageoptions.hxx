@@ -25,7 +25,7 @@
 #include <svl/lstner.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/options.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 
 // class SvtLanguageOptions ----------------------------------------------------
 

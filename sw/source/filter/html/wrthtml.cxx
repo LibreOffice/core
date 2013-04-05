@@ -27,7 +27,7 @@
 
 #include <svtools/htmlcfg.hxx>
 #include <vcl/svapp.hxx>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <sfx2/frmhtmlw.hxx>
 #include <svx/xoutbmp.hxx>
 #include <svx/htmlmode.hxx>

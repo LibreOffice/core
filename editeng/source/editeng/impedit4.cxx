@@ -34,7 +34,7 @@
 #include <editeng/editview.hxx>
 #include <eehtml.hxx>
 #include <editobj2.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 
 #include "editxml.hxx"
 

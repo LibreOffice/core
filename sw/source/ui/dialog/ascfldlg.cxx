@@ -19,7 +19,7 @@
 
 #include <hintids.hxx>
 #include <rtl/textenc.h>
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <unotools/lingucfg.hxx>
 #include <fontcfg.hxx>

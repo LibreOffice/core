@@ -20,7 +20,7 @@
 
 #include "PresenterTextView.hxx"
 
-#include <i18npool/mslangid.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <cppcanvas/vclfactory.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>

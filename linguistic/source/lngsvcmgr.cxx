@@ -31,8 +31,8 @@
 #include <tools/solar.h>
 #include <unotools/lingucfg.hxx>
 #include <comphelper/processfactory.hxx>
-#include <i18npool/lang.h>
-#include <i18npool/languagetag.hxx>
+#include <i18nlangtag/lang.h>
+#include <i18nlangtag/languagetag.hxx>
 #include <cppuhelper/factory.hxx>
 #include <comphelper/extract.hxx>
 #include <rtl/logfile.hxx>

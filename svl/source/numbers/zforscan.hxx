@@ -21,7 +21,7 @@
 
 #include <tools/string.hxx>
 #include <tools/date.hxx>
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <tools/color.hxx>
 #include <svl/nfkeytab.hxx>
 #include <svl/nfsymbol.hxx>

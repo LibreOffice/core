@@ -18,7 +18,7 @@
  */
 
 
-#include <i18npool/lang.h>
+#include <i18nlangtag/lang.h>
 #include <sortopt.hxx>
 #include <boost/foreach.hpp>
 
