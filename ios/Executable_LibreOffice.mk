@@ -32,26 +32,7 @@ $(eval $(call gb_Executable_add_objcobjects,LibreOffice,\
     ios/experimental/LibreOffice/LibreOffice/ViewController \
 ))
 
-# The executables built for iOS link to all LO libs statically. The
-# link command just uses the wildcard function to list all of them.
-# Instead of tediously here declare dependencies on the transitive
-# closure of those from which some object ends up being linked in, we
-# list a few libraries that are high in the dependency forest to make
-# it likely that all necessary libraries are built before this
-# executable is.
-$(eval $(call gb_Executable_use_libraries,LibreOffice,\
-	for \
-	msfilter \
-	msword \
-	oox \
-	sal \
-	sc \
-	scfilt \
-	sdfilt \
-	svt \
-	svx \
-	swui \
-))
+$(call gb_LinkTarget_get_target,Executable/LibreOffice) : $(call gb_Postprocess_get_target,AllModulesButInstsetNative)
 
 # Mark the executable as depending on all libraries so that it gets
 # rebuilt if any library has been rebuilt. Avoids need for "make
