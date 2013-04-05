@@ -110,19 +110,20 @@ void            ScTPValidationValue::RefInputStartPreHdl( formula::RefEdit* pEdi
     if ( ScValidationDlg *pValidationDlg = GetValidationDlg() )
     {
         Window *pNewParent = pValidationDlg->get_refinput_shrink_parent();
-        if( pEdit == m_pRefEdit )
+        if( pEdit == m_pRefEdit && m_pRefEdit->GetParent() != pNewParent )
         {
             maRefEditPos = m_pRefEdit->GetPosPixel();
             maRefEditSize = m_pRefEdit->GetSizePixel();
             m_pRefEdit->SetParent(pNewParent);
         }
 
-        if( pButton == &m_btnRef )
+        if( pButton == &m_btnRef && m_btnRef.GetParent() != pNewParent )
         {
             maBtnRefPos = m_btnRef.GetPosPixel();
             maBtnRefSize = m_btnRef.GetSizePixel();
             m_btnRef.SetParent(pNewParent);
         }
+
         pNewParent->Show();
     }
 }
@@ -135,10 +136,14 @@ void            ScTPValidationValue::RefInputDonePostHdl()
         m_pRefEdit->SetPosSizePixel( maRefEditPos, maRefEditSize );
 
         m_btnRef.SetParent( m_pRefEdit ); //if Edit SetParent but button not, the tab order will be incorrect, need button to setparent to anthor window and restore parent later in order to restore the tab order
+    }
+
+    if( m_btnRef.GetParent()!=this )
+    {
+        m_btnRef.SetParent( this );
         m_btnRef.SetPosSizePixel( maBtnRefPos, maBtnRefSize );
     }
 
-    if( m_btnRef.GetParent()!=this ) m_btnRef.SetParent( this );
     if ( ScValidationDlg *pValidationDlg = GetValidationDlg() )
         pValidationDlg->get_refinput_shrink_parent()->Hide();
 

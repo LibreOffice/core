@@ -520,7 +520,7 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
             pResizeDialog = pRefEdit->GetParentDialog();
             Window *pContentArea = pResizeDialog->get_content_area();
             for (Window *pCandidate = pRefEdit;
-                pCandidate != pContentArea && pCandidate->IsVisible();
+                pCandidate && (pCandidate != pContentArea && pCandidate->IsVisible());
                 pCandidate = pCandidate->GetWindow(WINDOW_REALPARENT))
             {
                 m_aVisibleWidgets.insert(pCandidate);
@@ -528,7 +528,7 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
             //same again with pRefBtn, except stop if there's a
             //shared parent in the existing widgets
             for (Window *pCandidate = pRefBtn;
-                pCandidate != pContentArea && pCandidate->IsVisible();
+                pCandidate && (pCandidate != pContentArea && pCandidate->IsVisible());
                 pCandidate = pCandidate->GetWindow(WINDOW_REALPARENT))
             {
                 if (m_aVisibleWidgets.insert(pCandidate).second)
