@@ -235,7 +235,7 @@ void DbRegistrationOptionsPage::Reset( const SfxItemSet& rSet )
 
         // restore column width
         rBar.SetItemSize( ITEMID_TYPE, aUserData.GetToken(0).ToInt32() );
-        HeaderEndDrag_Impl( NULL );
+        HeaderEndDrag_Impl( &rBar );
         // restore sort direction
         sal_Bool bUp = (sal_Bool)(sal_uInt16)aUserData.GetToken(1).ToInt32();
         HeaderBarItemBits nBits = rBar.GetItemBits(ITEMID_TYPE);
@@ -251,7 +251,7 @@ void DbRegistrationOptionsPage::Reset( const SfxItemSet& rSet )
             nBits |= HIB_UPARROW;
         }
         rBar.SetItemBits( ITEMID_TYPE, nBits );
-        HeaderSelect_Impl( NULL );
+        HeaderSelect_Impl( &rBar );
     }
 }
 
@@ -312,6 +312,8 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, EditHdl)
 
 IMPL_LINK( DbRegistrationOptionsPage, HeaderSelect_Impl, HeaderBar*, pBar )
 {
+    assert(pBar);
+
     if ( pBar && pBar->GetCurItemId() != ITEMID_TYPE )
         return 0;
 
@@ -341,6 +343,8 @@ IMPL_LINK( DbRegistrationOptionsPage, HeaderSelect_Impl, HeaderBar*, pBar )
 
 IMPL_LINK( DbRegistrationOptionsPage, HeaderEndDrag_Impl, HeaderBar*, pBar )
 {
+    assert(pBar);
+
     if ( pBar && !pBar->GetCurItemId() )
         return 0;
 
