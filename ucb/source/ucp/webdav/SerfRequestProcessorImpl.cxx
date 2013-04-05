@@ -90,9 +90,9 @@ void SerfRequestProcessorImpl::setRequestHeaders( serf_bucket_t* inoutSerfHeader
         const OString aValue = OUStringToOString( (*aHeaderIter).second,
                                                             RTL_TEXTENCODING_UTF8 );
 
-        serf_bucket_headers_set( inoutSerfHeaderBucket,
-                                 aHeader.getStr(),
-                                 aValue.getStr() );
+        serf_bucket_headers_setc( inoutSerfHeaderBucket,
+                                  aHeader.getStr(),
+                                  aValue.getStr() );
 
         ++aHeaderIter;
     }
