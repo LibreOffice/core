@@ -16,6 +16,24 @@
       "revId": "35060e7361c5bbddf87f82c4b38a8f1c230b22a2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///y0\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 2
+      },
+      "lineNbr": 3968,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2013-04-05T13:37:24Z",
+      "side": 1,
+      "message": "Well, I only copied what was already there... Feel free to send a change for review.",
+      "parentUuid": "AAAAXH///04\u003d",
+      "revId": "35060e7361c5bbddf87f82c4b38a8f1c230b22a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
