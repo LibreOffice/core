@@ -463,9 +463,7 @@ ScTabViewObj::ScTabViewObj( ScTabViewShell* pViewSh ) :
     aMouseClickHandlers( 0 ),
     aActivationListeners( 0 ),
     nPreviousTab( 0 ),
-    bDrawSelModeSet(false),
-    mbLeftMousePressed(false    ),
-    mbPendingSelectionChanged(false)
+    bDrawSelModeSet(false)
 {
     if (pViewSh)
         nPreviousTab = pViewSh->GetViewData()->GetTabNo();
@@ -1186,17 +1184,13 @@ bool ScTabViewObj::IsMouseListening() const
     SCTAB nTab = pViewData->GetTabNo();
     return
         pDoc->HasSheetEventScript( nTab, SC_SHEETEVENT_RIGHTCLICK, true ) ||
-        pDoc->HasSheetEventScript( nTab, SC_SHEETEVENT_DOUBLECLICK, true ) ||
-        pDoc->HasSheetEventScript( nTab, SC_SHEETEVENT_SELECT, true );
-
+        pDoc->HasSheetEventScript( nTab, SC_SHEETEVENT_DOUBLECLICK, true );
 }
 
 sal_Bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
                                     throw (::uno::RuntimeException)
 {
     sal_Bool bReturn(false);
-    if ( e.Buttons == ::com::sun::star::awt::MouseButton::LEFT )
-        mbLeftMousePressed = true;
 
     uno::Reference< uno::XInterface > xTarget = GetClickedObject(Point(e.X, e.Y));
     if (!aMouseClickHandlers.empty() && xTarget.is())
@@ -1287,26 +1281,6 @@ sal_Bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
 sal_Bool ScTabViewObj::MouseReleased( const awt::MouseEvent& e )
                                     throw (uno::RuntimeException)
 {
-    if ( e.Buttons == ::com::sun::star::awt::MouseButton::LEFT )
-    {
-        try
-        {
-            mbPendingSelectionChanged = false;
-            ScTabViewShell* pViewSh = GetViewShell();
-            ScViewData* pViewData = pViewSh->GetViewData();
-            ScDocShell* pDocSh = pViewData->GetDocShell();
-            ScDocument* pDoc = pDocSh->GetDocument();
-            uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( pDoc->GetVbaEventProcessor(), uno::UNO_SET_THROW );
-            uno::Sequence< uno::Any > aArgs( 1 );
-            aArgs[ 0 ] <<= getSelection();
-            xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( SC_SHEETEVENT_SELECT ), aArgs );
-        }
-        catch( uno::Exception& )
-        {
-        }
-        mbLeftMousePressed = false;
-    }
-
     sal_Bool bReturn(false);
 
     if (!aMouseClickHandlers.empty())
@@ -1772,24 +1746,7 @@ void ScTabViewObj::SelectionChanged()
             /*ErrCode eRet =*/ pDocSh->CallXScript( *pScript, aParams, aRet, aOutArgsIndex, aOutArgs );
         }
     }
-    if ( !mbLeftMousePressed ) // selection still in progress
-    {
-        mbPendingSelectionChanged = false;
-        try
-        {
-            uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( pDoc->GetVbaEventProcessor(), uno::UNO_SET_THROW );
-            uno::Sequence< uno::Any > aArgs( 1 );
-            aArgs[ 0 ] <<= getSelection();
-            xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( SC_SHEETEVENT_SELECT ), aArgs );
-        }
-        catch( uno::Exception& )
-        {
-        }
-    }
-    else
-    {
-        mbPendingSelectionChanged = true;
-    }
+    // Removed Sun/Oracle code intentionally, it doesn't work properly ( selection should be fired after mouse release )
 }
 
 
