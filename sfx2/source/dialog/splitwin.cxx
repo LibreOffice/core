@@ -51,12 +51,44 @@
 #include <sfx2/msgpool.hxx>
 #include <sfx2/viewfrm.hxx>
 
+#include <vector>
+#include <utility>
+
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 
 #define VERSION 1
 #define nPixel  30L
 #define USERITEM_NAME           OUString::createFromAscii( "UserItem" )
+
+namespace {
+    // helper class to deactivate UpdateMode, if needed, for the life time of an instance
+    class DeactivateUpdateMode
+    {
+    public:
+        explicit DeactivateUpdateMode( SfxSplitWindow& rSplitWindow )
+            : mrSplitWindow( rSplitWindow )
+            , mbUpdateMode( rSplitWindow.IsUpdateMode() )
+        {
+            if ( mbUpdateMode )
+            {
+                mrSplitWindow.SetUpdateMode( sal_False );
+            }
+        }
+
+        ~DeactivateUpdateMode( void )
+        {
+            if ( mbUpdateMode )
+            {
+                mrSplitWindow.SetUpdateMode( sal_True );
+            }
+        }
+
+    private:
+        SfxSplitWindow& mrSplitWindow;
+        const sal_Bool mbUpdateMode;
+    };
+}
 
 struct SfxDock_Impl
 {
@@ -399,15 +431,17 @@ void SfxSplitWindow::Split()
 
     SplitWindow::Split();
 
+    std::vector< std::pair< sal_uInt16, long > > aNewOrgSizes;
+
     sal_uInt16 nCount = pDockArr->Count();
     for ( sal_uInt16 n=0; n<nCount; n++ )
     {
         SfxDock_Impl *pD = (*pDockArr)[n];
         if ( pD->pWin )
         {
-            sal_uInt16 nId = pD->nType;
-            long nSize    = GetItemSize( nId, SWIB_FIXED );
-            long nSetSize = GetItemSize( GetSet( nId ) );
+            const sal_uInt16 nId = pD->nType;
+            const long nSize    = GetItemSize( nId, SWIB_FIXED );
+            const long nSetSize = GetItemSize( GetSet( nId ) );
             Size aSize;
 
             if ( IsHorizontal() )
@@ -422,6 +456,18 @@ void SfxSplitWindow::Split()
             }
 
             pD->pWin->SetItemSize_Impl( aSize );
+
+            aNewOrgSizes.push_back( std::pair< sal_uInt16, long >( nId, nSize ) );
+        }
+    }
+
+    // workaround insuffiency of <SplitWindow> regarding dock layouting:
+    // apply FIXED item size as 'original' item size to improve layouting of undock-dock-cycle of a window
+    {
+        DeactivateUpdateMode aDeactivateUpdateMode( *this );
+        for ( sal_uInt16 i = 0; i < aNewOrgSizes.size(); ++i )
+        {
+            SetItemSize( aNewOrgSizes[i].first, aNewOrgSizes[i].second );
         }
     }
 
@@ -684,9 +730,7 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
 
     pDock->nSize = nWinSize;
 
-    sal_Bool bUpdateMode = IsUpdateMode();
-    if ( bUpdateMode )
-        SetUpdateMode( sal_False );
+    DeactivateUpdateMode* pDeactivateUpdateMode = new DeactivateUpdateMode( *this );
 
     if ( bNewLine || nLine == GetItemCount( 0 ) )
     {
@@ -759,9 +803,32 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
         pWorkWin->ShowChilds_Impl();
     }
 
-    if ( bUpdateMode )
-        SetUpdateMode( sal_True );
+    delete pDeactivateUpdateMode;
     bLocked = sal_False;
+
+    // workaround insuffiency of <SplitWindow> regarding dock layouting:
+    // apply FIXED item size as 'original' item size to improve layouting of undock-dock-cycle of a window
+    {
+        std::vector< std::pair< sal_uInt16, long > > aNewOrgSizes;
+        // get FIXED item sizes
+        sal_uInt16 nCount = pDockArr->Count();
+        for ( sal_uInt16 n=0; n<nCount; n++ )
+        {
+            SfxDock_Impl *pD = (*pDockArr)[n];
+            if ( pD->pWin )
+            {
+                const sal_uInt16 nId = pD->nType;
+                const long nSize    = GetItemSize( nId, SWIB_FIXED );
+                aNewOrgSizes.push_back( std::pair< sal_uInt16, long >( nId, nSize ) );
+            }
+        }
+        // apply new item sizes
+        DeactivateUpdateMode aDeactivateUpdateMode( *this );
+        for ( sal_uInt16 i = 0; i < aNewOrgSizes.size(); ++i )
+        {
+            SetItemSize( aNewOrgSizes[i].first, aNewOrgSizes[i].second );
+        }
+    }
 }
 
 //-------------------------------------------------------------------------
@@ -817,9 +884,7 @@ void SfxSplitWindow::RemoveWindow( SfxDockingWindow* pDockWin, sal_Bool bHide )
 
     // Fenster removen, und wenn es das letzte der Zeile war, auch die Zeile
     // ( Zeile = ItemSet )
-    sal_Bool bUpdateMode = IsUpdateMode();
-    if ( bUpdateMode )
-        SetUpdateMode( sal_False );
+    DeactivateUpdateMode* pDeactivateUpdateMode = new DeactivateUpdateMode( *this );
     bLocked = sal_True;
 
     RemoveItem( pDockWin->GetType() );
@@ -827,8 +892,7 @@ void SfxSplitWindow::RemoveWindow( SfxDockingWindow* pDockWin, sal_Bool bHide )
     if ( nSet && !GetItemCount( nSet ) )
         RemoveItem( nSet );
 
-    if ( bUpdateMode )
-        SetUpdateMode( sal_True );
+    delete pDeactivateUpdateMode;
     bLocked = sal_False;
 };
 
