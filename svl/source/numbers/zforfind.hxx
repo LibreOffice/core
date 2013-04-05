@@ -218,6 +218,10 @@ private:
                                        const OUString& rString,
                                        sal_Int32 nPos )
         {
+            if (rWhat.isEmpty() || rString.getLength() <= nPos)
+            {
+                return false;
+            }
             // mostly used with one character
             if ( rWhat[ 0 ] != rString[ nPos ] )
             {
