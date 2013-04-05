@@ -54,6 +54,14 @@ gb_Module_SLOWCHECKTARGETSTACK :=
 gb_Module_SUBSEQUENTCHECKTARGETSTACK :=
 gb_Module_CLEANTARGETSTACK :=
 
+# The currently read gbuild makefile.
+#
+# gbuild classes should use this if they need to depend on their makefile
+# (e.g., to make sure a zip file is rebuilt if files are removed from it).
+# Because makefiles may include other makefiles, it is not safe to rely
+# on $(MAKEFILE_LIST).
+gb_Module_CURRENTMAKEFILE :=
+
 .PHONY : $(call gb_Module_get_clean_target,%)
 $(call gb_Module_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),MOD,5)
@@ -187,7 +195,9 @@ endef
 define gb_Module__read_targetfile
 gb_Module_CURRENTTARGET :=
 gb_Module_CURRENTCLEANTARGET :=
+gb_Module_CURRENTMAKEFILE := $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))$(2).mk
 include $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))$(2).mk
+gb_Module_CURRENTMAKEFILE :=
 ifneq ($$(words $$(gb_Module_CURRENTTARGET)) $$(words $$(gb_Module_CURRENTCLEANTARGET)),1 1)
 $$(eval $$(call gb_Output_error,No $(3) registered while reading $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))$(2).mk!))
 endif

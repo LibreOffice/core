@@ -71,10 +71,10 @@ $(call gb_JavaClassSet_get_preparation_target,%) :
 # depend on makefile to enforce a rebuild if files are removed from the classset
 define gb_JavaClassSet_JavaClassSet
 $(call gb_JavaClassSet_get_target,$(1)) : \
-	$(lastword $(MAKEFILE_LIST)) \
+	$(gb_Module_CURRENTMAKEFILE) \
 	$(call gb_JavaClassSet_get_preparation_target,$(1))
 $(call gb_JavaClassSet_get_target,$(1)) : JARDEPS := \
-	$(lastword $(MAKEFILE_LIST)) \
+	$(gb_Module_CURRENTMAKEFILE) \
 	$(call gb_JavaClassSet_get_preparation_target,$(1))
 
 endef

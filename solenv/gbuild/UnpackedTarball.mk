@@ -185,11 +185,6 @@ $(call gb_UnpackedTarball_get_clean_target,%) :
 			$(call gb_UnpackedTarball_get_pristine_dir,$*) \
 	)
 
-define gb_UnpackedTarball__get_makefile
-$(lastword $(foreach makefile,$(MAKEFILE_LIST),$(if $(filter UnpackedTarball_%,$(notdir $(makefile))),$(makefile))))
-
-endef
-
 # Initialize unpacked tarball
 define gb_UnpackedTarball_UnpackedTarball_internal
 $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_DESTFILES :=
@@ -199,7 +194,7 @@ $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_PATCHES :=
 $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_PATCHLEVEL := $(gb_UnpackedTarball_PATCHLEVEL_DEFAULT)
 $(call gb_UnpackedTarball_get_target,$(1)) : UNPACKED_POST_ACTION :=
 
-$(call gb_UnpackedTarball_get_preparation_target,$(1)) : $(call gb_UnpackedTarball__get_makefile)
+$(call gb_UnpackedTarball_get_preparation_target,$(1)) : $(gb_Module_CURRENTMAKEFILE)
 $(call gb_UnpackedTarball_get_preparation_target,$(1)) :| $(dir $(call gb_UnpackedTarball_get_target,$(1))).dir
 $(call gb_UnpackedTarball_get_target,$(1)) : $(call gb_UnpackedTarball_get_preparation_target,$(1))
 $(call gb_UnpackedTarball_get_target,$(1)) :| $(dir $(call gb_UnpackedTarball_get_target,$(1))).dir
