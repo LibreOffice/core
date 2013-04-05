@@ -675,7 +675,9 @@
 #define STR_INVALIDFORM             540
 #define STR_NOFORMULA               541
 
-#define STR_COUNT                   542
+#define STR_FUN_TEXT_SELECTION_COUNT    542
+
+#define STR_COUNT                   543
 
 #endif
 

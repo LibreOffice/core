@@ -134,6 +134,7 @@
 #define HID_MNU_FUNC_MIN                                      "SVX_HID_MNU_FUNC_MIN"
 #define HID_MNU_FUNC_NONE                                     "SVX_HID_MNU_FUNC_NONE"
 #define HID_MNU_FUNC_SUM                                      "SVX_HID_MNU_FUNC_SUM"
+#define HID_MNU_FUNC_SELECTION_COUNT                          "SVX_HID_MNU_FUNC_SELECTION_COUNT"
 #define HID_MNU_ZOOM_100                                      "SVX_HID_MNU_ZOOM_100"
 #define HID_MNU_ZOOM_150                                      "SVX_HID_MNU_ZOOM_150"
 #define HID_MNU_ZOOM_200                                      "SVX_HID_MNU_ZOOM_200"
