@@ -301,8 +301,7 @@ bool ATSLayout::LayoutText( ImplLayoutArgs& rArgs )
 **/
 void ATSLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
-    SAL_INFO("vcl.atsui.layout", "AdjustLayout(" << this << "): " <<
-             rArgs.mnLength << ":" << rArgs.mnMinCharPos << "--" << rArgs.mnEndCharPos << ", width=" << rArgs.mnLayoutWidth);
+    SAL_INFO("vcl.atsui.layout", "AdjustLayout(" << this << ",rArgs=" << rArgs << ")" );
     int nOrigWidth = GetTextWidth();
     int nPixelWidth = rArgs.mnLayoutWidth;
     if( !nPixelWidth && rArgs.mpDXArray ) {
@@ -382,6 +381,8 @@ void ATSLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 **/
 void ATSLayout::DrawText( SalGraphics& rGraphics ) const
 {
+    SAL_INFO( "vcl.atsui.layout", "DrawText(" << this << ") mnCharCount=" << mnCharCount << ", mnGlyphCount=" << mnGlyphCount );
+
     AquaSalGraphics& rAquaGraphics = static_cast<AquaSalGraphics&>(rGraphics);
 
     // short circuit if there is nothing to do
@@ -734,11 +735,12 @@ long ATSLayout::FillDXArray( sal_Int32* pDXArray ) const
 **/
 int ATSLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
 {
-    SAL_INFO("vcl.atsui.layout", "GetTextBreak(" << this << "," << nCharExtra << "," << nFactor << ")" <<
-             (maATSULayout == NULL ? " no layout" : ""));
+    SAL_INFO("vcl.atsui.layout", "GetTextBreak(" << this << ",nMaxWidth=" << nMaxWidth << ",nCharExtra=" << nCharExtra << ",nFactor=" << nFactor << ")" );
 
-    if( !maATSULayout )
+    if( !maATSULayout ) {
+        SAL_INFO( "vcl.atsui.layout", "GetTextBreak(): no maATSULayout, returning STRING_LEN" );
         return STRING_LEN;
+    }
 
     // the semantics of the legacy use case (nCharExtra!=0) cannot be mapped to ATSUBreakLine()
     if( nCharExtra != 0 )
