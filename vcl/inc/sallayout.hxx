@@ -21,7 +21,6 @@
 #define _SV_SALLAYOUT_HXX
 
 #include <iostream>
-#include <iomanip>
 
 #include <tools/gen.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -127,86 +126,7 @@ protected:
 };
 
 // For nice SAL_INFO logging of ImplLayoutArgs values
-inline std::ostream &operator <<(std::ostream& s, ImplLayoutArgs &rArgs)
-{
-#ifndef SAL_LOG_INFO
-    (void) rArgs;
-#else
-    s << "ImplLayoutArgs{";
-
-    s << "Flags=";
-    if (rArgs.mnFlags == 0)
-        s << 0;
-    else {
-        bool need_or = false;
-        s << "{";
-#define TEST(x) if (rArgs.mnFlags & SAL_LAYOUT_##x) { if (need_or) s << "|"; s << #x; need_or = true; }
-        TEST(BIDI_RTL);
-        TEST(BIDI_STRONG);
-        TEST(RIGHT_ALIGN);
-        TEST(KERNING_PAIRS);
-        TEST(KERNING_ASIAN);
-        TEST(VERTICAL);
-        TEST(COMPLEX_DISABLED);
-        TEST(ENABLE_LIGATURES);
-        TEST(SUBSTITUTE_DIGITS);
-        TEST(KASHIDA_JUSTIFICATON);
-        TEST(DISABLE_GLYPH_PROCESSING);
-        TEST(FOR_FALLBACK);
-#undef TEST
-        s << "}";
-    }
-
-    s << ",Length=" << rArgs.mnLength;
-    s << ",MinCharPos=" << rArgs.mnMinCharPos;
-    s << ",EndCharPos=" << rArgs.mnEndCharPos;
-
-    s << ",Str=\"";
-    int lim = rArgs.mnLength;
-    if (lim > 10)
-        lim = 7;
-    for (int i = 0; i < lim; i++) {
-        if (rArgs.mpStr[i] == '\n')
-            s << "\\n";
-        else if (rArgs.mpStr[i] < ' ' || (rArgs.mpStr[i] >= 0x7F && rArgs.mpStr[i] <= 0xFF))
-            s << "\\0x" << std::hex << std::setw(2) << std::setfill('0') << (int) rArgs.mpStr[i] << std::setfill(' ') << std::setw(1) << std::dec;
-        else if (rArgs.mpStr[i] < 0x7F)
-            s << (char) rArgs.mpStr[i];
-        else
-            s << "\\u" << std::hex << std::setw(4) << std::setfill('0') << (int) rArgs.mpStr[i] << std::setfill(' ') << std::setw(1) << std::dec;
-    }
-    if (rArgs.mnLength > lim)
-        s << "...";
-    s << "\"";
-
-    s << ",DXArray=";
-    if (rArgs.mpDXArray) {
-        s << "[";
-        int count = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
-        lim = count;
-        if (lim > 10)
-            lim = 7;
-        for (int i = 0; i < lim; i++) {
-            s << rArgs.mpDXArray[i];
-            if (i < lim-1)
-                s << ",";
-        }
-        if (count > lim) {
-            if (count > lim + 1)
-                s << "...";
-            s << rArgs.mpDXArray[count-1];
-        }
-        s << "]";
-    } else
-        s << "NULL";
-
-    s << ",LayoutWidth=" << rArgs.mnLayoutWidth;
-
-    s << "}";
-
-#endif
-    return s;
-}
+std::ostream &operator <<(std::ostream& s, ImplLayoutArgs &rArgs);
 
 // helper functions often used with ImplLayoutArgs
 bool IsDiacritic( sal_UCS4 );
