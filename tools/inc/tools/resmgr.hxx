@@ -152,7 +152,7 @@ public:
     /// Free resource context
     void                PopContext( const Resource* = NULL );
 
-    /// Incremet resource pointer
+    /// Increment resource pointer
     void*               Increment( sal_uInt32 nSize );
 
     /// Size of an object within the resource
