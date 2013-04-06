@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///w0\u003d",
+        "filename": "sc/source/core/data/documen4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-06T23:06:36Z",
+      "side": 1,
+      "message": "This is not correct. Also for selection count ScMarkData must be iterated and UpdateSelectionFunction() be called for each marked sheet. Please compare with what I lined out in https://bugs.freedesktop.org/show_bug.cgi?id\u003d61541#c4\n\nAnd by the way, if you add an if() please indent the dependents properly, in this case adding {} block braces would also help readability.",
+      "revId": "3cf0e7a3fb8af922389c0e83e922f9f4b6f39256",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///ww\u003d",
+        "filename": "sc/source/core/data/documen4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 497,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-06T23:06:36Z",
+      "side": 1,
+      "message": "This would only give a result of a single selection of a single sheet and ignore hidden rows. Instead, do the calculation as lined out in https://bugs.freedesktop.org/show_bug.cgi?id\u003d61541#c4",
+      "revId": "3cf0e7a3fb8af922389c0e83e922f9f4b6f39256",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///ws\u003d",
+        "filename": "sc/source/core/data/documen4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 508,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-06T23:06:36Z",
+      "side": 1,
+      "message": "Use aData.nCount instead.",
+      "revId": "3cf0e7a3fb8af922389c0e83e922f9f4b6f39256",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///wo\u003d",
+        "filename": "sc/source/filter/xml/XMLConverter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-06T23:06:36Z",
+      "side": 1,
+      "message": "There is no need to add selection count to XML, it is a mere UI function, not related to document content.",
+      "revId": "3cf0e7a3fb8af922389c0e83e922f9f4b6f39256",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///wk\u003d",
+        "filename": "sc/source/ui/src/globstr.src",
+        "patchSetId": 2
+      },
+      "lineNbr": 699,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-06T23:06:36Z",
+      "side": 1,
+      "message": "Probably \"Selection count\" (note lowercase \u0027c\u0027) is better. This is the string displayed in the status bar.",
+      "revId": "3cf0e7a3fb8af922389c0e83e922f9f4b6f39256",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///wg\u003d",
+        "filename": "svx/source/stbctrls/stbctrls.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-06T23:06:36Z",
+      "side": 1,
+      "message": "That instead would translate to\n\n // IDs as in SUBTOTAL_FUNC of Calc",
+      "revId": "3cf0e7a3fb8af922389c0e83e922f9f4b6f39256",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///wc\u003d",
+        "filename": "svx/source/stbctrls/stbctrls.src",
+        "patchSetId": 2
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-06T23:06:36Z",
+      "side": 1,
+      "message": "Also here I think \"Selection count\" (lowercase \u0027c\u0027) would be better.",
+      "revId": "3cf0e7a3fb8af922389c0e83e922f9f4b6f39256",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///wY\u003d",
+        "filename": "xmloff/inc/xmloff/xmltoken.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1746,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-06T23:06:36Z",
+      "side": 1,
+      "message": "There is no need to add selection count to XML, it is a mere UI function, not related to document content.",
+      "revId": "3cf0e7a3fb8af922389c0e83e922f9f4b6f39256",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAXH///wU\u003d",
+        "filename": "xmloff/source/core/xmltoken.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1751,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-06T23:06:36Z",
+      "side": 1,
+      "message": "There is no need to add selection count to XML, it is a mere UI function, not related to document content.",
+      "revId": "3cf0e7a3fb8af922389c0e83e922f9f4b6f39256",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
