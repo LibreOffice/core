@@ -162,7 +162,6 @@ void CoreTextLayout::DrawText( SalGraphics& rGraphics ) const
     if( mnCharCount <= 0 || !gr.CheckContext() )
         return;
 
-    CGContextSaveGState( gr.mrContext );
     Point pos = GetDrawPosition(Point(0,0));
     SAL_INFO( "vcl.coretext.layout", "at pos (" << pos.X() << "," << pos.Y() <<") ctfont=" << mpStyle->GetFont() );
 
@@ -171,6 +170,7 @@ void CoreTextLayout::DrawText( SalGraphics& rGraphics ) const
         SAL_INFO( "vcl.coretext.layout", "Error cg_font is NULL" );
         return;
     }
+    CGContextSaveGState( gr.mrContext );
     CGContextSetFont(gr.mrContext, cg_font);
     CGContextSetFontSize(gr.mrContext, CTFontGetSize(mpStyle->GetFont()));
     CGContextSetTextDrawingMode(gr.mrContext, kCGTextFill);
