@@ -33,7 +33,7 @@ $(eval $(call gb_Module_add_targets,chart2,\
     Library_chartcontroller \
     Library_chartcore \
     Package_uiconfig \
-	UI_chart2 \
+	UIConfig_chart2 \
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,chart2,\

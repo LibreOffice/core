@@ -7,11 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UI_UI,desktop))
+$(eval $(call gb_UIConfig_UIConfig,modules/smath))
 
-$(eval $(call gb_UI_add_uifiles,desktop,\
-    desktop/uiconfig/ui/cmdlinehelp \
-    desktop/uiconfig/ui/extensionmanager \
+$(eval $(call gb_UIConfig_add_uifiles,modules/smath,\
+	starmath/uiconfig/smath/ui/printeroptions \
 ))
 
 # vim: set noet sw=4 ts=4:

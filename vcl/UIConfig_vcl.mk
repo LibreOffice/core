@@ -7,10 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UI_UI,modules/schart))
+$(eval $(call gb_UIConfig_UIConfig,vcl))
 
-$(eval $(call gb_UI_add_uifiles,modules/schart,\
-	chart2/uiconfig/ui/smoothlinesdlg \
+$(eval $(call gb_UIConfig_add_uifiles,vcl,\
+	vcl/uiconfig/ui/printdialog \
 ))
 
 # vim: set noet sw=4 ts=4:

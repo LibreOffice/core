@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UI_UI,modules/sdraw))
+$(eval $(call gb_UIConfig_UIConfig,modules/sdraw))
 
-$(eval $(call gb_UI_add_uifiles,modules/sdraw,\
+$(eval $(call gb_UIConfig_add_uifiles,modules/sdraw,\
 	sd/uiconfig/sdraw/ui/printeroptions \
 ))
 

@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UI_UI,sfx))
+$(eval $(call gb_UIConfig_UIConfig,sfx))
 
-$(eval $(call gb_UI_add_uifiles,sfx,\
+$(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/checkin \
 	sfx2/uiconfig/ui/custominfopage \
 	sfx2/uiconfig/ui/descriptioninfopage \

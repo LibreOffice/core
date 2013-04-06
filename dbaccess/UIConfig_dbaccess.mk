@@ -7,12 +7,12 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UI_UI,modules/simpress))
+$(eval $(call gb_UIConfig_UIConfig,dbaccess))
 
-$(eval $(call gb_UI_add_uifiles,modules/simpress,\
-	sd/uiconfig/simpress/ui/presentationdialog \
-	sd/uiconfig/simpress/ui/printeroptions \
-	sd/uiconfig/simpress/ui/photoalbum \
+$(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
+    dbaccess/uiconfig/ui/querypropertiesdialog  \
+    dbaccess/uiconfig/ui/generalpagedialog \
+    dbaccess/uiconfig/ui/generalpagewizard \
 ))
 
 # vim: set noet sw=4 ts=4:
