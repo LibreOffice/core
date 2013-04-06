@@ -32,6 +32,7 @@
 #include "docsh.hxx"
 #include "docfunc.hxx"
 #include "sccollaboration.hxx"
+#include <editeng/editeng.hxx>
 #include <editeng/editobj.hxx>
 #include <tubes/manager.hxx>
 
@@ -52,7 +53,9 @@ OUString editToString( const EditTextObject& /*rEditText*/ )
 EditTextObject stringToEdit( const OUString& rStr )
 {
     // FIXME: implement me.
-    return EditTextObject();
+    // The code here only serves to make this file compilable.
+    EditEngine aEditEngine(0);
+    return *aEditEngine.CreateTextObject();
 }
 
 ScFormulaCell* stringToFormulaCell( const OUString &rString )
