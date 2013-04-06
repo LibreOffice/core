@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UI_UI,cui))
+$(eval $(call gb_UIConfig_UIConfig,cui))
 
-$(eval $(call gb_UI_add_uifiles,cui,\
+$(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/aboutdialog \
 	cui/uiconfig/ui/asiantypography \
 	cui/uiconfig/ui/backgroundpage \

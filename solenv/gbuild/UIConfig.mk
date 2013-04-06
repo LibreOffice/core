@@ -32,7 +32,7 @@ MERGEINPUT=`$(gb_MKTEMP)` && \
 echo $(POFILES) > $${MERGEINPUT} && \
 $(call gb_Helper_abbreviate_dirs,\
 	$(gb_UILocalizeTarget_COMMAND) \
-		-i $(UI_FILE) \
+		-i $(UIConfig_FILE) \
 		-o $(call gb_UILocalizeTarget_get_workdir,$(2)) \
 		-l all \
 		-m $${MERGEINPUT} \
@@ -68,7 +68,7 @@ endef
 # gb_UILocalizeTarget__UILocalizeTarget_impl target pofiles
 define gb_UILocalizeTarget__UILocalizeTarget_impl
 $(call gb_UILocalizeTarget_get_target,$(1)) : POFILES := $(2)
-$(call gb_UILocalizeTarget_get_target,$(1)) : UI_FILE := $(SRCDIR)/$(1).ui
+$(call gb_UILocalizeTarget_get_target,$(1)) : UIConfig_FILE := $(SRCDIR)/$(1).ui
 
 $(call gb_UILocalizeTarget_get_target,$(1)) : $(2)
 $(call gb_UILocalizeTarget_get_target,$(1)) : $(SRCDIR)/$(1).ui
@@ -78,97 +78,100 @@ $(call gb_UILocalizeTarget_get_target,$(1)) :| \
 
 endef
 
-# class UI
+# class UIConfig
 
-# Handles UI description files (suffix .ui) for the new layouting mechanism.
+# Handles UI configuration files.
+#
+# This mostly means UI description files (suffix .ui) for the new layouting
+# mechanism.
 
 # en-US is the default, so there is no translation for it
-gb_UI_LANGS := $(filter-out en-US,$(gb_WITH_LANG))
+gb_UIConfig_LANGS := $(filter-out en-US,$(gb_WITH_LANG))
 
-$(dir $(call gb_UI_get_target,%)).dir :
+$(dir $(call gb_UIConfig_get_target,%)).dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
-$(dir $(call gb_UI_get_target,%))%/.dir :
+$(dir $(call gb_UIConfig_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
-$(call gb_UI_get_target,%) :
-	$(call gb_Output_announce,$*,$(true),UI ,2)
+$(call gb_UIConfig_get_target,%) :
+	$(call gb_Output_announce,$*,$(true),UIC,2)
 	$(call gb_Helper_abbreviate_dirs,\
 		touch $@ \
 	)
 
-.PHONY : $(call gb_UI_get_clean_target,%)
-$(call gb_UI_get_clean_target,%) :
-	$(call gb_Output_announce,$*,$(false),UI ,2)
+.PHONY : $(call gb_UIConfig_get_clean_target,%)
+$(call gb_UIConfig_get_clean_target,%) :
+	$(call gb_Output_announce,$*,$(false),UIC,2)
 	$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call gb_UI_get_target,$*) \
+		rm -f $(call gb_UIConfig_get_target,$*) \
 	)
 
-# Translates and delivers a set of .ui files
+# Processes and delivers a set of UI configuration files.
 #
-# gb_UI_UI modulename
-define gb_UI_UI
+# gb_UIConfig_UIConfig modulename
+define gb_UIConfig_UIConfig
 $(call gb_Package_Package_internal,$(1)_ui,$(SRCDIR))
-$(call gb_UI_get_target,$(1)) :| $(dir $(call gb_UI_get_target,$(1))).dir
-$(call gb_UI_get_target,$(1)) :| $(call gb_Package_get_target,$(1)_ui)
-$(call gb_Postprocess_get_target,AllUIs) : $(call gb_UI_get_target,$(1))
-$(call gb_UI_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(1)_ui)
+$(call gb_UIConfig_get_target,$(1)) :| $(dir $(call gb_UIConfig_get_target,$(1))).dir
+$(call gb_UIConfig_get_target,$(1)) :| $(call gb_Package_get_target,$(1)_ui)
+$(call gb_Postprocess_get_target,AllUIConfigs) : $(call gb_UIConfig_get_target,$(1))
+$(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(1)_ui)
 
-ifneq ($(gb_UI_LANGS),)
+ifneq ($(gb_UIConfig_LANGS),)
 $(call gb_Package_Package_internal,$(1)_ui_localized,$(gb_UILocalizeTarget_WORKDIR))
-$(call gb_UI_get_target,$(1)) :| $(call gb_Package_get_target,$(1)_ui_localized)
-$(call gb_UI_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(1)_ui_localized)
+$(call gb_UIConfig_get_target,$(1)) :| $(call gb_Package_get_target,$(1)_ui_localized)
+$(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(1)_ui_localized)
 endif
 
-$$(eval $$(call gb_Module_register_target,$(call gb_UI_get_target,$(1)),$(call gb_UI_get_clean_target,$(1))))
-$(call gb_Helper_make_userfriendly_targets,$(1),UI)
+$$(eval $$(call gb_Module_register_target,$(call gb_UIConfig_get_target,$(1)),$(call gb_UIConfig_get_clean_target,$(1))))
+$(call gb_Helper_make_userfriendly_targets,$(1),UIConfig)
 
 endef
 
-# gb_UI__package_uifile target package destfile srcfile
-define gb_UI__package_uifile
+# gb_UIConfig__package_uifile target package destfile srcfile
+define gb_UIConfig__package_uifile
 $(call gb_Package_add_file,$(2),xml/uiconfig/$(1)/ui/$(3),$(4))
 
 endef
 
-# gb_UI__add_uifile target file
-define gb_UI__add_uifile
-$(call gb_UI__package_uifile,$(1),$(1)_ui,$(notdir $(2)).ui,$(2).ui)
+# gb_UIConfig__add_uifile target file
+define gb_UIConfig__add_uifile
+$(call gb_UIConfig__package_uifile,$(1),$(1)_ui,$(notdir $(2)).ui,$(2).ui)
 
 endef
 
-# gb_UI__add_uifile_for_lang target file lang
-define gb_UI__add_uifile_for_lang
-$(call gb_UI__package_uifile,$(1),$(1)_ui_localized,res/$(3)/$(notdir $(2)),$(2)/$(3).ui)
+# gb_UIConfig__add_uifile_for_lang target file lang
+define gb_UIConfig__add_uifile_for_lang
+$(call gb_UIConfig__package_uifile,$(1),$(1)_ui_localized,res/$(3)/$(notdir $(2)),$(2)/$(3).ui)
 
 endef
 
-# gb_UI__add_translations_impl target uifile langs
-define gb_UI__add_translations_impl
+# gb_UIConfig__add_translations_impl target uifile langs
+define gb_UIConfig__add_translations_impl
 $(call gb_UILocalizeTarget_UILocalizeTarget,$(2))
-$(call gb_UI_get_target,$(1)) : $(call gb_UILocalizeTarget_get_target,$(2))
-$(call gb_UI_get_clean_target,$(1)) : $(call gb_UILocalizeTarget_get_clean_target,$(2))
+$(call gb_UIConfig_get_target,$(1)) : $(call gb_UILocalizeTarget_get_target,$(2))
+$(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_UILocalizeTarget_get_clean_target,$(2))
 $(call gb_Package_get_preparation_target,$(1)_ui_localized) : $(call gb_UILocalizeTarget_get_target,$(2))
-$(foreach lang,$(3),$(call gb_UI__add_uifile_for_lang,$(1),$(2),$(lang)))
+$(foreach lang,$(3),$(call gb_UIConfig__add_uifile_for_lang,$(1),$(2),$(lang)))
 
 endef
 
-# gb_UI__add_translations target uifile langs qtz
-define gb_UI__add_translations
-$(if $(strip $(3) $(4)),$(call gb_UI__add_translations_impl,$(1),$(2),$(3)))
-$(if $(strip $(4)),$(call gb_UI__add_uifile_for_lang,$(1),$(2),$(strip $(4))))
+# gb_UIConfig__add_translations target uifile langs qtz
+define gb_UIConfig__add_translations
+$(if $(strip $(3) $(4)),$(call gb_UIConfig__add_translations_impl,$(1),$(2),$(3)))
+$(if $(strip $(4)),$(call gb_UIConfig__add_uifile_for_lang,$(1),$(2),$(strip $(4))))
 
 endef
 
 # Adds translations for languages that have corresponding .po file
 #
-# gb_UI__add_uifile_translations target uifile
-define gb_UI__add_uifile_translations
-$(call gb_UI__add_translations,$(1),$(2),\
-	$(foreach lang,$(gb_UI_LANGS),\
+# gb_UIConfig__add_uifile_translations target uifile
+define gb_UIConfig__add_uifile_translations
+$(call gb_UIConfig__add_translations,$(1),$(2),\
+	$(foreach lang,$(gb_UIConfig_LANGS),\
 		$(if $(wildcard $(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(2))).po),$(lang)) \
 	),\
-	$(filter qtz,$(gb_UI_LANGS)) \
+	$(filter qtz,$(gb_UIConfig_LANGS)) \
 )
 
 endef
@@ -177,21 +180,21 @@ endef
 #
 # The file is relative to $(SRCDIR) and without extension.
 #
-# gb_UI_add_uifile target uifile
-define gb_UI_add_uifile
-$(call gb_UI__add_uifile,$(1),$(2))
+# gb_UIConfig_add_uifile target uifile
+define gb_UIConfig_add_uifile
+$(call gb_UIConfig__add_uifile,$(1),$(2))
 
-ifneq ($(gb_UI_LANGS),)
-$(call gb_UI__add_uifile_translations,$(1),$(2))
+ifneq ($(gb_UIConfig_LANGS),)
+$(call gb_UIConfig__add_uifile_translations,$(1),$(2))
 endif
 
 endef
 
 # Adds multiple .ui files to the package
 #
-# gb_UI_add_uifiles target uifile(s)
-define gb_UI_add_uifiles
-$(foreach uifile,$(2),$(call gb_UI_add_uifile,$(1),$(uifile)))
+# gb_UIConfig_add_uifiles target uifile(s)
+define gb_UIConfig_add_uifiles
+$(foreach uifile,$(2),$(call gb_UIConfig_add_uifile,$(1),$(uifile)))
 
 endef
 
