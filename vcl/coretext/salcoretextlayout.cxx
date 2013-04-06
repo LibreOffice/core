@@ -69,7 +69,7 @@ private:
     mutable int* mpCharWidths;          // map relative charpos to charwidth
     mutable int* mpGlyphs2Chars;        // map absolute glyphpos to absolute charpos
 
-    mutable int* mpGlyphAdvances;       // glyph widths for the justified layout
+    mutable CGSize* mpGlyphAdvances;    // glyph advances for the justified layout
 
     mutable CGPoint* mpGlyphPositions;
     mutable CTTypesetterRef mpTypesetter;
@@ -186,7 +186,8 @@ void CoreTextLayout::DrawText( SalGraphics& rGraphics ) const
     CGContextSetTextMatrix(gr.mrContext, CGAffineTransformMakeScale(1.0, -1.0));
     CGContextSetShouldAntialias( gr.mrContext, !gr.mbNonAntialiasedText );
     CGContextTranslateCTM(gr.mrContext, pos.X(), pos.Y());
-    CGContextShowGlyphs(gr.mrContext, mpGlyphs, mnGlyphCount);
+
+    CGContextShowGlyphsWithAdvances(gr.mrContext, mpGlyphs, mpGlyphAdvances, mnGlyphCount);
 
 #ifndef IOS
     // Request an update of the changed window area. Like in the ATSUI
@@ -350,7 +351,7 @@ int CoreTextLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIDs, Point& rPos
         }
         pGlyphIDs[i] = mpGlyphs[mnCurrentGlyphIndex];
         if( pGlyphAdvances ) {
-            pGlyphAdvances[i] = mpGlyphAdvances[mnCurrentGlyphIndex];
+            pGlyphAdvances[i] = mpGlyphAdvances[mnCurrentGlyphIndex].width;
         }
         if( pCharIndexes ) {
             pCharIndexes[i] = mpGlyphs2Chars[mnCurrentGlyphIndex];
@@ -509,7 +510,7 @@ bool CoreTextLayout::InitGIA( ImplLayoutArgs& rArgs ) const
         mpCharWidths[i] = 0.0;
     }
     mpGlyphs2Chars = new int[ mnGlyphCount ];
-    mpGlyphAdvances = new int[ mnGlyphCount ];
+    mpGlyphAdvances = new CGSize[ mnGlyphCount ];
     mpGlyphPositions = new CGPoint[ mnGlyphCount ];
 
     CFArrayRef runs = CTLineGetGlyphRuns( mpLine );
@@ -555,7 +556,8 @@ bool CoreTextLayout::InitGIA( ImplLayoutArgs& rArgs ) const
                         }
                         if( p > 0)
                         {
-                            mpGlyphAdvances[p - 1] = mpGlyphPositions[ p ].x - mpGlyphPositions[p - 1].x;
+                            mpGlyphAdvances[p - 1].width = mpGlyphPositions[ p ].x - mpGlyphPositions[p - 1].x;
+                            mpGlyphAdvances[p - 1].height = mpGlyphPositions[ p ].y - mpGlyphPositions[p - 1].y;
                         }
                     }
                 }
