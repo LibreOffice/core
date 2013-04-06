@@ -10,6 +10,8 @@
 #include <sfx2/thumbnailview.hxx>
 #include <sfx2/thumbnailviewitem.hxx>
 
+#include <utility>
+
 #include "thumbnailviewacc.hxx"
 
 #include <basegfx/color/bcolortools.hxx>
@@ -84,7 +86,20 @@ ThumbnailView::~ThumbnailView()
 void ThumbnailView::AppendItem(ThumbnailViewItem *pItem)
 {
     if (maFilterFunc(pItem))
+    {
+        // Save current start,end range, iterator might get invalidated
+        size_t nSelStartPos = 0;
+        ThumbnailViewItem *pSelStartItem = NULL;
+
+        if (mpStartSelRange != mFilteredItemList.end())
+        {
+            pSelStartItem = *mpStartSelRange;
+            nSelStartPos = mpStartSelRange - mFilteredItemList.begin();
+        }
+
         mFilteredItemList.push_back(pItem);
+        mpStartSelRange = pSelStartItem != NULL ? mFilteredItemList.begin() + nSelStartPos : mFilteredItemList.end();
+    }
 
     mItemList.push_back(pItem);
 }
@@ -106,6 +121,7 @@ void ThumbnailView::ImplInit()
     mbHasVisibleItems   = false;
     maFilterFunc = ViewFilterAll();
     maColor = GetSettings().GetStyleSettings().GetFieldColor();
+    mpStartSelRange = mFilteredItemList.end();
 
     // Create the processor and process the primitives
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
@@ -144,6 +160,8 @@ void ThumbnailView::ImplDeleteItems()
 
     mItemList.clear();
     mFilteredItemList.clear();
+
+    mpStartSelRange = mFilteredItemList.end();
 }
 
 void ThumbnailView::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
@@ -394,9 +412,9 @@ size_t ThumbnailView::ImplGetItem( const Point& rPos, bool bMove ) const
 
     if ( maItemListRect.IsInside( rPos ) )
     {
-        for (size_t i = 0; i < mItemList.size(); ++i)
+        for (size_t i = 0; i < mFilteredItemList.size(); ++i)
         {
-            if (mItemList[i]->isVisible() && mItemList[i]->getDrawArea().IsInside(rPos))
+            if (mFilteredItemList[i]->isVisible() && mFilteredItemList[i]->getDrawArea().IsInside(rPos))
                 return i;
         }
 
@@ -413,7 +431,7 @@ size_t ThumbnailView::ImplGetItem( const Point& rPos, bool bMove ) const
 
 ThumbnailViewItem* ThumbnailView::ImplGetItem( size_t nPos )
 {
-    return ( nPos < mItemList.size() ) ? mItemList[nPos] : NULL;
+    return ( nPos < mFilteredItemList.size() ) ? mFilteredItemList[nPos] : NULL;
 }
 
 sal_uInt16 ThumbnailView::ImplGetVisibleItemCount() const
@@ -501,39 +519,66 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
         }
     }
 
+    bool bValidRange = false;
+    bool bHasSelRange = mpStartSelRange != mFilteredItemList.end();
+    size_t nNextPos = nLastPos;
     KeyCode aKeyCode = rKEvt.GetKeyCode();
     ThumbnailViewItem* pNext = NULL;
+
+    if (aKeyCode.IsShift() && bHasSelRange)
+    {
+        //If the last elemented selected is the start range position
+        //search for the first selected item
+        if (nLastPos == mpStartSelRange - mFilteredItemList.begin())
+        {
+            while (nLastPos && mFilteredItemList[nLastPos-1]->isSelected())
+                --nLastPos;
+        }
+    }
+
     switch ( aKeyCode.GetCode() )
     {
         case KEY_RIGHT:
             {
-                size_t nNextPos = nLastPos;
                 if ( bFoundLast && nLastPos < mFilteredItemList.size( ) - 1 )
+                {
+                    bValidRange = true;
                     nNextPos = nLastPos + 1;
+                }
+
                 pNext = mFilteredItemList[nNextPos];
             }
             break;
         case KEY_LEFT:
             {
-                size_t nNextPos = nLastPos;
                 if ( nLastPos > 0 )
+                {
+                    bValidRange = true;
                     nNextPos = nLastPos - 1;
+                }
+
                 pNext = mFilteredItemList[nNextPos];
             }
             break;
         case KEY_DOWN:
             {
-                size_t nNextPos = nLastPos;
                 if ( bFoundLast && nLastPos < mFilteredItemList.size( ) - mnCols )
+                {
+                    bValidRange = true;
                     nNextPos = nLastPos + mnCols;
+                }
+
                 pNext = mFilteredItemList[nNextPos];
             }
             break;
         case KEY_UP:
             {
-                size_t nNextPos = nLastPos;
                 if ( nLastPos >= mnCols )
+                {
+                    bValidRange = true;
                     nNextPos = nLastPos - mnCols;
+                }
+
                 pNext = mFilteredItemList[nNextPos];
             }
             break;
@@ -548,8 +593,67 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
 
     if ( pNext )
     {
-        deselectItems();
-        SelectItem(pNext->mnId);
+        if (aKeyCode.IsShift() && bValidRange)
+        {
+            std::pair<size_t,size_t> aRange;
+            size_t nSelPos = mpStartSelRange - mFilteredItemList.begin();
+
+            if (nLastPos < nSelPos)
+            {
+                if (nNextPos > nLastPos)
+                {
+                    if ( nNextPos > nSelPos)
+                        aRange = std::make_pair(nLastPos,nNextPos);
+                    else
+                        aRange = std::make_pair(nLastPos,nNextPos-1);
+                }
+                else
+                    aRange = std::make_pair(nNextPos,nLastPos-1);
+            }
+            else if (nLastPos == nSelPos)
+            {
+                if (nNextPos > nLastPos)
+                    aRange = std::make_pair(nLastPos+1,nNextPos);
+                else
+                    aRange = std::make_pair(nNextPos,nLastPos-1);
+            }
+            else
+            {
+                if (nNextPos > nLastPos)
+                    aRange = std::make_pair(nLastPos+1,nNextPos);
+                else
+                {
+                    if ( nNextPos < nSelPos)
+                        aRange = std::make_pair(nNextPos,nLastPos);
+                    else
+                        aRange = std::make_pair(nNextPos+1,nLastPos);
+                }
+            }
+
+            for (size_t i = aRange.first; i <= aRange.second; ++i)
+            {
+                if (i != nSelPos)
+                {
+                    ThumbnailViewItem *pCurItem = mFilteredItemList[i];
+
+                    pCurItem->setSelection(!pCurItem->isSelected());
+
+                    if (pCurItem->isVisible())
+                        DrawItem(pCurItem);
+
+                    maItemStateHdl.Call(pCurItem);
+                }
+            }
+        }
+        else if (!aKeyCode.IsShift())
+        {
+            deselectItems();
+            SelectItem(pNext->mnId);
+
+            //Mark it as the selection range start position
+            mpStartSelRange = mFilteredItemList.begin() + nNextPos;
+        }
+
         MakeItemVisible(pNext->mnId);
     }
 }
@@ -584,7 +688,8 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeft() )
     {
-        ThumbnailViewItem* pItem = ImplGetItem( ImplGetItem( rMEvt.GetPosPixel() ) );
+        size_t nPos = ImplGetItem(rMEvt.GetPosPixel());
+        ThumbnailViewItem* pItem = ImplGetItem(nPos);
 
         if (pItem && pItem->isVisible())
         {
@@ -594,6 +699,62 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
                 {
                     //Keep selected item group state and just invert current desired one state
                     pItem->setSelection(!pItem->isSelected());
+
+                    //This one becomes the selection range start position if it changes its state to selected otherwise resets it
+                    mpStartSelRange = pItem->isSelected() ? mFilteredItemList.begin() + nPos : mFilteredItemList.end();
+                }
+                else if (rMEvt.IsShift() && mpStartSelRange != mFilteredItemList.end())
+                {
+                    std::pair<size_t,size_t> aNewRange;
+                    aNewRange.first = mpStartSelRange - mFilteredItemList.begin();
+                    aNewRange.second = nPos;
+
+                    if (aNewRange.first > aNewRange.second)
+                        std::swap(aNewRange.first,aNewRange.second);
+
+                    //Deselect the ones outside of it
+                    for (size_t i = 0, n = mFilteredItemList.size(); i < n; ++i)
+                    {
+                        ThumbnailViewItem *pCurItem  = mFilteredItemList[i];
+
+                        if (pCurItem->isSelected() && (i < aNewRange.first || i > aNewRange.second))
+                        {
+                            pCurItem->setSelection(false);
+
+                            if (pCurItem->isVisible())
+                                DrawItem(pCurItem);
+
+                            maItemStateHdl.Call(pCurItem);
+                        }
+                    }
+
+                    size_t nSelPos = mpStartSelRange - mFilteredItemList.begin();
+
+                    //Select the items between start range and the selected item
+                    if (nSelPos != nPos)
+                    {
+                        int dir = nSelPos < nPos ? 1 : -1;
+                        size_t nCurPos = nSelPos + dir;
+
+                        while (nCurPos != nPos)
+                        {
+                            ThumbnailViewItem *pCurItem  = mFilteredItemList[nCurPos];
+
+                            if (!pCurItem->isSelected())
+                            {
+                                pCurItem->setSelection(true);
+
+                                if (pCurItem->isVisible())
+                                    DrawItem(pCurItem);
+
+                                maItemStateHdl.Call(pCurItem);
+                            }
+
+                            nCurPos += dir;
+                        }
+                    }
+
+                    pItem->setSelection(true);
                 }
                 else
                 {
@@ -602,6 +763,9 @@ void ThumbnailView::MouseButtonDown( const MouseEvent& rMEvt )
                     pItem->setSelection(false);
                     deselectItems();
                     pItem->setSelection(true);
+
+                    //Mark as initial selection range position and reset end one
+                    mpStartSelRange = mFilteredItemList.begin() + nPos;
                 }
 
                 if (pItem->isSelected())
@@ -1031,6 +1195,11 @@ void ThumbnailView::filterItems (const boost::function<bool (const ThumbnailView
 {
     mnFirstLine = 0;        // start at the top of the list instead of the current position
     maFilterFunc = func;
+
+    size_t nSelPos = 0;
+    bool bHasSelRange = false;
+    ThumbnailViewItem *curSel = mpStartSelRange != mFilteredItemList.end() ? *mpStartSelRange : NULL;
+
     mFilteredItemList.clear();
 
     for (size_t i = 0, n = mItemList.size(); i < n; ++i)
@@ -1039,6 +1208,12 @@ void ThumbnailView::filterItems (const boost::function<bool (const ThumbnailView
 
         if (maFilterFunc(pItem))
         {
+            if (curSel == pItem)
+            {
+                nSelPos = i;
+                bHasSelRange = true;
+            }
+
             mFilteredItemList.push_back(pItem);
         }
         else
@@ -1060,6 +1235,7 @@ void ThumbnailView::filterItems (const boost::function<bool (const ThumbnailView
         }
     }
 
+    mpStartSelRange = bHasSelRange ? mFilteredItemList.begin()  + nSelPos : mFilteredItemList.end();
     CalculateItemPositions();
 
     Invalidate();
