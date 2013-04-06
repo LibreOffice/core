@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UI_UI,svx))
+$(eval $(call gb_UIConfig_UIConfig,svx))
 
-$(eval $(call gb_UI_add_uifiles,svx,\
+$(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/acceptrejectchangesdialog \
 	svx/uiconfig/ui/asianphoneticguidedialog \
 	svx/uiconfig/ui/chineseconversiondialog \

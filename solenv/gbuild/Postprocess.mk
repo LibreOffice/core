@@ -28,7 +28,7 @@ $(call gb_Postprocess_Postprocess,AllLibraries,All libraries)
 $(call gb_Postprocess_Postprocess,AllModulesButInstsetNative,All modules but instset,$(WORKDIR)/Module/)
 $(call gb_Postprocess_Postprocess,AllPackages,All packages,$(WORKDIR)/Package/)
 $(call gb_Postprocess_Postprocess,AllResources,All resources,$(WORKDIR)/AllLangRes/)
-$(call gb_Postprocess_Postprocess,AllUIs,All UI files,$(WORKDIR)/UI/)
+$(call gb_Postprocess_Postprocess,AllUIConfigs,All UI configuration files,$(WORKDIR)/UIConfig/)
 
 endef
 
