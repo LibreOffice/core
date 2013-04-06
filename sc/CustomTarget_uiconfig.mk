@@ -9,14 +9,11 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,sc/uiconfig))
 
-ifeq ($(ENABLE_TELEPATHY),TRUE)
-$(call gb_CustomTarget_get_target,sc/uiconfig) : \
-	$(OUTDIR)/xml/uiconfig/modules/scalc/menubar/menubar.xml
+$(eval $(call gb_CustomTarget_register_targets,sc/uiconfig,\
+	scalc/menubar/menubar.xml \
+))
 
-$(OUTDIR)/xml/uiconfig/modules/scalc/menubar/menubar.xml : $(SRCDIR)/sc/uiconfig/scalc/menubar/menubar.xml \
-		| $(OUTDIR)/xml/uiconfig/modules/scalc/menubar/.dir
+$(call gb_CustomTarget_get_workdir,sc/uiconfig)/scalc/menubar/menubar.xml : $(SRCDIR)/sc/uiconfig/scalc/menubar/menubar.xml
 	sed 's/.*.uno:Collaborate.*/            <menu:menuseparator\/>\n            <menu:menuitem menu:id=".uno:Collaborate"\/>/' $< > $@
-
-endif
 
 # vim: set noet sw=4 ts=4:
