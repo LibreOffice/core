@@ -116,7 +116,7 @@ gb_UIConfig_get_packagename_for_lang = UIConfig/$(1)_$(2)
 define gb_UIConfig_UIConfig
 $(call gb_Package_Package_internal,$(call gb_UIConfig_get_packagename,$(1)),$(SRCDIR))
 $(call gb_UIConfig_get_target,$(1)) :| $(dir $(call gb_UIConfig_get_target,$(1))).dir
-$(call gb_UIConfig_get_target,$(1)) :| $(call gb_Package_get_target,$(call gb_UIConfig_get_packagename,$(1)))
+$(call gb_UIConfig_get_target,$(1)) : $(call gb_Package_get_target,$(call gb_UIConfig_get_packagename,$(1)))
 $(call gb_Postprocess_get_target,AllUIConfigs) : $(call gb_UIConfig_get_target,$(1))
 $(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(call gb_UIConfig_get_packagename,$(1)))
 
@@ -131,7 +131,7 @@ endef
 
 define gb_UIConfig__UIConfig_for_lang
 $(call gb_Package_Package_internal,$(call gb_UIConfig_get_packagename_for_lang,$(1),$(2)),$(gb_UILocalizeTarget_WORKDIR))
-$(call gb_UIConfig_get_target,$(1)) :| $(call gb_Package_get_target,$(call gb_UIConfig_get_packagename_for_lang,$(1),$(2)))
+$(call gb_UIConfig_get_target,$(1)) : $(call gb_Package_get_target,$(call gb_UIConfig_get_packagename_for_lang,$(1),$(2)))
 $(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(call gb_UIConfig_get_packagename_for_lang,$(1),$(2)))
 
 endef
