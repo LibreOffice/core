@@ -283,14 +283,8 @@ IMPL_LINK( IosSalInstance, RenderWindows, RenderWindowsArg*, arg )
 {
     int rc;
 
-    NSLog(@"RenderWindows: start");
-
     rc = pthread_mutex_lock( &m_aRenderMutex );
     SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_mutex_lock failed: " << strerror( rc ) );
-
-    NSLog(@"RenderWindows: mutex locked");
-
-    NSDate *a = [NSDate date];
 
     for( std::list< SalFrame* >::const_iterator it = getFrames().begin();
          it != getFrames().end();
@@ -325,12 +319,8 @@ IMPL_LINK( IosSalInstance, RenderWindows, RenderWindowsArg*, arg )
     rc = pthread_cond_signal( &m_aRenderCond );
     SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_cond_signal failed:" << strerror( rc ) );
 
-    NSLog(@"RenderWindows: took %f s", [[NSDate date] timeIntervalSinceDate: a]);
-
     rc = pthread_mutex_unlock( &m_aRenderMutex );
     SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_mutex_unlock failed: " << strerror( rc ) );
-
-    NSLog(@"RenderWindows: mutex unlocked");
 
     return 0;
 }
@@ -344,15 +334,11 @@ void lo_render_windows( CGContextRef context, CGRect rect )
     if ( pInstance == NULL )
         return;
 
-    NSLog(@"lo_render_windows: start");
-
     rc = pthread_mutex_lock( &pInstance->m_aRenderMutex );
     if (rc != 0) {
         SAL_WARN( "vcl.ios", "pthread_mutex_lock failed: " << strerror( rc ) );
         return;
     }
-
-    NSLog(@"lo_render_windows: mutex locked");
 
     IosSalInstance::RenderWindowsArg arg = { false, context, rect };
     Application::PostUserEvent( LINK( pInstance, IosSalInstance, RenderWindows), &arg );
@@ -362,12 +348,8 @@ void lo_render_windows( CGContextRef context, CGRect rect )
         SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_cond_wait failed: " << strerror( rc ) );
     }
 
-    NSLog(@"lo_render_windows: mutex unlocked");
-
     rc = pthread_mutex_unlock( &pInstance->m_aRenderMutex );
     SAL_WARN_IF( rc != 0, "vcl.ios", "pthread_mutex_unlock failed: " << strerror( rc ) );
-
-    NSLog(@"lo_render_windows: done");
 }
 
 extern "C"
