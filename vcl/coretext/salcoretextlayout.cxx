@@ -501,6 +501,17 @@ bool CoreTextLayout::InitGIA( ImplLayoutArgs& rArgs ) const
         return false;
     }
 
+    if ( rArgs.mpDXArray ) {
+        CTLineRef justifiedLine = CTLineCreateJustifiedLine( mpLine, 1.0, rArgs.mpDXArray[mnCharCount-1] );
+        if ( !justifiedLine ) {
+            SAL_INFO( "vcl.coretext.layout", "InitGIA(): CTLineCreateJustifiedLine() failed" );
+        } else {
+            SAL_INFO( "vcl.coretext.layout", "InitGIA(): Created justified line" );
+            CFRelease( mpLine );
+            mpLine = justifiedLine;
+        }
+    }
+
     mnGlyphCount = CTLineGetGlyphCount( mpLine );
     SAL_INFO( "vcl.coretext.layout", "InitGIA(): CTLineGetGlyphCount() returned " << mnGlyphCount );
 
