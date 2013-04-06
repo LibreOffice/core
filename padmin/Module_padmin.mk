@@ -27,7 +27,7 @@ $(eval $(call gb_Module_add_targets,padmin,\
     Library_spa \
     AllLangResTarget_spa \
     Package_inc \
-    UI_spa \
+    UIConfig_spa \
 ))
 endif
 
