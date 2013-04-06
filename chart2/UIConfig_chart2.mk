@@ -9,6 +9,26 @@
 
 $(eval $(call gb_UIConfig_UIConfig,modules/schart))
 
+$(eval $(call gb_UIConfig_add_menubarfiles,modules/schart,\
+	chart2/uiconfig/menubar/menubar \
+))
+
+$(eval $(call gb_UIConfig_add_statusbarfiles,modules/schart,\
+	chart2/uiconfig/statusbar/statusbar \
+))
+
+$(eval $(call gb_UIConfig_add_toolbarfiles,modules/schart,\
+	chart2/uiconfig/toolbar/arrowshapes \
+	chart2/uiconfig/toolbar/basicshapes \
+	chart2/uiconfig/toolbar/calloutshapes \
+	chart2/uiconfig/toolbar/drawbar \
+	chart2/uiconfig/toolbar/flowchartshapes \
+	chart2/uiconfig/toolbar/standardbar \
+	chart2/uiconfig/toolbar/starshapes \
+	chart2/uiconfig/toolbar/symbolshapes \
+	chart2/uiconfig/toolbar/toolbar \
+))
+
 $(eval $(call gb_UIConfig_add_uifiles,modules/schart,\
 	chart2/uiconfig/ui/smoothlinesdlg \
 ))

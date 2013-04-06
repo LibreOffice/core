@@ -38,7 +38,6 @@ $(eval $(call gb_Module_add_targets,basctl,\
 endif
 
 $(eval $(call gb_Module_add_targets,basctl,\
-	Package_uiconfig \
 	UIConfig_basicide \
 ))
 

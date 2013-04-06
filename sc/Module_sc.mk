@@ -25,14 +25,20 @@ $(eval $(call gb_Module_Module,sc))
 
 $(eval $(call gb_Module_add_targets,sc,\
 	AllLangResTarget_sc \
-	CustomTarget_uiconfig \
 	Library_sc \
 	Library_scd \
 	Library_scfilt \
 	Library_scui \
-	Package_uiconfig \
 	UIConfig_scalc \
 ))
+
+ifeq ($(ENABLE_TELEPATHY),TRUE)
+
+$(eval $(call gb_Module_add_targets,sc,\
+	CustomTarget_uiconfig \
+))
+
+endif
 
 ifneq ($(DISABLE_SCRIPTING),TRUE)
 
