@@ -33,7 +33,7 @@ $(eval $(call gb_Module_add_targets,reportdesign,\
     Library_rpt \
     Library_rptui \
     Library_rptxml \
-    Package_uiconfig \
+    UIConfig_dbreport \
 ))
 
 # deactivated since sb123;

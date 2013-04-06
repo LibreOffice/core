@@ -25,8 +25,12 @@ $(eval $(call gb_Module_add_targets,sw,\
     Library_sw \
     Library_swd \
     Library_swui \
-    Package_uiconfig \
+	UIConfig_sglobal \
+	UIConfig_sweb \
+	UIConfig_swform \
+	UIConfig_swreport \
 	UIConfig_swriter \
+	UIConfig_swxform \
 ))
 
 ifneq ($(DISABLE_SCRIPTING),TRUE)

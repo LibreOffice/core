@@ -32,7 +32,6 @@ $(eval $(call gb_Module_add_targets,chart2,\
     AllLangResTarget_chartcontroller \
     Library_chartcontroller \
     Library_chartcore \
-    Package_uiconfig \
 	UIConfig_chart2 \
 ))
 
