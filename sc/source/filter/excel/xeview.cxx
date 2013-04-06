@@ -164,7 +164,8 @@ XclExpPane::XclExpPane( const XclTabViewData& rData ) :
     mnSplitX( rData.mnSplitX ),
     mnSplitY( rData.mnSplitY ),
     maSecondXclPos( rData.maSecondXclPos ),
-    mnActivePane( rData.mnActivePane )
+    mnActivePane( rData.mnActivePane ),
+    mbFrozenPanes( rData.mbFrozenPanes )
 {
     OSL_ENSURE( rData.IsSplit(), "XclExpPane::XclExpPane - no PANE record for unsplit view" );
 }
@@ -188,7 +189,7 @@ void XclExpPane::SaveXml( XclExpXmlStream& rStrm )
             XML_ySplit,         OString::valueOf( (sal_Int32)mnSplitY ).getStr(),
             XML_topLeftCell,    XclXmlUtils::ToOString( maSecondXclPos ).getStr(),
             XML_activePane,     lcl_GetActivePane( mnActivePane ),
-            // OOXTODO: XML_state,
+            XML_state,          mbFrozenPanes ? "frozen" : "split",
             FSEND );
 }
 
