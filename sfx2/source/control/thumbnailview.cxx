@@ -529,7 +529,9 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
     {
         //If the last elemented selected is the start range position
         //search for the first selected item
-        if (nLastPos == mpStartSelRange - mFilteredItemList.begin())
+        size_t nSelPos = mpStartSelRange - mFilteredItemList.begin();
+
+        if (nLastPos == nSelPos)
         {
             while (nLastPos && mFilteredItemList[nLastPos-1]->isSelected())
                 --nLastPos;
