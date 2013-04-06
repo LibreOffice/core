@@ -452,6 +452,13 @@ void ATSLayout::DrawText( SalGraphics& rGraphics ) const
         }
     }
 
+#if 1
+    // I am not sure at all if this code actually is needed; putting
+    // it in #if 0 didn't seem to cause any immediately visible bad
+    // effect. Aybody know? But I guess, better safe than sorry, so
+    // let's keep it in for now. This ATSUI-using code is destined for
+    // the bin anyway...
+
     // request an update of the changed window area
     if( rAquaGraphics.IsWindowGraphics() )
     {
@@ -462,6 +469,12 @@ void ATSLayout::DrawText( SalGraphics& rGraphics ) const
         {
             // FIXME: transformation from baseline to top left
             // with the simple approach below we invalidate too much
+
+            // Indeed, this simply triples the rectangle's height,
+            // enlarging it on top and bottom with its old height!? Is
+            // that really necessary? (Sure, it can't harm, but it
+            // seems silly. But OTOH, see comment above.)
+
             short d = drawRect.bottom - drawRect.top;
             drawRect.top -= d;
             drawRect.bottom += d;
@@ -472,7 +485,7 @@ void ATSLayout::DrawText( SalGraphics& rGraphics ) const
             rAquaGraphics.RefreshRect( aRect );
         }
     }
-
+#endif
     // restore the original graphic context transformations
     CGContextRestoreGState( rAquaGraphics.mrContext );
 }
