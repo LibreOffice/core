@@ -53,7 +53,7 @@ $(eval $(call gb_ExternalPackage_add_file,python3,lib/libpython$(PYTHON_VERSION_
 # one of these failed to build.
 # Obviously this list should not contain stuff with external dependencies
 # that may not be available on baseline systems.
-
+ifneq ($(OS),AIX)
 $(eval $(call gb_ExternalPackage_add_files,python3,lib/python/lib-dynload,\
 	LO_lib/array.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
 	LO_lib/atexit.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
@@ -104,6 +104,7 @@ $(eval $(call gb_ExternalPackage_add_files,python3,lib/python/lib-dynload,\
 	LO_lib/time.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
 	LO_lib/zlib.cpython-$(PYTHON_VERSION_MAJOR)$(PYTHON_VERSION_MINOR)m.so \
 ))
+endif
 endif
 
 # headers are not delivered, but used from unpacked dir Include/
