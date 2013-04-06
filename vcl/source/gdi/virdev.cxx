@@ -184,6 +184,10 @@ VirtualDevice::~VirtualDevice()
 
     ImplSVData* pSVData = ImplGetSVData();
 
+    // OutputDevice::ImplReleaseGraphics() requires the yield mutex to
+    // be held, hmm.
+    pSVData->mpDefInst->AcquireYieldMutex( 1 );
+
     ImplReleaseGraphics();
 
     if ( mpVirDev )
