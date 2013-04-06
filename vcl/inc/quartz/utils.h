@@ -20,17 +20,21 @@
 #ifndef INCLUDED_QUARTZ_UTILS_HXX
 #define INCLUDED_QUARTZ_UTILS_HXX
 
-#include <rtl/ustring.hxx>
+#include <iostream>
 
 #include <premac.h>
 #include <CoreFoundation/CoreFoundation.h>
 #include <Foundation/Foundation.h>
 #include <postmac.h>
 
+#include <rtl/ustring.hxx>
+
 rtl::OUString GetOUString( CFStringRef );
 rtl::OUString GetOUString( NSString* );
 CFStringRef CreateCFString( const rtl::OUString& );
 NSString* CreateNSString( const rtl::OUString& );
+
+std::ostream &operator <<(std::ostream& s, CGRect &rRect);
 
 #endif // INCLUDED_QUARTZ_UTILS_HXX
 

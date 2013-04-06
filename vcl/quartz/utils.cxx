@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <iostream>
+#include <iomanip>
+
 #include <rtl/alloc.h>
 #include <rtl/ustrbuf.hxx>
 
@@ -62,6 +65,16 @@ CFStringRef CreateCFString( const rtl::OUString& rStr )
 NSString* CreateNSString( const rtl::OUString& rStr )
 {
     return [[NSString alloc] initWithCharacters: rStr.getStr() length: rStr.getLength()];
+}
+
+std::ostream &operator <<(std::ostream& s, CGRect &rRect)
+{
+#ifndef SAL_LOG_INFO
+    (void) rRect;
+#else
+    s << (int) rRect.size.width << "x" << (int) rRect.size.height << "@(" << (int) rRect.origin.x << "," << (int) rRect.origin.y << ")";
+#endif
+    return s;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
