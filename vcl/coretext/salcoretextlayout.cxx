@@ -263,7 +263,14 @@ bool CoreTextLayout::GetBoundRect( SalGraphics& rGraphics, Rectangle& rVCLRect )
             maBoundRectangle = Rectangle(
                 Point( round_to_long(bound_rect.origin.x * mpStyle->GetFontStretchFactor()),
                        round_to_long(bound_rect.origin.y - bound_rect.size.height )),
-                Size( round_to_long(bound_rect.size.width * mpStyle->GetFontStretchFactor()), round_to_long(bound_rect.size.height)));
+                Size( round_to_long((bound_rect.size.width + CTLineGetTrailingWhitespaceWidth( mpLine )) * mpStyle->GetFontStretchFactor()),
+                      round_to_long(bound_rect.size.height)));
+            maBoundRectangle.Justify();
+        } else {
+            maBoundRectangle = Rectangle(
+                Point( 0, 0 ),
+                Size( round_to_long(CTLineGetTrailingWhitespaceWidth( mpLine ) * mpStyle->GetFontStretchFactor()),
+                      0 ) );
             maBoundRectangle.Justify();
         }
         mbHasBoundRectangle = true;
@@ -422,7 +429,7 @@ long CoreTextLayout::GetTextWidth() const
         return 0;
     }
     CGRect bound_rect = CTLineGetImageBounds(mpLine, context);
-    long w = round_to_long(bound_rect.size.width * mpStyle->GetFontStretchFactor());
+    long w = round_to_long((bound_rect.size.width + CTLineGetTrailingWhitespaceWidth(mpLine)) * mpStyle->GetFontStretchFactor());
 
     SAL_INFO( "vcl.coretext.layout", "GetTextWidth(" << this << ") returning " << w );
 
