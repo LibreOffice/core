@@ -374,6 +374,9 @@ Regexp Regexp::parse(rtl::OUString const & rRegexp)
     if (p == pEnd)
         throw lang::IllegalArgumentException();
 
+    // This and the matchString() calls below are some of the few places where
+    // RTL_CONSTASCII_STRINGPARAM() should NOT be removed.
+    // (c.f. https://gerrit.libreoffice.org/3117)
     if (matchString(&p, pEnd, RTL_CONSTASCII_STRINGPARAM(".*")))
     {
         if (p != pEnd)
