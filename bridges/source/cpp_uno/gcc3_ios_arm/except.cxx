@@ -28,12 +28,12 @@
 #include <osl/mutex.hxx>
 
 #include <com/sun/star/uno/genfunc.hxx>
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <typelib/typedescription.hxx>
 #include <uno/any2.h>
 
 #include "share.hxx"
-
 
 using namespace ::std;
 using namespace ::osl;
@@ -51,8 +51,6 @@ void dummy_can_throw_anything( char const * )
 //==================================================================================================
 static OUString toUNOname( char const * p ) SAL_THROW(())
 {
-    char const * start = p;
-
     // example: N3com3sun4star4lang24IllegalArgumentExceptionE
 
     OUStringBuffer buf( 64 );
@@ -76,15 +74,13 @@ static OUString toUNOname( char const * p ) SAL_THROW(())
 
     OUString result( buf.makeStringAndClear() );
 
-    SAL_INFO( "bridges.ios", "toUNOname():" << start << " => " << result );
-
     return result;
 }
 
 //==================================================================================================
 class RTTI
 {
-    typedef boost::unordered_map< OUString, type_info *, OUStringHash > t_rtti_map;
+    typedef boost::unordered_map< OUString, const type_info *, OUStringHash > t_rtti_map;
 
     Mutex m_mutex;
     t_rtti_map m_rttis;
@@ -96,12 +92,16 @@ public:
     RTTI() SAL_THROW(());
     ~RTTI() SAL_THROW(());
 
-    type_info * getRTTI( typelib_CompoundTypeDescription * ) SAL_THROW(());
+    const type_info * getRTTI( typelib_CompoundTypeDescription * ) SAL_THROW(());
 };
 //__________________________________________________________________________________________________
 RTTI::RTTI() SAL_THROW(())
     : m_hApp( dlopen( 0, RTLD_LAZY ) )
 {
+    // Insert commonly needed type_infos to avoid dlsym() calls
+    // Ideally we should insert all needed ones
+    m_rttis.insert( t_rtti_map::value_type( "com.sun.star.ucb.InteractiveAugmentedIOException",
+                                            &typeid( com::sun::star::ucb::InteractiveAugmentedIOException ) ) );
 }
 //__________________________________________________________________________________________________
 RTTI::~RTTI() SAL_THROW(())
@@ -110,9 +110,9 @@ RTTI::~RTTI() SAL_THROW(())
 }
 
 //__________________________________________________________________________________________________
-type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THROW(())
+const type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THROW(())
 {
-    type_info * rtti;
+    const type_info * rtti;
 
     OUString const & unoName = *(OUString const *)&pTypeDescr->aBase.pTypeName;
 
@@ -135,6 +135,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
         buf.append( 'E' );
 
         OString symName( buf.makeStringAndClear() );
+        SAL_INFO( "bridges.ios", "getRTTI: calling dlsym() for type_info for " << unoName );
         rtti = (type_info *)dlsym( m_hApp, symName.getStr() );
 
         if (rtti)
@@ -161,7 +162,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
                 if (pTypeDescr->pBaseTypeDescription)
                 {
                     // ensure availability of base
-                    type_info * base_rtti = getRTTI(
+                    const type_info * base_rtti = getRTTI(
                         (typelib_CompoundTypeDescription *)pTypeDescr->pBaseTypeDescription );
                     rtti = new __si_class_type_info(
                         strdup( rttiName ), (__class_type_info *)base_rtti );
@@ -210,10 +211,10 @@ static void deleteException( void * pExc )
 //==================================================================================================
 void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
 {
-    SAL_INFO( "bridges.ios", "raiseException: " << pUnoExc->pType->pTypeName );
+    SAL_INFO( "bridges.ios", "raiseException: " << *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ) );
 
     void * pCppExc;
-    type_info * rtti;
+    const type_info * rtti;
 
     {
     // construct cpp exception object
@@ -248,7 +249,7 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
 #endif
         }
     }
-    rtti = (type_info *)s_rtti->getRTTI( (typelib_CompoundTypeDescription *) pTypeDescr );
+    rtti = s_rtti->getRTTI( (typelib_CompoundTypeDescription *) pTypeDescr );
 
     TYPELIB_DANGER_RELEASE( pTypeDescr );
     OSL_ENSURE( rtti, "### no rtti for throwing exception!" );
@@ -261,7 +262,7 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     }
     }
 
-    __cxa_throw( pCppExc, rtti, deleteException );
+    __cxa_throw( pCppExc, (type_info *) rtti, deleteException );
 }
 
 //==================================================================================================
