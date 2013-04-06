@@ -115,6 +115,7 @@ gb_UIConfig_get_packagename_for_lang = UIConfig/$(1)_$(2)
 # gb_UIConfig_UIConfig modulename
 define gb_UIConfig_UIConfig
 $(call gb_Package_Package_internal,$(call gb_UIConfig_get_packagename,$(1)),$(SRCDIR))
+$(call gb_Package_Package_internal,$(call gb_UIConfig_get_packagename,$(1)_generated),$(WORKDIR))
 $(call gb_UIConfig_get_target,$(1)) :| $(dir $(call gb_UIConfig_get_target,$(1))).dir
 $(call gb_UIConfig_get_target,$(1)) : $(call gb_Package_get_target,$(call gb_UIConfig_get_packagename,$(1)))
 $(call gb_Postprocess_get_target,AllUIConfigs) : $(call gb_UIConfig_get_target,$(1))
@@ -136,9 +137,15 @@ $(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$
 
 endef
 
+# gb_UIConfig__package_file target package type destfile srcfile
+define gb_UIConfig__package_file
+$(call gb_Package_add_file,$(2),xml/uiconfig/$(1)/$(3)/$(4),$(5))
+
+endef
+
 # gb_UIConfig__package_uifile target package destfile srcfile
 define gb_UIConfig__package_uifile
-$(call gb_Package_add_file,$(2),xml/uiconfig/$(1)/ui/$(3),$(4))
+$(call gb_UIConfig__package_file,$(1),$(2),ui,$(3),$(4))
 
 endef
 
@@ -215,6 +222,87 @@ endef
 # gb_UIConfig_add_uifiles target uifile(s)
 define gb_UIConfig_add_uifiles
 $(foreach uifile,$(2),$(call gb_UIConfig_add_uifile,$(1),$(uifile)))
+
+endef
+
+# gb_UIConfig__add_xmlfile target package-target type xmlfile
+define gb_UIConfig__add_xmlfile
+$(call gb_UIConfig__package_file,$(1),$(call gb_UIConfig_get_packagename,$(2)),$(3),$(notdir $(4)).xml,$(4).xml)
+
+endef
+
+# Add menubar config file to the package.
+#
+# The file is relative to $(SRCDIR) and without extension.
+#
+# gb_UIConfig_add_menubarfile target file
+define gb_UIConfig_add_menubarfile
+$(call gb_UIConfig__add_xmlfile,$(1),$(1),menubar,$(2))
+
+endef
+
+# Adds multiple menubar config files to the package.
+#
+# gb_UIConfig_add_menubarfiles target file(s)
+define gb_UIConfig_add_menubarfiles
+$(foreach menubarfile,$(2),$(call gb_UIConfig_add_menubarfile,$(1),$(menubarfile)))
+
+endef
+
+# Add a generated menubar config file to the package.
+#
+# The file is relative to $(WORKDIR) and without extension.
+#
+# gb_UIConfig_add_generated_menubarfile target file
+define gb_UIConfig_add_generated_menubarfile
+$(call gb_UIConfig__add_xmlfile,$(1),$(1)_generated,menubar,$(2))
+
+$(call gb_UIConfig_get_target,$(1)) : $(call gb_Package_get_target,$(call gb_UIConfig_get_packagename,$(1)_generated))
+$(call gb_UIConfig_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(call gb_UIConfig_get_packagename,$(1)_generated))
+
+endef
+
+# Adds multiple menubar config files to the package.
+#
+# gb_UIConfig_add_generated_menubarfiles target file(s)
+define gb_UIConfig_add_generated_menubarfiles
+$(foreach menubarfile,$(2),$(call gb_UIConfig_add_generated_menubarfile,$(1),$(menubarfile)))
+
+endef
+
+# Add statusbar config file to the package.
+#
+# The file is relative to $(SRCDIR) and without extension.
+#
+# gb_UIConfig_add_statusbarfile target file
+define gb_UIConfig_add_statusbarfile
+$(call gb_UIConfig__add_xmlfile,$(1),$(1),statusbar,$(2))
+
+endef
+
+# Adds multiple statusbar config files to the package.
+#
+# gb_UIConfig_add_statusbarfiles target file(s)
+define gb_UIConfig_add_statusbarfiles
+$(foreach statusbarfile,$(2),$(call gb_UIConfig_add_statusbarfile,$(1),$(statusbarfile)))
+
+endef
+
+# Add toolbar config file to the package.
+#
+# The file is relative to $(SRCDIR) and without extension.
+#
+# gb_UIConfig_add_toolbarfile target file
+define gb_UIConfig_add_toolbarfile
+$(call gb_UIConfig__add_xmlfile,$(1),$(1),toolbar,$(2))
+
+endef
+
+# Adds multiple toolbar config files to the package.
+#
+# gb_UIConfig_add_toolbarfiles target file(s)
+define gb_UIConfig_add_toolbarfiles
+$(foreach toolbarfile,$(2),$(call gb_UIConfig_add_toolbarfile,$(1),$(toolbarfile)))
 
 endef
 
