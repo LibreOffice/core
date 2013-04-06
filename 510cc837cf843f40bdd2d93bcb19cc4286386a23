@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAXH///wM\u003d",
+        "filename": "fpicker/source/aqua/SalAquaFolderPicker.mm",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2013-04-06T23:18:48Z",
+      "side": 0,
+      "message": "I\u0027m not sure about this, this source may use names of the ::rtl namespace other than OUString which then would fail to compile. As I have no Mac to build this I can\u0027t verify. Did you compile this for the Mac platform?",
+      "revId": "510cc837cf843f40bdd2d93bcb19cc4286386a23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
