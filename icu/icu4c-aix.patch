@@ -126,3 +126,30 @@
  
  
  ## BIR  - bind with internal references [so app data and icu data doesn't collide]
+--- misc/icu/source/tools/pkgdata/pkgdata.cpp	2013-03-15 22:12:06.000000000 +0000
++++ misc/build/icu/source/tools/pkgdata/pkgdata.cpp	2013-04-06 20:56:00.935656635 +0100
+@@ -888,7 +888,7 @@
+ 
+         uprv_strcat(pkgDataFlags[SO_EXT], ".");
+         uprv_strcat(pkgDataFlags[SO_EXT], pkgDataFlags[A_EXT]);
+-#elif U_PLATFORM == U_PF_OS400 || defined(_AIX)
++#elif U_PLATFORM == U_PF_OS400
+         sprintf(libFileNames[LIB_FILE_VERSION_TMP], "%s.%s",
+                 libFileNames[LIB_FILE],
+                 pkgDataFlags[SOBJ_EXT]);
+@@ -1302,15 +1298,6 @@
+                 pkgDataFlags[LDICUDTFLAGS],
+                 targetDir,
+                 libFileNames[LIB_FILE_CYGWIN_VERSION],
+-#elif U_PLATFORM == U_PF_AIX
+-        sprintf(cmd, "%s %s%s;%s %s -o %s%s %s %s%s %s %s",
+-                RM_CMD,
+-                targetDir,
+-                libFileNames[LIB_FILE_VERSION_TMP],
+-                pkgDataFlags[GENLIB],
+-                pkgDataFlags[LDICUDTFLAGS],
+-                targetDir,
+-                libFileNames[LIB_FILE_VERSION_TMP],
+ #else
+         sprintf(cmd, "%s %s -o %s%s %s %s%s %s %s",
+                 pkgDataFlags[GENLIB],
