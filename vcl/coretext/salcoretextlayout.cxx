@@ -20,6 +20,7 @@
 #include <iostream>
 #include <iomanip>
 
+#include "quartz/utils.h"
 #include "coretext/common.h"
 #include "coretext/salcoretextstyle.hxx"
 
@@ -186,6 +187,29 @@ void CoreTextLayout::DrawText( SalGraphics& rGraphics ) const
     CGContextSetShouldAntialias( gr.mrContext, !gr.mbNonAntialiasedText );
     CGContextTranslateCTM(gr.mrContext, pos.X(), pos.Y());
     CGContextShowGlyphs(gr.mrContext, mpGlyphs, mnGlyphCount);
+
+#ifndef IOS
+    // Request an update of the changed window area. Like in the ATSUI
+    // code, I am not sure if this is actually necessary. Once this
+    // seems to work fine otherwise, let's try removing this.
+    if( gr.IsWindowGraphics() )
+    {
+        CGRect drawRect = CTLineGetImageBounds( mpLine, gr.mrContext );
+        SAL_INFO( "vcl.coretext.layout", "drawRect=" << drawRect );
+        if( !CGRectIsNull( drawRect ) ) {
+#if 1
+            // For kicks, try the same silly (?) enlarging of the
+            // rectangle as in the ATSUI code
+            drawRect.origin.y -= drawRect.size.height;
+            drawRect.size.height += 2*drawRect.size.height;
+            SAL_INFO( "vcl.coretext.layout", "after enlarging drawRect=" << drawRect );
+#endif
+            drawRect = CGContextConvertRectToDeviceSpace( gr.mrContext, drawRect );
+            SAL_INFO( "vcl.coretext.layout", "after convert: drawRect=" << drawRect );
+            gr.RefreshRect( drawRect );
+        }
+    }
+#endif
 
     // restore the original graphic context transformations
     CGContextRestoreGState( gr.mrContext );
