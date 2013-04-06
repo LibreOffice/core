@@ -40,12 +40,21 @@
 		BE5A226D1664F87600CF01C9 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		BE5A226F1664F87600CF01C9 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		BE5A22771664F87600CF01C9 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		BE5C5252170EB97700F33F89 /* shlib.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = shlib.cxx; path = ../../../../cppuhelper/source/shlib.cxx; sourceTree = "<group>"; };
+		BE5C5253170EB9C900F33F89 /* cpp2uno-arm.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "cpp2uno-arm.cxx"; path = "../../../../bridges/source/cpp_uno/gcc3_ios_arm/cpp2uno-arm.cxx"; sourceTree = "<group>"; };
+		BE5C5254170EB9C900F33F89 /* cpp2uno-i386.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "cpp2uno-i386.cxx"; path = "../../../../bridges/source/cpp_uno/gcc3_ios_arm/cpp2uno-i386.cxx"; sourceTree = "<group>"; };
+		BE5C5255170EB9C900F33F89 /* cpp2uno.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cpp2uno.cxx; path = ../../../../bridges/source/cpp_uno/gcc3_ios_arm/cpp2uno.cxx; sourceTree = "<group>"; };
+		BE5C5256170EB9C900F33F89 /* except.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = except.cxx; path = ../../../../bridges/source/cpp_uno/gcc3_ios_arm/except.cxx; sourceTree = "<group>"; };
+		BE5C5257170EB9C900F33F89 /* uno2cpp-arm.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "uno2cpp-arm.cxx"; path = "../../../../bridges/source/cpp_uno/gcc3_ios_arm/uno2cpp-arm.cxx"; sourceTree = "<group>"; };
+		BE5C5258170EB9C900F33F89 /* uno2cpp-i386.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "uno2cpp-i386.cxx"; path = "../../../../bridges/source/cpp_uno/gcc3_ios_arm/uno2cpp-i386.cxx"; sourceTree = "<group>"; };
+		BE5C5259170EB9C900F33F89 /* uno2cpp.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = uno2cpp.cxx; path = ../../../../bridges/source/cpp_uno/gcc3_ios_arm/uno2cpp.cxx; sourceTree = "<group>"; };
 		BE69AD87169592C4001BE1CD /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
 		BE69AD8A1695954D001BE1CD /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
 		BE69AD8B1695954D001BE1CD /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		BE69AD8C1695954D001BE1CD /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		BE7B7AFF170438D0002341F4 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		BE7B7B00170438D0002341F4 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		BE837605170E27EC007BBC3E /* vclxmenu.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = vclxmenu.cxx; path = ../../../../toolkit/source/awt/vclxmenu.cxx; sourceTree = "<group>"; };
 		BE9086F616FF02B2004400A1 /* headlessinst.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = headlessinst.cxx; path = ../../../../vcl/headless/headlessinst.cxx; sourceTree = "<group>"; };
 		BE9086F716FF02B2004400A1 /* svpbmp.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svpbmp.cxx; path = ../../../../vcl/headless/svpbmp.cxx; sourceTree = "<group>"; };
 		BE9086F816FF02B2004400A1 /* svpdata.cxx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = svpdata.cxx; path = ../../../../vcl/headless/svpdata.cxx; sourceTree = "<group>"; };
@@ -84,6 +93,7 @@
 			isa = PBXGroup;
 			children = (
 				BE2F0A0A17077A040060FE0D /* typedescriptionprovider.cxx */,
+				BE5C5252170EB97700F33F89 /* shlib.cxx */,
 			);
 			name = cppuhelper;
 			sourceTree = "<group>";
@@ -123,6 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				BEBF3E3C17002D4C00C454AC /* frame.cxx */,
+				BE837605170E27EC007BBC3E /* vclxmenu.cxx */,
 			);
 			name = framework;
 			sourceTree = "<group>";
@@ -184,6 +195,7 @@
 			children = (
 				BE5A22681664F87600CF01C9 /* AppDelegate.h */,
 				BE5A22691664F87600CF01C9 /* AppDelegate.m */,
+				BE5C525A170EB9D000F33F89 /* bridges */,
 				BE2F0A1017077B560060FE0D /* basebmp */,
 				BE2F0A0B17077A0F0060FE0D /* cppuhelper */,
 				BE2F0A0E17077AC40060FE0D /* framework */,
@@ -215,6 +227,20 @@
 				BE5A226F1664F87600CF01C9 /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		BE5C525A170EB9D000F33F89 /* bridges */ = {
+			isa = PBXGroup;
+			children = (
+				BE5C5253170EB9C900F33F89 /* cpp2uno-arm.cxx */,
+				BE5C5254170EB9C900F33F89 /* cpp2uno-i386.cxx */,
+				BE5C5255170EB9C900F33F89 /* cpp2uno.cxx */,
+				BE5C5256170EB9C900F33F89 /* except.cxx */,
+				BE5C5257170EB9C900F33F89 /* uno2cpp-arm.cxx */,
+				BE5C5258170EB9C900F33F89 /* uno2cpp-i386.cxx */,
+				BE5C5259170EB9C900F33F89 /* uno2cpp.cxx */,
+			);
+			name = bridges;
 			sourceTree = "<group>";
 		};
 		BE69AD3716958CA0001BE1CD /* Resources */ = {
