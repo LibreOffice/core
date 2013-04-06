@@ -42,8 +42,13 @@ $(eval $(call gb_Module_add_targets,dbaccess,\
     Library_dbu \
     Library_sdbt \
     Package_inc \
-    Package_uiconfig \
     UIConfig_dbaccess \
+	UIConfig_dbapp \
+	UIConfig_dbbrowser \
+	UIConfig_dbquery \
+	UIConfig_dbrelation \
+	UIConfig_dbtable \
+	UIConfig_dbtdata \
 ))
 
 $(eval $(call gb_Module_add_check_targets,dbaccess,\

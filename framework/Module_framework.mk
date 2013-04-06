@@ -28,7 +28,7 @@ $(eval $(call gb_Module_add_targets,framework,\
     Library_fwm \
     Package_dtd \
     Package_inc \
-    Package_uiconfig \
+    UIConfig_startmodule \
 ))
 
 ifneq ($(OOO_JUNIT_JAR),)

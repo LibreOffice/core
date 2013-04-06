@@ -27,7 +27,6 @@ $(eval $(call gb_Module_add_targets,starmath,\
     AllLangResTarget_sm \
     Library_sm \
     Library_smd \
-    Package_uiconfig \
     UIConfig_smath \
 ))
 
