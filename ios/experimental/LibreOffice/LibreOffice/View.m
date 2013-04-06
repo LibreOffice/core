@@ -14,9 +14,9 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    // NSLog(@"drawRect: %fx%f@(%f,%f)", rect.size.width, rect.size.height, rect.origin.x, rect.origin.y);
+    NSLog(@"drawRect: %dx%d@(%d,%d)", (int) rect.size.width, (int) rect.size.height, (int) rect.origin.x, (int) rect.origin.y);
 
-    NSDate *a = [NSDate date];
+    NSDate *startDate = [NSDate date];
 
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSaveGState(context);
@@ -25,7 +25,7 @@
     lo_render_windows(context, rect);
     CGContextRestoreGState(context);
 
-    NSLog(@"drawRect: lo_render_windows took %f s", [[NSDate date] timeIntervalSinceDate: a]);
+    NSLog(@"drawRect: lo_render_windows took %f s", [[NSDate date] timeIntervalSinceDate: startDate]);
 }
 
 - (void) tapGesture:(UIGestureRecognizer *)gestureRecognizer
