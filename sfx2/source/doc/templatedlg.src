@@ -13,7 +13,7 @@
 
 String STR_ACTION_SORT_NAME
 {
-    Text [ en-US ] = "Sort by name";
+    Text [ en-US ] = "Reverse Sort Order";
 };
 
 String STR_ACTION_REFRESH
@@ -84,7 +84,7 @@ String STR_MSG_ERROR_REPOSITORY_NAME
 
 String STR_MSG_ERROR_SELECT_FOLDER
 {
-    Text [ en-US ] = "Select the destination folder(s) to save the template.";
+    Text [ en-US ] = "Select the destination folder(s) to save the template to.";
 };
 
 String STR_INPUT_TEMPLATE_NEW
