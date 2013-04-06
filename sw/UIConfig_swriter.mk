@@ -9,6 +9,55 @@
 
 $(eval $(call gb_UIConfig_UIConfig,modules/swriter))
 
+$(eval $(call gb_UIConfig_add_menubarfiles,modules/swriter,\
+	sw/uiconfig/swriter/menubar/menubar \
+))
+
+$(eval $(call gb_UIConfig_add_statusbarfiles,modules/swriter,\
+	sw/uiconfig/swriter/statusbar/statusbar \
+))
+
+$(eval $(call gb_UIConfig_add_toolbarfiles,modules/swriter,\
+	sw/uiconfig/swriter/toolbar/alignmentbar \
+	sw/uiconfig/swriter/toolbar/arrowshapes \
+	sw/uiconfig/swriter/toolbar/basicshapes \
+	sw/uiconfig/swriter/toolbar/bezierobjectbar \
+	sw/uiconfig/swriter/toolbar/calloutshapes \
+	sw/uiconfig/swriter/toolbar/colorbar \
+	sw/uiconfig/swriter/toolbar/drawbar \
+	sw/uiconfig/swriter/toolbar/drawingobjectbar \
+	sw/uiconfig/swriter/toolbar/drawtextobjectbar \
+	sw/uiconfig/swriter/toolbar/extrusionobjectbar \
+	sw/uiconfig/swriter/toolbar/findbar \
+	sw/uiconfig/swriter/toolbar/flowchartshapes \
+	sw/uiconfig/swriter/toolbar/fontworkobjectbar \
+	sw/uiconfig/swriter/toolbar/fontworkshapetype \
+	sw/uiconfig/swriter/toolbar/formcontrols \
+	sw/uiconfig/swriter/toolbar/formdesign \
+	sw/uiconfig/swriter/toolbar/formsfilterbar \
+	sw/uiconfig/swriter/toolbar/formsnavigationbar \
+	sw/uiconfig/swriter/toolbar/formtextobjectbar \
+	sw/uiconfig/swriter/toolbar/frameobjectbar \
+	sw/uiconfig/swriter/toolbar/fullscreenbar \
+	sw/uiconfig/swriter/toolbar/graffilterbar \
+	sw/uiconfig/swriter/toolbar/graphicobjectbar \
+	sw/uiconfig/swriter/toolbar/insertbar \
+	sw/uiconfig/swriter/toolbar/mediaobjectbar \
+	sw/uiconfig/swriter/toolbar/moreformcontrols \
+	sw/uiconfig/swriter/toolbar/navigationobjectbar \
+	sw/uiconfig/swriter/toolbar/numobjectbar \
+	sw/uiconfig/swriter/toolbar/oleobjectbar \
+	sw/uiconfig/swriter/toolbar/optimizetablebar \
+	sw/uiconfig/swriter/toolbar/previewobjectbar \
+	sw/uiconfig/swriter/toolbar/standardbar \
+	sw/uiconfig/swriter/toolbar/starshapes \
+	sw/uiconfig/swriter/toolbar/symbolshapes \
+	sw/uiconfig/swriter/toolbar/tableobjectbar \
+	sw/uiconfig/swriter/toolbar/textobjectbar \
+	sw/uiconfig/swriter/toolbar/toolbar \
+	sw/uiconfig/swriter/toolbar/viewerbar \
+))
+
 $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/autoformattable \
 	sw/uiconfig/swriter/ui/autotext \

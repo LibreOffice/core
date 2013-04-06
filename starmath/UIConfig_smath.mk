@@ -9,6 +9,20 @@
 
 $(eval $(call gb_UIConfig_UIConfig,modules/smath))
 
+$(eval $(call gb_UIConfig_add_menubarfiles,modules/smath,\
+	starmath/uiconfig/smath/menubar/menubar \
+))
+
+$(eval $(call gb_UIConfig_add_statusbarfiles,modules/smath,\
+	starmath/uiconfig/smath/statusbar/statusbar \
+))
+
+$(eval $(call gb_UIConfig_add_toolbarfiles,modules/smath,\
+	starmath/uiconfig/smath/toolbar/toolbar \
+	starmath/uiconfig/smath/toolbar/standardbar \
+	starmath/uiconfig/smath/toolbar/fullscreenbar \
+))
+
 $(eval $(call gb_UIConfig_add_uifiles,modules/smath,\
 	starmath/uiconfig/smath/ui/printeroptions \
 ))
