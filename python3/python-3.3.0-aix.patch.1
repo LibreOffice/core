@@ -109,7 +109,7 @@ build with GCC on AIX
  	IRIX*/6*) LDSHARED="ld ${SGI_ABI} -shared -all";;
 --- Python-3.3.0/Makefile.pre.in	2012-11-28 09:05:45.861528086 +0000
 +++ Python-3.3.0/Makefile.pre.in	2012-11-28 09:06:23.046964040 +0000
-@@ -493,7 +493,10 @@
+@@ -493,14 +493,20 @@
  
  libpython$(LDVERSION).so: $(LIBRARY_OBJS)
  	if test $(INSTSONAME) != $(LDLIBRARY); then \
@@ -121,7 +121,18 @@ build with GCC on AIX
  		$(LN) -f $(INSTSONAME) $@; \
  	else \
  		$(BLDSHARED) -o $@ $(LIBRARY_OBJS) $(MODLIBS) $(SHLIBS) $(LIBC) $(LIBM) $(LDLAST); \
-@@ -1106,6 +1109,8 @@
+ 	fi
+ 
+ libpython3.so:	libpython$(LDVERSION).so
+-	$(BLDSHARED) $(NO_AS_NEEDED) -o $@ -Wl,-h$@ $^
++	if [ "`echo $(MACHDEP) | sed 's/^\(...\).*/\1/'`" != "aix" ]; then \
++		SONAME="-Wl,-h$@"; \
++	fi; \
++	$(BLDSHARED) $(NO_AS_NEEDED) -o $@ $(SONAME) $^
+ 
+ libpython$(LDVERSION).dylib: $(LIBRARY_OBJS)
+ 	 $(CC) -dynamiclib -Wl,-single_module $(PY_LDFLAGS) -undefined dynamic_lookup -Wl,-install_name,$(prefix)/lib/libpython$(LDVERSION).dylib -Wl,-compatibility_version,$(VERSION) -Wl,-current_version,$(VERSION) -o $@ $(LIBRARY_OBJS) $(SHLIBS) $(LIBC) $(LIBM) $(LDLAST); \
+@@ -1106,6 +1112,8 @@
  	export PATH; PATH="`pwd`:$$PATH"; \
  	export PYTHONPATH; PYTHONPATH="`pwd`/Lib"; \
  	export DYLD_FRAMEWORK_PATH; DYLD_FRAMEWORK_PATH="`pwd`"; \
