@@ -190,6 +190,8 @@ gb_Executable_EXT_for_build :=
 
 ifeq ($(OS_FOR_BUILD),MACOSX)
 gb_Helper_LIBRARY_PATH_VAR := DYLD_LIBRARY_PATH
+else ifeq ($(OS_FOR_BUILD),AIX)
+gb_Helper_LIBRARY_PATH_VAR := LIBPATH
 else ifeq ($(OS_FOR_BUILD),WNT)
 # In theory possible if cross-compiling to some Unix from Windows,
 # in practice strongly discouraged to even try that
