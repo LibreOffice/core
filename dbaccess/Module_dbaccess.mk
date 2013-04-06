@@ -43,7 +43,7 @@ $(eval $(call gb_Module_add_targets,dbaccess,\
     Library_sdbt \
     Package_inc \
     Package_uiconfig \
-    UI_dbaccess \
+    UIConfig_dbaccess \
 ))
 
 $(eval $(call gb_Module_add_check_targets,dbaccess,\

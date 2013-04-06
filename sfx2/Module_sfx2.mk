@@ -24,7 +24,7 @@ $(eval $(call gb_Module_add_targets,sfx2,\
     Library_sfx \
     Package_inc \
     Package_sdi \
-    UI_sfx \
+    UIConfig_sfx \
 ))
 
 $(eval $(call gb_Module_add_check_targets,sfx2,\

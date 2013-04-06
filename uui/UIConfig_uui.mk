@@ -7,11 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UI_UI,filter))
+$(eval $(call gb_UIConfig_UIConfig,uui))
 
-$(eval $(call gb_UI_add_uifiles,filter,\
-	filter/uiconfig/ui/testxmlfilter \
-	filter/uiconfig/ui/xmlfiltersettings \
+$(eval $(call gb_UIConfig_add_uifiles,uui,\
+	uui/uiconfig/ui/masterpassworddlg \
+	uui/uiconfig/ui/setmasterpassworddlg \
 ))
 
 # vim: set noet sw=4 ts=4:
