@@ -30,7 +30,7 @@ $(eval $(call gb_Module_add_targets,svx,\
     Package_globlmn_hrc \
     Package_inc \
     Package_sdi \
-    UI_svx \
+    UIConfig_svx \
 ))
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))

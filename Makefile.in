@@ -120,7 +120,7 @@ gbuild_TARGETS := AllLangHelp \
 	Pyuno \
 	Rdb \
 	StaticLibrary \
-	UI \
+	UIConfig \
 	UnoApi \
 	UnoApiMerge \
 	UnpackedTarball \

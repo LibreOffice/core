@@ -7,12 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UI_UI,dbaccess))
+$(eval $(call gb_UIConfig_UIConfig,filter))
 
-$(eval $(call gb_UI_add_uifiles,dbaccess, \
-    dbaccess/uiconfig/ui/querypropertiesdialog  \
-    dbaccess/uiconfig/ui/generalpagedialog \
-    dbaccess/uiconfig/ui/generalpagewizard \
+$(eval $(call gb_UIConfig_add_uifiles,filter,\
+	filter/uiconfig/ui/testxmlfilter \
+	filter/uiconfig/ui/xmlfiltersettings \
 ))
 
 # vim: set noet sw=4 ts=4:

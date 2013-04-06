@@ -7,12 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UI_UI,spa))
+$(eval $(call gb_UIConfig_UIConfig,tubes))
 
-$(eval $(call gb_UI_add_uifiles,spa,\
-	padmin/uiconfig/ui/printerdevicepage \
-	padmin/uiconfig/ui/printerpaperpage \
-	padmin/uiconfig/ui/printerpropertiesdialog \
+$(eval $(call gb_UIConfig_add_uifiles,tubes,\
+	tubes/uiconfig/ui/contacts \
 ))
 
 # vim: set noet sw=4 ts=4:

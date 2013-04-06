@@ -7,14 +7,11 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UI_UI,xmlsec))
+$(eval $(call gb_UIConfig_UIConfig,desktop))
 
-$(eval $(call gb_UI_add_uifiles,xmlsec,\
-	xmlsecurity/uiconfig/ui/digitalsignaturesdialog \
-	xmlsecurity/uiconfig/ui/securitylevelpage \
-	xmlsecurity/uiconfig/ui/securitytrustpage \
-	xmlsecurity/uiconfig/ui/selectcertificatedialog \
-	xmlsecurity/uiconfig/ui/macrosecuritydialog \
+$(eval $(call gb_UIConfig_add_uifiles,desktop,\
+    desktop/uiconfig/ui/cmdlinehelp \
+    desktop/uiconfig/ui/extensionmanager \
 ))
 
 # vim: set noet sw=4 ts=4:

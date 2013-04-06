@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_UI_UI,modules/scalc))
+$(eval $(call gb_UIConfig_UIConfig,modules/scalc))
 
-$(eval $(call gb_UI_add_uifiles,modules/scalc,\
+$(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/cellprotectionpage \
 	sc/uiconfig/scalc/ui/definename \
 	sc/uiconfig/scalc/ui/deletecontents \
