@@ -111,3 +111,18 @@
  
  ## Compilation rules
  %.$(STATIC_O): $(srcdir)/%.c
+@@ -118,10 +61,10 @@
+ 		[ -s $@ ] || rm -f $@'
+ 
+ ## Versioned libraries rules
+-%$(SO_TARGET_VERSION_MAJOR).$(SO): %$(SO_TARGET_VERSION).$(SO)
+-	$(RM) $@ && ln -s ${*F}$(SO_TARGET_VERSION).$(SO) $@
+-%.$(SO): %$(SO_TARGET_VERSION).$(SO)
+-	$(RM) $@ && ln -s ${*F}$(SO_TARGET_VERSION).$(SO) $@
++%.$(SO).$(SO_TARGET_VERSION_MAJOR): %.$(SO).$(SO_TARGET_VERSION)
++	$(RM) $@ && ln -s ${<F} $@
++%.$(SO): %.$(SO).$(SO_TARGET_VERSION_MAJOR)
++	$(RM) $@ && ln -s ${*F}.$(SO).$(SO_TARGET_VERSION) $@
+ 
+ 
+ ## BIR  - bind with internal references [so app data and icu data doesn't collide]
