@@ -163,14 +163,6 @@ void CoreTextLayout::DrawText( SalGraphics& rGraphics ) const
 
     CGContextSaveGState( gr.mrContext );
     Point pos = GetDrawPosition(Point(0,0));
-#if 0
-    SAL_INFO( "vcl.coretext.layout", "at pos (" << pos.X() << "," << pos.Y() << ")" );
-
-    CGContextSetTextMatrix(gr.mrContext, CGAffineTransformMakeScale(1.0, -1.0));
-    CGContextSetShouldAntialias( gr.mrContext, !gr.mbNonAntialiasedText );
-    CGContextSetTextPosition(gr.mrContext, pos.X(), pos.Y());
-    CTLineDraw(mpLine, gr.mrContext);
-#else
     SAL_INFO( "vcl.coretext.layout", "at pos (" << pos.X() << "," << pos.Y() <<") ctfont=" << mpStyle->GetFont() );
 
     CGFontRef cg_font = CTFontCopyGraphicsFont(mpStyle->GetFont(), NULL);
@@ -194,7 +186,7 @@ void CoreTextLayout::DrawText( SalGraphics& rGraphics ) const
     CGContextSetShouldAntialias( gr.mrContext, !gr.mbNonAntialiasedText );
     CGContextTranslateCTM(gr.mrContext, pos.X(), pos.Y());
     CGContextShowGlyphs(gr.mrContext, mpGlyphs, mnGlyphCount);
-#endif
+
     // restore the original graphic context transformations
     CGContextRestoreGState( gr.mrContext );
 }
