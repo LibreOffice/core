@@ -31,9 +31,8 @@ namespace svx
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::beans;
 
-    #define DECLARE_ASCII(s)        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
-    #define TOOLBAR_RESNAME         DECLARE_ASCII("private:resource/toolbar/")
-    #define PROPNAME_LAYOUTMANAGER  DECLARE_ASCII("LayoutManager")
+    #define TOOLBAR_RESNAME         "private:resource/toolbar/"
+    #define PROPNAME_LAYOUTMANAGER  "LayoutManager"
 
     //====================================================================
     //= ToolboxAccess

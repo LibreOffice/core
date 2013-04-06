@@ -30,10 +30,10 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphicfilter.hxx>
 
-#define FORMAT_BMP  String(RTL_CONSTASCII_USTRINGPARAM("bmp"))
-#define FORMAT_GIF  String(RTL_CONSTASCII_USTRINGPARAM("gif"))
-#define FORMAT_JPG  String(RTL_CONSTASCII_USTRINGPARAM("jpg"))
-#define FORMAT_PNG  String(RTL_CONSTASCII_USTRINGPARAM("png"))
+#define FORMAT_BMP  OUString("bmp")
+#define FORMAT_GIF  OUString("gif")
+#define FORMAT_JPG  OUString("jpg")
+#define FORMAT_PNG  OUString("png")
 
 GraphicFilter* XOutBitmap::pGrfFilter = NULL;
 

@@ -82,36 +82,36 @@ namespace svxform
 //............................................................................
 
     // properties of instance
-    #define PN_INSTANCE_MODEL       ::rtl::OUString( "Instance" )
-    #define PN_INSTANCE_ID          ::rtl::OUString( "ID" )
-    #define PN_INSTANCE_URL         ::rtl::OUString( "URL" )
+    #define PN_INSTANCE_MODEL       "Instance"
+    #define PN_INSTANCE_ID          "ID"
+    #define PN_INSTANCE_URL         "URL"
 
     // properties of binding
-    #define PN_BINDING_ID           ::rtl::OUString( "BindingID" )
-    #define PN_BINDING_EXPR         ::rtl::OUString( "BindingExpression" )
-    #define PN_BINDING_MODEL        ::rtl::OUString( "Model" )
-    #define PN_BINDING_NAMESPACES   ::rtl::OUString( "ModelNamespaces" )
-    #define PN_READONLY_EXPR        ::rtl::OUString( "ReadonlyExpression" )
-    #define PN_RELEVANT_EXPR        ::rtl::OUString( "RelevantExpression" )
-    #define PN_REQUIRED_EXPR        ::rtl::OUString( "RequiredExpression" )
-    #define PN_CONSTRAINT_EXPR      ::rtl::OUString( "ConstraintExpression" )
-    #define PN_CALCULATE_EXPR       ::rtl::OUString( "CalculateExpression" )
-    #define PN_BINDING_TYPE         ::rtl::OUString( "Type" )
+    #define PN_BINDING_ID           "BindingID"
+    #define PN_BINDING_EXPR         "BindingExpression"
+    #define PN_BINDING_MODEL        "Model"
+    #define PN_BINDING_NAMESPACES   "ModelNamespaces"
+    #define PN_READONLY_EXPR        "ReadonlyExpression"
+    #define PN_RELEVANT_EXPR        "RelevantExpression"
+    #define PN_REQUIRED_EXPR        "RequiredExpression"
+    #define PN_CONSTRAINT_EXPR      "ConstraintExpression"
+    #define PN_CALCULATE_EXPR       "CalculateExpression"
+    #define PN_BINDING_TYPE         "Type"
 
     // properties of submission
-    #define PN_SUBMISSION_ID        ::rtl::OUString( "ID" )
-    #define PN_SUBMISSION_BIND      ::rtl::OUString( "Bind" )
-    #define PN_SUBMISSION_REF       ::rtl::OUString( "Ref" )
-    #define PN_SUBMISSION_ACTION    ::rtl::OUString( "Action" )
-    #define PN_SUBMISSION_METHOD    ::rtl::OUString( "Method" )
-    #define PN_SUBMISSION_REPLACE   ::rtl::OUString( "Replace" )
+    #define PN_SUBMISSION_ID        "ID"
+    #define PN_SUBMISSION_BIND      "Bind"
+    #define PN_SUBMISSION_REF       "Ref"
+    #define PN_SUBMISSION_ACTION    "Action"
+    #define PN_SUBMISSION_METHOD    "Method"
+    #define PN_SUBMISSION_REPLACE   "Replace"
 
     // other const strings
-    #define TRUE_VALUE              ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true()" ) )
-    #define NEW_ELEMENT             ::rtl::OUString( "newElement" )
-    #define NEW_ATTRIBUTE           ::rtl::OUString( "newAttribute" )
-    #define EVENTTYPE_CHARDATA      ::rtl::OUString( "DOMCharacterDataModified" )
-    #define EVENTTYPE_ATTR          ::rtl::OUString( "DOMAttrModified" )
+    #define TRUE_VALUE              "true()"
+    #define NEW_ELEMENT             "newElement"
+    #define NEW_ATTRIBUTE           "newAttribute"
+    #define EVENTTYPE_CHARDATA      "DOMCharacterDataModified"
+    #define EVENTTYPE_ATTR          "DOMAttrModified"
 
     #define MIN_PAGE_COUNT          3 // at least one instance, one submission and one binding page
 
