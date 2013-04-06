@@ -467,8 +467,8 @@ bool CoreTextLayout::InitGIA( ImplLayoutArgs& rArgs ) const
         return false;
     }
 
-    CFStringRef keys[6];
-    CFTypeRef values[6];
+    CFStringRef keys[1];
+    CFTypeRef values[1];
 
     keys[0] = kCTFontAttributeName;
     values[0] = CFRetain( mpStyle->GetFont() );
