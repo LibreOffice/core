@@ -125,13 +125,13 @@ SwPaM * SwCrsrShell::CreateCrsr()
 
     // New cursor as copy of current one. Add to the ring.
     // Links point to previously created one, ie forward.
-    SwShellCrsr* pNew = new SwShellCrsr( *pCurCrsr );
+    SwShellCrsr* pNew = new SwShellCrsr( *m_pCurCrsr );
 
     // Hide PaM logically, to avoid undoing the inverting from
     // copied PaM (#i75172#)
-    pNew->swapContent(*pCurCrsr);
+    pNew->swapContent(*m_pCurCrsr);
 
-    pCurCrsr->DeleteMark();
+    m_pCurCrsr->DeleteMark();
 
     UpdateCrsr( SwCrsrShell::SCROLLWIN );
     return pNew;
@@ -149,13 +149,13 @@ bool SwCrsrShell::DestroyCrsr()
     OSL_ENSURE( !IsTableMode(), "in table Selection" );
 
     // Is there a next one? Don't do anything if not.
-    if(pCurCrsr->GetNext() == pCurCrsr)
+    if(m_pCurCrsr->GetNext() == m_pCurCrsr)
         return false;
 
     SwCallLink aLk( *this ); // watch Crsr-Moves
-    SwCursor* pNextCrsr = (SwCursor*)pCurCrsr->GetNext();
-    delete pCurCrsr;
-    pCurCrsr = dynamic_cast<SwShellCrsr*>(pNextCrsr);
+    SwCursor* pNextCrsr = (SwCursor*)m_pCurCrsr->GetNext();
+    delete m_pCurCrsr;
+    m_pCurCrsr = dynamic_cast<SwShellCrsr*>(pNextCrsr);
     UpdateCrsr();
     return true;
 }
@@ -190,29 +190,29 @@ SwPaM & SwCrsrShell::GetCurrentShellCursor()
  */
 SwPaM* SwCrsrShell::GetCrsr( sal_Bool bMakeTblCrsr ) const
 {
-    if( pTblCrsr )
+    if( m_pTblCrsr )
     {
-        if( bMakeTblCrsr && pTblCrsr->IsCrsrMovedUpdt() )
+        if( bMakeTblCrsr && m_pTblCrsr->IsCrsrMovedUpdt() )
         {
             //don't re-create 'parked' cursors
             const SwCntntNode* pCNd;
-            if( pTblCrsr->GetPoint()->nNode.GetIndex() &&
-                pTblCrsr->GetMark()->nNode.GetIndex() &&
-                0 != ( pCNd = pTblCrsr->GetCntntNode() ) && pCNd->getLayoutFrm( GetLayout() ) &&
-                0 != ( pCNd = pTblCrsr->GetCntntNode(sal_False) ) && pCNd->getLayoutFrm( GetLayout() ) )
+            if( m_pTblCrsr->GetPoint()->nNode.GetIndex() &&
+                m_pTblCrsr->GetMark()->nNode.GetIndex() &&
+                0 != ( pCNd = m_pTblCrsr->GetCntntNode() ) && pCNd->getLayoutFrm( GetLayout() ) &&
+                0 != ( pCNd = m_pTblCrsr->GetCntntNode(sal_False) ) && pCNd->getLayoutFrm( GetLayout() ) )
             {
-                SwShellTableCrsr* pTC = (SwShellTableCrsr*)pTblCrsr;
+                SwShellTableCrsr* pTC = (SwShellTableCrsr*)m_pTblCrsr;
                 GetLayout()->MakeTblCrsrs( *pTC );
             }
         }
 
-        if( pTblCrsr->IsChgd() )
+        if( m_pTblCrsr->IsChgd() )
         {
-            const_cast<SwCrsrShell*>(this)->pCurCrsr =
-                dynamic_cast<SwShellCrsr*>(pTblCrsr->MakeBoxSels( pCurCrsr ));
+            const_cast<SwCrsrShell*>(this)->m_pCurCrsr =
+                dynamic_cast<SwShellCrsr*>(m_pTblCrsr->MakeBoxSels( m_pCurCrsr ));
         }
     }
-    return pCurCrsr;
+    return m_pCurCrsr;
 }
 
 
@@ -221,15 +221,15 @@ void SwCrsrShell::StartAction()
     if( !ActionPend() )
     {
         // save for update of the ribbon bar
-        const SwNode& rNd = pCurCrsr->GetPoint()->nNode.GetNode();
-        nAktNode = rNd.GetIndex();
-        nAktCntnt = pCurCrsr->GetPoint()->nContent.GetIndex();
-        nAktNdTyp = rNd.GetNodeType();
-        bAktSelection = *pCurCrsr->GetPoint() != *pCurCrsr->GetMark();
+        const SwNode& rNd = m_pCurCrsr->GetPoint()->nNode.GetNode();
+        m_nAktNode = rNd.GetIndex();
+        m_nAktCntnt = m_pCurCrsr->GetPoint()->nContent.GetIndex();
+        m_nAktNdTyp = rNd.GetNodeType();
+        m_bAktSelection = *m_pCurCrsr->GetPoint() != *m_pCurCrsr->GetMark();
         if( rNd.IsTxtNode() )
-            nLeftFrmPos = SwCallLink::getLayoutFrm( GetLayout(), (SwTxtNode&)rNd, nAktCntnt, sal_True );
+            m_nLeftFrmPos = SwCallLink::getLayoutFrm( GetLayout(), (SwTxtNode&)rNd, m_nAktCntnt, sal_True );
         else
-            nLeftFrmPos = 0;
+            m_nLeftFrmPos = 0;
     }
     ViewShell::StartAction(); // to the ViewShell
 }
@@ -237,12 +237,12 @@ void SwCrsrShell::StartAction()
 
 void SwCrsrShell::EndAction( const sal_Bool bIdleEnd )
 {
-    sal_Bool bVis = bSVCrsrVis;
+    sal_Bool bVis = m_bSVCrsrVis;
 
     // Idle-formatting?
     if( bIdleEnd && Imp()->GetRegion() )
     {
-        pCurCrsr->Hide();
+        m_pCurCrsr->Hide();
     }
 
     // Update all invalid numberings before the last action
@@ -251,17 +251,17 @@ void SwCrsrShell::EndAction( const sal_Bool bIdleEnd )
 
     // #i76923#: Don't show the cursor in the ViewShell::EndAction() - call.
     //           Only the UpdateCrsr shows the cursor.
-    sal_Bool bSavSVCrsrVis = bSVCrsrVis;
-    bSVCrsrVis = sal_False;
+    sal_Bool bSavSVCrsrVis = m_bSVCrsrVis;
+    m_bSVCrsrVis = sal_False;
 
     ViewShell::EndAction( bIdleEnd );   // have ViewShell go first
 
-    bSVCrsrVis = bSavSVCrsrVis;
+    m_bSVCrsrVis = bSavSVCrsrVis;
 
     if( ActionPend() )
     {
         if( bVis )    // display SV-Cursor again
-            pVisCrsr->Show();
+            m_pVisCrsr->Show();
 
         // If there is still a ChgCall and just the "basic
         // parenthiszing(?) (Basic-Klammerung)" exists, call it. This
@@ -276,14 +276,14 @@ void SwCrsrShell::EndAction( const sal_Bool bIdleEnd )
 
             {
                 // watch Crsr-Moves, call Link if needed, the DTOR is key here!
-                SwCallLink aLk( *this, nAktNode, nAktCntnt, (sal_uInt8)nAktNdTyp,
-                                nLeftFrmPos, bAktSelection );
+                SwCallLink aLk( *this, m_nAktNode, m_nAktCntnt, (sal_uInt8)m_nAktNdTyp,
+                                m_nLeftFrmPos, m_bAktSelection );
 
             }
-            if( bCallChgLnk && bChgCallFlag && aChgLnk.IsSet() )
+            if( m_bCallChgLnk && m_bChgCallFlag && m_aChgLnk.IsSet() )
             {
-                aChgLnk.Call( this );
-                bChgCallFlag = sal_False; // reset flag
+                m_aChgLnk.Call( this );
+                m_bChgCallFlag = sal_False; // reset flag
             }
         }
         return;
@@ -297,21 +297,21 @@ void SwCrsrShell::EndAction( const sal_Bool bIdleEnd )
 
     {
         SwCallLink aLk( *this );        // watch Crsr-Moves
-        aLk.nNode = nAktNode;           // call Link if needed
-        aLk.nNdTyp = (sal_uInt8)nAktNdTyp;
-        aLk.nCntnt = nAktCntnt;
-        aLk.nLeftFrmPos = nLeftFrmPos;
+        aLk.nNode = m_nAktNode;           // call Link if needed
+        aLk.nNdTyp = (sal_uInt8)m_nAktNdTyp;
+        aLk.nCntnt = m_nAktCntnt;
+        aLk.nLeftFrmPos = m_nLeftFrmPos;
 
-        if( !nCrsrMove ||
-            ( 1 == nCrsrMove && bInCMvVisportChgd ) )
+        if( !m_nCrsrMove ||
+            ( 1 == m_nCrsrMove && m_bInCMvVisportChgd ) )
             // display Cursor & Selektions again
-            ShowCrsrs( bSVCrsrVis ? sal_True : sal_False );
+            ShowCrsrs( m_bSVCrsrVis ? sal_True : sal_False );
     }
     // call ChgCall if there is still one
-    if( bCallChgLnk && bChgCallFlag && aChgLnk.IsSet() )
+    if( m_bCallChgLnk && m_bChgCallFlag && m_aChgLnk.IsSet() )
     {
-        aChgLnk.Call( this );
-        bChgCallFlag = sal_False;       // reset flag
+        m_aChgLnk.Call( this );
+        m_bChgCallFlag = sal_False;       // reset flag
     }
 }
 
@@ -320,17 +320,17 @@ void SwCrsrShell::EndAction( const sal_Bool bIdleEnd )
 
 void SwCrsrShell::SttCrsrMove()
 {
-    OSL_ENSURE( nCrsrMove < USHRT_MAX, "To many nested CrsrMoves." );
-    ++nCrsrMove;
+    OSL_ENSURE( m_nCrsrMove < USHRT_MAX, "To many nested CrsrMoves." );
+    ++m_nCrsrMove;
     StartAction();
 }
 
 void SwCrsrShell::EndCrsrMove( const sal_Bool bIdleEnd )
 {
-    OSL_ENSURE( nCrsrMove, "EndCrsrMove() without SttCrsrMove()." );
+    OSL_ENSURE( m_nCrsrMove, "EndCrsrMove() without SttCrsrMove()." );
     EndAction( bIdleEnd );
-    if( !--nCrsrMove )
-        bInCMvVisportChgd = sal_False;
+    if( !--m_nCrsrMove )
+        m_bInCMvVisportChgd = sal_False;
 }
 
 #endif
@@ -348,8 +348,8 @@ sal_Bool SwCrsrShell::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMo
     // #i27615# Handle cursor in front of label.
     const SwTxtNode* pTxtNd = 0;
 
-    if( pBlockCrsr )
-        pBlockCrsr->clearPoints();
+    if( m_pBlockCrsr )
+        m_pBlockCrsr->clearPoints();
 
     // 1. CASE: Cursor is in front of label. A move to the right
     // will simply reset the bInFrontOfLabel flag:
@@ -396,19 +396,19 @@ sal_Bool SwCrsrShell::LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMo
 void SwCrsrShell::MarkListLevel( const String& sListId,
                                  const int nListLevel )
 {
-    if ( sListId != sMarkedListId ||
-         nListLevel != nMarkedListLevel)
+    if ( sListId != m_sMarkedListId ||
+         nListLevel != m_nMarkedListLevel)
     {
-        if ( sMarkedListId.Len() > 0 )
-            mpDoc->MarkListLevel( sMarkedListId, nMarkedListLevel, false );
+        if ( m_sMarkedListId.Len() > 0 )
+            mpDoc->MarkListLevel( m_sMarkedListId, m_nMarkedListLevel, false );
 
         if ( sListId.Len() > 0 )
         {
             mpDoc->MarkListLevel( sListId, nListLevel, true );
         }
 
-        sMarkedListId = sListId;
-        nMarkedListLevel = nListLevel;
+        m_sMarkedListId = sListId;
+        m_nMarkedListLevel = nListLevel;
     }
 }
 
@@ -420,10 +420,10 @@ void SwCrsrShell::UpdateMarkedListLevel()
     {
         if ( !pTxtNd->IsNumbered() )
         {
-            pCurCrsr->_SetInFrontOfLabel( false );
+            m_pCurCrsr->_SetInFrontOfLabel( false );
             MarkListLevel( String(), 0 );
         }
-        else if ( pCurCrsr->IsInFrontOfLabel() )
+        else if ( m_pCurCrsr->IsInFrontOfLabel() )
         {
             if ( pTxtNd->IsInList() )
             {
@@ -452,12 +452,12 @@ sal_Bool SwCrsrShell::UpDown( sal_Bool bUp, sal_uInt16 nCnt )
     // #i40019# UpDown should always reset the bInFrontOfLabel flag:
     bRet = SetInFrontOfLabel(false) || bRet;
 
-    if( pBlockCrsr )
-        pBlockCrsr->clearPoints();
+    if( m_pBlockCrsr )
+        m_pBlockCrsr->clearPoints();
 
     if( bRet )
     {
-        eMvState = MV_UPDOWN; // status for Crsr travelling - GetCrsrOfst
+        m_eMvState = MV_UPDOWN; // status for Crsr travelling - GetCrsrOfst
         if( !ActionPend() )
         {
             CrsrFlag eUpdtMode = SwCrsrShell::SCROLLWIN;
@@ -474,13 +474,13 @@ sal_Bool SwCrsrShell::LRMargin( sal_Bool bLeft, sal_Bool bAPI)
 {
     SwCallLink aLk( *this ); // watch Crsr-Moves; call Link if needed
     SET_CURR_SHELL( this );
-    eMvState = MV_LEFTMARGIN; // status for Crsr travelling - GetCrsrOfst
+    m_eMvState = MV_LEFTMARGIN; // status for Crsr travelling - GetCrsrOfst
 
     const sal_Bool bTableMode = IsTableMode();
     SwShellCrsr* pTmpCrsr = getShellCrsr( true );
 
-    if( pBlockCrsr )
-        pBlockCrsr->clearPoints();
+    if( m_pBlockCrsr )
+        m_pBlockCrsr->clearPoints();
 
     const bool bWasAtLM =
             ( 0 == _GetCrsr()->GetPoint()->nContent.GetIndex() );
@@ -516,15 +516,15 @@ sal_Bool SwCrsrShell::SttEndDoc( sal_Bool bStt )
 {
     SwCallLink aLk( *this ); // watch Crsr-Moves; call Link if needed
 
-    SwShellCrsr* pTmpCrsr = pBlockCrsr ? &pBlockCrsr->getShellCrsr() : pCurCrsr;
+    SwShellCrsr* pTmpCrsr = m_pBlockCrsr ? &m_pBlockCrsr->getShellCrsr() : m_pCurCrsr;
     sal_Bool bRet = pTmpCrsr->SttEndDoc( bStt );
     if( bRet )
     {
         if( bStt )
             pTmpCrsr->GetPtPos().Y() = 0; // set to 0 explicitly (table header)
-        if( pBlockCrsr )
+        if( m_pBlockCrsr )
         {
-            pBlockCrsr->clearPoints();
+            m_pBlockCrsr->clearPoints();
             RefreshBlockCursor();
         }
 
@@ -536,10 +536,10 @@ sal_Bool SwCrsrShell::SttEndDoc( sal_Bool bStt )
 void SwCrsrShell::ExtendedSelectAll()
 {
     SwNodes& rNodes = GetDoc()->GetNodes();
-    SwPosition* pPos = pCurCrsr->GetPoint();
+    SwPosition* pPos = m_pCurCrsr->GetPoint();
     pPos->nNode = rNodes.GetEndOfPostIts();
     pPos->nContent.Assign( rNodes.GoNext( &pPos->nNode ), 0 );
-    pPos = pCurCrsr->GetMark();
+    pPos = m_pCurCrsr->GetMark();
     pPos->nNode = rNodes.GetEndOfContent();
     SwCntntNode* pCNd = rNodes.GoPrevious( &pPos->nNode );
     pPos->nContent.Assign( pCNd, pCNd ? pCNd->Len() : 0 );
@@ -550,18 +550,18 @@ sal_Bool SwCrsrShell::MovePage( SwWhichPage fnWhichPage, SwPosPage fnPosPage )
     sal_Bool bRet = sal_False;
 
     // never jump of section borders at selection
-    if( !pCurCrsr->HasMark() || !pCurCrsr->IsNoCntnt() )
+    if( !m_pCurCrsr->HasMark() || !m_pCurCrsr->IsNoCntnt() )
     {
         SwCallLink aLk( *this ); // watch Crsr-Moves; call Link if needed
         SET_CURR_SHELL( this );
 
-        SwCrsrSaveState aSaveState( *pCurCrsr );
-        Point& rPt = pCurCrsr->GetPtPos();
-        SwCntntFrm * pFrm = pCurCrsr->GetCntntNode()->
-                            getLayoutFrm( GetLayout(), &rPt, pCurCrsr->GetPoint(), sal_False );
+        SwCrsrSaveState aSaveState( *m_pCurCrsr );
+        Point& rPt = m_pCurCrsr->GetPtPos();
+        SwCntntFrm * pFrm = m_pCurCrsr->GetCntntNode()->
+                            getLayoutFrm( GetLayout(), &rPt, m_pCurCrsr->GetPoint(), sal_False );
         if( pFrm && sal_True == ( bRet = GetFrmInPage( pFrm, fnWhichPage,
-                                                fnPosPage, pCurCrsr )  ) &&
-            !pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
+                                                fnPosPage, m_pCurCrsr )  ) &&
+            !m_pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
                                  nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ))
             UpdateCrsr();
         else
@@ -616,7 +616,7 @@ static SwFrm* lcl_IsInHeaderFooter( const SwNodeIndex& rIdx, Point& rPt )
 bool SwCrsrShell::IsInHeaderFooter( sal_Bool* pbInHeader ) const
 {
     Point aPt;
-    SwFrm* pFrm = ::lcl_IsInHeaderFooter( pCurCrsr->GetPoint()->nNode, aPt );
+    SwFrm* pFrm = ::lcl_IsInHeaderFooter( m_pCurCrsr->GetPoint()->nNode, aPt );
     if( pFrm && pbInHeader )
         *pbInHeader = pFrm->IsHeaderFrm();
     return 0 != pFrm;
@@ -658,7 +658,7 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, sal_Bool bOnlyText, bool bBlock )
     pCrsr->SetCrsrBidiLevel( aTmpState.nCursorBidiLevel );
 
     if( MV_RIGHTMARGIN == aTmpState.eState )
-        eMvState = MV_RIGHTMARGIN;
+        m_eMvState = MV_RIGHTMARGIN;
     // is the new position in header or footer?
     SwFrm* pFrm = lcl_IsInHeaderFooter( aPos.nNode, aPt );
     if( IsTableMode() && !pFrm && aPos.nNode.GetNode().StartOfSectionNode() ==
@@ -666,13 +666,13 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, sal_Bool bOnlyText, bool bBlock )
         // same table column and not in header/footer -> back
         return bRet;
 
-    if( pBlockCrsr && bBlock )
+    if( m_pBlockCrsr && bBlock )
     {
-        pBlockCrsr->setEndPoint( rLPt );
+        m_pBlockCrsr->setEndPoint( rLPt );
         if( !pCrsr->HasMark() )
-            pBlockCrsr->setStartPoint( rLPt );
-        else if( !pBlockCrsr->getStartPoint() )
-            pBlockCrsr->setStartPoint( pCrsr->GetMkPos() );
+            m_pBlockCrsr->setStartPoint( rLPt );
+        else if( !m_pBlockCrsr->getStartPoint() )
+            m_pBlockCrsr->setStartPoint( pCrsr->GetMkPos() );
     }
     if( !pCrsr->HasMark() )
     {
@@ -689,7 +689,7 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, sal_Bool bOnlyText, bool bBlock )
             {
                 // in the same frame?
                 SwFrm* pOld = ((SwCntntNode&)aPos.nNode.GetNode()).getLayoutFrm(
-                                GetLayout(), &aCharRect.Pos(), 0, sal_False );
+                                GetLayout(), &m_aCharRect.Pos(), 0, sal_False );
                 SwFrm* pNew = ((SwCntntNode&)aPos.nNode.GetNode()).getLayoutFrm(
                                 GetLayout(), &aPt, 0, sal_False );
                 if( pNew == pOld )
@@ -718,7 +718,7 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, sal_Bool bOnlyText, bool bBlock )
     // #i41424# Only update the marked number levels if necessary
     // Force update of marked number levels if necessary.
     if ( bNewInFrontOfLabel || bOldInFrontOfLabel )
-        pCurCrsr->_SetInFrontOfLabel( !bNewInFrontOfLabel );
+        m_pCurCrsr->_SetInFrontOfLabel( !bNewInFrontOfLabel );
     SetInFrontOfLabel( bNewInFrontOfLabel );
 
     if( !pCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ) )
@@ -727,7 +727,7 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, sal_Bool bOnlyText, bool bBlock )
         UpdateCrsr( nFlag );
         bRet &= ~CRSR_POSOLD;
     }
-    else if( bOnlyText && !pCurCrsr->HasMark() )
+    else if( bOnlyText && !m_pCurCrsr->HasMark() )
     {
         if( FindValidCntntNode( bOnlyText ) )
         {
@@ -743,9 +743,9 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, sal_Bool bOnlyText, bool bBlock )
         else
         {
             // there is no valid content -> hide cursor
-            pVisCrsr->Hide(); // always hide visible cursor
-            eMvState = MV_NONE; // status for Crsr travelling
-            bAllProtect = sal_True;
+            m_pVisCrsr->Hide(); // always hide visible cursor
+            m_eMvState = MV_NONE; // status for Crsr travelling
+            m_bAllProtect = sal_True;
             if( GetDoc()->GetDocShell() )
             {
                 GetDoc()->GetDocShell()->SetReadOnlyUI( sal_True );
@@ -760,68 +760,68 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, sal_Bool bOnlyText, bool bBlock )
 
 void SwCrsrShell::TblCrsrToCursor()
 {
-    OSL_ENSURE( pTblCrsr, "TblCrsrToCursor: Why?" );
-    delete pTblCrsr, pTblCrsr = 0;
+    OSL_ENSURE( m_pTblCrsr, "TblCrsrToCursor: Why?" );
+    delete m_pTblCrsr, m_pTblCrsr = 0;
 }
 
 void SwCrsrShell::BlockCrsrToCrsr()
 {
-    OSL_ENSURE( pBlockCrsr, "BlockCrsrToCrsr: Why?" );
-    if( pBlockCrsr && !HasSelection() )
+    OSL_ENSURE( m_pBlockCrsr, "BlockCrsrToCrsr: Why?" );
+    if( m_pBlockCrsr && !HasSelection() )
     {
-        SwPaM& rPam = pBlockCrsr->getShellCrsr();
-        pCurCrsr->SetMark();
-        *pCurCrsr->GetPoint() = *rPam.GetPoint();
+        SwPaM& rPam = m_pBlockCrsr->getShellCrsr();
+        m_pCurCrsr->SetMark();
+        *m_pCurCrsr->GetPoint() = *rPam.GetPoint();
         if( rPam.HasMark() )
-            *pCurCrsr->GetMark() = *rPam.GetMark();
+            *m_pCurCrsr->GetMark() = *rPam.GetMark();
         else
-            pCurCrsr->DeleteMark();
+            m_pCurCrsr->DeleteMark();
     }
-    delete pBlockCrsr, pBlockCrsr = 0;
+    delete m_pBlockCrsr, m_pBlockCrsr = 0;
 }
 
 void SwCrsrShell::CrsrToBlockCrsr()
 {
-    if( !pBlockCrsr )
+    if( !m_pBlockCrsr )
     {
-        SwPosition aPos( *pCurCrsr->GetPoint() );
-        pBlockCrsr = createBlockCursor( *this, aPos );
-        SwShellCrsr &rBlock = pBlockCrsr->getShellCrsr();
-        rBlock.GetPtPos() = pCurCrsr->GetPtPos();
-        if( pCurCrsr->HasMark() )
+        SwPosition aPos( *m_pCurCrsr->GetPoint() );
+        m_pBlockCrsr = createBlockCursor( *this, aPos );
+        SwShellCrsr &rBlock = m_pBlockCrsr->getShellCrsr();
+        rBlock.GetPtPos() = m_pCurCrsr->GetPtPos();
+        if( m_pCurCrsr->HasMark() )
         {
             rBlock.SetMark();
-            *rBlock.GetMark() = *pCurCrsr->GetMark();
-            rBlock.GetMkPos() = pCurCrsr->GetMkPos();
+            *rBlock.GetMark() = *m_pCurCrsr->GetMark();
+            rBlock.GetMkPos() = m_pCurCrsr->GetMkPos();
         }
     }
-    pBlockCrsr->clearPoints();
+    m_pBlockCrsr->clearPoints();
     RefreshBlockCursor();
 }
 
 void SwCrsrShell::ClearMark()
 {
     // is there any GetMark?
-    if( pTblCrsr )
+    if( m_pTblCrsr )
     {
-        while( pCurCrsr->GetNext() != pCurCrsr )
-            delete pCurCrsr->GetNext();
-        pTblCrsr->DeleteMark();
+        while( m_pCurCrsr->GetNext() != m_pCurCrsr )
+            delete m_pCurCrsr->GetNext();
+        m_pTblCrsr->DeleteMark();
 
-        pCurCrsr->DeleteMark();
+        m_pCurCrsr->DeleteMark();
 
-        *pCurCrsr->GetPoint() = *pTblCrsr->GetPoint();
-        pCurCrsr->GetPtPos() = pTblCrsr->GetPtPos();
-        delete pTblCrsr, pTblCrsr = 0;
-        pCurCrsr->SwSelPaintRects::Show();
+        *m_pCurCrsr->GetPoint() = *m_pTblCrsr->GetPoint();
+        m_pCurCrsr->GetPtPos() = m_pTblCrsr->GetPtPos();
+        delete m_pTblCrsr, m_pTblCrsr = 0;
+        m_pCurCrsr->SwSelPaintRects::Show();
     }
     else
     {
-        if( !pCurCrsr->HasMark() )
+        if( !m_pCurCrsr->HasMark() )
             return;
-        pCurCrsr->DeleteMark();
-        if( !nCrsrMove )
-            pCurCrsr->SwSelPaintRects::Show();
+        m_pCurCrsr->DeleteMark();
+        if( !m_nCrsrMove )
+            m_pCurCrsr->SwSelPaintRects::Show();
     }
 }
 
@@ -829,13 +829,13 @@ void SwCrsrShell::ClearMark()
 void SwCrsrShell::NormalizePam(sal_Bool bPointFirst)
 {
     SwCallLink aLk( *this ); // watch Crsr-Moves; call Link if needed
-    pCurCrsr->Normalize(bPointFirst);
+    m_pCurCrsr->Normalize(bPointFirst);
 }
 
 void SwCrsrShell::SwapPam()
 {
     SwCallLink aLk( *this ); // watch Crsr-Moves; call Link if needed
-    pCurCrsr->Exchange();
+    m_pCurCrsr->Exchange();
 }
 
 //TODO: provide documentation
@@ -855,12 +855,12 @@ sal_Bool SwCrsrShell::ChgCurrPam( const Point & rPt,
     SET_CURR_SHELL( this );
 
     // check if the SPoint is in a table selection
-    if( bTstOnly && pTblCrsr )
-        return pTblCrsr->IsInside( rPt );
+    if( bTstOnly && m_pTblCrsr )
+        return m_pTblCrsr->IsInside( rPt );
 
     SwCallLink aLk( *this ); // watch Crsr-Moves; call Link if needed
     // search position <rPt> in document
-    SwPosition aPtPos( *pCurCrsr->GetPoint() );
+    SwPosition aPtPos( *m_pCurCrsr->GetPoint() );
     Point aPt( rPt );
 
     SwCrsrMoveState aTmpState( MV_NONE );
@@ -869,19 +869,19 @@ sal_Bool SwCrsrShell::ChgCurrPam( const Point & rPt,
         return sal_False;
 
     // search in all selections for this position
-    SwShellCrsr* pCmp = (SwShellCrsr*)pCurCrsr; // keep the pointer on cursor
+    SwShellCrsr* pCmp = (SwShellCrsr*)m_pCurCrsr; // keep the pointer on cursor
     do {
         if( pCmp->HasMark() &&
             *pCmp->Start() <= aPtPos && *pCmp->End() > aPtPos )
         {
-            if( bTstOnly || pCurCrsr == pCmp ) // is the current
+            if( bTstOnly || m_pCurCrsr == pCmp ) // is the current
                 return sal_True;               // return without update
 
-            pCurCrsr = pCmp;
+            m_pCurCrsr = pCmp;
             UpdateCrsr(); // cursor is already at the right position
             return sal_True;
         }
-    } while( pCurCrsr !=
+    } while( m_pCurCrsr !=
         ( pCmp = dynamic_cast<SwShellCrsr*>(pCmp->GetNext()) ) );
     return sal_False;
 }
@@ -890,31 +890,31 @@ sal_Bool SwCrsrShell::ChgCurrPam( const Point & rPt,
 void SwCrsrShell::KillPams()
 {
     // Does any exist for deletion?
-    if( !pTblCrsr && !pBlockCrsr && pCurCrsr->GetNext() == pCurCrsr )
+    if( !m_pTblCrsr && !m_pBlockCrsr && m_pCurCrsr->GetNext() == m_pCurCrsr )
         return;
 
-    while( pCurCrsr->GetNext() != pCurCrsr )
-        delete pCurCrsr->GetNext();
-    pCurCrsr->SetColumnSelection( false );
+    while( m_pCurCrsr->GetNext() != m_pCurCrsr )
+        delete m_pCurCrsr->GetNext();
+    m_pCurCrsr->SetColumnSelection( false );
 
-    if( pTblCrsr )
+    if( m_pTblCrsr )
     {
         // delete the ring of cursors
-        pCurCrsr->DeleteMark();
-        *pCurCrsr->GetPoint() = *pTblCrsr->GetPoint();
-        pCurCrsr->GetPtPos() = pTblCrsr->GetPtPos();
-        delete pTblCrsr;
-        pTblCrsr = 0;
+        m_pCurCrsr->DeleteMark();
+        *m_pCurCrsr->GetPoint() = *m_pTblCrsr->GetPoint();
+        m_pCurCrsr->GetPtPos() = m_pTblCrsr->GetPtPos();
+        delete m_pTblCrsr;
+        m_pTblCrsr = 0;
     }
-    else if( pBlockCrsr )
+    else if( m_pBlockCrsr )
     {
         // delete the ring of cursors
-        pCurCrsr->DeleteMark();
-        SwShellCrsr &rBlock = pBlockCrsr->getShellCrsr();
-        *pCurCrsr->GetPoint() = *rBlock.GetPoint();
-        pCurCrsr->GetPtPos() = rBlock.GetPtPos();
+        m_pCurCrsr->DeleteMark();
+        SwShellCrsr &rBlock = m_pBlockCrsr->getShellCrsr();
+        *m_pCurCrsr->GetPoint() = *rBlock.GetPoint();
+        m_pCurCrsr->GetPtPos() = rBlock.GetPtPos();
         rBlock.DeleteMark();
-        pBlockCrsr->clearPoints();
+        m_pBlockCrsr->clearPoints();
     }
     UpdateCrsr( SwCrsrShell::SCROLLWIN );
 }
@@ -924,7 +924,7 @@ int SwCrsrShell::CompareCursor( CrsrCompareType eType ) const
 {
     int nRet = 0;
     const SwPosition *pFirst = 0, *pSecond = 0;
-    const SwPaM *pCur = GetCrsr(), *pStk = pCrsrStk;
+    const SwPaM *pCur = GetCrsr(), *pStk = m_pCrsrStk;
     // cursor on stack is needed if we compare against stack
     if( pStk || ( eType == CurrPtCurrMk ) )
     {
@@ -969,23 +969,23 @@ int SwCrsrShell::CompareCursor( CrsrCompareType eType ) const
 
 
 bool SwCrsrShell::IsSttPara() const
-{   return pCurCrsr->GetPoint()->nContent == 0; }
+{   return m_pCurCrsr->GetPoint()->nContent == 0; }
 
 
 bool SwCrsrShell::IsEndPara() const
-{   return pCurCrsr->GetPoint()->nContent == pCurCrsr->GetCntntNode()->Len(); }
+{   return m_pCurCrsr->GetPoint()->nContent == m_pCurCrsr->GetCntntNode()->Len(); }
 
 
 bool SwCrsrShell::IsInFrontOfLabel() const
 {
-    return pCurCrsr->IsInFrontOfLabel();
+    return m_pCurCrsr->IsInFrontOfLabel();
 }
 
 bool SwCrsrShell::SetInFrontOfLabel( bool bNew )
 {
     if ( bNew != IsInFrontOfLabel() )
     {
-        pCurCrsr->_SetInFrontOfLabel( bNew );
+        m_pCurCrsr->_SetInFrontOfLabel( bNew );
         UpdateMarkedListLevel();
         return true;
     }
@@ -996,9 +996,9 @@ sal_Bool SwCrsrShell::GotoPage( sal_uInt16 nPage )
 {
     SET_CURR_SHELL( this );
     SwCallLink aLk( *this ); // watch Crsr-Moves; call Link if needed
-    SwCrsrSaveState aSaveState( *pCurCrsr );
-    sal_Bool bRet = GetLayout()->SetCurrPage( pCurCrsr, nPage ) &&
-                    !pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
+    SwCrsrSaveState aSaveState( *m_pCurCrsr );
+    sal_Bool bRet = GetLayout()->SetCurrPage( m_pCurCrsr, nPage ) &&
+                    !m_pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
                                          nsSwCursorSelOverFlags::SELOVER_CHANGEPOS );
     if( bRet )
         UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
@@ -1078,18 +1078,18 @@ sal_uInt16 SwCrsrShell::GetPageCnt()
 sal_Bool SwCrsrShell::GoNextCrsr()
 {
     // is there a ring of cursors?
-    if( pCurCrsr->GetNext() == pCurCrsr )
+    if( m_pCurCrsr->GetNext() == m_pCurCrsr )
         return sal_False;
 
     SET_CURR_SHELL( this );
     SwCallLink aLk( *this ); // watch Crsr-Moves; call Link if needed
-    pCurCrsr = dynamic_cast<SwShellCrsr*>(pCurCrsr->GetNext());
+    m_pCurCrsr = dynamic_cast<SwShellCrsr*>(m_pCurCrsr->GetNext());
 
     // #i24086#: show also all others
     if( !ActionPend() )
     {
         UpdateCrsr();
-        pCurCrsr->Show();
+        m_pCurCrsr->Show();
     }
     return sal_True;
 }
@@ -1098,18 +1098,18 @@ sal_Bool SwCrsrShell::GoNextCrsr()
 sal_Bool SwCrsrShell::GoPrevCrsr()
 {
     // is there a ring of cursors?
-    if( pCurCrsr->GetNext() == pCurCrsr )
+    if( m_pCurCrsr->GetNext() == m_pCurCrsr )
         return sal_False;
 
     SET_CURR_SHELL( this );
     SwCallLink aLk( *this ); // watch Crsr-Moves; call Link if needed
-    pCurCrsr = dynamic_cast<SwShellCrsr*>(pCurCrsr->GetPrev());
+    m_pCurCrsr = dynamic_cast<SwShellCrsr*>(m_pCurCrsr->GetPrev());
 
     // #i24086#: show also all others
     if( !ActionPend() )
     {
         UpdateCrsr();
-        pCurCrsr->Show();
+        m_pCurCrsr->Show();
     }
 
     return sal_True;
@@ -1125,18 +1125,18 @@ void SwCrsrShell::Paint( const Rectangle &rRect)
 
     bool bVis = false;
     // if a cursor is visible then hide the SV cursor
-    if( pVisCrsr->IsVisible() && !aRect.IsOver( aCharRect ) )
+    if( m_pVisCrsr->IsVisible() && !aRect.IsOver( m_aCharRect ) )
     {
         bVis = true;
-        pVisCrsr->Hide();
+        m_pVisCrsr->Hide();
     }
 
     // re-paint area
     ViewShell::Paint( rRect );
 
-    if( bHasFocus && !bBasicHideCrsr )
+    if( m_bHasFocus && !m_bBasicHideCrsr )
     {
-        SwShellCrsr* pAktCrsr = pTblCrsr ? pTblCrsr : pCurCrsr;
+        SwShellCrsr* pAktCrsr = m_pTblCrsr ? m_pTblCrsr : m_pCurCrsr;
 
         if( !ActionPend() )
         {
@@ -1148,8 +1148,8 @@ void SwCrsrShell::Paint( const Rectangle &rRect)
             pAktCrsr->Invalidate( aRect );
 
     }
-    if( bSVCrsrVis && bVis ) // also show SV cursor again
-        pVisCrsr->Show();
+    if( m_bSVCrsrVis && bVis ) // also show SV cursor again
+        m_pVisCrsr->Show();
 }
 
 
@@ -1160,25 +1160,25 @@ void SwCrsrShell::VisPortChgd( const SwRect & rRect )
     bool bVis; // switch off all cursors when scrolling
 
     // if a cursor is visible then hide the SV cursor
-    if( ( bVis = pVisCrsr->IsVisible() ) )
-        pVisCrsr->Hide();
+    if( ( bVis = m_pVisCrsr->IsVisible() ) )
+        m_pVisCrsr->Hide();
 
-    bVisPortChgd = sal_True;
-    aOldRBPos.X() = VisArea().Right();
-    aOldRBPos.Y() = VisArea().Bottom();
+    m_bVisPortChgd = sal_True;
+    m_aOldRBPos.X() = VisArea().Right();
+    m_aOldRBPos.Y() = VisArea().Bottom();
 
     // For not having problems with the SV cursor, Update() is called for the
     // Window in ViewShell::VisPo...
     // During painting no selections should be shown, thus the call is encapsulated. <- TODO: old artefact?
     ViewShell::VisPortChgd( rRect ); // move area
 
-    if( bSVCrsrVis && bVis ) // show SV cursor again
-        pVisCrsr->Show();
+    if( m_bSVCrsrVis && bVis ) // show SV cursor again
+        m_pVisCrsr->Show();
 
-    if( nCrsrMove )
-        bInCMvVisportChgd = sal_True;
+    if( m_nCrsrMove )
+        m_bInCMvVisportChgd = sal_True;
 
-    bVisPortChgd = sal_False;
+    m_bVisPortChgd = sal_False;
 }
 
 /** Set the cursor back into content.
@@ -1206,7 +1206,7 @@ void SwCrsrShell::UpdateCrsrPos()
     }
     IGrammarContact *pGrammarContact = GetDoc() ? GetDoc()->getGrammarContact() : 0;
     if( pGrammarContact )
-        pGrammarContact->updateCursorPosition( *pCurCrsr->GetPoint() );
+        pGrammarContact->updateCursorPosition( *m_pCurCrsr->GetPoint() );
     --mnStartAction;
     if( aOldSz != GetDocSize() )
         SizeChgNotify();
@@ -1272,31 +1272,31 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
     if( ActionPend() && BasicActionPend() )
     {
         if ( eFlags & SwCrsrShell::READONLY )
-            bIgnoreReadonly = sal_True;
+            m_bIgnoreReadonly = sal_True;
         return; // if not then no update
     }
 
     // #i27301#
     SwNotifyAccAboutInvalidTextSelections aInvalidateTextSelections( *this );
 
-    if ( bIgnoreReadonly )
+    if ( m_bIgnoreReadonly )
     {
-        bIgnoreReadonly = sal_False;
+        m_bIgnoreReadonly = sal_False;
         eFlags |= SwCrsrShell::READONLY;
     }
 
     if( eFlags & SwCrsrShell::CHKRANGE )    // check all cursor moves for
-        CheckRange( pCurCrsr );             // overlapping ranges
+        CheckRange( m_pCurCrsr );             // overlapping ranges
 
     if( !bIdleEnd )
         CheckTblBoxCntnt();
 
     // If the current cursor is in a table and point/mark in different boxes,
-    // then the table mode is active (also if it is already active: pTblCrsr)
+    // then the table mode is active (also if it is already active: m_pTblCrsr)
     SwPaM* pTstCrsr = getShellCrsr( true );
-    if( pTstCrsr->HasMark() && !pBlockCrsr &&
+    if( pTstCrsr->HasMark() && !m_pBlockCrsr &&
         mpDoc->IsIdxInTbl( pTstCrsr->GetPoint()->nNode ) &&
-          ( pTblCrsr ||
+          ( m_pTblCrsr ||
             pTstCrsr->GetNode( sal_True )->StartOfSectionNode() !=
             pTstCrsr->GetNode( sal_False )->StartOfSectionNode() ) )
     {
@@ -1360,48 +1360,48 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                                             : fnSectionEnd;
 
                 // then only select inside the Box
-                if( pTblCrsr )
+                if( m_pTblCrsr )
                 {
-                    pCurCrsr->SetMark();
-                    *pCurCrsr->GetMark() = *pTblCrsr->GetMark();
-                    pCurCrsr->GetMkPos() = pTblCrsr->GetMkPos();
-                    pTblCrsr->DeleteMark();
-                    pTblCrsr->SwSelPaintRects::Hide();
+                    m_pCurCrsr->SetMark();
+                    *m_pCurCrsr->GetMark() = *m_pTblCrsr->GetMark();
+                    m_pCurCrsr->GetMkPos() = m_pTblCrsr->GetMkPos();
+                    m_pTblCrsr->DeleteMark();
+                    m_pTblCrsr->SwSelPaintRects::Hide();
                 }
 
-                *pCurCrsr->GetPoint() = *pCurCrsr->GetMark();
-                (*fnSectionCurr)( *pCurCrsr, fnPosSect );
+                *m_pCurCrsr->GetPoint() = *m_pCurCrsr->GetMark();
+                (*fnSectionCurr)( *m_pCurCrsr, fnPosSect );
             }
         }
 
         // we really want a table selection
         if( pTab && pTblFrm )
         {
-            if( !pTblCrsr )
+            if( !m_pTblCrsr )
             {
-                pTblCrsr = new SwShellTableCrsr( *this,
-                                *pCurCrsr->GetMark(), pCurCrsr->GetMkPos(),
+                m_pTblCrsr = new SwShellTableCrsr( *this,
+                                *m_pCurCrsr->GetMark(), m_pCurCrsr->GetMkPos(),
                                 *pPos, aTmpPt );
-                pCurCrsr->DeleteMark();
-                pCurCrsr->SwSelPaintRects::Hide();
+                m_pCurCrsr->DeleteMark();
+                m_pCurCrsr->SwSelPaintRects::Hide();
 
                 CheckTblBoxCntnt();
             }
 
             SwCrsrMoveState aTmpState( MV_NONE );
             aTmpState.bRealHeight = sal_True;
-            if( !pTblFrm->GetCharRect( aCharRect, *pTblCrsr->GetPoint(), &aTmpState ) )
+            if( !pTblFrm->GetCharRect( m_aCharRect, *m_pTblCrsr->GetPoint(), &aTmpState ) )
             {
-                Point aCentrPt( aCharRect.Center() );
+                Point aCentrPt( m_aCharRect.Center() );
                 aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
-                pTblFrm->GetCrsrOfst( pTblCrsr->GetPoint(), aCentrPt, &aTmpState );
+                pTblFrm->GetCrsrOfst( m_pTblCrsr->GetPoint(), aCentrPt, &aTmpState );
                 bool const bResult =
-                    pTblFrm->GetCharRect( aCharRect, *pTblCrsr->GetPoint() );
+                    pTblFrm->GetCharRect( m_aCharRect, *m_pTblCrsr->GetPoint() );
                 OSL_ENSURE( bResult, "GetCharRect failed." );
                 (void) bResult; // non-debug: unused
             }
 
-            pVisCrsr->Hide(); // always hide visible Cursor
+            m_pVisCrsr->Hide(); // always hide visible Cursor
             // scroll Cursor to visible area
             if( (eFlags & SwCrsrShell::SCROLLWIN) &&
                 (HasSelection() || eFlags & SwCrsrShell::READONLY ||
@@ -1413,45 +1413,45 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                 if( pBoxFrm && pBoxFrm->Frm().HasArea() )
                     MakeVisible( pBoxFrm->Frm() );
                 else
-                    MakeVisible( aCharRect );
+                    MakeVisible( m_aCharRect );
             }
 
             // let Layout create the Cursors in the Boxes
-            if( pTblCrsr->IsCrsrMovedUpdt() )
-                GetLayout()->MakeTblCrsrs( *pTblCrsr );
-            if( bHasFocus && !bBasicHideCrsr )
-                pTblCrsr->Show();
+            if( m_pTblCrsr->IsCrsrMovedUpdt() )
+                GetLayout()->MakeTblCrsrs( *m_pTblCrsr );
+            if( m_bHasFocus && !m_bBasicHideCrsr )
+                m_pTblCrsr->Show();
 
             // set Cursor-Points to the new Positions
-            pTblCrsr->GetPtPos().X() = aCharRect.Left();
-            pTblCrsr->GetPtPos().Y() = aCharRect.Top();
+            m_pTblCrsr->GetPtPos().X() = m_aCharRect.Left();
+            m_pTblCrsr->GetPtPos().Y() = m_aCharRect.Top();
 
-            if( bSVCrsrVis )
+            if( m_bSVCrsrVis )
             {
-                aCrsrHeight.X() = 0;
-                aCrsrHeight.Y() = aTmpState.aRealHeight.Y() < 0 ?
-                                  -aCharRect.Width() : aCharRect.Height();
-                pVisCrsr->Show(); // show again
+                m_aCrsrHeight.X() = 0;
+                m_aCrsrHeight.Y() = aTmpState.aRealHeight.Y() < 0 ?
+                                  -m_aCharRect.Width() : m_aCharRect.Height();
+                m_pVisCrsr->Show(); // show again
             }
-            eMvState = MV_NONE;  // state for cursor travelling - GetCrsrOfst
+            m_eMvState = MV_NONE;  // state for cursor travelling - GetCrsrOfst
             if( pTblFrm && Imp()->IsAccessible() )
                 Imp()->InvalidateAccessibleCursorPosition( pTblFrm );
             return;
         }
     }
 
-    if( pTblCrsr )
+    if( m_pTblCrsr )
     {
         // delete Ring
-        while( pCurCrsr->GetNext() != pCurCrsr )
-            delete pCurCrsr->GetNext();
-        pCurCrsr->DeleteMark();
-        *pCurCrsr->GetPoint() = *pTblCrsr->GetPoint();
-        pCurCrsr->GetPtPos() = pTblCrsr->GetPtPos();
-        delete pTblCrsr, pTblCrsr = 0;
+        while( m_pCurCrsr->GetNext() != m_pCurCrsr )
+            delete m_pCurCrsr->GetNext();
+        m_pCurCrsr->DeleteMark();
+        *m_pCurCrsr->GetPoint() = *m_pTblCrsr->GetPoint();
+        m_pCurCrsr->GetPtPos() = m_pTblCrsr->GetPtPos();
+        delete m_pTblCrsr, m_pTblCrsr = 0;
     }
 
-    pVisCrsr->Hide(); // always hide visible Cursor
+    m_pVisCrsr->Hide(); // always hide visible Cursor
 
     // are we perhaps in a protected / hidden Section ?
     {
@@ -1462,19 +1462,19 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
             ( !IsReadOnlyAvailable() &&
               pSectNd->GetSection().IsProtectFlag() &&
              ( !mpDoc->GetDocShell() ||
-               !mpDoc->GetDocShell()->IsReadOnly() || bAllProtect )) ) )
+               !mpDoc->GetDocShell()->IsReadOnly() || m_bAllProtect )) ) )
         {
             if( !FindValidCntntNode( !HasDrawView() ||
                     0 == Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount()))
             {
                 // everything protected/hidden -> special mode
-                if( bAllProtect && !IsReadOnlyAvailable() &&
+                if( m_bAllProtect && !IsReadOnlyAvailable() &&
                     pSectNd->GetSection().IsProtectFlag() )
                     bChgState = false;
                 else
                 {
-                    eMvState = MV_NONE;     // state for cursor travelling
-                    bAllProtect = sal_True;
+                    m_eMvState = MV_NONE;     // state for cursor travelling
+                    m_bAllProtect = sal_True;
                     if( GetDoc()->GetDocShell() )
                     {
                         GetDoc()->GetDocShell()->SetReadOnlyUI( sal_True );
@@ -1486,8 +1486,8 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
         }
         if( bChgState )
         {
-            sal_Bool bWasAllProtect = bAllProtect;
-            bAllProtect = sal_False;
+            sal_Bool bWasAllProtect = m_bAllProtect;
+            m_bAllProtect = sal_False;
             if( bWasAllProtect && GetDoc()->GetDocShell() &&
                 GetDoc()->GetDocShell()->IsReadOnlyUI() )
             {
@@ -1504,7 +1504,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
     // loops _behind_ the last node in the selection, which always works if you
     // are in content.) To achieve this, we'll force cursor(s) to point into
     // content, if UpdateCrsrPos() hasn't already done so.
-    SwPaM* pCmp = pCurCrsr;
+    SwPaM* pCmp = m_pCurCrsr;
     do
     {
         // start will move forwards, end will move backwards
@@ -1530,10 +1530,10 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
         // iterate to next PaM in ring
         pCmp = static_cast<SwPaM*>( pCmp->GetNext() );
     }
-    while( pCmp != pCurCrsr );
+    while( pCmp != m_pCurCrsr );
 
 
-    SwRect aOld( aCharRect );
+    SwRect aOld( m_aCharRect );
     bool bFirst = true;
     SwCntntFrm *pFrm;
     int nLoopCnt = 100;
@@ -1565,7 +1565,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                 ( !Imp()->GetDrawView() ||
                   !Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() ) &&
                 (!mpDoc->GetDocShell() ||
-                 !mpDoc->GetDocShell()->IsReadOnly() || bAllProtect ) )
+                 !mpDoc->GetDocShell()->IsReadOnly() || m_bAllProtect ) )
             {
                 // look for a valid position
                 bool bChgState = true;
@@ -1573,12 +1573,12 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                     0 == Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount()))
                 {
                     // everything is protected / hidden -> special Mode
-                    if( bAllProtect )
+                    if( m_bAllProtect )
                         bChgState = false;
                     else
                     {
-                        eMvState = MV_NONE;     // state for crusor travelling
-                        bAllProtect = sal_True;
+                        m_eMvState = MV_NONE;     // state for crusor travelling
+                        m_bAllProtect = sal_True;
                         if( GetDoc()->GetDocShell() )
                         {
                             GetDoc()->GetDocShell()->SetReadOnlyUI( sal_True );
@@ -1590,15 +1590,15 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
 
                 if( bChgState )
                 {
-                    sal_Bool bWasAllProtect = bAllProtect;
-                    bAllProtect = sal_False;
+                    sal_Bool bWasAllProtect = m_bAllProtect;
+                    m_bAllProtect = sal_False;
                     if( bWasAllProtect && GetDoc()->GetDocShell() &&
                         GetDoc()->GetDocShell()->IsReadOnlyUI() )
                     {
                         GetDoc()->GetDocShell()->SetReadOnlyUI( sal_False );
                         CallChgLnk();       // notify UI!
                     }
-                    bAllProtect = sal_False;
+                    m_bAllProtect = sal_False;
                     bAgainst = true; // look for the right Frm again
                 }
             }
@@ -1606,7 +1606,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
 
         if( !( eFlags & SwCrsrShell::NOCALRECT ))
         {
-            SwCrsrMoveState aTmpState( eMvState );
+            SwCrsrMoveState aTmpState( m_eMvState );
             aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
             aTmpState.bRealHeight = sal_True;
             aTmpState.bRealWidth = IsOverwriteCrsr();
@@ -1620,29 +1620,29 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                 aTmpState.pSpecialPos = &aSpecialPos;
             }
 
-            if( !pFrm->GetCharRect( aCharRect, *pShellCrsr->GetPoint(), &aTmpState ) )
+            if( !pFrm->GetCharRect( m_aCharRect, *pShellCrsr->GetPoint(), &aTmpState ) )
             {
                 Point& rPt = pShellCrsr->GetPtPos();
-                rPt = aCharRect.Center();
+                rPt = m_aCharRect.Center();
                 pFrm->GetCrsrOfst( pShellCrsr->GetPoint(), rPt, &aTmpState );
             }
 
             if( !pShellCrsr->HasMark() )
-                aCrsrHeight = aTmpState.aRealHeight;
+                m_aCrsrHeight = aTmpState.aRealHeight;
             else
             {
-                aCrsrHeight.X() = 0;
-                aCrsrHeight.Y() = aTmpState.aRealHeight.Y() < 0 ?
-                                  -aCharRect.Width() : aCharRect.Height();
+                m_aCrsrHeight.X() = 0;
+                m_aCrsrHeight.Y() = aTmpState.aRealHeight.Y() < 0 ?
+                                  -m_aCharRect.Width() : m_aCharRect.Height();
             }
         }
         else
         {
-            aCrsrHeight.X() = 0;
-            aCrsrHeight.Y() = aCharRect.Height();
+            m_aCrsrHeight.X() = 0;
+            m_aCrsrHeight.Y() = m_aCharRect.Height();
         }
 
-        if( !bFirst && aOld == aCharRect )
+        if( !bFirst && aOld == m_aCharRect )
             break;
 
         // if the layout says that we are after the 100th iteration still in
@@ -1653,49 +1653,50 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
             OSL_ENSURE( !this, "endless loop? CharRect != OldCharRect ");
             break;
         }
-        aOld = aCharRect;
+        aOld = m_aCharRect;
         bFirst = false;
 
         // update cursor Points to the new Positions
-        pShellCrsr->GetPtPos().X() = aCharRect.Left();
-        pShellCrsr->GetPtPos().Y() = aCharRect.Top();
+        pShellCrsr->GetPtPos().X() = m_aCharRect.Left();
+        pShellCrsr->GetPtPos().Y() = m_aCharRect.Top();
 
         if( !(eFlags & SwCrsrShell::UPDOWN ))   // delete old Pos. of Up/Down
         {
             pFrm->Calc();
-            nUpDownX = pFrm->IsVertical() ?
-                       aCharRect.Top() - pFrm->Frm().Top() :
-                       aCharRect.Left() - pFrm->Frm().Left();
+            m_nUpDownX = pFrm->IsVertical() ?
+                       m_aCharRect.Top() - pFrm->Frm().Top() :
+                       m_aCharRect.Left() - pFrm->Frm().Left();
         }
 
         // scroll Cursor to visible area
-        if( bHasFocus && eFlags & SwCrsrShell::SCROLLWIN &&
+        if( m_bHasFocus && eFlags & SwCrsrShell::SCROLLWIN &&
             (HasSelection() || eFlags & SwCrsrShell::READONLY ||
              !IsCrsrReadonly() || GetViewOptions()->IsSelectionInReadonly()) )
         {
             // in case of scrolling this EndAction doesn't show the SV cursor
             // again, thus save and reset the flag here
-            sal_Bool bSav = bSVCrsrVis; bSVCrsrVis = sal_False;
+            sal_Bool bSav = m_bSVCrsrVis;
+            m_bSVCrsrVis = sal_False;
             MakeSelVisible();
-            bSVCrsrVis = bSav;
+            m_bSVCrsrVis = bSav;
         }
 
     } while( eFlags & SwCrsrShell::SCROLLWIN );
 
-    if( pBlockCrsr )
+    if( m_pBlockCrsr )
         RefreshBlockCursor();
 
-    if( !bIdleEnd && bHasFocus && !bBasicHideCrsr )
+    if( !bIdleEnd && m_bHasFocus && !m_bBasicHideCrsr )
     {
-        if( pTblCrsr )
-            pTblCrsr->SwSelPaintRects::Show();
+        if( m_pTblCrsr )
+            m_pTblCrsr->SwSelPaintRects::Show();
         else
         {
-            pCurCrsr->SwSelPaintRects::Show();
-            if( pBlockCrsr )
+            m_pCurCrsr->SwSelPaintRects::Show();
+            if( m_pBlockCrsr )
             {
-                SwShellCrsr* pNxt = dynamic_cast<SwShellCrsr*>(pCurCrsr->GetNext());
-                while( pNxt && pNxt != pCurCrsr )
+                SwShellCrsr* pNxt = dynamic_cast<SwShellCrsr*>(m_pCurCrsr->GetNext());
+                while( pNxt && pNxt != m_pCurCrsr )
                 {
                     pNxt->SwSelPaintRects::Show();
                     pNxt = dynamic_cast<SwShellCrsr*>(pNxt->GetNext());
@@ -1704,7 +1705,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
         }
     }
 
-    eMvState = MV_NONE; // state for cursor tavelling - GetCrsrOfst
+    m_eMvState = MV_NONE; // state for cursor tavelling - GetCrsrOfst
 
     if( pFrm && Imp()->IsAccessible() )
         Imp()->InvalidateAccessibleCursorPosition( pFrm );
@@ -1728,21 +1729,21 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
         GetOut()->SetSettings( aSettings );
     }
 
-    if( bSVCrsrVis )
-        pVisCrsr->Show(); // show again
+    if( m_bSVCrsrVis )
+        m_pVisCrsr->Show(); // show again
 }
 
 void SwCrsrShell::RefreshBlockCursor()
 {
-    OSL_ENSURE( pBlockCrsr, "Don't call me without a block cursor" );
-    SwShellCrsr &rBlock = pBlockCrsr->getShellCrsr();
+    OSL_ENSURE( m_pBlockCrsr, "Don't call me without a block cursor" );
+    SwShellCrsr &rBlock = m_pBlockCrsr->getShellCrsr();
     Point aPt = rBlock.GetPtPos();
     SwCntntFrm* pFrm = rBlock.GetCntntNode()->getLayoutFrm( GetLayout(), &aPt, rBlock.GetPoint(), sal_False );
     Point aMk;
-    if( pBlockCrsr->getEndPoint() && pBlockCrsr->getStartPoint() )
+    if( m_pBlockCrsr->getEndPoint() && m_pBlockCrsr->getStartPoint() )
     {
-        aPt = *pBlockCrsr->getStartPoint();
-        aMk = *pBlockCrsr->getEndPoint();
+        aPt = *m_pBlockCrsr->getStartPoint();
+        aMk = *m_pBlockCrsr->getEndPoint();
     }
     else
     {
@@ -1762,29 +1763,29 @@ void SwCrsrShell::RefreshBlockCursor()
 
     if( GetLayout()->FillSelection( aSelList, aRect ) )
     {
-        SwCursor* pNxt = (SwCursor*)pCurCrsr->GetNext();
-        while( pNxt != pCurCrsr )
+        SwCursor* pNxt = (SwCursor*)m_pCurCrsr->GetNext();
+        while( pNxt != m_pCurCrsr )
         {
             delete pNxt;
-            pNxt = (SwCursor*)pCurCrsr->GetNext();
+            pNxt = (SwCursor*)m_pCurCrsr->GetNext();
         }
 
         std::list<SwPaM*>::iterator pStart = aSelList.getStart();
         std::list<SwPaM*>::iterator pPam = aSelList.getEnd();
         OSL_ENSURE( pPam != pStart, "FillSelection should deliver at least one PaM" );
-        pCurCrsr->SetMark();
+        m_pCurCrsr->SetMark();
         --pPam;
         // If there is only one text portion inside the rectangle, a simple
         // selection is created
         if( pPam == pStart )
         {
-            *pCurCrsr->GetPoint() = *(*pPam)->GetPoint();
+            *m_pCurCrsr->GetPoint() = *(*pPam)->GetPoint();
             if( (*pPam)->HasMark() )
-                *pCurCrsr->GetMark() = *(*pPam)->GetMark();
+                *m_pCurCrsr->GetMark() = *(*pPam)->GetMark();
             else
-                pCurCrsr->DeleteMark();
+                m_pCurCrsr->DeleteMark();
             delete *pPam;
-            pCurCrsr->SetColumnSelection( false );
+            m_pCurCrsr->SetColumnSelection( false );
         }
         else
         {
@@ -1794,50 +1795,50 @@ void SwCrsrShell::RefreshBlockCursor()
             // downto the first selection.
             // At least create the cursor for the last selection
             --pPam;
-            *pCurCrsr->GetPoint() = *(*pPam)->GetPoint(); // n-1 (if n == number of selections)
+            *m_pCurCrsr->GetPoint() = *(*pPam)->GetPoint(); // n-1 (if n == number of selections)
             if( (*pPam)->HasMark() )
-                *pCurCrsr->GetMark() = *(*pPam)->GetMark();
+                *m_pCurCrsr->GetMark() = *(*pPam)->GetMark();
             else
-                pCurCrsr->DeleteMark();
+                m_pCurCrsr->DeleteMark();
             delete *pPam;
-            pCurCrsr->SetColumnSelection( true );
+            m_pCurCrsr->SetColumnSelection( true );
             while( pPam != pStart )
             {
                 --pPam;
 
-                SwShellCrsr* pNew = new SwShellCrsr( *pCurCrsr );
-                pNew->insert( pNew->begin(), pCurCrsr->begin(),  pCurCrsr->end());
-                pCurCrsr->clear();
-                pCurCrsr->DeleteMark();
+                SwShellCrsr* pNew = new SwShellCrsr( *m_pCurCrsr );
+                pNew->insert( pNew->begin(), m_pCurCrsr->begin(),  m_pCurCrsr->end());
+                m_pCurCrsr->clear();
+                m_pCurCrsr->DeleteMark();
 
-                *pCurCrsr->GetPoint() = *(*pPam)->GetPoint(); // n-2, n-3, .., 2, 1
+                *m_pCurCrsr->GetPoint() = *(*pPam)->GetPoint(); // n-2, n-3, .., 2, 1
                 if( (*pPam)->HasMark() )
                 {
-                    pCurCrsr->SetMark();
-                    *pCurCrsr->GetMark() = *(*pPam)->GetMark();
+                    m_pCurCrsr->SetMark();
+                    *m_pCurCrsr->GetMark() = *(*pPam)->GetMark();
                 }
                 else
-                    pCurCrsr->DeleteMark();
-                pCurCrsr->SetColumnSelection( true );
+                    m_pCurCrsr->DeleteMark();
+                m_pCurCrsr->SetColumnSelection( true );
                 delete *pPam;
             }
             {
-                SwShellCrsr* pNew = new SwShellCrsr( *pCurCrsr );
-                pNew->insert( pNew->begin(), pCurCrsr->begin(), pCurCrsr->end() );
-                pCurCrsr->clear();
-                pCurCrsr->DeleteMark();
+                SwShellCrsr* pNew = new SwShellCrsr( *m_pCurCrsr );
+                pNew->insert( pNew->begin(), m_pCurCrsr->begin(), m_pCurCrsr->end() );
+                m_pCurCrsr->clear();
+                m_pCurCrsr->DeleteMark();
             }
             pPam = aSelList.getEnd();
             --pPam;
-            *pCurCrsr->GetPoint() = *(*pPam)->GetPoint(); // n, the last selection
+            *m_pCurCrsr->GetPoint() = *(*pPam)->GetPoint(); // n, the last selection
             if( (*pPam)->HasMark() )
             {
-                pCurCrsr->SetMark();
-                *pCurCrsr->GetMark() = *(*pPam)->GetMark();
+                m_pCurCrsr->SetMark();
+                *m_pCurCrsr->GetMark() = *(*pPam)->GetMark();
             }
             else
-                pCurCrsr->DeleteMark();
-            pCurCrsr->SetColumnSelection( true );
+                m_pCurCrsr->DeleteMark();
+            m_pCurCrsr->SetColumnSelection( true );
             delete *pPam;
         }
     }
@@ -1848,15 +1849,15 @@ void SwCrsrShell::Push()
 {
     // fdo#60513: if we have a table cursor, copy that; else copy current.
     // This seems to work because UpdateCrsr() will fix this up on Pop(),
-    // then MakeBoxSels() will re-create the current pCurCrsr cell ring.
-    SwShellCrsr *const pCurrent((pTblCrsr) ? pTblCrsr : pCurCrsr);
-    pCrsrStk = new SwShellCrsr( *this, *pCurrent->GetPoint(),
-                                    pCurrent->GetPtPos(), pCrsrStk );
+    // then MakeBoxSels() will re-create the current m_pCurCrsr cell ring.
+    SwShellCrsr *const pCurrent((m_pTblCrsr) ? m_pTblCrsr : m_pCurCrsr);
+    m_pCrsrStk = new SwShellCrsr( *this, *pCurrent->GetPoint(),
+                                    pCurrent->GetPtPos(), m_pCrsrStk );
 
     if (pCurrent->HasMark())
     {
-        pCrsrStk->SetMark();
-        *pCrsrStk->GetMark() = *pCurrent->GetMark();
+        m_pCrsrStk->SetMark();
+        *m_pCrsrStk->GetMark() = *pCurrent->GetMark();
     }
 }
 
@@ -1871,50 +1872,50 @@ sal_Bool SwCrsrShell::Pop( sal_Bool bOldCrsr )
     SwCallLink aLk( *this ); // watch Crsr-Moves; call Link if needed
 
     // are there any left?
-    if( 0 == pCrsrStk )
+    if( 0 == m_pCrsrStk )
         return sal_False;
 
-    SwShellCrsr *pTmp = 0, *pOldStk = pCrsrStk;
+    SwShellCrsr *pTmp = 0, *pOldStk = m_pCrsrStk;
 
     // the successor becomes the current one
-    if( pCrsrStk->GetNext() != pCrsrStk )
+    if( m_pCrsrStk->GetNext() != m_pCrsrStk )
     {
-        pTmp = dynamic_cast<SwShellCrsr*>(pCrsrStk->GetNext());
+        pTmp = dynamic_cast<SwShellCrsr*>(m_pCrsrStk->GetNext());
     }
 
     if( bOldCrsr ) // delete from stack
-        delete pCrsrStk;
+        delete m_pCrsrStk;
 
-    pCrsrStk = pTmp; // assign new one
+    m_pCrsrStk = pTmp; // assign new one
 
     if( !bOldCrsr )
     {
-        SwCrsrSaveState aSaveState( *pCurCrsr );
+        SwCrsrSaveState aSaveState( *m_pCurCrsr );
 
         // If the visible SSelection was not changed
-        if( pOldStk->GetPtPos() == pCurCrsr->GetPtPos() ||
-            pOldStk->GetPtPos() == pCurCrsr->GetMkPos() )
+        if( pOldStk->GetPtPos() == m_pCurCrsr->GetPtPos() ||
+            pOldStk->GetPtPos() == m_pCurCrsr->GetMkPos() )
         {
             // move "Selections Rectangles"
-            pCurCrsr->insert( pCurCrsr->begin(), pOldStk->begin(), pOldStk->end() );
+            m_pCurCrsr->insert( m_pCurCrsr->begin(), pOldStk->begin(), pOldStk->end() );
             pOldStk->clear();
         }
 
         if( pOldStk->HasMark() )
         {
-            pCurCrsr->SetMark();
-            *pCurCrsr->GetMark() = *pOldStk->GetMark();
-            pCurCrsr->GetMkPos() = pOldStk->GetMkPos();
+            m_pCurCrsr->SetMark();
+            *m_pCurCrsr->GetMark() = *pOldStk->GetMark();
+            m_pCurCrsr->GetMkPos() = pOldStk->GetMkPos();
         }
         else
             // no selection so revoke old one and set to old position
-            pCurCrsr->DeleteMark();
-        *pCurCrsr->GetPoint() = *pOldStk->GetPoint();
-        pCurCrsr->GetPtPos() = pOldStk->GetPtPos();
+            m_pCurCrsr->DeleteMark();
+        *m_pCurCrsr->GetPoint() = *pOldStk->GetPoint();
+        m_pCurCrsr->GetPtPos() = pOldStk->GetPtPos();
         delete pOldStk;
 
-        if( !pCurCrsr->IsInProtectTable( sal_True ) &&
-            !pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
+        if( !m_pCurCrsr->IsInProtectTable( sal_True ) &&
+            !m_pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
                                  nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ) )
             UpdateCrsr(); // update current cursor
     }
@@ -1928,31 +1929,31 @@ sal_Bool SwCrsrShell::Pop( sal_Bool bOldCrsr )
 void SwCrsrShell::Combine()
 {
     // any others left?
-    if( 0 == pCrsrStk )
+    if( 0 == m_pCrsrStk )
         return;
 
     SwCallLink aLk( *this ); // watch Crsr-Moves; call Link if needed
     // rhbz#689053: IsSelOvr must restore the saved stack position, not the
     // current one, because current point + stack mark may be invalid PaM
-    SwCrsrSaveState aSaveState(*pCrsrStk);
+    SwCrsrSaveState aSaveState(*m_pCrsrStk);
     // stack cursor & current cursor in same Section?
-    assert(!pCrsrStk->HasMark() ||
-            CheckNodesRange(pCrsrStk->GetMark()->nNode,
-                            pCurCrsr->GetPoint()->nNode, true));
-    *pCrsrStk->GetPoint() = *pCurCrsr->GetPoint();
-    pCrsrStk->GetPtPos() = pCurCrsr->GetPtPos();
+    assert(!m_pCrsrStk->HasMark() ||
+            CheckNodesRange(m_pCrsrStk->GetMark()->nNode,
+                            m_pCurCrsr->GetPoint()->nNode, true));
+    *m_pCrsrStk->GetPoint() = *m_pCurCrsr->GetPoint();
+    m_pCrsrStk->GetPtPos() = m_pCurCrsr->GetPtPos();
 
     SwShellCrsr * pTmp = 0;
-    if( pCrsrStk->GetNext() != pCrsrStk )
+    if( m_pCrsrStk->GetNext() != m_pCrsrStk )
     {
-        pTmp = dynamic_cast<SwShellCrsr*>(pCrsrStk->GetNext());
+        pTmp = dynamic_cast<SwShellCrsr*>(m_pCrsrStk->GetNext());
     }
-    delete pCurCrsr;
-    pCurCrsr = pCrsrStk;
-    pCrsrStk->MoveTo(0); // remove from ring
-    pCrsrStk = pTmp;
-    if( !pCurCrsr->IsInProtectTable( sal_True ) &&
-        !pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
+    delete m_pCurCrsr;
+    m_pCurCrsr = m_pCrsrStk;
+    m_pCrsrStk->MoveTo(0); // remove from ring
+    m_pCrsrStk = pTmp;
+    if( !m_pCurCrsr->IsInProtectTable( sal_True ) &&
+        !m_pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
                              nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ) )
     {
         UpdateCrsr(); // update current cursor
@@ -1962,17 +1963,17 @@ void SwCrsrShell::Combine()
 
 void SwCrsrShell::HideCrsrs()
 {
-    if( !bHasFocus || bBasicHideCrsr )
+    if( !m_bHasFocus || m_bBasicHideCrsr )
         return;
 
     // if cursor is visible then hide SV cursor
-    if( pVisCrsr->IsVisible() )
+    if( m_pVisCrsr->IsVisible() )
     {
         SET_CURR_SHELL( this );
-        pVisCrsr->Hide();
+        m_pVisCrsr->Hide();
     }
     // revoke inversion of SSelection
-    SwShellCrsr* pAktCrsr = pTblCrsr ? pTblCrsr : pCurCrsr;
+    SwShellCrsr* pAktCrsr = m_pTblCrsr ? m_pTblCrsr : m_pCurCrsr;
     pAktCrsr->Hide();
 }
 
@@ -1980,24 +1981,24 @@ void SwCrsrShell::HideCrsrs()
 
 void SwCrsrShell::ShowCrsrs( sal_Bool bCrsrVis )
 {
-    if( !bHasFocus || bAllProtect || bBasicHideCrsr )
+    if( !m_bHasFocus || m_bAllProtect || m_bBasicHideCrsr )
         return;
 
     SET_CURR_SHELL( this );
-    SwShellCrsr* pAktCrsr = pTblCrsr ? pTblCrsr : pCurCrsr;
+    SwShellCrsr* pAktCrsr = m_pTblCrsr ? m_pTblCrsr : m_pCurCrsr;
     pAktCrsr->Show();
 
-    if( bSVCrsrVis && bCrsrVis ) // also show SV cursor again
-        pVisCrsr->Show();
+    if( m_bSVCrsrVis && bCrsrVis ) // also show SV cursor again
+        m_pVisCrsr->Show();
 }
 
 
 
 void SwCrsrShell::ShowCrsr()
 {
-    if( !bBasicHideCrsr )
+    if( !m_bBasicHideCrsr )
     {
-        bSVCrsrVis = sal_True;
+        m_bSVCrsrVis = sal_True;
         UpdateCrsr();
     }
 }
@@ -2005,33 +2006,33 @@ void SwCrsrShell::ShowCrsr()
 
 void SwCrsrShell::HideCrsr()
 {
-    if( !bBasicHideCrsr )
+    if( !m_bBasicHideCrsr )
     {
-        bSVCrsrVis = sal_False;
+        m_bSVCrsrVis = sal_False;
         // possibly reverse selected areas!!
         SET_CURR_SHELL( this );
-        pVisCrsr->Hide();
+        m_pVisCrsr->Hide();
     }
 }
 
 
 void SwCrsrShell::ShLooseFcs()
 {
-    if( !bBasicHideCrsr )
+    if( !m_bBasicHideCrsr )
         HideCrsrs();
-    bHasFocus = sal_False;
+    m_bHasFocus = sal_False;
 }
 
 
 void SwCrsrShell::ShGetFcs( sal_Bool bUpdate )
 {
-    bHasFocus = sal_True;
-    if( !bBasicHideCrsr && VisArea().Width() )
+    m_bHasFocus = sal_True;
+    if( !m_bBasicHideCrsr && VisArea().Width() )
     {
         UpdateCrsr( static_cast<sal_uInt16>( bUpdate ?
                     SwCrsrShell::CHKRANGE|SwCrsrShell::SCROLLWIN
                     : SwCrsrShell::CHKRANGE ) );
-        ShowCrsrs( bSVCrsrVis ? sal_True : sal_False );
+        ShowCrsrs( m_bSVCrsrVis ? sal_True : sal_False );
     }
 }
 
@@ -2040,7 +2041,7 @@ SwCntntFrm *SwCrsrShell::GetCurrFrm( const sal_Bool bCalcFrm ) const
 {
     SET_CURR_SHELL( (ViewShell*)this );
     SwCntntFrm *pRet = 0;
-    SwCntntNode *pNd = pCurCrsr->GetCntntNode();
+    SwCntntNode *pNd = m_pCurCrsr->GetCntntNode();
     if ( pNd )
     {
         if ( bCalcFrm )
@@ -2048,13 +2049,13 @@ SwCntntFrm *SwCrsrShell::GetCurrFrm( const sal_Bool bCalcFrm ) const
             const sal_uInt16* pST = &mnStartAction;
             ++(*((sal_uInt16*)pST));
             const Size aOldSz( GetDocSize() );
-            pRet = pNd->getLayoutFrm( GetLayout(), &pCurCrsr->GetPtPos(), pCurCrsr->GetPoint() );
+            pRet = pNd->getLayoutFrm( GetLayout(), &m_pCurCrsr->GetPtPos(), m_pCurCrsr->GetPoint() );
             --(*((sal_uInt16*)pST));
             if( aOldSz != GetDocSize() )
                 ((SwCrsrShell*)this)->SizeChgNotify();
         }
         else
-            pRet = pNd->getLayoutFrm( GetLayout(), &pCurCrsr->GetPtPos(), pCurCrsr->GetPoint(), sal_False);
+            pRet = pNd->getLayoutFrm( GetLayout(), &m_pCurCrsr->GetPtPos(), m_pCurCrsr->GetPoint(), sal_False);
     }
     return pRet;
 }
@@ -2073,7 +2074,7 @@ void SwCrsrShell::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                           pNew->Which() :
                           sal::static_int_cast<sal_uInt16>(RES_MSG_BEGIN);
 
-    if( bCallChgLnk &&
+    if( m_bCallChgLnk &&
         ( nWhich < RES_MSG_BEGIN || nWhich >= RES_MSG_END ||
             nWhich == RES_FMT_CHG || nWhich == RES_UPDATE_ATTR ||
             nWhich == RES_ATTRSET_CHG ))
@@ -2083,9 +2084,9 @@ void SwCrsrShell::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         // not need to send the expensive RES_FMT_CHG in Insert.
         CallChgLnk();
 
-    if( aGrfArrivedLnk.IsSet() &&
+    if( m_aGrfArrivedLnk.IsSet() &&
         ( RES_GRAPHIC_ARRIVED == nWhich || RES_GRAPHIC_SWAPIN == nWhich ))
-        aGrfArrivedLnk.Call( this );
+        m_aGrfArrivedLnk.Call( this );
 }
 
 /** Does the current cursor create a selection?
@@ -2106,12 +2107,12 @@ void SwCrsrShell::CallChgLnk()
     // Do not make any call in start/end action but just remember the change.
     // This will be taken care of in the end action.
     if( BasicActionPend() )
-        bChgCallFlag = sal_True; // remember change
-    else if( aChgLnk.IsSet() )
+        m_bChgCallFlag = sal_True; // remember change
+    else if( m_aChgLnk.IsSet() )
     {
-        if( bCallChgLnk )
-            aChgLnk.Call( this );
-        bChgCallFlag = sal_False; // reset flag
+        if( m_bCallChgLnk )
+            m_aChgLnk.Call( this );
+        m_bChgCallFlag = sal_False; // reset flag
     }
 }
 
@@ -2119,15 +2120,15 @@ void SwCrsrShell::CallChgLnk()
 String SwCrsrShell::GetSelTxt() const
 {
     String aTxt;
-    if( pCurCrsr->GetPoint()->nNode.GetIndex() ==
-        pCurCrsr->GetMark()->nNode.GetIndex() )
+    if( m_pCurCrsr->GetPoint()->nNode.GetIndex() ==
+        m_pCurCrsr->GetMark()->nNode.GetIndex() )
     {
-        SwTxtNode* pTxtNd = pCurCrsr->GetNode()->GetTxtNode();
+        SwTxtNode* pTxtNd = m_pCurCrsr->GetNode()->GetTxtNode();
         if( pTxtNd )
         {
-            xub_StrLen nStt = pCurCrsr->Start()->nContent.GetIndex();
+            xub_StrLen nStt = m_pCurCrsr->Start()->nContent.GetIndex();
             aTxt = pTxtNd->GetExpandTxt( nStt,
-                    pCurCrsr->End()->nContent.GetIndex() - nStt );
+                    m_pCurCrsr->End()->nContent.GetIndex() - nStt );
         }
     }
     return aTxt;
@@ -2137,13 +2138,13 @@ String SwCrsrShell::GetSelTxt() const
 String SwCrsrShell::GetText() const
 {
     String aTxt;
-    if( pCurCrsr->GetPoint()->nNode.GetIndex() ==
-        pCurCrsr->GetMark()->nNode.GetIndex() )
+    if( m_pCurCrsr->GetPoint()->nNode.GetIndex() ==
+        m_pCurCrsr->GetMark()->nNode.GetIndex() )
     {
-        SwTxtNode* pTxtNd = pCurCrsr->GetNode()->GetTxtNode();
+        SwTxtNode* pTxtNd = m_pCurCrsr->GetNode()->GetTxtNode();
         if( pTxtNd )
             aTxt = pTxtNd->GetTxt().copy(
-                    pCurCrsr->GetPoint()->nContent.GetIndex() );
+                    m_pCurCrsr->GetPoint()->nContent.GetIndex() );
     }
     return aTxt;
 }
@@ -2158,8 +2159,8 @@ sal_Unicode SwCrsrShell::GetChar( sal_Bool bEnd, long nOffset )
     if( IsTableMode() ) // not possible in table mode
         return 0;
 
-    const SwPosition* pPos = !pCurCrsr->HasMark() ? pCurCrsr->GetPoint()
-                                : bEnd ? pCurCrsr->End() : pCurCrsr->Start();
+    const SwPosition* pPos = !m_pCurCrsr->HasMark() ? m_pCurCrsr->GetPoint()
+                                : bEnd ? m_pCurCrsr->End() : m_pCurCrsr->Start();
     SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();
     if( !pTxtNd )
         return 0;
@@ -2181,10 +2182,10 @@ sal_Unicode SwCrsrShell::GetChar( sal_Bool bEnd, long nOffset )
 */
 sal_Bool SwCrsrShell::ExtendSelection( sal_Bool bEnd, xub_StrLen nCount )
 {
-    if( !pCurCrsr->HasMark() || IsTableMode() )
+    if( !m_pCurCrsr->HasMark() || IsTableMode() )
         return sal_False; // no selection
 
-    SwPosition* pPos = bEnd ? pCurCrsr->End() : pCurCrsr->Start();
+    SwPosition* pPos = bEnd ? m_pCurCrsr->End() : m_pCurCrsr->Start();
     SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();
     OSL_ENSURE( pTxtNd, "no text node; how should this then be extended?" );
 
@@ -2218,7 +2219,7 @@ sal_Bool SwCrsrShell::SetVisCrsr( const Point &rPt )
 {
     SET_CURR_SHELL( this );
     Point aPt( rPt );
-    SwPosition aPos( *pCurCrsr->GetPoint() );
+    SwPosition aPos( *m_pCurCrsr->GetPoint() );
     SwCrsrMoveState aTmpState( MV_SETONLYTEXT );
     aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
     aTmpState.bRealHeight = sal_True;
@@ -2241,32 +2242,32 @@ sal_Bool SwCrsrShell::SetVisCrsr( const Point &rPt )
     SwCntntFrm *pFrm = pTxtNd->getLayoutFrm( GetLayout(), &aPt, &aPos );
     if ( Imp()->IsIdleAction() )
         pFrm->PrepareCrsr();
-    SwRect aTmp( aCharRect );
+    SwRect aTmp( m_aCharRect );
 
-    pFrm->GetCharRect( aCharRect, aPos, &aTmpState );
+    pFrm->GetCharRect( m_aCharRect, aPos, &aTmpState );
 
     // #i10137#
-    if( aTmp == aCharRect && pVisCrsr->IsVisible() )
+    if( aTmp == m_aCharRect && m_pVisCrsr->IsVisible() )
         return sal_True;
 
-    pVisCrsr->Hide(); // always hide visible cursor
-    if( IsScrollMDI( this, aCharRect ))
+    m_pVisCrsr->Hide(); // always hide visible cursor
+    if( IsScrollMDI( this, m_aCharRect ))
     {
-        MakeVisible( aCharRect );
-        pCurCrsr->Show();
+        MakeVisible( m_aCharRect );
+        m_pCurCrsr->Show();
     }
 
     {
         if( aTmpState.bRealHeight )
-            aCrsrHeight = aTmpState.aRealHeight;
+            m_aCrsrHeight = aTmpState.aRealHeight;
         else
         {
-            aCrsrHeight.X() = 0;
-            aCrsrHeight.Y() = aCharRect.Height();
+            m_aCrsrHeight.X() = 0;
+            m_aCrsrHeight.Y() = m_aCharRect.Height();
         }
 
-        pVisCrsr->SetDragCrsr( true );
-        pVisCrsr->Show(); // show again
+        m_pVisCrsr->SetDragCrsr( true );
+        m_pVisCrsr->Show(); // show again
     }
     return bRet;
 }
@@ -2274,7 +2275,7 @@ sal_Bool SwCrsrShell::SetVisCrsr( const Point &rPt )
 sal_Bool SwCrsrShell::IsOverReadOnlyPos( const Point& rPt ) const
 {
     Point aPt( rPt );
-    SwPaM aPam( *pCurCrsr->GetPoint() );
+    SwPaM aPam( *m_pCurCrsr->GetPoint() );
     GetLayout()->GetCrsrOfst( aPam.GetPoint(), aPt );
     // Formular view
     return aPam.HasReadonlySel( GetViewOptions()->IsFormView() );
@@ -2287,9 +2288,9 @@ sal_Bool SwCrsrShell::IsOverReadOnlyPos( const Point& rPt ) const
 sal_uInt16 SwCrsrShell::GetCrsrCnt( sal_Bool bAll ) const
 {
     Ring* pTmp = GetCrsr()->GetNext();
-    sal_uInt16 n = (bAll || ( pCurCrsr->HasMark() &&
-                    *pCurCrsr->GetPoint() != *pCurCrsr->GetMark())) ? 1 : 0;
-    while( pTmp != pCurCrsr )
+    sal_uInt16 n = (bAll || ( m_pCurCrsr->HasMark() &&
+                    *m_pCurCrsr->GetPoint() != *m_pCurCrsr->GetMark())) ? 1 : 0;
+    while( pTmp != m_pCurCrsr )
     {
         if( bAll || ( ((SwPaM*)pTmp)->HasMark() &&
                 *((SwPaM*)pTmp)->GetPoint() != *((SwPaM*)pTmp)->GetMark()))
@@ -2302,14 +2303,14 @@ sal_uInt16 SwCrsrShell::GetCrsrCnt( sal_Bool bAll ) const
 
 sal_Bool SwCrsrShell::IsStartOfDoc() const
 {
-    if( pCurCrsr->GetPoint()->nContent.GetIndex() )
+    if( m_pCurCrsr->GetPoint()->nContent.GetIndex() )
         return sal_False;
 
     // after EndOfIcons comes the content selection (EndNd+StNd+CntntNd)
     SwNodeIndex aIdx( GetDoc()->GetNodes().GetEndOfExtras(), 2 );
     if( !aIdx.GetNode().IsCntntNode() )
         GetDoc()->GetNodes().GoNext( &aIdx );
-    return aIdx == pCurCrsr->GetPoint()->nNode;
+    return aIdx == m_pCurCrsr->GetPoint()->nNode;
 }
 
 
@@ -2320,8 +2321,8 @@ sal_Bool SwCrsrShell::IsEndOfDoc() const
     if( !pCNd )
         pCNd = GetDoc()->GetNodes().GoPrevious( &aIdx );
 
-    return aIdx == pCurCrsr->GetPoint()->nNode &&
-            pCNd->Len() == pCurCrsr->GetPoint()->nContent.GetIndex();
+    return aIdx == m_pCurCrsr->GetPoint()->nNode &&
+            pCNd->Len() == m_pCurCrsr->GetPoint()->nContent.GetIndex();
 }
 
 /** Invalidate cursors
@@ -2333,17 +2334,17 @@ sal_Bool SwCrsrShell::IsEndOfDoc() const
 */
 sal_Bool SwCrsrShell::ParkTblCrsr()
 {
-    if( !pTblCrsr )
+    if( !m_pTblCrsr )
         return sal_False;
 
-    pTblCrsr->ParkCrsr();
+    m_pTblCrsr->ParkCrsr();
 
-    while( pCurCrsr->GetNext() != pCurCrsr )
-        delete pCurCrsr->GetNext();
+    while( m_pCurCrsr->GetNext() != m_pCurCrsr )
+        delete m_pCurCrsr->GetNext();
 
     // *always* move cursor's Point and Mark
-    pCurCrsr->DeleteMark();
-    *pCurCrsr->GetPoint() = *pTblCrsr->GetPoint();
+    m_pCurCrsr->DeleteMark();
+    *m_pCurCrsr->GetPoint() = *m_pTblCrsr->GetPoint();
 
     return sal_True;
 }
@@ -2379,7 +2380,7 @@ void SwCrsrShell::_ParkPams( SwPaM* pDelRg, SwShellCrsr** ppDelRing )
             sal_Bool bDelete = sal_True;
             if( *ppDelRing == pTmpDel )
             {
-                if( *ppDelRing == pCurCrsr )
+                if( *ppDelRing == m_pCurCrsr )
                 {
                     if( sal_True == ( bDelete = GoNextCrsr() ))
                     {
@@ -2442,11 +2443,11 @@ void SwCrsrShell::ParkCrsr( const SwNodeIndex &rIdx )
         if( pTmp->IsA( TYPE( SwCrsrShell )))
         {
             SwCrsrShell* pSh = (SwCrsrShell*)pTmp;
-            if( pSh->pCrsrStk )
-                pSh->_ParkPams( pNew, &pSh->pCrsrStk );
+            if( pSh->m_pCrsrStk )
+                pSh->_ParkPams( pNew, &pSh->m_pCrsrStk );
 
-            pSh->_ParkPams( pNew, &pSh->pCurCrsr );
-            if( pSh->pTblCrsr )
+            pSh->_ParkPams( pNew, &pSh->m_pCurCrsr );
+            if( pSh->m_pTblCrsr )
             {
                 // set table cursor always to 0 and the current one always to
                 // the beginning of the table
@@ -2455,7 +2456,7 @@ void SwCrsrShell::ParkCrsr( const SwNodeIndex &rIdx )
                 if ( pTblNd )
                 {
                     pTCrsr->DeleteMark();
-                    pSh->pCurCrsr->GetPoint()->nNode = *pTblNd;
+                    pSh->m_pCurCrsr->GetPoint()->nNode = *pTblNd;
                 }
             }
         }
@@ -2471,35 +2472,35 @@ void SwCrsrShell::ParkCrsr( const SwNodeIndex &rIdx )
 */
 SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
     : ViewShell( rShell, pInitWin ),
-    SwModify( 0 ), pCrsrStk( 0 ), pBlockCrsr( 0 ), pTblCrsr( 0 ),
-    pBoxIdx( 0 ), pBoxPtr( 0 ), nCrsrMove( 0 ), nBasicActionCnt( 0 ),
-    eMvState( MV_NONE ),
-    sMarkedListId(),
-    nMarkedListLevel( 0 )
+    SwModify( 0 ), m_pCrsrStk( 0 ), m_pBlockCrsr( 0 ), m_pTblCrsr( 0 ),
+    m_pBoxIdx( 0 ), m_pBoxPtr( 0 ), m_nCrsrMove( 0 ), m_nBasicActionCnt( 0 ),
+    m_eMvState( MV_NONE ),
+    m_sMarkedListId(),
+    m_nMarkedListLevel( 0 )
 {
     SET_CURR_SHELL( this );
     // only keep the position of the current cursor of the copy shell
-    pCurCrsr = new SwShellCrsr( *this, *(rShell.pCurCrsr->GetPoint()) );
-    pCurCrsr->GetCntntNode()->Add( this );
+    m_pCurCrsr = new SwShellCrsr( *this, *(rShell.m_pCurCrsr->GetPoint()) );
+    m_pCurCrsr->GetCntntNode()->Add( this );
 
-    bAllProtect = bVisPortChgd = bChgCallFlag = bInCMvVisportChgd =
-    bGCAttr = bIgnoreReadonly = bSelTblCells = bBasicHideCrsr =
-    bOverwriteCrsr = sal_False;
-    bCallChgLnk = bHasFocus = bSVCrsrVis = bAutoUpdateCells = sal_True;
-    bSetCrsrInReadOnly = sal_True;
-    pVisCrsr = new SwVisCrsr( this );
-    mbMacroExecAllowed = rShell.IsMacroExecAllowed();
+    m_bAllProtect = m_bVisPortChgd = m_bChgCallFlag = m_bInCMvVisportChgd =
+    m_bGCAttr = m_bIgnoreReadonly = m_bSelTblCells = m_bBasicHideCrsr =
+    m_bOverwriteCrsr = sal_False;
+    m_bCallChgLnk = m_bHasFocus = m_bSVCrsrVis = m_bAutoUpdateCells = sal_True;
+    m_bSetCrsrInReadOnly = sal_True;
+    m_pVisCrsr = new SwVisCrsr( this );
+    m_bMacroExecAllowed = rShell.IsMacroExecAllowed();
 }
 
 /// default constructor
 SwCrsrShell::SwCrsrShell( SwDoc& rDoc, Window *pInitWin,
                             const SwViewOption *pInitOpt )
     : ViewShell( rDoc, pInitWin, pInitOpt ),
-    SwModify( 0 ), pCrsrStk( 0 ), pBlockCrsr( 0 ), pTblCrsr( 0 ),
-    pBoxIdx( 0 ), pBoxPtr( 0 ), nCrsrMove( 0 ), nBasicActionCnt( 0 ),
-    eMvState( MV_NONE ), // state for crsr-travelling - GetCrsrOfst
-    sMarkedListId(),
-    nMarkedListLevel( 0 )
+    SwModify( 0 ), m_pCrsrStk( 0 ), m_pBlockCrsr( 0 ), m_pTblCrsr( 0 ),
+    m_pBoxIdx( 0 ), m_pBoxPtr( 0 ), m_nCrsrMove( 0 ), m_nBasicActionCnt( 0 ),
+    m_eMvState( MV_NONE ), // state for crsr-travelling - GetCrsrOfst
+    m_sMarkedListId(),
+    m_nMarkedListLevel( 0 )
 {
     SET_CURR_SHELL( this );
     // create initial cursor and set it to first content position
@@ -2508,20 +2509,20 @@ SwCrsrShell::SwCrsrShell( SwDoc& rDoc, Window *pInitWin,
     SwNodeIndex aNodeIdx( *rNds.GetEndOfContent().StartOfSectionNode() );
     SwCntntNode* pCNd = rNds.GoNext( &aNodeIdx ); // go to the first ContentNode
 
-    pCurCrsr = new SwShellCrsr( *this, SwPosition( aNodeIdx, SwIndex( pCNd, 0 )));
+    m_pCurCrsr = new SwShellCrsr( *this, SwPosition( aNodeIdx, SwIndex( pCNd, 0 )));
 
     // Register shell as dependent at current node. As a result all attribute
     // changes can be forwarded via the Link.
     pCNd->Add( this );
 
-    bAllProtect = bVisPortChgd = bChgCallFlag = bInCMvVisportChgd =
-    bGCAttr = bIgnoreReadonly = bSelTblCells = bBasicHideCrsr =
-    bOverwriteCrsr = sal_False;
-    bCallChgLnk = bHasFocus = bSVCrsrVis = bAutoUpdateCells = sal_True;
-    bSetCrsrInReadOnly = sal_True;
+    m_bAllProtect = m_bVisPortChgd = m_bChgCallFlag = m_bInCMvVisportChgd =
+    m_bGCAttr = m_bIgnoreReadonly = m_bSelTblCells = m_bBasicHideCrsr =
+    m_bOverwriteCrsr = sal_False;
+    m_bCallChgLnk = m_bHasFocus = m_bSVCrsrVis = m_bAutoUpdateCells = sal_True;
+    m_bSetCrsrInReadOnly = sal_True;
 
-    pVisCrsr = new SwVisCrsr( this );
-    mbMacroExecAllowed = true;
+    m_pVisCrsr = new SwVisCrsr( this );
+    m_bMacroExecAllowed = true;
 }
 
 
@@ -2530,25 +2531,25 @@ SwCrsrShell::~SwCrsrShell()
 {
     // if it is not the last view then at least the field should be updated
     if( GetNext() != this )
-        CheckTblBoxCntnt( pCurCrsr->GetPoint() );
+        CheckTblBoxCntnt( m_pCurCrsr->GetPoint() );
     else
         ClearTblBoxCntnt();
 
-    delete pVisCrsr;
-    delete pBlockCrsr;
-    delete pTblCrsr;
+    delete m_pVisCrsr;
+    delete m_pBlockCrsr;
+    delete m_pTblCrsr;
 
     // release cursors
-    while(pCurCrsr->GetNext() != pCurCrsr)
-        delete pCurCrsr->GetNext();
-    delete pCurCrsr;
+    while(m_pCurCrsr->GetNext() != m_pCurCrsr)
+        delete m_pCurCrsr->GetNext();
+    delete m_pCurCrsr;
 
     // free stack
-    if( pCrsrStk )
+    if( m_pCrsrStk )
     {
-        while( pCrsrStk->GetNext() != pCrsrStk )
-            delete pCrsrStk->GetNext();
-        delete pCrsrStk;
+        while( m_pCrsrStk->GetNext() != m_pCrsrStk )
+            delete m_pCrsrStk->GetNext();
+        delete m_pCrsrStk;
     }
 
     // #i54025# - do not give a HTML parser that might potentially hang as
@@ -2559,11 +2560,11 @@ SwCrsrShell::~SwCrsrShell()
 
 SwShellCrsr* SwCrsrShell::getShellCrsr( bool bBlock )
 {
-    if( pTblCrsr )
-        return pTblCrsr;
-    if( pBlockCrsr && bBlock )
-        return &pBlockCrsr->getShellCrsr();
-    return pCurCrsr;
+    if( m_pTblCrsr )
+        return m_pTblCrsr;
+    if( m_pBlockCrsr && bBlock )
+        return &m_pBlockCrsr->getShellCrsr();
+    return m_pCurCrsr;
 }
 
 /** Should WaitPtr be switched on for the clipboard?
@@ -2585,27 +2586,27 @@ bool SwCrsrShell::ShouldWait() const
 
 size_t SwCrsrShell::UpdateTblSelBoxes()
 {
-    if (pTblCrsr && (pTblCrsr->IsChgd() || !pTblCrsr->GetSelectedBoxesCount()))
+    if (m_pTblCrsr && (m_pTblCrsr->IsChgd() || !m_pTblCrsr->GetSelectedBoxesCount()))
     {
-         GetLayout()->MakeTblCrsrs( *pTblCrsr );
+         GetLayout()->MakeTblCrsrs( *m_pTblCrsr );
     }
-    return (pTblCrsr) ? pTblCrsr->GetSelectedBoxesCount() : 0;
+    return (m_pTblCrsr) ? m_pTblCrsr->GetSelectedBoxesCount() : 0;
 }
 
 /// show the current selected "object"
 void SwCrsrShell::MakeSelVisible()
 {
-    OSL_ENSURE( bHasFocus, "no focus but cursor should be made visible?" );
-    if( aCrsrHeight.Y() < aCharRect.Height() && aCharRect.Height() > VisArea().Height() )
+    OSL_ENSURE( m_bHasFocus, "no focus but cursor should be made visible?" );
+    if( m_aCrsrHeight.Y() < m_aCharRect.Height() && m_aCharRect.Height() > VisArea().Height() )
     {
-        SwRect aTmp( aCharRect );
-        long nDiff = aCharRect.Height() - VisArea().Height();
-        if( nDiff < aCrsrHeight.X() )
-            aTmp.Top( nDiff + aCharRect.Top() );
+        SwRect aTmp( m_aCharRect );
+        long nDiff = m_aCharRect.Height() - VisArea().Height();
+        if( nDiff < m_aCrsrHeight.X() )
+            aTmp.Top( nDiff + m_aCharRect.Top() );
         else
         {
-            aTmp.Top( aCrsrHeight.X() + aCharRect.Top() );
-            aTmp.Height( aCrsrHeight.Y() );
+            aTmp.Top( m_aCrsrHeight.X() + m_aCharRect.Top() );
+            aTmp.Height( m_aCrsrHeight.Y() );
         }
         if( !aTmp.HasArea() )
         {
@@ -2616,11 +2617,11 @@ void SwCrsrShell::MakeSelVisible()
     }
     else
     {
-        if( aCharRect.HasArea() )
-            MakeVisible( aCharRect );
+        if( m_aCharRect.HasArea() )
+            MakeVisible( m_aCharRect );
         else
         {
-            SwRect aTmp( aCharRect );
+            SwRect aTmp( m_aCharRect );
             aTmp.SSize().Height() += 1; aTmp.SSize().Width() += 1;
             MakeVisible( aTmp );
         }
@@ -2630,33 +2631,33 @@ void SwCrsrShell::MakeSelVisible()
 /// search a valid content position (not protected/hidden)
 sal_Bool SwCrsrShell::FindValidCntntNode( sal_Bool bOnlyText )
 {
-    if( pTblCrsr )
+    if( m_pTblCrsr )
     {
         OSL_ENSURE( !this, "Did not remove table selection!" );
         return sal_False;
     }
 
     // #i45129# - everything is allowed in UI-readonly
-    if( !bAllProtect && GetDoc()->GetDocShell() &&
+    if( !m_bAllProtect && GetDoc()->GetDocShell() &&
         GetDoc()->GetDocShell()->IsReadOnlyUI() )
         return sal_True;
 
-    if( pCurCrsr->HasMark() )
+    if( m_pCurCrsr->HasMark() )
         ClearMark();
 
     // first check for frames
-    SwNodeIndex& rNdIdx = pCurCrsr->GetPoint()->nNode;
+    SwNodeIndex& rNdIdx = m_pCurCrsr->GetPoint()->nNode;
     sal_uLong nNdIdx = rNdIdx.GetIndex(); // keep backup
     SwNodes& rNds = mpDoc->GetNodes();
     SwCntntNode* pCNd = rNdIdx.GetNode().GetCntntNode();
     const SwCntntFrm * pFrm;
 
-    if( pCNd && 0 != (pFrm = pCNd->getLayoutFrm( GetLayout(),0,pCurCrsr->GetPoint(),sal_False)) &&
+    if( pCNd && 0 != (pFrm = pCNd->getLayoutFrm( GetLayout(),0,m_pCurCrsr->GetPoint(),sal_False)) &&
         !IsReadOnlyAvailable() && pFrm->IsProtected() &&
         nNdIdx < rNds.GetEndOfExtras().GetIndex() )
     {
         // skip protected frame
-        SwPaM aPam( *pCurCrsr->GetPoint() );
+        SwPaM aPam( *m_pCurCrsr->GetPoint() );
         aPam.SetMark();
         aPam.GetMark()->nNode = rNds.GetEndOfContent();
         aPam.GetPoint()->nNode = *pCNd->EndOfSectionNode();
@@ -2673,13 +2674,13 @@ sal_Bool SwCrsrShell::FindValidCntntNode( sal_Bool bOnlyText )
             rNdIdx = nNdIdx; // back to old node
             return sal_False;
         }
-        *pCurCrsr->GetPoint() = *aPam.GetPoint();
+        *m_pCurCrsr->GetPoint() = *aPam.GetPoint();
     }
     else if( bOnlyText && pCNd && pCNd->IsNoTxtNode() )
     {
         // set to beginning of document
         rNdIdx = mpDoc->GetNodes().GetEndOfExtras();
-        pCurCrsr->GetPoint()->nContent.Assign( mpDoc->GetNodes().GoNext(
+        m_pCurCrsr->GetPoint()->nContent.Assign( mpDoc->GetNodes().GoNext(
                                                             &rNdIdx ), 0 );
         nNdIdx = rNdIdx.GetIndex();
     }
@@ -2714,7 +2715,7 @@ sal_Bool SwCrsrShell::FindValidCntntNode( sal_Bool bOnlyText )
         // if we're successful, set the new position
         if( ! aPam.GetNode()->IsProtect() )
         {
-            *pCurCrsr->GetPoint() = *aPam.GetPoint();
+            *m_pCurCrsr->GetPoint() = *aPam.GetPoint();
         }
     }
 
@@ -2741,9 +2742,9 @@ sal_Bool SwCrsrShell::FindValidCntntNode( sal_Bool bOnlyText )
                     if( pCNd->FindTableNode() )
                     {
                         SwCallLink aTmp( *this );
-                        SwCrsrSaveState aSaveState( *pCurCrsr );
+                        SwCrsrSaveState aSaveState( *m_pCurCrsr );
                         aTmp.nNdTyp = 0; // don't do anything in DTOR
-                        if( !pCurCrsr->IsInProtectTable( sal_True, sal_True ) )
+                        if( !m_pCurCrsr->IsInProtectTable( sal_True, sal_True ) )
                         {
                             const SwSectionNode* pSNd = pCNd->FindSectionNode();
                             if( !pSNd || !pSNd->GetSection().IsHiddenFlag()
@@ -2789,7 +2790,7 @@ sal_Bool SwCrsrShell::FindValidCntntNode( sal_Bool bOnlyText )
     {
         pCNd = rNdIdx.GetNode().GetCntntNode();
         xub_StrLen nCntnt = rNdIdx.GetIndex() < nNdIdx ? pCNd->Len() : 0;
-        pCurCrsr->GetPoint()->nContent.Assign( pCNd, nCntnt );
+        m_pCurCrsr->GetPoint()->nContent.Assign( pCNd, nCntnt );
     }
     else
     {
@@ -2799,7 +2800,7 @@ sal_Bool SwCrsrShell::FindValidCntntNode( sal_Bool bOnlyText )
         {
             SwCrsrMoveState aTmpState( MV_NONE );
             aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
-            GetLayout()->GetCrsrOfst( pCurCrsr->GetPoint(), pCurCrsr->GetPtPos(),
+            GetLayout()->GetCrsrOfst( m_pCurCrsr->GetPoint(), m_pCurCrsr->GetPtPos(),
                                         &aTmpState );
         }
     }
@@ -2843,7 +2844,7 @@ void SwCrsrShell::SetReadOnlyAvailable( sal_Bool bFlag )
     // *never* switch in GlobalDoc
     if( (!GetDoc()->GetDocShell() ||
          !GetDoc()->GetDocShell()->IsA( SwGlobalDocShell::StaticType() )) &&
-        bFlag != bSetCrsrInReadOnly )
+        bFlag != m_bSetCrsrInReadOnly )
     {
         // If the flag is switched off then all selections need to be
         // invalidated. Otherwise we would trust that nothing protected is selected.
@@ -2851,7 +2852,7 @@ void SwCrsrShell::SetReadOnlyAvailable( sal_Bool bFlag )
         {
             ClearMark();
         }
-        bSetCrsrInReadOnly = bFlag;
+        m_bSetCrsrInReadOnly = bFlag;
         UpdateCrsr();
     }
 }
@@ -2861,17 +2862,17 @@ sal_Bool SwCrsrShell::HasReadonlySel(bool bAnnotationMode) const
     sal_Bool bRet = sal_False;
     if( IsReadOnlyAvailable() || GetViewOptions()->IsFormView() )
     {
-        if( pTblCrsr )
-            bRet = pTblCrsr->HasReadOnlyBoxSel() ||
-                   pTblCrsr->HasReadonlySel( GetViewOptions()->IsFormView() );
+        if( m_pTblCrsr )
+            bRet = m_pTblCrsr->HasReadOnlyBoxSel() ||
+                   m_pTblCrsr->HasReadonlySel( GetViewOptions()->IsFormView() );
         else
         {
-            const SwPaM* pCrsr = pCurCrsr;
+            const SwPaM* pCrsr = m_pCurCrsr;
 
             do {
                 if( pCrsr->HasReadonlySel( GetViewOptions()->IsFormView(), bAnnotationMode ) )
                     bRet = sal_True;
-            } while( !bRet && pCurCrsr != ( pCrsr = (SwPaM*)pCrsr->GetNext() ));
+            } while( !bRet && m_pCurCrsr != ( pCrsr = (SwPaM*)pCrsr->GetNext() ));
         }
     }
     return bRet;
@@ -2881,18 +2882,18 @@ sal_Bool SwCrsrShell::IsSelFullPara() const
 {
     sal_Bool bRet = sal_False;
 
-    if( pCurCrsr->GetPoint()->nNode.GetIndex() ==
-        pCurCrsr->GetMark()->nNode.GetIndex() && pCurCrsr == pCurCrsr->GetNext() )
+    if( m_pCurCrsr->GetPoint()->nNode.GetIndex() ==
+        m_pCurCrsr->GetMark()->nNode.GetIndex() && m_pCurCrsr == m_pCurCrsr->GetNext() )
     {
-        xub_StrLen nStt = pCurCrsr->GetPoint()->nContent.GetIndex(),
-                   nEnd = pCurCrsr->GetMark()->nContent.GetIndex();
+        xub_StrLen nStt = m_pCurCrsr->GetPoint()->nContent.GetIndex(),
+                   nEnd = m_pCurCrsr->GetMark()->nContent.GetIndex();
         if( nStt > nEnd )
         {
             xub_StrLen nTmp = nStt;
             nStt = nEnd;
             nEnd = nTmp;
         }
-        const SwCntntNode* pCNd = pCurCrsr->GetCntntNode();
+        const SwCntntNode* pCNd = m_pCurCrsr->GetCntntNode();
         bRet = pCNd && !nStt && nEnd == pCNd->Len();
     }
     return bRet;
@@ -2900,8 +2901,8 @@ sal_Bool SwCrsrShell::IsSelFullPara() const
 
 short SwCrsrShell::GetTextDirection( const Point* pPt ) const
 {
-    SwPosition aPos( *pCurCrsr->GetPoint() );
-    Point aPt( pPt ? *pPt : pCurCrsr->GetPtPos() );
+    SwPosition aPos( *m_pCurCrsr->GetPoint() );
+    Point aPt( pPt ? *pPt : m_pCurCrsr->GetPtPos() );
     if( pPt )
     {
         SwCrsrMoveState aTmpState( MV_NONE );
@@ -2932,9 +2933,9 @@ sal_Bool SwCrsrShell::IsInRightToLeftText( const Point* pPt ) const
 bool SwCrsrShell::SelectHiddenRange()
 {
     bool bRet = false;
-    if ( !GetViewOptions()->IsShowHiddenChar() && !pCurCrsr->HasMark() )
+    if ( !GetViewOptions()->IsShowHiddenChar() && !m_pCurCrsr->HasMark() )
     {
-        SwPosition& rPt = *(SwPosition*)pCurCrsr->GetPoint();
+        SwPosition& rPt = *(SwPosition*)m_pCurCrsr->GetPoint();
         const SwTxtNode* pNode = rPt.nNode.GetNode().GetTxtNode();
         if ( pNode )
         {
@@ -2947,8 +2948,8 @@ bool SwCrsrShell::SelectHiddenRange()
             if ( STRING_LEN != nHiddenStart )
             {
                 // make selection:
-                pCurCrsr->SetMark();
-                pCurCrsr->GetMark()->nContent = nHiddenEnd;
+                m_pCurCrsr->SetMark();
+                m_pCurCrsr->GetMark()->nContent = nHiddenEnd;
                 bRet = true;
             }
         }
@@ -2964,11 +2965,11 @@ sal_uLong SwCrsrShell::Find( const SearchOptions& rSearchOpt,
                              FindRanges eRng,
                              int bReplace )
 {
-    if( pTblCrsr )
+    if( m_pTblCrsr )
         GetCrsr();
-    delete pTblCrsr, pTblCrsr = 0;
+    delete m_pTblCrsr, m_pTblCrsr = 0;
     SwCallLink aLk( *this ); // watch Crsr-Moves; call Link if needed
-    sal_uLong nRet = pCurCrsr->Find( rSearchOpt, bSearchInNotes, eStart, eEnd,
+    sal_uLong nRet = m_pCurCrsr->Find( rSearchOpt, bSearchInNotes, eStart, eEnd,
                                      bCancel, eRng, bReplace );
     if( nRet || bCancel )
         UpdateCrsr();
@@ -2981,11 +2982,11 @@ sal_uLong SwCrsrShell::Find( const SwTxtFmtColl& rFmtColl,
                              FindRanges eRng,
                              const SwTxtFmtColl* pReplFmt )
 {
-    if( pTblCrsr )
+    if( m_pTblCrsr )
         GetCrsr();
-    delete pTblCrsr, pTblCrsr = 0;
+    delete m_pTblCrsr, m_pTblCrsr = 0;
     SwCallLink aLk( *this ); // watch Crsr-Moves; call Link if needed
-    sal_uLong nRet = pCurCrsr->Find( rFmtColl, eStart, eEnd, bCancel, eRng,
+    sal_uLong nRet = m_pCurCrsr->Find( rFmtColl, eStart, eEnd, bCancel, eRng,
                                      pReplFmt );
     if( nRet )
         UpdateCrsr();
@@ -3000,11 +3001,11 @@ sal_uLong SwCrsrShell::Find( const SfxItemSet& rSet,
                              const SearchOptions* pSearchOpt,
                              const SfxItemSet* rReplSet )
 {
-    if( pTblCrsr )
+    if( m_pTblCrsr )
         GetCrsr();
-    delete pTblCrsr, pTblCrsr = 0;
+    delete m_pTblCrsr, m_pTblCrsr = 0;
     SwCallLink aLk( *this ); // watch Crsr-Moves; call Link if needed
-    sal_uLong nRet = pCurCrsr->Find( rSet, bNoCollections, eStart, eEnd,
+    sal_uLong nRet = m_pCurCrsr->Find( rSet, bNoCollections, eStart, eEnd,
                                      bCancel, eRng, pSearchOpt, rReplSet );
     if( nRet )
         UpdateCrsr();
@@ -3134,7 +3135,7 @@ void SwCrsrShell::ClearUpCrsrs()
 
     // If at least one of the cursors in the ring have been deleted or replaced,
     // remove the table cursor.
-    if (pTblCrsr != NULL && bChanged)
+    if (m_pTblCrsr != NULL && bChanged)
         TblCrsrToCursor();
 }
 

@@ -83,7 +83,7 @@ void SwVisCrsr::Show()
         bIsVisible = true;
 
         // display at all?
-        if( pCrsrShell->VisArea().IsOver( pCrsrShell->aCharRect ) )
+        if( pCrsrShell->VisArea().IsOver( pCrsrShell->m_aCharRect ) )
             _SetPosAndShow();
     }
 }
@@ -104,23 +104,23 @@ void SwVisCrsr::Hide()
 void SwVisCrsr::_SetPosAndShow()
 {
     SwRect aRect;
-    long nTmpY = pCrsrShell->aCrsrHeight.Y();
+    long nTmpY = pCrsrShell->m_aCrsrHeight.Y();
     if( 0 > nTmpY )
     {
         nTmpY = -nTmpY;
         aTxtCrsr.SetOrientation( 900 );
-        aRect = SwRect( pCrsrShell->aCharRect.Pos(),
-           Size( pCrsrShell->aCharRect.Height(), nTmpY ) );
-        aRect.Pos().X() += pCrsrShell->aCrsrHeight.X();
+        aRect = SwRect( pCrsrShell->m_aCharRect.Pos(),
+           Size( pCrsrShell->m_aCharRect.Height(), nTmpY ) );
+        aRect.Pos().X() += pCrsrShell->m_aCrsrHeight.X();
         if( pCrsrShell->IsOverwriteCrsr() )
             aRect.Pos().Y() += aRect.Width();
     }
     else
     {
         aTxtCrsr.SetOrientation( 0 );
-        aRect = SwRect( pCrsrShell->aCharRect.Pos(),
-           Size( pCrsrShell->aCharRect.Width(), nTmpY ) );
-        aRect.Pos().Y() += pCrsrShell->aCrsrHeight.X();
+        aRect = SwRect( pCrsrShell->m_aCharRect.Pos(),
+           Size( pCrsrShell->m_aCharRect.Width(), nTmpY ) );
+        aRect.Pos().Y() += pCrsrShell->m_aCrsrHeight.X();
     }
 
     // check if cursor should show the current cursor bidi level
@@ -316,16 +316,16 @@ void SwSelPaintRects::Invalidate( const SwRect& rRect )
     // visible area, it is never aligned on one pixel at the right/bottom.
     // This has to be determined here and if that is the case the
     // rectangle has to be expanded.
-    if( GetShell()->bVisPortChgd && 0 != ( nSz = size()) )
+    if( GetShell()->m_bVisPortChgd && 0 != ( nSz = size()) )
     {
         SwSelPaintRects::Get1PixelInLogic( *GetShell() );
         iterator it = begin();
         for( ; nSz--; ++it )
         {
             SwRect& rRectIt = *it;
-            if( rRectIt.Right() == GetShell()->aOldRBPos.X() )
+            if( rRectIt.Right() == GetShell()->m_aOldRBPos.X() )
                 rRectIt.Right( rRectIt.Right() + nPixPtX );
-            if( rRectIt.Bottom() == GetShell()->aOldRBPos.Y() )
+            if( rRectIt.Bottom() == GetShell()->m_aOldRBPos.Y() )
                 rRectIt.Bottom( rRectIt.Bottom() + nPixPtY );
         }
     }

@@ -164,36 +164,36 @@ public:
 
 private:
 
-    SwRect  aCharRect;          ///< Char-SRectangle on which the cursor is located
-    Point   aCrsrHeight;        ///< height & offset from visible Cursor
-    Point   aOldRBPos;          ///< Right/Bottom of last VisArea
+    SwRect  m_aCharRect;          ///< Char-SRectangle on which the cursor is located
+    Point   m_aCrsrHeight;        ///< height & offset from visible Cursor
+    Point   m_aOldRBPos;          ///< Right/Bottom of last VisArea
                                 // (used in Invalidate by Cursor)
 
-    Link aFlyMacroLnk;          /**< Link will be called, if the Crsr is set
+    Link m_aFlyMacroLnk;          /**< Link will be called, if the Crsr is set
                                    into a fly. A macro can be then becalled */
-    Link aChgLnk;               /**< link will be called by every attribut/
+    Link m_aChgLnk;               /**< link will be called by every attribut/
                                    format changes at cursor position.*/
-    Link aGrfArrivedLnk;        ///< Link calls to UI if a graphic is arrived
+    Link m_aGrfArrivedLnk;        ///< Link calls to UI if a graphic is arrived
 
-    SwShellCrsr* pCurCrsr;      ///< current cursor
-    SwShellCrsr* pCrsrStk;      ///< stack for the cursor
-    SwVisCrsr *pVisCrsr;        ///< the visible cursor
+    SwShellCrsr* m_pCurCrsr;      ///< current cursor
+    SwShellCrsr* m_pCrsrStk;      ///< stack for the cursor
+    SwVisCrsr *m_pVisCrsr;        ///< the visible cursor
 
-    IBlockCursor *pBlockCrsr;   ///< interface of cursor for block (=rectangular) selection
+    IBlockCursor *m_pBlockCrsr;   ///< interface of cursor for block (=rectangular) selection
 
-    SwShellTableCrsr* pTblCrsr; /**< table Crsr; only in tables when the
+    SwShellTableCrsr* m_pTblCrsr; /**< table Crsr; only in tables when the
                                    selection lays over 2 columns */
 
-    SwNodeIndex* pBoxIdx;       ///< for recognizing of the changed
-    SwTableBox* pBoxPtr;        ///< table row
+    SwNodeIndex* m_pBoxIdx;       ///< for recognizing of the changed
+    SwTableBox* m_pBoxPtr;        ///< table row
 
-    long nUpDownX;              /**< try to move the cursor on up/down always
+    long m_nUpDownX;              /**< try to move the cursor on up/down always
                                    in the same column */
-    long nLeftFrmPos;
-    sal_uLong nAktNode;             // save CursorPos at Start-Action
-    xub_StrLen nAktCntnt;
-    sal_uInt16 nAktNdTyp;
-    bool bAktSelection;
+    long m_nLeftFrmPos;
+    sal_uLong m_nAktNode;             // save CursorPos at Start-Action
+    xub_StrLen m_nAktCntnt;
+    sal_uInt16 m_nAktNdTyp;
+    bool m_bAktSelection;
 
     /*
      * Via the Method SttCrsrMove and EndCrsrMove this counter gets
@@ -201,36 +201,36 @@ private:
      * current Cursor gets no update. This way, "complicated" cursor movements
      * (via Find()) can be realised.
      */
-    sal_uInt16 nCrsrMove;
-    sal_uInt16 nBasicActionCnt;     ///< Actions which are parenthesized by Basic
-    CrsrMoveState eMvState;     ///< Status for Crsr-Travelling - GetCrsrOfst
+    sal_uInt16 m_nCrsrMove;
+    sal_uInt16 m_nBasicActionCnt;     ///< Actions which are parenthesized by Basic
+    CrsrMoveState m_eMvState;     ///< Status for Crsr-Travelling - GetCrsrOfst
 
-    String sMarkedListId;
-    int nMarkedListLevel;
+    String m_sMarkedListId;
+    int m_nMarkedListLevel;
 
-    sal_Bool bHasFocus : 1;         ///< Shell is "active" in a window
-    sal_Bool bSVCrsrVis : 1;        ///< SV-Cursor visible/invisible
-    sal_Bool bChgCallFlag : 1;      ///< attribute change inside Start- and EndAction
-    sal_Bool bVisPortChgd : 1;      ///< in VisPortChg-Call
+    sal_Bool m_bHasFocus : 1;         ///< Shell is "active" in a window
+    sal_Bool m_bSVCrsrVis : 1;        ///< SV-Cursor visible/invisible
+    sal_Bool m_bChgCallFlag : 1;      ///< attribute change inside Start- and EndAction
+    sal_Bool m_bVisPortChgd : 1;      ///< in VisPortChg-Call
                                 // (used in Invalidate by the Cursor)
 
-    sal_Bool bCallChgLnk : 1;       ///< flag for derived classes
+    sal_Bool m_bCallChgLnk : 1;       ///< flag for derived classes
                                 // TRUE -> call ChgLnk
                                 // access only via SwChgLinkFlag
-    sal_Bool bAllProtect : 1;       ///< Flag for areas
+    sal_Bool m_bAllProtect : 1;       ///< Flag for areas
                                 // TRUE -> everything protected / hidden
-    sal_Bool bInCMvVisportChgd : 1; ///< Flag for CrsrMoves
+    sal_Bool m_bInCMvVisportChgd : 1; ///< Flag for CrsrMoves
                                 // TRUE -> view was moved
-    sal_Bool bGCAttr : 1;           // TRUE -> non expanded attributes exist.
-    sal_Bool bIgnoreReadonly : 1;   // TRUE -> make the cursor visible on next
+    sal_Bool m_bGCAttr : 1;           // TRUE -> non expanded attributes exist.
+    sal_Bool m_bIgnoreReadonly : 1;   // TRUE -> make the cursor visible on next
                                 // EndAction in spite of Readonly
-    sal_Bool bSelTblCells : 1;      // TRUE -> select cells over the InputWin
-    sal_Bool bAutoUpdateCells : 1;  // TRUE -> autoformat cells
-    sal_Bool bBasicHideCrsr : 1;    // TRUE -> HideCrsr from Basic
-    sal_Bool bSetCrsrInReadOnly : 1;// TRUE -> Cursor is allowed in ReadOnly-Areas
-    sal_Bool bOverwriteCrsr : 1;    // sal_True -> show Overwrite Crsr
+    sal_Bool m_bSelTblCells : 1;      // TRUE -> select cells over the InputWin
+    sal_Bool m_bAutoUpdateCells : 1;  // TRUE -> autoformat cells
+    sal_Bool m_bBasicHideCrsr : 1;    // TRUE -> HideCrsr from Basic
+    sal_Bool m_bSetCrsrInReadOnly : 1;// TRUE -> Cursor is allowed in ReadOnly-Areas
+    sal_Bool m_bOverwriteCrsr : 1;    // sal_True -> show Overwrite Crsr
 
-    bool mbMacroExecAllowed : 1;
+    bool m_bMacroExecAllowed : 1;
 
     SW_DLLPRIVATE void UpdateCrsr( sal_uInt16 eFlags
                             =SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE,
@@ -328,8 +328,8 @@ public:
     SwPaM* GetCrsr( sal_Bool bMakeTblCrsr = sal_True ) const;
     inline SwCursor* GetSwCrsr( sal_Bool bMakeTblCrsr = sal_True ) const;
     // return only the current cursor
-          SwShellCrsr* _GetCrsr()                       { return pCurCrsr; }
-    const SwShellCrsr* _GetCrsr() const                 { return pCurCrsr; }
+          SwShellCrsr* _GetCrsr()                       { return m_pCurCrsr; }
+    const SwShellCrsr* _GetCrsr() const                 { return m_pCurCrsr; }
 
     // show passed cursor - for UNO
     void    SetSelection(const SwPaM& rCrsr);
@@ -347,7 +347,7 @@ public:
     void EndAction( const sal_Bool bIdleEnd = sal_False );
 
     // basic cursor travelling
-    long GetUpDownX() const             { return nUpDownX; }
+    long GetUpDownX() const             { return m_nUpDownX; }
 
     sal_Bool Left( sal_uInt16 nCnt, sal_uInt16 nMode, sal_Bool bAllowVisual = sal_False )
         { return LeftRight( sal_True, nCnt, nMode, bAllowVisual ); }
@@ -391,7 +391,7 @@ public:
     int SetCrsr( const Point &rPt, sal_Bool bOnlyText = sal_False, bool bBlock = true );
 
     /*
-     * Notification that the visible area was changed. aVisArea is reset, then
+     * Notification that the visible area was changed. m_aVisArea is reset, then
      * scrolling is done. The passed Rectangle lays on pixel borders to avoid
      * pixel errors.
      */
@@ -443,9 +443,9 @@ public:
     void SttCrsrMove();
     void EndCrsrMove( const sal_Bool bIdleEnd = sal_False );
 #else
-    void SttCrsrMove() { ++nCrsrMove; StartAction(); }
+    void SttCrsrMove() { ++m_nCrsrMove; StartAction(); }
     void EndCrsrMove( const sal_Bool bIdleEnd = sal_False )
-            { EndAction( bIdleEnd ); --nCrsrMove; }
+            { EndAction( bIdleEnd ); --m_nCrsrMove; }
 #endif
 
     /*
@@ -453,7 +453,7 @@ public:
      * On the other hand, on receiving the focus all selected ranges are displayed again
      * (ranges must be recalculated!).
      */
-    sal_Bool HasShFcs() const { return bHasFocus; }
+    sal_Bool HasShFcs() const { return m_bHasFocus; }
     void ShLooseFcs();
     void ShGetFcs( sal_Bool bUpdate = sal_True );
 
@@ -464,8 +464,8 @@ public:
     void ShowCrsrs( sal_Bool bCrsrVis );
     void HideCrsrs();
 
-    sal_Bool IsOverwriteCrsr() const { return bOverwriteCrsr; }
-    void SetOverwriteCrsr( sal_Bool bFlag ) { bOverwriteCrsr = bFlag; }
+    sal_Bool IsOverwriteCrsr() const { return m_bOverwriteCrsr; }
+    void SetOverwriteCrsr( sal_Bool bFlag ) { m_bOverwriteCrsr = bFlag; }
 
     // Return current frame in which the cursor is placed.
     SwCntntFrm *GetCurrFrm( const sal_Bool bCalcFrm = sal_True ) const;
@@ -479,21 +479,21 @@ public:
     sal_Bool HasReadonlySel(bool bAnnotationMode = false) const;
 
     // Can the cursor be set to read only ranges?
-    sal_Bool IsReadOnlyAvailable() const { return bSetCrsrInReadOnly; }
+    sal_Bool IsReadOnlyAvailable() const { return m_bSetCrsrInReadOnly; }
     void SetReadOnlyAvailable( sal_Bool bFlag );
     sal_Bool IsOverReadOnlyPos( const Point& rPt ) const;
 
     // Methods for aFlyMacroLnk.
-    void        SetFlyMacroLnk( const Link& rLnk ) { aFlyMacroLnk = rLnk; }
-    const Link& GetFlyMacroLnk() const             { return aFlyMacroLnk; }
+    void        SetFlyMacroLnk( const Link& rLnk ) { m_aFlyMacroLnk = rLnk; }
+    const Link& GetFlyMacroLnk() const             { return m_aFlyMacroLnk; }
 
     // Methods returning/altering link for changes of attributes/formates.
-    void        SetChgLnk( const Link &rLnk ) { aChgLnk = rLnk; }
-    const Link& GetChgLnk() const             { return aChgLnk; }
+    void        SetChgLnk( const Link &rLnk ) { m_aChgLnk = rLnk; }
+    const Link& GetChgLnk() const             { return m_aChgLnk; }
 
     // Methods returning/altering ling for "graphic completely loaded".
-    void        SetGrfArrivedLnk( const Link &rLnk ) { aGrfArrivedLnk = rLnk; }
-    const Link& GetGrfArrivedLnk() const             { return aGrfArrivedLnk; }
+    void        SetGrfArrivedLnk( const Link &rLnk ) { m_aGrfArrivedLnk = rLnk; }
+    const Link& GetGrfArrivedLnk() const             { return m_aGrfArrivedLnk; }
 
     //Call ChgLink. When within an action calling will be delayed.
     void CallChgLnk();
@@ -521,7 +521,7 @@ public:
     /*
      * Returns SRectangle, at which the cursor is located.
      */
-    const SwRect &GetCharRect() const { return aCharRect; }
+    const SwRect &GetCharRect() const { return m_aCharRect; }
     /*
      * Returns if cursor is wholly or partly within visible range.
      */
@@ -618,30 +618,30 @@ public:
     /** Delivers the current shell cursor
 
         Some operations have to run on the current cursor ring,
-        some on the pTblCrsr (if exist) or the current cursor ring and
-        some on the pTblCrsr or pBlockCrsr or the current cursor ring.
+        some on the m_pTblCrsr (if exist) or the current cursor ring and
+        some on the m_pTblCrsr or m_pBlockCrsr or the current cursor ring.
         This small function checks the existence and delivers the wished cursor.
 
         @param bBlock [bool]
         if the block cursor is of interest or not
 
-        @return pTblCrsr if exist,
-        pBlockCrsr if exist and of interest (param bBlock)
-        otherwise pCurCrsr
+        @return m_pTblCrsr if exist,
+        m_pBlockCrsr if exist and of interest (param bBlock)
+        otherwise m_pCurCrsr
     */
     SwShellCrsr* getShellCrsr( bool bBlock );
     const SwShellCrsr* getShellCrsr( bool bBlock ) const
         { return (const_cast<SwCrsrShell*>(this))->getShellCrsr( bBlock ); }
 
-    bool IsBlockMode() const { return 0 != pBlockCrsr; }
-    const IBlockCursor* GetBlockCrsr() const { return pBlockCrsr; }
-    IBlockCursor* GetBlockCrsr() { return pBlockCrsr; }
+    bool IsBlockMode() const { return 0 != m_pBlockCrsr; }
+    const IBlockCursor* GetBlockCrsr() const { return m_pBlockCrsr; }
+    IBlockCursor* GetBlockCrsr() { return m_pBlockCrsr; }
 
     // is the Crsr in a table and is the selection over 2 columns
-    sal_Bool IsTableMode() const { return 0 != pTblCrsr; }
+    sal_Bool IsTableMode() const { return 0 != m_pTblCrsr; }
 
-    const SwShellTableCrsr* GetTableCrsr() const { return pTblCrsr; }
-    SwShellTableCrsr* GetTableCrsr() { return pTblCrsr; }
+    const SwShellTableCrsr* GetTableCrsr() const { return m_pTblCrsr; }
+    SwShellTableCrsr* GetTableCrsr() { return m_pTblCrsr; }
     size_t UpdateTblSelBoxes();
 
     sal_Bool GotoFtnTxt();      ///< jump from content to footnote
@@ -730,14 +730,14 @@ public:
     sal_Bool ParkTblCrsr();
 
     // Non expanded attributes?
-    sal_Bool IsGCAttr() const { return bGCAttr; }
-    void ClearGCAttr() { bGCAttr = sal_False; }
-    void    UpdateAttr() {  bGCAttr = sal_True; }
+    sal_Bool IsGCAttr() const { return m_bGCAttr; }
+    void ClearGCAttr() { m_bGCAttr = sal_False; }
+    void    UpdateAttr() {  m_bGCAttr = sal_True; }
 
     // is the whole document protected/hidden (for UI...)
-    sal_Bool IsAllProtect() const { return bAllProtect; }
+    sal_Bool IsAllProtect() const { return m_bAllProtect; }
 
-    sal_Bool BasicActionPend() const    { return nBasicActionCnt != mnStartAction; }
+    sal_Bool BasicActionPend() const    { return m_nBasicActionCnt != mnStartAction; }
 
     bool GotoRegion( const String& rName );
 
@@ -777,11 +777,11 @@ public:
     void ClearTblBoxCntnt();
     sal_Bool EndAllTblBoxEdit();
 
-    void SetSelTblCells( sal_Bool bFlag )           { bSelTblCells = bFlag; }
-    sal_Bool IsSelTblCells() const                  { return bSelTblCells; }
+    void SetSelTblCells( sal_Bool bFlag )           { m_bSelTblCells = bFlag; }
+    sal_Bool IsSelTblCells() const                  { return m_bSelTblCells; }
 
-    sal_Bool IsAutoUpdateCells() const              { return bAutoUpdateCells; }
-    void SetAutoUpdateCells( sal_Bool bFlag )       { bAutoUpdateCells = bFlag; }
+    sal_Bool IsAutoUpdateCells() const              { return m_bAutoUpdateCells; }
+    void SetAutoUpdateCells( sal_Bool bFlag )       { m_bAutoUpdateCells = bFlag; }
 
     sal_Bool GetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode,
                             SwRect& rRect, short& rOrient );
@@ -805,11 +805,11 @@ public:
 
     inline void SetMacroExecAllowed( const bool _bMacroExecAllowed )
     {
-        mbMacroExecAllowed = _bMacroExecAllowed;
+        m_bMacroExecAllowed = _bMacroExecAllowed;
     }
     inline bool IsMacroExecAllowed()
     {
-        return mbMacroExecAllowed;
+        return m_bMacroExecAllowed;
     }
 
     /**
@@ -830,7 +830,7 @@ public:
 inline SwMoveFnCollection* SwCrsrShell::MakeFindRange(
             sal_uInt16 nStt, sal_uInt16 nEnd, SwPaM* pPam ) const
 {
-    return pCurCrsr->MakeFindRange( (SwDocPositions)nStt, (SwDocPositions)nEnd, pPam );
+    return m_pCurCrsr->MakeFindRange( (SwDocPositions)nStt, (SwDocPositions)nEnd, pPam );
 }
 
 inline SwCursor* SwCrsrShell::GetSwCrsr( sal_Bool bMakeTblCrsr ) const
@@ -838,57 +838,57 @@ inline SwCursor* SwCrsrShell::GetSwCrsr( sal_Bool bMakeTblCrsr ) const
     return (SwCursor*)GetCrsr( bMakeTblCrsr );
 }
 
-inline SwPaM* SwCrsrShell::GetStkCrsr() const { return pCrsrStk; }
+inline SwPaM* SwCrsrShell::GetStkCrsr() const { return m_pCrsrStk; }
 
-inline void SwCrsrShell::SetMark() { pCurCrsr->SetMark(); }
+inline void SwCrsrShell::SetMark() { m_pCurCrsr->SetMark(); }
 
-inline sal_Bool SwCrsrShell::HasMark() { return( pCurCrsr->HasMark() ); }
+inline sal_Bool SwCrsrShell::HasMark() { return( m_pCurCrsr->HasMark() ); }
 
 inline sal_Bool SwCrsrShell::IsSelection() const
 {
-    return IsTableMode() || pCurCrsr->HasMark() ||
-            pCurCrsr->GetNext() != pCurCrsr;
+    return IsTableMode() || m_pCurCrsr->HasMark() ||
+            m_pCurCrsr->GetNext() != m_pCurCrsr;
 }
 inline sal_Bool SwCrsrShell::IsMultiSelection() const
 {
-    return pCurCrsr->GetNext() != pCurCrsr;
+    return m_pCurCrsr->GetNext() != m_pCurCrsr;
 }
 
 inline sal_Bool SwCrsrShell::IsSelOnePara() const
 {
-    return pCurCrsr == pCurCrsr->GetNext() &&
-           pCurCrsr->GetPoint()->nNode == pCurCrsr->GetMark()->nNode;
+    return m_pCurCrsr == m_pCurCrsr->GetNext() &&
+           m_pCurCrsr->GetPoint()->nNode == m_pCurCrsr->GetMark()->nNode;
 }
 
 inline const SwTableNode* SwCrsrShell::IsCrsrInTbl( sal_Bool bIsPtInTbl ) const
 {
-    return pCurCrsr->GetNode( bIsPtInTbl )->FindTableNode();
+    return m_pCurCrsr->GetNode( bIsPtInTbl )->FindTableNode();
 }
 
 inline sal_Bool SwCrsrShell::IsCrsrPtAtEnd() const
 {
-    return pCurCrsr->End() == pCurCrsr->GetPoint();
+    return m_pCurCrsr->End() == m_pCurCrsr->GetPoint();
 }
 
 inline Point& SwCrsrShell::GetCrsrDocPos( sal_Bool bPoint ) const
 {
-    return bPoint ? pCurCrsr->GetPtPos() : pCurCrsr->GetMkPos();
+    return bPoint ? m_pCurCrsr->GetPtPos() : m_pCurCrsr->GetMkPos();
 }
 
 inline const SwPaM* SwCrsrShell::GetTblCrs() const
 {
-    return pTblCrsr;
+    return m_pTblCrsr;
 }
 
 inline SwPaM* SwCrsrShell::GetTblCrs()
 {
-    return pTblCrsr;
+    return m_pTblCrsr;
 }
 
 inline void SwCrsrShell::UnSetVisCrsr()
 {
-    pVisCrsr->Hide();
-    pVisCrsr->SetDragCrsr( false );
+    m_pVisCrsr->Hide();
+    m_pVisCrsr->SetDragCrsr( false );
 }
 
 #endif  // _CRSRSH_HXX

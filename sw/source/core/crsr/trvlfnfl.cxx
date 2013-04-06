@@ -153,11 +153,11 @@ sal_Bool SwCrsrShell::GotoFtnAnchor()
 {
     // jump from footnote to anchor
     SwCallLink aLk( *this ); // watch Crsr-Moves
-    sal_Bool bRet = pCurCrsr->GotoFtnAnchor();
+    sal_Bool bRet = m_pCurCrsr->GotoFtnAnchor();
     if( bRet )
     {
         // special treatment for table header row
-        pCurCrsr->GetPtPos() = Point();
+        m_pCurCrsr->GetPtPos() = Point();
         UpdateCrsr( SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE |
                     SwCrsrShell::READONLY );
     }
@@ -314,10 +314,10 @@ sal_Bool SwCrsrShell::GotoFlyAnchor()
         return sal_False;
 
     SwCallLink aLk( *this ); // watch Crsr-Moves
-    SwCrsrSaveState aSaveState( *pCurCrsr );
+    SwCrsrSaveState aSaveState( *m_pCurCrsr );
 
     // jump in BodyFrame closest to FlyFrame
-    SwRect aTmpRect( aCharRect );
+    SwRect aTmpRect( m_aCharRect );
     if( !pFrm->Frm().IsInside( aTmpRect ))
         aTmpRect = pFrm->Frm();
     Point aPt( aTmpRect.Left(), aTmpRect.Top() +
@@ -328,9 +328,9 @@ sal_Bool SwCrsrShell::GotoFlyAnchor()
 
     const SwPageFrm* pPageFrm = pFrm->FindPageFrm();
     const SwCntntFrm* pFndFrm = pPageFrm->GetCntntPos( aPt, sal_False, sal_True );
-    pFndFrm->GetCrsrOfst( pCurCrsr->GetPoint(), aPt );
+    pFndFrm->GetCrsrOfst( m_pCurCrsr->GetPoint(), aPt );
 
-    sal_Bool bRet = !pCurCrsr->IsInProtectTable() && !pCurCrsr->IsSelOvr();
+    sal_Bool bRet = !m_pCurCrsr->IsInProtectTable() && !m_pCurCrsr->IsSelOvr();
     if( bRet )
         UpdateCrsr( SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE |
                     SwCrsrShell::READONLY );

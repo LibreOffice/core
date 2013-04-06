@@ -679,9 +679,9 @@ sal_Bool IsFrmInTblSel( const SwRect& rUnion, const SwFrm* pCell )
 
 sal_Bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
 {
-    SwShellCrsr* pCrsr = rShell.pCurCrsr;
+    SwShellCrsr* pCrsr = rShell.m_pCurCrsr;
     if ( rShell.IsTableMode() )
-        pCrsr = rShell.pTblCrsr;
+        pCrsr = rShell.m_pTblCrsr;
 
     const SwLayoutFrm *pStart = pCrsr->GetCntntNode()->getLayoutFrm( rShell.GetLayout(),
                       &pCrsr->GetPtPos() )->GetUpper(),

@@ -23,27 +23,27 @@
 
 sal_Bool SwCrsrShell::IsStartWord( sal_Int16 nWordType ) const
 {
-    return pCurCrsr->IsStartWord( nWordType );
+    return m_pCurCrsr->IsStartWord( nWordType );
 }
 
 sal_Bool SwCrsrShell::IsEndWord( sal_Int16 nWordType ) const
 {
-    return pCurCrsr->IsEndWord( nWordType );
+    return m_pCurCrsr->IsEndWord( nWordType );
 }
 
 sal_Bool SwCrsrShell::IsInWord( sal_Int16 nWordType ) const
 {
-    return pCurCrsr->IsInWord( nWordType );
+    return m_pCurCrsr->IsInWord( nWordType );
 }
 
 sal_Bool SwCrsrShell::IsStartSentence() const
 {
-    return pCurCrsr->IsStartEndSentence( false );
+    return m_pCurCrsr->IsStartEndSentence( false );
 }
 
 sal_Bool SwCrsrShell::IsEndSentence() const
 {
-    return pCurCrsr->IsStartEndSentence( true );
+    return m_pCurCrsr->IsStartEndSentence( true );
 }
 
 
@@ -79,12 +79,12 @@ sal_Bool SwCrsrShell::GoStartSentence()
 
 sal_Bool SwCrsrShell::SelectWord( const Point* pPt )
 {
-    return pCurCrsr->SelectWord( this, pPt );
+    return m_pCurCrsr->SelectWord( this, pPt );
 }
 
 sal_Bool SwCrsrShell::ExpandToSentenceBorders()
 {
-    return pCurCrsr->ExpandToSentenceBorders();
+    return m_pCurCrsr->ExpandToSentenceBorders();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

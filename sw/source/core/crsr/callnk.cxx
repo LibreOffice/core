@@ -111,7 +111,7 @@ static void lcl_notifyRow(const SwCntntNode* pNode, SwCrsrShell& rShell)
 
 SwCallLink::~SwCallLink()
 {
-    if( !nNdTyp || !rShell.bCallChgLnk ) // see ctor
+    if( !nNdTyp || !rShell.m_bCallChgLnk ) // see ctor
         return ;
 
     // If travelling over Nodes check formats and register them anew at the
@@ -152,7 +152,7 @@ SwCallLink::~SwCallLink()
         // always call change link when selection changes
         rShell.CallChgLnk();
     }
-    else if( rShell.aChgLnk.IsSet() && ND_TEXTNODE == nNdWhich &&
+    else if( rShell.m_aChgLnk.IsSet() && ND_TEXTNODE == nNdWhich &&
              nCntnt != nAktCntnt )
     {
         // If travelling with left/right only and the frame is

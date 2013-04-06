@@ -81,7 +81,7 @@ SwPosColumn fnColumnEnd = &GetColumnEnd;
 sal_Bool SwCrsrShell::MoveColumn( SwWhichColumn fnWhichCol, SwPosColumn fnPosCol )
 {
     sal_Bool bRet = sal_False;
-    if( !pTblCrsr )
+    if( !m_pTblCrsr )
     {
         SwLayoutFrm* pLayFrm = GetCurrFrm()->GetUpper();
         if( pLayFrm && 0 != ( pLayFrm = (*fnWhichCol)( pLayFrm )) )
@@ -91,7 +91,7 @@ sal_Bool SwCrsrShell::MoveColumn( SwWhichColumn fnWhichCol, SwPosColumn fnPosCol
             {
                 SET_CURR_SHELL( this );
                 SwCallLink aLk( *this ); // watch Crsr-Moves; call Link if needed
-                SwCrsrSaveState aSaveState( *pCurCrsr );
+                SwCrsrSaveState aSaveState( *m_pCurCrsr );
 
                 pCnt->Calc();
 
@@ -102,10 +102,10 @@ sal_Bool SwCrsrShell::MoveColumn( SwWhichColumn fnWhichCol, SwPosColumn fnPosCol
                     aPt.Y() += pCnt->Prt().Height();
                 }
 
-                pCnt->GetCrsrOfst( pCurCrsr->GetPoint(), aPt );
+                pCnt->GetCrsrOfst( m_pCurCrsr->GetPoint(), aPt );
 
-                if( !pCurCrsr->IsInProtectTable( sal_True ) &&
-                    !pCurCrsr->IsSelOvr() )
+                if( !m_pCurCrsr->IsInProtectTable( sal_True ) &&
+                    !m_pCurCrsr->IsSelOvr() )
                 {
                     UpdateCrsr();
                     bRet = sal_True;

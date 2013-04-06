@@ -47,7 +47,7 @@ sal_Bool SwCrsrShell::GoNextCell( sal_Bool bAppendLine )
 
     if( IsTableMode() || 0 != ( pTblNd = IsCrsrInTbl() ))
     {
-        SwCursor* pCrsr = pTblCrsr ? pTblCrsr : pCurCrsr;
+        SwCursor* pCrsr = m_pTblCrsr ? m_pTblCrsr : m_pCurCrsr;
         SwCallLink aLk( *this ); // watch Crsr-Moves
         bRet = sal_True;
 
@@ -107,7 +107,7 @@ sal_Bool SwCrsrShell::GoPrevCell()
     sal_Bool bRet = sal_False;
     if( IsTableMode() || IsCrsrInTbl() )
     {
-        SwCursor* pCrsr = pTblCrsr ? pTblCrsr : pCurCrsr;
+        SwCursor* pCrsr = m_pTblCrsr ? m_pTblCrsr : m_pCurCrsr;
         SwCallLink aLk( *this ); // watch Crsr-Moves
         bRet = pCrsr->GoPrevCell();
         if( bRet )
@@ -222,26 +222,26 @@ bool SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
     }
 
     // if no table cursor exists, create one
-    if( !pTblCrsr )
+    if( !m_pTblCrsr )
     {
-        pTblCrsr = new SwShellTableCrsr( *this, *pCurCrsr->GetPoint() );
-        pCurCrsr->DeleteMark();
-        pCurCrsr->SwSelPaintRects::Hide();
+        m_pTblCrsr = new SwShellTableCrsr( *this, *m_pCurCrsr->GetPoint() );
+        m_pCurCrsr->DeleteMark();
+        m_pCurCrsr->SwSelPaintRects::Hide();
     }
 
-    pTblCrsr->DeleteMark();
+    m_pTblCrsr->DeleteMark();
 
     // set start and end of a column
-    pTblCrsr->GetPoint()->nNode = *pEnd->GetSttNd();
-    pTblCrsr->Move( fnMoveForward, fnGoCntnt );
-    pTblCrsr->SetMark();
-    pTblCrsr->GetPoint()->nNode = *pStt->GetSttNd()->EndOfSectionNode();
-    pTblCrsr->Move( fnMoveBackward, fnGoCntnt );
+    m_pTblCrsr->GetPoint()->nNode = *pEnd->GetSttNd();
+    m_pTblCrsr->Move( fnMoveForward, fnGoCntnt );
+    m_pTblCrsr->SetMark();
+    m_pTblCrsr->GetPoint()->nNode = *pStt->GetSttNd()->EndOfSectionNode();
+    m_pTblCrsr->Move( fnMoveBackward, fnGoCntnt );
 
     // set PtPos 'close' to the reference table, otherwise we might get problems
     // with the repeated headlines check in UpdateCrsr():
     if ( !bRow )
-        pTblCrsr->GetPtPos() = pMasterTabFrm->IsVertical()
+        m_pTblCrsr->GetPtPos() = pMasterTabFrm->IsVertical()
                                    ? pMasterTabFrm->Frm().TopRight()
                                    : pMasterTabFrm->Frm().TopLeft();
 
@@ -262,22 +262,22 @@ sal_Bool SwCrsrShell::SelTbl()
 
     SET_CURR_SHELL( this );
 
-    if( !pTblCrsr )
+    if( !m_pTblCrsr )
     {
-        pTblCrsr = new SwShellTableCrsr( *this, *pCurCrsr->GetPoint() );
-        pCurCrsr->DeleteMark();
-        pCurCrsr->SwSelPaintRects::Hide();
+        m_pTblCrsr = new SwShellTableCrsr( *this, *m_pCurCrsr->GetPoint() );
+        m_pCurCrsr->DeleteMark();
+        m_pCurCrsr->SwSelPaintRects::Hide();
     }
 
-    pTblCrsr->DeleteMark();
-    pTblCrsr->GetPoint()->nNode = *pTblNd;
-    pTblCrsr->Move( fnMoveForward, fnGoCntnt );
-    pTblCrsr->SetMark();
+    m_pTblCrsr->DeleteMark();
+    m_pTblCrsr->GetPoint()->nNode = *pTblNd;
+    m_pTblCrsr->Move( fnMoveForward, fnGoCntnt );
+    m_pTblCrsr->SetMark();
     // set MkPos 'close' to the master table, otherwise we might get problems
     // with the repeated headlines check in UpdateCrsr():
-    pTblCrsr->GetMkPos() = pMasterTabFrm->IsVertical() ? pMasterTabFrm->Frm().TopRight() : pMasterTabFrm->Frm().TopLeft();
-    pTblCrsr->GetPoint()->nNode = *pTblNd->EndOfSectionNode();
-    pTblCrsr->Move( fnMoveBackward, fnGoCntnt );
+    m_pTblCrsr->GetMkPos() = pMasterTabFrm->IsVertical() ? pMasterTabFrm->Frm().TopRight() : pMasterTabFrm->Frm().TopLeft();
+    m_pTblCrsr->GetPoint()->nNode = *pTblNd->EndOfSectionNode();
+    m_pTblCrsr->Move( fnMoveBackward, fnGoCntnt );
     UpdateCrsr();
     return sal_True;
 }
@@ -290,7 +290,7 @@ sal_Bool SwCrsrShell::SelTblBox()
 
     // search for start node of our table box. If not found, exit realy
     const SwStartNode* pStartNode =
-        pCurCrsr->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
+        m_pCurCrsr->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
 
 #if OSL_DEBUG_LEVEL > 0
     // the old code checks whether we're in a table by asking the
@@ -308,27 +308,27 @@ sal_Bool SwCrsrShell::SelTblBox()
     SET_CURR_SHELL( this );
 
     // create a table cursor, if there isn't one already
-    if( !pTblCrsr )
+    if( !m_pTblCrsr )
     {
-        pTblCrsr = new SwShellTableCrsr( *this, *pCurCrsr->GetPoint() );
-        pCurCrsr->DeleteMark();
-        pCurCrsr->SwSelPaintRects::Hide();
+        m_pTblCrsr = new SwShellTableCrsr( *this, *m_pCurCrsr->GetPoint() );
+        m_pCurCrsr->DeleteMark();
+        m_pCurCrsr->SwSelPaintRects::Hide();
     }
 
-    // select the complete box with our shiny new pTblCrsr
+    // select the complete box with our shiny new m_pTblCrsr
     // 1. delete mark, and move point to first content node in box
 
-    pTblCrsr->DeleteMark();
-    *(pTblCrsr->GetPoint()) = SwPosition( *pStartNode );
-    pTblCrsr->Move( fnMoveForward, fnGoNode );
+    m_pTblCrsr->DeleteMark();
+    *(m_pTblCrsr->GetPoint()) = SwPosition( *pStartNode );
+    m_pTblCrsr->Move( fnMoveForward, fnGoNode );
 
     // 2. set mark, and move point to last content node in box
-    pTblCrsr->SetMark();
-    *(pTblCrsr->GetPoint()) = SwPosition( *(pStartNode->EndOfSectionNode()) );
-    pTblCrsr->Move( fnMoveBackward, fnGoNode );
+    m_pTblCrsr->SetMark();
+    *(m_pTblCrsr->GetPoint()) = SwPosition( *(pStartNode->EndOfSectionNode()) );
+    m_pTblCrsr->Move( fnMoveBackward, fnGoNode );
 
     // 3. exchange
-    pTblCrsr->Exchange();
+    m_pTblCrsr->Exchange();
 
     // with some luck, UpdateCrsr() will now update everything that
     // needs updateing
@@ -640,9 +640,9 @@ sal_Bool GotoCurrTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
 sal_Bool SwCursor::MoveTable( SwWhichTable fnWhichTbl, SwPosTable fnPosTbl )
 {
     sal_Bool bRet = sal_False;
-    SwTableCursor* pTblCrsr = dynamic_cast<SwTableCursor*>(this);
+    SwTableCursor* m_pTblCrsr = dynamic_cast<SwTableCursor*>(this);
 
-    if( pTblCrsr || !HasMark() )
+    if( m_pTblCrsr || !HasMark() )
     {
         SwCrsrSaveState aSaveState( *this );
         bRet = (*fnWhichTbl)( *this, fnPosTbl, IsReadOnlyAvailable() ) &&
@@ -656,20 +656,20 @@ sal_Bool SwCrsrShell::MoveTable( SwWhichTable fnWhichTbl, SwPosTable fnPosTbl )
 {
     SwCallLink aLk( *this ); // watch Crsr-Moves; call Link if needed
 
-    SwShellCrsr* pCrsr = pTblCrsr ? pTblCrsr : pCurCrsr;
+    SwShellCrsr* pCrsr = m_pTblCrsr ? m_pTblCrsr : m_pCurCrsr;
     bool bCheckPos;
     sal_Bool bRet;
     sal_uLong nPtNd = 0;
     xub_StrLen nPtCnt = 0;
 
-    if ( !pTblCrsr && pCurCrsr->HasMark() )
+    if ( !m_pTblCrsr && m_pCurCrsr->HasMark() )
     {
         // switch to table mode
-        pTblCrsr = new SwShellTableCrsr( *this, *pCurCrsr->GetPoint() );
-        pCurCrsr->DeleteMark();
-        pCurCrsr->SwSelPaintRects::Hide();
-        pTblCrsr->SetMark();
-        pCrsr = pTblCrsr;
+        m_pTblCrsr = new SwShellTableCrsr( *this, *m_pCurCrsr->GetPoint() );
+        m_pCurCrsr->DeleteMark();
+        m_pCurCrsr->SwSelPaintRects::Hide();
+        m_pTblCrsr->SetMark();
+        pCrsr = m_pTblCrsr;
         bCheckPos = false;
     }
     else
@@ -702,12 +702,12 @@ bool SwCrsrShell::IsTblComplexForChart()
 
     // Here we may trigger table formatting so we better do that inside an action
     StartAction();
-    const SwTableNode* pTNd = pCurCrsr->GetPoint()->nNode.GetNode().FindTableNode();
+    const SwTableNode* pTNd = m_pCurCrsr->GetPoint()->nNode.GetNode().FindTableNode();
     if( pTNd )
     {
         // in a table; check if table or section is balanced
         String sSel;
-        if( pTblCrsr )
+        if( m_pTblCrsr )
             sSel = GetBoxNms();
         bRet = pTNd->GetTable().IsTblComplexForChart( sSel );
     }
@@ -725,7 +725,7 @@ String SwCrsrShell::GetBoxNms() const
 
     if( IsTableMode() )
     {
-        SwCntntNode *pCNd = pTblCrsr->Start()->nNode.GetNode().GetCntntNode();
+        SwCntntNode *pCNd = m_pTblCrsr->Start()->nNode.GetNode().GetCntntNode();
         pFrm = pCNd ? pCNd->getLayoutFrm( GetLayout() ) : 0;
         if( !pFrm )
             return sNm;
@@ -741,7 +741,7 @@ String SwCrsrShell::GetBoxNms() const
 
         sNm = ((SwCellFrm*)pFrm)->GetTabBox()->GetName();
         sNm += ':';
-        pPos = pTblCrsr->End();
+        pPos = m_pTblCrsr->End();
     }
     else
     {
@@ -770,10 +770,10 @@ String SwCrsrShell::GetBoxNms() const
 bool SwCrsrShell::GotoTable( const String& rName )
 {
     SwCallLink aLk( *this ); // watch Crsr-Moves
-    bool bRet = !pTblCrsr && pCurCrsr->GotoTable( rName );
+    bool bRet = !m_pTblCrsr && m_pCurCrsr->GotoTable( rName );
     if( bRet )
     {
-        pCurCrsr->GetPtPos() = Point();
+        m_pCurCrsr->GetPtPos() = Point();
         UpdateCrsr( SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE |
                     SwCrsrShell::READONLY );
     }
@@ -783,7 +783,7 @@ bool SwCrsrShell::GotoTable( const String& rName )
 
 sal_Bool SwCrsrShell::CheckTblBoxCntnt( const SwPosition* pPos )
 {
-    if( !pBoxIdx || !pBoxPtr || IsSelTblCells() || !IsAutoUpdateCells() )
+    if( !m_pBoxIdx || !m_pBoxPtr || IsSelTblCells() || !IsAutoUpdateCells() )
         return sal_False;
 
     // check if box content is consistent with given box format, reset if not
@@ -792,12 +792,12 @@ sal_Bool SwCrsrShell::CheckTblBoxCntnt( const SwPosition* pPos )
     if( !pPos )
     {
         // get stored position
-        if( pBoxIdx && pBoxPtr &&
-            0 != ( pSttNd = pBoxIdx->GetNode().GetStartNode() ) &&
+        if( m_pBoxIdx && m_pBoxPtr &&
+            0 != ( pSttNd = m_pBoxIdx->GetNode().GetStartNode() ) &&
             SwTableBoxStartNode == pSttNd->GetStartNodeType() &&
-            pBoxPtr == pSttNd->FindTableNode()->GetTable().
-                        GetTblBox( pBoxIdx->GetIndex() ) )
-            pChkBox = pBoxPtr;
+            m_pBoxPtr == pSttNd->FindTableNode()->GetTable().
+                        GetTblBox( m_pBoxIdx->GetIndex() ) )
+            pChkBox = m_pBoxPtr;
     }
     else if( 0 != ( pSttNd = pPos->nNode.GetNode().
                                 FindSttNodeByType( SwTableBoxStartNode )) )
@@ -815,8 +815,8 @@ sal_Bool SwCrsrShell::CheckTblBoxCntnt( const SwPosition* pPos )
 
     // cursor not anymore in this section?
     if( pChkBox && !pPos &&
-        ( pCurCrsr->HasMark() || pCurCrsr->GetNext() != pCurCrsr ||
-          pSttNd->GetIndex() + 1 == pCurCrsr->GetPoint()->nNode.GetIndex() ))
+        ( m_pCurCrsr->HasMark() || m_pCurCrsr->GetNext() != m_pCurCrsr ||
+          pSttNd->GetIndex() + 1 == m_pCurCrsr->GetPoint()->nNode.GetIndex() ))
         pChkBox = 0;
 
     // Did the content of a box change at all? This is important if e.g. Undo
@@ -851,44 +851,44 @@ void SwCrsrShell::SaveTblBoxCntnt( const SwPosition* pPos )
         return ;
 
     if( !pPos )
-        pPos = pCurCrsr->GetPoint();
+        pPos = m_pCurCrsr->GetPoint();
 
     SwStartNode* pSttNd = pPos->nNode.GetNode().FindSttNodeByType( SwTableBoxStartNode );
 
     bool bCheckBox = false;
-    if( pSttNd && pBoxIdx )
+    if( pSttNd && m_pBoxIdx )
     {
-        if( pSttNd == &pBoxIdx->GetNode() )
+        if( pSttNd == &m_pBoxIdx->GetNode() )
             pSttNd = 0;
         else
             bCheckBox = true;
     }
     else
-        bCheckBox = 0 != pBoxIdx;
+        bCheckBox = 0 != m_pBoxIdx;
 
     if( bCheckBox )
     {
-        // check pBoxIdx
-        SwPosition aPos( *pBoxIdx );
+        // check m_pBoxIdx
+        SwPosition aPos( *m_pBoxIdx );
         CheckTblBoxCntnt( &aPos );
     }
 
     if( pSttNd )
     {
-        pBoxPtr = pSttNd->FindTableNode()->GetTable().GetTblBox( pSttNd->GetIndex() );
+        m_pBoxPtr = pSttNd->FindTableNode()->GetTable().GetTblBox( pSttNd->GetIndex() );
 
-        if( pBoxIdx )
-            *pBoxIdx = *pSttNd;
+        if( m_pBoxIdx )
+            *m_pBoxIdx = *pSttNd;
         else
-            pBoxIdx = new SwNodeIndex( *pSttNd );
+            m_pBoxIdx = new SwNodeIndex( *pSttNd );
     }
 }
 
 
 void SwCrsrShell::ClearTblBoxCntnt()
 {
-    delete pBoxIdx, pBoxIdx = 0;
-    pBoxPtr = 0;
+    delete m_pBoxIdx, m_pBoxIdx = 0;
+    m_pBoxPtr = 0;
 }
 
 sal_Bool SwCrsrShell::EndAllTblBoxEdit()
@@ -898,7 +898,7 @@ sal_Bool SwCrsrShell::EndAllTblBoxEdit()
     do {
         if( pSh->IsA( TYPE( SwCrsrShell ) ) )
             bRet |= ((SwCrsrShell*)pSh)->CheckTblBoxCntnt(
-                        ((SwCrsrShell*)pSh)->pCurCrsr->GetPoint() );
+                        ((SwCrsrShell*)pSh)->m_pCurCrsr->GetPoint() );
 
     } while( this != (pSh = (ViewShell *)pSh->GetNext()) );
     return bRet;

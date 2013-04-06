@@ -233,7 +233,7 @@ sal_Bool SwCursor::MoveRegion( SwWhichRegion fnWhichRegion, SwPosRegion fnPosReg
 sal_Bool SwCrsrShell::MoveRegion( SwWhichRegion fnWhichRegion, SwPosRegion fnPosRegion )
 {
     SwCallLink aLk( *this ); // watch Crsr-Moves;call Link if needed
-    sal_Bool bRet = !pTblCrsr && pCurCrsr->MoveRegion( fnWhichRegion, fnPosRegion );
+    sal_Bool bRet = !m_pTblCrsr && m_pCurCrsr->MoveRegion( fnWhichRegion, fnPosRegion );
     if( bRet )
         UpdateCrsr();
     return bRet;
@@ -268,7 +268,7 @@ bool SwCursor::GotoRegion( const String& rName )
 bool SwCrsrShell::GotoRegion( const String& rName )
 {
     SwCallLink aLk( *this ); // watch Crsr-Moves;call Link if needed
-    bool bRet = !pTblCrsr && pCurCrsr->GotoRegion( rName );
+    bool bRet = !m_pTblCrsr && m_pCurCrsr->GotoRegion( rName );
     if( bRet )
         UpdateCrsr( SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE |
                     SwCrsrShell::READONLY );
