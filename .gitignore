@@ -20,6 +20,7 @@
 #
 
 # where stuff are built
+/instdir
 /workdir
 /solver
 
