@@ -25,6 +25,11 @@
 #include <premac.h>
 #include <CoreFoundation/CoreFoundation.h>
 #include <Foundation/Foundation.h>
+#ifdef MACOSX
+#include <ApplicationServices/ApplicationServices.h>
+#else
+#include <CoreGraphics/CoreGraphics.h>
+#endif
 #include <postmac.h>
 
 #include <rtl/ustring.hxx>
