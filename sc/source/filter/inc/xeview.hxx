@@ -103,6 +103,7 @@ private:
     sal_uInt32          mnSplitY;           /// Split Y position, or frozen row.
     XclAddress          maSecondXclPos;     /// First visible cell in additional panes.
     sal_uInt8           mnActivePane;       /// Active pane (with cell cursor).
+    bool                mbFrozenPanes;      /// true = "frozen" panes; false = "split" window.
 };
 
 // ----------------------------------------------------------------------------
