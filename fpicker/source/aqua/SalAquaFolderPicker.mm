@@ -48,7 +48,6 @@
 // namespace directives
 //------------------------------------------------------------------------
 
-using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::lang;
@@ -226,7 +225,7 @@ sal_Bool SAL_CALL SalAquaFolderPicker::supportsService( const rtl::OUString& sSe
     uno::Sequence <rtl::OUString> supportedServicesNames = FolderPicker_getSupportedServiceNames();
 
     for( sal_Int32 n = supportedServicesNames.getLength(); n--; ) {
-        if( supportedServicesNames[n].compareTo( sServiceName ) == 0) {
+        if( supportedServicesNames[n] == sServiceName ) {
             retVal = sal_True;
             break;
         }
