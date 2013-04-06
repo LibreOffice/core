@@ -66,7 +66,6 @@ private:
 
     mutable CGGlyph* mpGlyphs;          // glyphs
     mutable int* mpCharWidths;          // map relative charpos to charwidth
-    mutable int* mpChars2Glyphs;        // map relative charpos to absolute glyphpos
     mutable int* mpGlyphs2Chars;        // map absolute glyphpos to absolute charpos
 
     mutable int* mpGlyphAdvances;       // glyph widths for the justified layout
@@ -94,7 +93,6 @@ CoreTextLayout::CoreTextLayout(QuartzSalGraphics* graphics, CoreTextStyleInfo* s
     mnGlyphCount(-1),
     mpGlyphs(NULL),
     mpCharWidths(NULL),
-    mpChars2Glyphs(NULL),
     mpGlyphs2Chars(NULL),
     mpGlyphAdvances(NULL),
     mpGlyphPositions(NULL),
@@ -133,10 +131,6 @@ void CoreTextLayout::InvalidateMeasurements()
     if( mpGlyphs ) {
         delete[] mpGlyphs;
         mpGlyphs = NULL;
-    }
-    if( mpChars2Glyphs ) {
-        delete[] mpChars2Glyphs;
-        mpChars2Glyphs = NULL;
     }
     if( mpGlyphs2Chars ) {
         delete[] mpGlyphs2Chars;
@@ -488,10 +482,8 @@ bool CoreTextLayout::InitGIA( ImplLayoutArgs& rArgs ) const
 
     mpGlyphs = new CGGlyph[ mnGlyphCount ];
     mpCharWidths = new int[ mnCharCount ];
-    mpChars2Glyphs = new int[ mnCharCount ];
     for( int i = 0; i < mnCharCount; ++i) {
         mpCharWidths[i] = 0.0;
-        mpChars2Glyphs[i] = -1;
     }
     mpGlyphs2Chars = new int[ mnGlyphCount ];
     mpGlyphAdvances = new int[ mnGlyphCount ];
@@ -533,7 +525,6 @@ bool CoreTextLayout::InitGIA( ImplLayoutArgs& rArgs ) const
                         CFIndex k = indices[ j ];
                         mpGlyphs2Chars[p] = k;
                         assert( k < mnCharCount );
-                        mpChars2Glyphs[k] = p;
 
                         if ( j < nb_glyphs - 1 )
                         {
