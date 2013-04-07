@@ -1106,10 +1106,7 @@ SwFlyFrmFmt* SwDoc::InsertOLE(const SwPaM &rRg, const String& rObjName,
                             pFrmFmt );
 }
 
-/*************************************************************************
-|*  SwDoc::GetFldType()
-|*  Description: returns the field type of the Doc
-*************************************************************************/
+/// @returns the field type of the Doc
 SwFieldType *SwDoc::GetSysFldType( const sal_uInt16 eWhich ) const
 {
     for( sal_uInt16 i = 0; i < INIT_FLDTYPES; ++i )
@@ -1118,7 +1115,7 @@ SwFieldType *SwDoc::GetSysFldType( const sal_uInt16 eWhich ) const
     return 0;
 }
 
-// Set the rsid from nStt to nEnd of pTxtNode to the current session number
+/// Set the rsid from nStt to nEnd of pTxtNode to the current session number
 bool SwDoc::UpdateRsid( SwTxtNode *pTxtNode, xub_StrLen nStt, xub_StrLen nEnd )
 {
     if ( !pTxtNode )
@@ -1131,7 +1128,7 @@ bool SwDoc::UpdateRsid( SwTxtNode *pTxtNode, xub_StrLen nStt, xub_StrLen nEnd )
     return pTxtNode->InsertHint( pAttr, INS_DEFAULT );
 }
 
-// Set the rsid of the next nLen symbols of rRg to the current session number
+/// Set the rsid of the next nLen symbols of rRg to the current session number
 bool SwDoc::UpdateRsid( const SwPaM &rRg, const xub_StrLen nLen )
 {
     const SwPosition* pPos = rRg.GetPoint();
@@ -1303,8 +1300,8 @@ static void lcl_FormatPostIt(
     pIDCO->InsertString( aPam, aStr );
 }
 
-// provide the paper tray to use according to the page style in use,
-// but do that only if the respective item is NOT just the default item
+/// provide the paper tray to use according to the page style in use,
+/// but do that only if the respective item is NOT just the default item
 static sal_Int32 lcl_GetPaperBin( const SwPageFrm *pStartFrm )
 {
     sal_Int32 nRes = -1;
@@ -1813,7 +1810,7 @@ void SwDoc::DocInfoChgd( )
     SetModified();
 }
 
-// Return the reference in the doc for the name
+/// @return the reference in the doc for the name
 const SwFmtRefMark* SwDoc::GetRefMark( const String& rName ) const
 {
     const SfxPoolItem* pItem;
@@ -1832,7 +1829,7 @@ const SwFmtRefMark* SwDoc::GetRefMark( const String& rName ) const
     return 0;
 }
 
-// Return the RefMark per index - for Uno
+/// @return the RefMark per index - for Uno
 const SwFmtRefMark* SwDoc::GetRefMark( sal_uInt16 nIndex ) const
 {
     const SfxPoolItem* pItem;
@@ -1856,7 +1853,7 @@ const SwFmtRefMark* SwDoc::GetRefMark( sal_uInt16 nIndex ) const
    return pRet;
 }
 
-// Return the names of all set references in the Doc
+/// @return the names of all set references in the Doc
 //JP 24.06.96: If the array pointer is 0, then just return whether a RefMark is set in the Doc
 // OS 25.06.96: From now on we always return the reference count
 sal_uInt16 SwDoc::GetRefMarks( std::vector<OUString>* pNames ) const
@@ -2045,11 +2042,13 @@ static bool lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
     return true;
 }
 
-/*************************************************************************
- * Re-triggers spelling in the idle handler.
- * If bInvalid is passed with true, the WrongLists in all nodes are invalidated
- * and the SpellInvalid flag is set on all pages.
- * bOnlyWrong controls whether only the areas with wrong words are checked or the whole area.
+/** Re-trigger spelling in the idle handler.
+ *
+ * @param bInvalid if <true>, the WrongLists in all nodes are invalidated
+ *                 and the SpellInvalid flag is set on all pages.
+ * @param bOnlyWrong controls whether only the areas with wrong words are
+ *                   checked or the whole area.
+ * @param bSmartTags ???
  ************************************************************************/
 void SwDoc::SpellItAgainSam( bool bInvalid, bool bOnlyWrong, bool bSmartTags )
 {
@@ -2177,7 +2176,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bIm
     }
 }
 
-// Remove the invisible content from the document e.g. hidden areas, hidden paragraphs
+/// Remove the invisible content from the document e.g. hidden areas, hidden paragraphs
 bool SwDoc::RemoveInvisibleContent()
 {
     bool bRet = false;
@@ -2517,7 +2516,6 @@ bool SwDoc::LinksUpdated() const
     return mbLinksUpdated;
 }
 
-// embedded all local links (Areas/Graphics)
 static ::sfx2::SvBaseLink* lcl_FindNextRemovableLink( const ::sfx2::SvBaseLinks& rLinks, sfx2::LinkManager& rLnkMgr )
 {
     for( sal_uInt16 n = 0; n < rLinks.size(); ++n )
@@ -2541,6 +2539,8 @@ static ::sfx2::SvBaseLink* lcl_FindNextRemovableLink( const ::sfx2::SvBaseLinks&
     }
     return 0;
 }
+
+/// embedded all local links (Areas/Graphics)
 bool SwDoc::EmbedAllLinks()
 {
     bool bRet = false;
@@ -2585,7 +2585,7 @@ sal_Bool SwDoc::IsInsTblAlignNum() const
     return SW_MOD()->IsInsTblAlignNum(get(IDocumentSettingAccess::HTML_MODE));
 }
 
-// Set up the InsertDB as Undo table
+/// Set up the InsertDB as Undo table
 void SwDoc::AppendUndoForInsertFromDB( const SwPaM& rPam, sal_Bool bIsTable )
 {
     if( bIsTable )

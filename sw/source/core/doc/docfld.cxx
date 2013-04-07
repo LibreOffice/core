@@ -64,12 +64,10 @@ using namespace ::com::sun::star::uno;
 extern bool IsFrameBehind( const SwTxtNode& rMyNd, sal_uInt16 nMySttPos,
                         const SwTxtNode& rBehindNd, sal_uInt16 nSttPos );
 
-/*--------------------------------------------------------------------
-    Description: Insert field types
- --------------------------------------------------------------------*/
-/*
- *  Implementation of field methods at the Doc
- *  Always returns a pointer to the type, if it's new or already added.
+/** Insert field types
+ *
+ * @param rFldTyp ???
+ * @return Always returns a pointer to the type, if it's new or already added.
  */
 SwFieldType* SwDoc::InsertFldType(const SwFieldType &rFldTyp)
 {
@@ -144,6 +142,7 @@ SwFieldType* SwDoc::InsertFldType(const SwFieldType &rFldTyp)
     return (*mpFldTypes)[ nSize ];
 }
 
+/// Insert field type that was marked as deleted
 void SwDoc::InsDeletedFldType( SwFieldType& rFldTyp )
 {
     // The FldType was marked as deleted and removed from the array.
@@ -202,9 +201,7 @@ void SwDoc::InsDeletedFldType( SwFieldType& rFldTyp )
     }
 }
 
-/*--------------------------------------------------------------------
-    Description: Remove field type
- --------------------------------------------------------------------*/
+/// Remove field type
 void SwDoc::RemoveFldType(sal_uInt16 nFld)
 {
     OSL_ENSURE( INIT_FLDTYPES <= nFld,  "don't remove InitFlds" );
@@ -254,9 +251,7 @@ const SwFldTypes* SwDoc::GetFldTypes() const
     return mpFldTypes;
 }
 
-/*--------------------------------------------------------------------
-    Description: Find first type with ResId and name
- --------------------------------------------------------------------*/
+/// Find first type with ResId and name
 SwFieldType* SwDoc::GetFldType( sal_uInt16 nResId, const String& rName,
          bool bDbFieldMatching // used in some UNO calls for RES_DBFLD
                                    // to use different string matching code
@@ -389,9 +384,7 @@ void SwDoc::UpdateUsrFlds()
     }
 }
 
-/*--------------------------------------------------------------------
-    Description: Update reference and table fields
- --------------------------------------------------------------------*/
+/// Update reference and table fields
 void SwDoc::UpdateRefFlds( SfxPoolItem* pHt )
 {
     SwFieldType* pFldType;
@@ -400,8 +393,8 @@ void SwDoc::UpdateRefFlds( SfxPoolItem* pHt )
             pFldType->ModifyNotification( 0, pHt );
 }
 
-//For simplicity assume that all field types have updatable contents so
-//optimization currently only available when no fields exist.
+/// @note For simplicity assume that all field types have updatable contents so
+///       optimization currently only available when no fields exist.
 bool SwDoc::containsUpdatableFields()
 {
     for (sal_uInt16 i = 0; i < mpFldTypes->size(); ++i)
@@ -688,7 +681,7 @@ void SwDoc::UpdatePageFlds( SfxPoolItem* pMsgHnt )
     SetNewFldLst(true);
 }
 
-// ---- Remove all unreferenced field types of a document --
+/// Remove all unreferenced field types of a document
 void SwDoc::GCFieldTypes()
 {
     for( sal_uInt16 n = mpFldTypes->size(); n > INIT_FLDTYPES; )
@@ -999,7 +992,7 @@ _HashStr::_HashStr( const String& rName, const String& rText,
     pNext = pNxt;
 }
 
-// Look up the Name, if it is present, return it's String, otherwise return an empty String
+/// Look up the Name, if it is present, return it's String, otherwise return an empty String
 void LookString( SwHash** ppTbl, sal_uInt16 nSize, const String& rName,
                     String& rRet, sal_uInt16* pPos )
 {
@@ -1676,9 +1669,7 @@ void SwDoc::SetInitDBFields( sal_Bool b )
     GetNewDBMgr()->SetInitDBFields( b );
 }
 
-/*--------------------------------------------------------------------
-    Description: Get all databases that are used by fields
- --------------------------------------------------------------------*/
+/// Get all databases that are used by fields
 static String lcl_DBDataToString(const SwDBData& rData)
 {
     String sRet = rData.sDataSource;

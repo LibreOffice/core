@@ -59,8 +59,8 @@
 
 namespace
 {
-    // find the relevant section in which the SwUnoCrsr may wander.
-    // returns NULL if no restrictions apply
+    /// find the relevant section in which the SwUnoCrsr may wander.
+    /// returns NULL if no restrictions apply
     static const SwStartNode* lcl_FindUnoCrsrSection( const SwNode& rNode )
     {
         const SwStartNode* pStartNode = rNode.StartOfSectionNode();

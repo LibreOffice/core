@@ -841,11 +841,11 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
     return aRefNumStr;
 }
 
-//  ----- Copy method of SwNumRule ------
+/** Copy method of SwNumRule
 
-    // A kind of copy constructor, so that the num formats are attached
-    // to the right CharFormats of a Document.
-    // Copies the NumFormats and returns itself.
+    A kind of copy constructor, so that the num formats are attached to the
+    right CharFormats of a Document.
+    Copies the NumFormats and returns itself. */
 SwNumRule& SwNumRule::CopyNumRule( SwDoc* pDoc, const SwNumRule& rNumRule )
 {
     for( sal_uInt16 n = 0; n < MAXLEVEL; ++n )
@@ -924,8 +924,7 @@ void SwNumRule::SetInvalidRule(sal_Bool bFlag)
     bInvalidRuleFlag = bFlag;
 }
 
-
-// change indent of all list levels by given difference
+/// change indent of all list levels by given difference
 void SwNumRule::ChangeIndent( const short nDiff )
 {
     for ( sal_uInt16 i = 0; i < MAXLEVEL; ++i )
@@ -964,7 +963,7 @@ void SwNumRule::ChangeIndent( const short nDiff )
     SetInvalidRule( sal_True );
 }
 
-// set indent of certain list level to given value
+/// set indent of certain list level to given value
 void SwNumRule::SetIndent( const short nNewIndent,
                            const sal_uInt16 nListLevel )
 {
@@ -992,8 +991,8 @@ void SwNumRule::SetIndent( const short nNewIndent,
     SetInvalidRule( sal_True );
 }
 
-// set indent of first list level to given value and change other list level's
-// indents accordingly
+/// set indent of first list level to given value and change other list level's
+/// indents accordingly
 void SwNumRule::SetIndentOfFirstListLevelAndChangeOthers( const short nNewIndent )
 {
     SwNumFmt aTmpNumFmt( Get(0) );
@@ -1080,10 +1079,7 @@ void SwNumRule::RemoveParagraphStyle( SwTxtFmtColl& rTxtFmtColl )
 
 namespace numfunc
 {
-    /** class containing default bullet list configuration data
-
-        @author OD
-    */
+    /** class containing default bullet list configuration data */
     class SwDefBulletConfig : private utl::ConfigItem
     {
         public:
@@ -1116,37 +1112,22 @@ namespace numfunc
 
             SwDefBulletConfig();
             ~SwDefBulletConfig();
+
         private:
-
-            /** sets internal default bullet configuration data to default values
-
-                @author OD
-            */
+            /** sets internal default bullet configuration data to default values */
             void SetToDefault();
 
-            /** returns sequence of default bullet configuration property names
-
-                @author OD
-            */
+            /** returns sequence of default bullet configuration property names */
             uno::Sequence<OUString> GetPropNames() const;
 
             /** loads default bullet configuration properties and applies
-                values to internal data
-
-                @author OD
-            */
+                values to internal data */
             void LoadConfig();
 
-            /** initialize font instance for default bullet list
-
-                @author OD
-            */
+            /** initialize font instance for default bullet list */
             void InitFont();
 
-            /** catches notification about changed default bullet configuration data
-
-                @author OD
-            */
+            /** catches notification about changed default bullet configuration data */
             virtual void Notify( const uno::Sequence<OUString>& aPropertyNames );
             virtual void Commit();
 
@@ -1336,8 +1317,6 @@ namespace numfunc
         regarding lists and list items.
         configuration item about behavior of <TAB>/<SHIFT-TAB>-key at first
         position of first list item
-
-        @author OD
     */
     class SwNumberingUIBehaviorConfig : private utl::ConfigItem
     {
@@ -1353,28 +1332,16 @@ namespace numfunc
 
         private:
 
-            /** sets internal configuration data to default values
-
-                @author OD
-            */
+            /** sets internal configuration data to default values */
             void SetToDefault();
 
-            /** returns sequence of configuration property names
-
-                @author OD
-            */
+            /** returns sequence of configuration property names */
             com::sun::star::uno::Sequence<OUString> GetPropNames() const;
 
-            /** loads configuration properties and applies values to internal data
-
-                @author OD
-            */
+            /** loads configuration properties and applies values to internal data */
             void LoadConfig();
 
-            /** catches notification about changed configuration data
-
-                @author OD
-            */
+            /** catches notification about changed configuration data */
             virtual void Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames );
             virtual void Commit();
 

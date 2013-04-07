@@ -151,9 +151,7 @@ SwNoTxtFrm::SwNoTxtFrm(SwNoTxtNode * const pNode, SwFrm* pSib )
     InitCtor();
 }
 
-// Initialization: Currently add the Frame to the Cache
-
-
+/// Initialization: Currently add the Frame to the Cache
 void SwNoTxtFrm::InitCtor()
 {
     mnType = FRMC_NOTXT;
@@ -330,21 +328,13 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     SfxProgress::LeaveLock();
 }
 
-/*************************************************************************
-|*
-|*    void lcl_CalcRect( Point & aPt, Size & aDim,
-|*                   sal_uInt16 nMirror )
-|*
-|*    Calculate the position and the size of the graphic in the Frame,
-|*    corresponding to the current graphic attributes
-|*
-|*    Point&  the position in the Frame (also returned)
-|*    Size&   the graphic's size (also returned)
-|*    nMirror the current mirror attribute
-|*
-*************************************************************************/
+/** Calculate the position and the size of the graphic in the Frame,
+    corresponding to the current graphic attributes
 
-
+    @param Point  the position in the Frame (also returned)
+    @param Size   the graphic's size (also returned)
+    @param nMirror the current mirror attribute
+*/
 static void lcl_CalcRect( Point& rPt, Size& rDim, sal_uInt16 nMirror )
 {
     if( nMirror == RES_MIRROR_GRAPH_VERT || nMirror == RES_MIRROR_GRAPH_BOTH )
@@ -360,14 +350,7 @@ static void lcl_CalcRect( Point& rPt, Size& rDim, sal_uInt16 nMirror )
     }
 }
 
-/*************************************************************************
-|*
-|*    void SwNoTxtFrm::GetGrfArea()
-|*
-|*    Calculate the Bitmap's position and the size within the passed rectangle
-|*
-*************************************************************************/
-
+/** Calculate the Bitmap's position and the size within the passed rectangle */
 void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
                              bool ) const
 {
@@ -485,15 +468,7 @@ void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
     }
 }
 
-/*************************************************************************
-|*
-|*    Size SwNoTxtFrm::GetSize()
-|*
-|*    By returning the surrounding Fly's size which equals the graphic's size
-|*
-*************************************************************************/
-
-
+/** By returning the surrounding Fly's size which equals the graphic's size */
 const Size& SwNoTxtFrm::GetSize() const
 {
     // Return the Frame's size
@@ -532,15 +507,7 @@ void SwNoTxtFrm::MakeAll()
     }
 }
 
-/*************************************************************************
-|*
-|*    SwNoTxtFrm::Format()
-|*
-|*    Calculate the Bitmap's site, if needed
-|*
-*************************************************************************/
-
-
+/** Calculate the Bitmap's site, if needed */
 void SwNoTxtFrm::Format( const SwBorderAttrs * )
 {
     const Size aNewSize( GetSize() );
@@ -856,12 +823,13 @@ bool paintUsingPrimitivesHelper(
     return false;
 }
 
-// Paint the graphic.
-// We require either a QuickDraw-Bitmap or a graphic here. If we do not have
-// either, we return a replacement.
-// delete unused 3rd parameter.
-// use aligned rectangle for drawing graphic.
-// pixel-align coordinations for drawing graphic.
+/** Paint the graphic.
+
+    We require either a QuickDraw-Bitmap or a graphic here. If we do not have
+    either, we return a replacement.
+
+    @todo use aligned rectangle for drawing graphic.
+    @todo pixel-align coordinations for drawing graphic. */
 void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) const
 {
     ViewShell* pShell = getRootFrm()->GetCurrShell();

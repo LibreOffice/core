@@ -2523,7 +2523,7 @@ sal_uInt16 SwDoc::GetRedlineAuthor()
     return SW_MOD()->GetRedlineAuthor();
 }
 
-// Insert new author into the Table for the Readers etc.
+/// Insert new author into the Table for the Readers etc.
 sal_uInt16 SwDoc::InsertRedlineAuthor( const String& rNew )
 {
     return SW_MOD()->InsertRedlineAuthor(rNew);
@@ -2540,10 +2540,10 @@ void SwDoc::UpdateRedlineAttr()
     }
 }
 
-// Set comment text for the Redline, which is inserted later on via
-// AppendRedline. Is used by Autoformat.
-// A null pointer resets the mode. The pointer is not copied, so it
-// needs to stay valid!
+/// Set comment text for the Redline, which is inserted later on via
+/// AppendRedline. Is used by Autoformat.
+/// A null pointer resets the mode. The pointer is not copied, so it
+/// needs to stay valid!
 void SwDoc::SetAutoFmtRedlineComment( const String* pTxt, sal_uInt16 nSeqNo )
 {
     mbIsAutoFmtRedline = 0 != pTxt;
@@ -2774,9 +2774,9 @@ void SwRedlineTbl::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )
         pSh->InvalidateWindows( SwRect( 0, 0, LONG_MAX, LONG_MAX ) );
 }
 
-// Find the next or preceding Redline with the same seq.no.
-// We can limit the search using look ahead.
-// 0 or USHRT_MAX searches the whole array.
+/// Find the next or preceding Redline with the same seq.no.
+/// We can limit the search using look ahead.
+/// 0 or USHRT_MAX searches the whole array.
 sal_uInt16 SwRedlineTbl::FindNextOfSeqNo( sal_uInt16 nSttPos, sal_uInt16 nLookahead ) const
 {
     return nSttPos + 1 < (sal_uInt16)size()
@@ -3020,8 +3020,8 @@ SwRedlineData::~SwRedlineData()
     delete pNext;
 }
 
-// ExtraData is copied. The Pointer's ownership is thus NOT transferred
-// to the Redline Object!
+/// ExtraData is copied. The Pointer's ownership is thus NOT transferred
+/// to the Redline Object!
 void SwRedlineData::SetExtraData( const SwRedlineExtraData* pData )
 {
     delete pExtraData;
@@ -3095,7 +3095,7 @@ SwRedline::~SwRedline()
     delete pRedlineData;
 }
 
-// Do we have a valid Selection?
+/// Do we have a valid Selection?
 sal_Bool SwRedline::HasValidRange() const
 {
     const SwNode* pPtNd = &GetPoint()->nNode.GetNode(),
@@ -3267,12 +3267,8 @@ void SwRedline::InvalidateRange()       // trigger the Layout
     }
 }
 
-/*************************************************************************
- * SwRedline::CalcStartEnd()
- * Calculates the start and end position of the intersection rTmp and
- * text node nNdIdx
- *************************************************************************/
-
+/** Calculates the start and end position of the intersection rTmp and
+    text node nNdIdx */
 void SwRedline::CalcStartEnd( sal_uLong nNdIdx, sal_uInt16& nStart, sal_uInt16& nEnd ) const
 {
     const SwPosition *pRStt = Start(), *pREnd = End();

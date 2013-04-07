@@ -499,15 +499,11 @@ namespace
     }
 }
 
-// ---------------------------------------------------------------
-
-// Copy Table into this Box.
-// Copy all Boxes of a Line into the corresponding Boxes. The old
-// content is deleted by doing this.
-// If no Box is left the remaining content goes to the Box of
-// a "BaseLine".
-// If there's no Line anymore, put it also into the last Box
-// of a "BaseLine".
+/** Copy Table into this Box.
+    Copy all Boxes of a Line into the corresponding Boxes. The old content
+    is deleted by doing this.
+    If no Box is left the remaining content goes to the Box of a "BaseLine".
+    If there's no Line anymore, put it also into the last Box of a "BaseLine". */
 static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
                     SwTable& rDstTbl, SwTableBox* pDstBox,
                     bool bDelCntnt, SwUndoTblCpyTbl* pUndo )
@@ -718,13 +714,11 @@ sal_Bool SwTable::InsNewTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBox
     return sal_True;
 }
 
-// Copy Table into this Box.
-// Copy all Boxes of a Line into the corresponding Boxes. The old
-// content is deleted by doing this.
-// If no Box is left the remaining content goes to the Box of
-// a "BaseLine".
-// If there's no Line anymore, put it also into the last Box
-// of a "BaseLine".
+/** Copy Table into this Box.
+    Copy all Boxes of a Line into the corresponding Boxes. The old content is
+    deleted by doing this.
+    If no Box is left the remaining content goes to the Box of a "BaseLine".
+    If there's no Line anymore, put it also into the last Box of a "BaseLine". */
 sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
                         SwUndoTblCpyTbl* pUndo )
 {

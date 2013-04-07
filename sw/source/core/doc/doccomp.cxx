@@ -157,7 +157,7 @@ public:
     };
 
 private:
-    // Look for the moved lines
+    /// Look for the moved lines
     class CompareSequence
     {
         CompareData &rData1, &rData2;
@@ -194,8 +194,8 @@ public:
     virtual ~ArrayComparator() {}
 };
 
-// Consider two lines equal if similar enough (e.g. look like different
-// versions of the same paragraph)
+/// Consider two lines equal if similar enough (e.g. look like different
+/// versions of the same paragraph)
 class LineArrayComparator : public ArrayComparator
 {
 private:
@@ -248,7 +248,7 @@ public:
     virtual int GetLen2() const { return pTxtNd2->GetTxt().getLength(); }
 };
 
-// Options set in Tools->Options->Writer->Comparison
+/// Options set in Tools->Options->Writer->Comparison
 struct CmpOptionsContainer
 {
     SvxCompareMode eCmpMode;
@@ -284,7 +284,7 @@ public:
                                 int nLcsLen, int nPieceLen );
 };
 
-// Use Hirschberg's algrithm to find LCS in linear space
+/// Use Hirschberg's algrithm to find LCS in linear space
 class LgstCommonSubseq: public CommonSubseq
 {
 private:
@@ -304,7 +304,7 @@ public:
     int Find( int *pSubseq1, int *pSubseq2 );
 };
 
-// Find a common subsequence in linear time
+/// Find a common subsequence in linear time
 class FastCommonSubseq: private CommonSubseq
 {
 private:
@@ -736,7 +736,7 @@ Compare::MovedData::~MovedData()
     delete [] pLineNum;
 }
 
-// Find the differing lines
+/// Find the differing lines
 Compare::CompareSequence::CompareSequence(
                             CompareData& rD1, CompareData& rD2,
                             const MovedData& rMD1, const MovedData& rMD2 )
@@ -2009,7 +2009,7 @@ sal_uInt16 _SaveMergeRedlines::InsertRedline()
     return nIns;
 }
 
-// Merge two documents
+/// Merge two documents
 long SwDoc::MergeDoc( const SwDoc& rDoc )
 {
     if( &rDoc == this )
