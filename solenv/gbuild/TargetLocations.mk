@@ -166,6 +166,7 @@ gb_Pagein_get_target = $(WORKDIR)/Pagein/$(1)
 gb_Package_get_preparation_target = $(WORKDIR)/Package/prepared/$(1)
 gb_Package_get_target = $(WORKDIR)/Package/$(1).filelist
 gb_Package_get_target_for_build = $(WORKDIR_FOR_BUILD)/Package/$(1).filelist
+gb_PackageSet_get_target = $(WORKDIR)/PackageSet/$(1).filelist
 gb_Postprocess_get_target = $(WORKDIR)/Postprocess/$(1)
 gb_PrecompiledHeader_get_dep_target = $(WORKDIR)/Dep/PrecompiledHeader/$(gb_PrecompiledHeader_DEBUGDIR)/$(1).hxx.gch.d
 gb_PrecompiledHeader_get_target = $(WORKDIR)/PrecompiledHeader/$(gb_PrecompiledHeader_DEBUGDIR)/$(1).hxx.gch
@@ -288,6 +289,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	NoexPrecompiledHeader \
 	PackagePart \
 	Package \
+	PackageSet \
 	Pagein \
 	PrecompiledHeader \
 	Pyuno \
