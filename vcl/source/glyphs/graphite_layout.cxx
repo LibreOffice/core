@@ -48,6 +48,7 @@
 #include <unicode/ubidi.h>
 #include <unicode/uscript.h>
 
+#include <layout/DefaultCharMapper.h>
 // Graphite Libraries (must be after vcl headers on windows)
 #include <graphite2/Segment.h>
 
@@ -490,6 +491,7 @@ GraphiteLayout::GraphiteLayout(const gr_face * face, gr_font * font,
                                const grutils::GrFeatureParser * pFeatures) throw()
   : mpFace(face),
     mpFont(font),
+    mpStr(NULL),
     mnWidth(0),
     mfScaling(1.0),
     mpFeatures(pFeatures)
@@ -501,6 +503,7 @@ GraphiteLayout::~GraphiteLayout() throw()
 {
     clear();
     // the features and font are owned by the platform layers
+    delete[] mpStr;
     mpFeatures = NULL;
     mpFont = NULL;
 }
@@ -591,12 +594,28 @@ gr_segment * GraphiteLayout::CreateSegment(ImplLayoutArgs& rArgs)
         }
         size_t numchars = gr_count_unicode_characters(gr_utf16, rArgs.mpStr + mnSegCharOffset,
                 rArgs.mpStr + (rArgs.mnLength > limit + 64 ? limit + 64 : rArgs.mnLength), NULL);
+
+        mpStr = new sal_Unicode[rArgs.mnLength+1];
+        if(mpStr)
+            memcpy(mpStr, rArgs.mpStr, (rArgs.mnLength+1)*2);
+
+        if (bRtl && mpStr)
+        {
+            DefaultCharMapper cmap(true, bRtl);
+            int i=0;
+            while(rArgs.mpStr[i])
+            {
+                mpStr[i]=(sal_Unicode) cmap.mapChar((sal_uInt32)rArgs.mpStr[i]);
+                i++;
+            }
+        }
+
         if (mpFeatures)
             pSegment = gr_make_seg(mpFont, mpFace, 0, mpFeatures->values(), gr_utf16,
-                                        rArgs.mpStr + mnSegCharOffset, numchars, bRtl);
+                                        mpStr + mnSegCharOffset, numchars, bRtl);
         else
             pSegment = gr_make_seg(mpFont, mpFace, 0, NULL, gr_utf16,
-                                        rArgs.mpStr + mnSegCharOffset, numchars, bRtl);
+                                        mpStr + mnSegCharOffset, numchars, bRtl);
 
         //pSegment = new gr::RangeSegment((gr::Font *)&mrFont, mpTextSrc, &maLayout, mnMinCharPos, limit);
         if (pSegment != NULL)
