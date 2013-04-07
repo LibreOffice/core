@@ -72,7 +72,27 @@ std::ostream &operator <<(std::ostream& s, CGRect &rRect)
 #ifndef SAL_LOG_INFO
     (void) rRect;
 #else
-    s << (int) rRect.size.width << "x" << (int) rRect.size.height << "@(" << (int) rRect.origin.x << "," << (int) rRect.origin.y << ")";
+    s << rRect.size << "@" << rRect.origin;
+#endif
+    return s;
+}
+
+std::ostream &operator <<(std::ostream& s, CGPoint &rPoint)
+{
+#ifndef SAL_LOG_INFO
+    (void) rPoint;
+#else
+    s << "(" << rPoint.x << "," << rPoint.y << ")";
+#endif
+    return s;
+}
+
+std::ostream &operator <<(std::ostream& s, CGSize &rSize)
+{
+#ifndef SAL_LOG_INFO
+    (void) rSize;
+#else
+    s << rSize.width << "x" << rSize.height;
 #endif
     return s;
 }

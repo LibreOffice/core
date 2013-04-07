@@ -40,6 +40,8 @@ CFStringRef CreateCFString( const OUString& );
 NSString* CreateNSString( const OUString& );
 
 std::ostream &operator <<(std::ostream& s, CGRect &rRect);
+std::ostream &operator <<(std::ostream& s, CGPoint &rPoint);
+std::ostream &operator <<(std::ostream& s, CGSize &rSize);
 
 #endif // INCLUDED_QUARTZ_UTILS_HXX
 
