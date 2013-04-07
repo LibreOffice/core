@@ -66,7 +66,7 @@ SwPosSize SwGluePortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
  *              virtual SwGluePortion::GetExpTxt()
  *************************************************************************/
 
-sal_Bool SwGluePortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const
+sal_Bool SwGluePortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
 {
     if( GetLen() && rInf.OnWin() &&
         rInf.GetOpt().IsBlank() && rInf.IsNoSymbol() )

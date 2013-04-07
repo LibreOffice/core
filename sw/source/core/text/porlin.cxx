@@ -374,7 +374,7 @@ long SwLinePortion::CalcSpacing( long , const SwTxtSizeInfo & ) const
  *              virtual SwLinePortion::GetExpTxt()
  *************************************************************************/
 
-sal_Bool SwLinePortion::GetExpTxt( const SwTxtSizeInfo &, XubString & ) const
+sal_Bool SwLinePortion::GetExpTxt( const SwTxtSizeInfo &, OUString & ) const
 {
     return sal_False;
 }

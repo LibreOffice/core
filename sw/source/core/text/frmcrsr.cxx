@@ -757,12 +757,12 @@ sal_Bool SwTxtFrm::RightMargin(SwPaM *pPam, sal_Bool bAPI) const
 
         // We skip hard line brakes
         if( aLine.GetCurr()->GetLen() &&
-            CH_BREAK == aInf.GetTxt().GetChar(nRightMargin - 1))
+            CH_BREAK == aInf.GetTxt()[nRightMargin - 1])
             --nRightMargin;
         else if( !bAPI && (aLine.GetNext() || pFrm->GetFollow()) )
         {
             while( nRightMargin > aLine.GetStart() &&
-                ' ' == aInf.GetTxt().GetChar(nRightMargin - 1))
+                ' ' == aInf.GetTxt()[nRightMargin - 1])
                 --nRightMargin;
         }
     }
@@ -1278,13 +1278,13 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
             }
             else if( !IsFollow() )
             {
-                xub_StrLen nTmpLen = aInf.GetTxt().Len();
+                sal_Int32 nTmpLen = aInf.GetTxt().getLength();
                 if( aLine.GetEnd() < nTmpLen )
                 {
                     if( nFormat <= GetOfst() )
                     {
                         nFormat = Min( xub_StrLen( GetOfst() + MIN_OFFSET_STEP ),
-                                       nTmpLen );
+                                       static_cast<xub_StrLen>(nTmpLen) );
                         if( nFormat <= GetOfst() )
                             break;
                     }

@@ -36,7 +36,7 @@ class SwFldPortion : public SwExpandPortion
 {
     friend class SwTxtFormatter;
 protected:
-    XubString  aExpand;             // The expanded field
+    OUString  aExpand;              // The expanded field
     SwFont  *pFnt;                  // For multi-line fields
     xub_StrLen nNextOffset;         // Offset of the follow in the original string
     xub_StrLen nNextScriptChg;
@@ -58,7 +58,7 @@ protected:
 
 public:
     SwFldPortion( const SwFldPortion& rFld );
-    SwFldPortion( const XubString &rExpand, SwFont *pFnt = 0, bool bPlaceHolder = false );
+    SwFldPortion( const OUString &rExpand, SwFont *pFnt = 0, bool bPlaceHolder = false );
     ~SwFldPortion();
 
     void TakeNextOffset( const SwFldPortion* pFld );
@@ -67,8 +67,8 @@ public:
     // #i89179# - made public
     inline const SwFont *GetFont() const { return pFnt; }
 
-    inline const XubString &GetExp() const { return aExpand; }
-    virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
+    inline const OUString &GetExp() const { return aExpand; }
+    virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
 
@@ -99,7 +99,7 @@ public:
     inline void SetNextScriptChg( xub_StrLen nNew ) { nNextScriptChg = nNew; }
 
     // Field cloner for SplitGlue
-    virtual SwFldPortion *Clone( const XubString &rExpand ) const;
+    virtual SwFldPortion *Clone( const OUString &rExpand ) const;
 
     // Extra GetTxtSize because of pFnt
     virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const;
@@ -122,10 +122,10 @@ public:
          : SwFldPortion( rExpand, pFntL )
         { SetLen(1); SetWhichPor( POR_HIDDEN ); }
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
-    virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
+    virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
 
     // Field cloner for SplitGlue
-    virtual SwFldPortion *Clone( const XubString &rExpand ) const;
+    virtual SwFldPortion *Clone( const OUString &rExpand ) const;
     OUTPUT_OPERATOR
 };
 
@@ -152,7 +152,7 @@ public:
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
 
     // Field cloner for SplitGlue
-    virtual SwFldPortion *Clone( const XubString &rExpand ) const;
+    virtual SwFldPortion *Clone( const OUString &rExpand ) const;
     virtual void FormatEOL( SwTxtFormatInfo &rInf );
 
     OUTPUT_OPERATOR

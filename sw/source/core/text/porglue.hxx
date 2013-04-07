@@ -47,7 +47,7 @@ public:
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual xub_StrLen GetCrsrOfst( const KSHORT nOfst ) const;
     virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const;
-    virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
+    virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
 
     OUTPUT_OPERATOR
 };

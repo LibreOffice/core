@@ -432,7 +432,7 @@ sal_Bool SwTabPortion::PreFormat( SwTxtFormatInfo &rInf )
                 // In tabulator compatibility mode, we reset the bFull flag
                 // if the tabulator is at the end of the paragraph and the
                 // tab stop position is outside the frame:
-                bool bAtParaEnd = rInf.GetIdx() + GetLen() == rInf.GetTxt().Len();
+                bool bAtParaEnd = rInf.GetIdx() + GetLen() == rInf.GetTxt().getLength();
                 if ( bFull && bTabCompat &&
                      ( ( bTabOverflow && ( rInf.IsTabOverflow() || !IsAutoTabStop() ) ) || bAtParaEnd ) &&
                      GetTabPos() >= rInf.GetTxtFrm()->Frm().Width() )

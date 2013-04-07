@@ -50,9 +50,9 @@ using namespace ::com::sun::star;
  *************************************************************************/
 
 SwLinePortion *SwFldPortion::Compress()
-{ return (GetLen() || aExpand.Len() || SwLinePortion::Compress()) ? this : 0; }
+{ return (GetLen() || !aExpand.isEmpty() || SwLinePortion::Compress()) ? this : 0; }
 
-SwFldPortion *SwFldPortion::Clone( const XubString &rExpand ) const
+SwFldPortion *SwFldPortion::Clone( const OUString &rExpand ) const
 {
     SwFont *pNewFnt;
     if( 0 != ( pNewFnt = pFnt ) )
@@ -71,11 +71,11 @@ void SwFldPortion::TakeNextOffset( const SwFldPortion* pFld )
 {
     OSL_ENSURE( pFld, "TakeNextOffset: Missing Source" );
     nNextOffset = pFld->GetNextOffset();
-    aExpand.Erase( 0, nNextOffset );
+    aExpand = aExpand.replaceAt( 0, nNextOffset, "" );
     bFollow = sal_True;
 }
 
-SwFldPortion::SwFldPortion( const XubString &rExpand, SwFont *pFont, bool bPlaceHold )
+SwFldPortion::SwFldPortion( const OUString &rExpand, SwFont *pFont, bool bPlaceHold )
     : aExpand(rExpand), pFnt(pFont), nNextOffset(0), nNextScriptChg(STRING_LEN), nViewWidth(0),
       bFollow( sal_False ), bHasFollow( sal_False ), bPlaceHolder( bPlaceHold )
     , m_bNoLength( sal_False )
@@ -143,10 +143,10 @@ KSHORT SwFldPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 
 class SwFldSlot
 {
-    const XubString *pOldTxt;
-    XubString aTxt;
-    xub_StrLen nIdx;
-    xub_StrLen nLen;
+    const OUString *pOldTxt;
+    OUString aTxt;
+    sal_Int32 nIdx;
+    sal_Int32 nLen;
     sal_Bool bOn;
     SwTxtFormatInfo *pInf;
 public:
@@ -165,7 +165,7 @@ SwFldSlot::SwFldSlot( const SwTxtFormatInfo* pNew, const SwFldPortion *pPor )
         nIdx = pInf->GetIdx();
         nLen = pInf->GetLen();
         pOldTxt = &(pInf->GetTxt());
-        pInf->SetLen( aTxt.Len() );
+        pInf->SetLen( aTxt.getLength() );
         if( pPor->IsFollow() )
         {
             pInf->SetFakeLineStart( nIdx > pInf->GetLineStart() );
@@ -173,10 +173,7 @@ SwFldSlot::SwFldSlot( const SwTxtFormatInfo* pNew, const SwFldPortion *pPor )
         }
         else
         {
-            XubString aTmp( aTxt );
-            aTxt = *pOldTxt;
-            aTxt.Erase( nIdx, 1 );
-            aTxt.Insert( aTmp, nIdx );
+            aTxt = (*pOldTxt).replaceAt(nIdx, 1, aTxt);
         }
         pInf->SetTxt( aTxt );
     }
@@ -195,8 +192,8 @@ SwFldSlot::~SwFldSlot()
 
 void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
 {
-    String aTxt;
-    if( GetExpTxt( rInf, aTxt ) && aTxt.Len() && pBreakIt->GetBreakIter().is() )
+    OUString aTxt;
+    if( GetExpTxt( rInf, aTxt ) && !aTxt.isEmpty() && pBreakIt->GetBreakIter().is() )
     {
         sal_uInt8 nActual = pFnt ? pFnt->GetActual() : rInf.GetFont()->GetActual();
         sal_uInt16 nScript;
@@ -206,17 +203,17 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
             if( i18n::ScriptType::WEAK == nScript )
             {
                 nChg =(xub_StrLen)pBreakIt->GetBreakIter()->endOfScript(aTxt,0,nScript);
-                if( nChg < aTxt.Len() )
+                if( nChg < aTxt.getLength() )
                     nScript = pBreakIt->GetBreakIter()->getScriptType( aTxt, nChg );
             }
 
             //
             // nNextScriptChg will be evaluated during SwFldPortion::Format()
             //
-            if ( nChg < aTxt.Len() )
+            if ( nChg < aTxt.getLength() )
                 nNextScriptChg = (xub_StrLen)pBreakIt->GetBreakIter()->endOfScript( aTxt, nChg, nScript );
             else
-                nNextScriptChg = aTxt.Len();
+                nNextScriptChg = aTxt.getLength();
 
         }
         sal_uInt8 nTmp;
@@ -238,8 +235,8 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
         if (bPerformUBA)
         {
             UErrorCode nError = U_ZERO_ERROR;
-            UBiDi* pBidi = ubidi_openSized( aTxt.Len(), 0, &nError );
-            ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(aTxt.GetBuffer()), aTxt.Len(), nFldDir, NULL, &nError );
+            UBiDi* pBidi = ubidi_openSized( aTxt.getLength(), 0, &nError );
+            ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(aTxt.getStr()), aTxt.getLength(), nFldDir, NULL, &nError );
             int32_t nEnd;
             UBiDiLevel nCurrDir;
             ubidi_getLogicalRun( pBidi, 0, &nEnd, &nCurrDir );
@@ -254,7 +251,7 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
                 nCurrDir = UBIDI_RTL;
                 for ( xub_StrLen nCharIdx = 0; nCharIdx < nEnd; ++nCharIdx )
                 {
-                    UCharDirection nCharDir = u_charDirection ( aTxt.GetChar ( nCharIdx ));
+                    UCharDirection nCharDir = u_charDirection ( aTxt[ nCharIdx ]);
                     if ( nCharDir == U_LEFT_TO_RIGHT ||
                          nCharDir == U_LEFT_TO_RIGHT_EMBEDDING ||
                          nCharDir == U_LEFT_TO_RIGHT_OVERRIDE )
@@ -300,7 +297,7 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
     xub_StrLen nRest;
     sal_Bool bFull;
     bool bEOL = false;
-    long nTxtRest = rInf.GetTxt().Len() - rInf.GetIdx();
+    long nTxtRest = rInf.GetTxt().getLength() - rInf.GetIdx();
     {
         SwFldSlot aDiffTxt( &rInf, this );
         SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
@@ -371,13 +368,13 @@ sal_Bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
         {
             // aExpand ist noch nicht gekuerzt worden, der neue Ofst
             // ergibt sich durch nRest.
-            xub_StrLen nNextOfst = aExpand.Len() - nRest;
+            sal_Int32 nNextOfst = aExpand.getLength() - nRest;
 
             if ( IsQuoVadisPortion() )
                 nNextOfst = nNextOfst + ((SwQuoVadisPortion*)this)->GetContTxt().Len();
 
             XubString aNew( aExpand, nNextOfst, STRING_LEN );
-            aExpand.Erase( nNextOfst, STRING_LEN );
+            aExpand = aExpand.copy( 0, nNextOfst );
 
             // These characters should not be contained in the follow
             // field portion. They are handled via the HookChar mechanism.
@@ -455,14 +452,14 @@ void SwFldPortion::Paint( const SwTxtPaintInfo &rInf ) const
  *              virtual SwFldPortion::GetExpTxt()
  *************************************************************************/
 
-sal_Bool SwFldPortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const
+sal_Bool SwFldPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
 {
     rTxt = aExpand;
-    if( !rTxt.Len() && rInf.OnWin() &&
+    if( rTxt.isEmpty() && rInf.OnWin() &&
         !rInf.GetOpt().IsPagePreview() && !rInf.GetOpt().IsReadonly() &&
             SwViewOption::IsFieldShadings() &&
             !HasFollow() )
-        rTxt = ' ';
+        rTxt = OUString(' ');
     return sal_True;
 }
 
@@ -493,7 +490,7 @@ SwPosSize SwFldPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
  *                      class SwHiddenPortion
  *************************************************************************/
 
-SwFldPortion *SwHiddenPortion::Clone(const XubString &rExpand ) const
+SwFldPortion *SwHiddenPortion::Clone(const OUString &rExpand ) const
 {
     SwFont *pNewFnt;
     if( 0 != ( pNewFnt = pFnt ) )
@@ -519,7 +516,7 @@ void SwHiddenPortion::Paint( const SwTxtPaintInfo &rInf ) const
  *              virtual SwHiddenPortion::GetExpTxt()
  *************************************************************************/
 
-sal_Bool SwHiddenPortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const
+sal_Bool SwHiddenPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
 {
     // Nicht auf IsHidden() abfragen !
     return SwFldPortion::GetExpTxt( rInf, rTxt );
@@ -551,7 +548,7 @@ xub_StrLen SwNumberPortion::GetCrsrOfst( const MSHORT ) const
     return 0;
 }
 
-SwFldPortion *SwNumberPortion::Clone( const XubString &rExpand ) const
+SwFldPortion *SwNumberPortion::Clone( const OUString &rExpand ) const
 {
     SwFont *pNewFnt;
     if( 0 != ( pNewFnt = pFnt ) )
@@ -701,7 +698,7 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
         pThis->Width( nOldWidth );
     }
 
-    if( aExpand.Len() )
+    if( !aExpand.isEmpty() )
     {
         const SwFont *pTmpFnt = rInf.GetFont();
         bool bPaintSpace = ( UNDERLINE_NONE != pTmpFnt->GetUnderline() ||
@@ -1096,8 +1093,8 @@ SwCombinedPortion::SwCombinedPortion( const XubString &rTxt )
 {
     SetLen(1);
     SetWhichPor( POR_COMBINED );
-    if( aExpand.Len() > 6 )
-        aExpand.Erase( 6 );
+    if( aExpand.getLength() > 6 )
+        aExpand = aExpand.copy( 0, 6 );
     // Initialization of the scripttype array,
     // the arrays of width and position are filled by the format function
     if( pBreakIt->GetBreakIter().is() )
@@ -1138,7 +1135,7 @@ void SwCombinedPortion::Paint( const SwTxtPaintInfo &rInf ) const
         if( rInf.OnWin() && pPortion && !pPortion->Width() )
             pPortion->PrePaint( rInf, this );
 
-        sal_uInt16 nCount = aExpand.Len();
+        sal_Int32 nCount = aExpand.getLength();
         if( !nCount )
             return;
         OSL_ENSURE( nCount < 7, "Too much combined characters" );
@@ -1186,7 +1183,7 @@ void SwCombinedPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
 sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
 {
-    sal_uInt16 nCount = aExpand.Len();
+    sal_Int32 nCount = aExpand.getLength();
     if( !nCount )
     {
         Width( 0 );
@@ -1203,7 +1200,7 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
     {
         // more than four? Ok, then we need the 2/3 font width
         i = 0;
-        while( i < aExpand.Len() )
+        while( i < aExpand.getLength() )
         {
             OSL_ENSURE( aScrType[i] < SW_SCRIPTS, "Combined: Script fault" );
             if( !aWidth[ aScrType[i] ] )

@@ -194,10 +194,10 @@ void ChkOutDev( const SwTxtSizeInfo &rInf )
 #endif
 
 
-inline xub_StrLen GetMinLen( const SwTxtSizeInfo &rInf )
+inline sal_Int32 GetMinLen( const SwTxtSizeInfo &rInf )
 {
-    const xub_StrLen nInfLen = rInf.GetIdx() + rInf.GetLen();
-    return Min( rInf.GetTxt().Len(), nInfLen );
+    const sal_Int32 nInfLen = rInf.GetIdx() + rInf.GetLen();
+    return Min( rInf.GetTxt().getLength(), nInfLen );
 }
 
 
@@ -300,7 +300,7 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
 
     pFnt = pNewFnt;
     pUnderFnt = 0;
-    pTxt = reinterpret_cast<String const*>(&pNd->GetTxt()); //FIXME
+    pTxt = &pNd->GetTxt();
 
     nIdx = nNewIdx;
     nLen = nNewLen;
@@ -312,8 +312,8 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
     SetLen( GetMinLen( *this ) );
 }
 
-SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const XubString &rTxt,
-                              const xub_StrLen nIndex, const xub_StrLen nLength )
+SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const OUString &rTxt,
+                              const sal_Int32 nIndex, const xub_StrLen nLength )
     : SwTxtInfo( rNew ),
       pKanaComp(((SwTxtSizeInfo&)rNew).GetpKanaComp()),
       pVsh(((SwTxtSizeInfo&)rNew).GetVsh()),
@@ -618,7 +618,7 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
                              rPor.InNumberGrp() ) ? 0 : GetSpaceAdd();
     if ( nSpaceAdd )
     {
-        xub_StrLen nCharCnt = 0;
+        sal_Int32 nCharCnt = 0;
         // #i41860# Thai justified alignment needs some
         // additional information:
         aDrawInf.SetNumberOfBlanks( rPor.InTxtGrp() ?
@@ -1090,7 +1090,7 @@ void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
                     pFieldmark=doc->getIDocumentMarkAccess()->getFieldmarkFor(aPosition);
                 }
             }
-            bool bIsStartMark=(1==GetLen() && CH_TXT_ATR_FIELDSTART==GetTxt().GetChar(GetIdx()));
+            bool bIsStartMark=(1==GetLen() && CH_TXT_ATR_FIELDSTART==GetTxt()[GetIdx()]);
             if(pFieldmark) {
                 OSL_TRACE("Found Fieldmark");
 #if OSL_DEBUG_LEVEL > 1
@@ -1374,7 +1374,7 @@ void SwTxtFormatInfo::Init()
     nUnderScorePos = STRING_LEN;
     cHookChar = 0;
     SetIdx(0);
-    SetLen( GetTxt().Len() );
+    SetLen( GetTxt().getLength() );
     SetPaintOfst(0);
 }
 
@@ -1544,7 +1544,7 @@ xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nStart,
 
     // Check if character *behind* the portion has
     // to become the hook:
-    if ( i == nEnd && i < GetTxt().Len() && bNumFound )
+    if ( i == nEnd && i < GetTxt().getLength() && bNumFound )
     {
         const sal_Unicode cPos = GetChar( i );
         if ( cPos != cTabDec && cPos != cThousandSep && cPos !=cThousandSep2 && ( 0x2F >= cPos || cPos >= 0x3A ) )
@@ -1609,7 +1609,7 @@ SwTxtSlot::SwTxtSlot( const SwTxtSizeInfo *pNew, const SwLinePortion *pPor,
         pOldTxt = &(pInf->GetTxt());
         pInf->SetTxt( aTxt );
         pInf->SetIdx( 0 );
-        pInf->SetLen( bTxtLen ? pInf->GetTxt().Len() : pPor->GetLen() );
+        pInf->SetLen( bTxtLen ? pInf->GetTxt().getLength() : pPor->GetLen() );
 
         // ST2
         if ( bExgLists )
@@ -1621,10 +1621,10 @@ SwTxtSlot::SwTxtSlot( const SwTxtSizeInfo *pNew, const SwLinePortion *pPor,
                 const xub_StrLen nListPos = pOldSmartTagList->Pos(nPos);
                 if( nListPos == nIdx )
                     ((SwTxtPaintInfo*)pInf)->SetSmartTags( pOldSmartTagList->SubList( nPos ) );
-                else if( !pTempList && nPos < pOldSmartTagList->Count() && nListPos < nIdx && aTxt.Len() )
+                else if( !pTempList && nPos < pOldSmartTagList->Count() && nListPos < nIdx && !aTxt.isEmpty() )
                 {
                     pTempList = new SwWrongList( WRONGLIST_SMARTTAG );
-                    pTempList->Insert( OUString(), 0, 0, aTxt.Len(), 0 );
+                    pTempList->Insert( OUString(), 0, 0, aTxt.getLength(), 0 );
                     ((SwTxtPaintInfo*)pInf)->SetSmartTags( pTempList );
                 }
                 else
@@ -1637,10 +1637,10 @@ SwTxtSlot::SwTxtSlot( const SwTxtSizeInfo *pNew, const SwLinePortion *pPor,
                 const xub_StrLen nListPos = pOldGrammarCheckList->Pos(nPos);
                 if( nListPos == nIdx )
                     ((SwTxtPaintInfo*)pInf)->SetGrammarCheckList( pOldGrammarCheckList->SubList( nPos ) );
-                else if( !pTempList && nPos < pOldGrammarCheckList->Count() && nListPos < nIdx && aTxt.Len() )
+                else if( !pTempList && nPos < pOldGrammarCheckList->Count() && nListPos < nIdx && !aTxt.isEmpty() )
                 {
                     pTempList = new SwWrongList( WRONGLIST_GRAMMAR );
-                    pTempList->Insert( OUString(), 0, 0, aTxt.Len(), 0 );
+                    pTempList->Insert( OUString(), 0, 0, aTxt.getLength(), 0 );
                     ((SwTxtPaintInfo*)pInf)->SetGrammarCheckList( pTempList );
                 }
                 else

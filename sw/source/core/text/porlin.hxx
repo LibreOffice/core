@@ -176,7 +176,7 @@ public:
             void Move( SwTxtPaintInfo &rInf );
 
     // For SwTxtSlot
-    virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
+    virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
 
     // For SwFldPortion, SwSoftHyphPortion
     virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const;

@@ -56,10 +56,10 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
     nCutPos = rInf.GetIdx();
 
     // Empty strings are always 0
-    if( !rInf.GetLen() || !rInf.GetTxt().Len() )
+    if( !rInf.GetLen() || rInf.GetTxt().isEmpty() )
         return sal_False;
 
-    OSL_ENSURE( rInf.GetIdx() < rInf.GetTxt().Len(),
+    OSL_ENSURE( rInf.GetIdx() < rInf.GetTxt().getLength(),
             "+SwTxtGuess::Guess: invalid SwTxtFormatInfo" );
 
     OSL_ENSURE( nPorHeight, "+SwTxtGuess::Guess: no height" );
@@ -79,7 +79,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
                             0 ;
 
     SwTwips nLineWidth = rInf.Width() - rInf.X();
-    xub_StrLen nMaxLen = rInf.GetTxt().Len() - rInf.GetIdx();
+    sal_Int32 nMaxLen = rInf.GetTxt().getLength() - rInf.GetIdx();
 
     if ( rInf.GetLen() < nMaxLen )
         nMaxLen = rInf.GetLen();
@@ -101,7 +101,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
         // do not add extra italic value for an isolated blank:
         if ( 1 == rInf.GetLen() &&
-             CH_BLANK == rInf.GetTxt().GetChar( rInf.GetIdx() ) )
+             CH_BLANK == rInf.GetTxt()[ rInf.GetIdx() ] )
             bAddItalic = false;
 
         nItalic = bAddItalic ? nPorHeight / 12 : 0;
@@ -130,10 +130,10 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             // portion fits to line
             nCutPos = rInf.GetIdx() + nMaxLen;
             if( nItalic &&
-                ( nCutPos >= rInf.GetTxt().Len() ||
+                ( nCutPos >= rInf.GetTxt().getLength() ||
                   // #i48035# Needed for CalcFitToContent
                   // if first line ends with a manual line break
-                  rInf.GetTxt().GetChar( nCutPos ) == CH_BREAK ) )
+                  rInf.GetTxt()[ nCutPos ] == CH_BREAK ) )
                 nBreakWidth = nBreakWidth + nItalic;
 
             // save maximum width for later use
@@ -184,7 +184,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         // there likely has been a pixel rounding error in GetTxtBreak
         if ( nBreakWidth <= nLineWidth )
         {
-            if( nItalic && ( nBreakPos + 1 ) >= rInf.GetTxt().Len() )
+            if( nItalic && ( nBreakPos + 1 ) >= rInf.GetTxt().getLength() )
                 nBreakWidth = nBreakWidth + nItalic;
 
             // save maximum width for later use
@@ -206,7 +206,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
     xub_StrLen nPorLen = 0;
     // do not call the break iterator nCutPos is a blank
-    sal_Unicode cCutChar = rInf.GetTxt().GetChar( nCutPos );
+    sal_Unicode cCutChar = rInf.GetTxt()[ nCutPos ];
     if( CH_BLANK == cCutChar || CH_FULL_BLANK == cCutChar )
     {
         nBreakPos = nCutPos;
@@ -217,7 +217,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         {
             // we step back until a non blank character has been found
             // or there is only one more character left
-            while( nX && nBreakPos > rInf.GetTxt().Len() &&
+            while( nX && nBreakPos > rInf.GetTxt().getLength() &&
                    ( CH_BLANK == ( cCutChar = rInf.GetChar( --nX ) ) ||
                      CH_FULL_BLANK == cCutChar ) )
                 --nBreakPos;
@@ -232,7 +232,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
         if( nBreakPos > rInf.GetIdx() )
             nPorLen = nBreakPos - rInf.GetIdx();
-        while( ++nCutPos < rInf.GetTxt().Len() &&
+        while( ++nCutPos < rInf.GetTxt().getLength() &&
                ( CH_BLANK == ( cCutChar = rInf.GetChar( nCutPos ) ) ||
                  CH_FULL_BLANK == cCutChar ) )
             ; // nothing
@@ -259,15 +259,15 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
              ! rInf.GetLast()->IsFtnPortion() &&
              rInf.GetIdx() > rInf.GetLineStart() &&
              CH_TXTATR_BREAKWORD ==
-                ( cFldChr = rInf.GetTxt().GetChar( rInf.GetIdx() - 1 ) ) )
+                ( cFldChr = rInf.GetTxt()[ rInf.GetIdx() - 1 ] ) )
         {
             SwFldPortion* pFld = (SwFldPortion*)rInf.GetLast();
-            XubString aTxt;
+            OUString aTxt;
             pFld->GetExpTxt( rInf, aTxt );
 
-            if ( aTxt.Len() )
+            if ( !aTxt.isEmpty() )
             {
-                nFieldDiff = aTxt.Len() - 1;
+                nFieldDiff = aTxt.getLength() - 1;
                 nCutPos = nCutPos + nFieldDiff;
                 nHyphPos = nHyphPos + nFieldDiff;
 
@@ -275,9 +275,8 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
                 aDebugString = rInf.GetTxt();
 #endif
 
-                XubString& rOldTxt = (XubString&)rInf.GetTxt();
-                rOldTxt.Erase( rInf.GetIdx() - 1, 1 );
-                rOldTxt.Insert( aTxt, rInf.GetIdx() - 1 );
+                OUString rOldTxt = rInf.GetTxt();
+                rOldTxt = rOldTxt.replaceAt( rInf.GetIdx() - 1, 1, aTxt );
                 rInf.SetIdx( rInf.GetIdx() + nFieldDiff );
             }
             else
@@ -300,7 +299,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         // NEVER call GetLang if the string has been modified!!!
         LanguageType aLang = rInf.GetFont()->GetLanguage();
 
-        // If we are inside a field portion, we use a temporar string which
+        // If we are inside a field portion, we use a temporary string which
         // differs from the string at the textnode. Therefore we are not allowed
         // to call the GetLang function.
         if ( nCutPos && ! rPor.InFldGrp() )
@@ -415,7 +414,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             if( nBreakPos >= rInf.GetIdx() )
             {
                 nPorLen = nBreakPos - rInf.GetIdx();
-                if( '-' == rInf.GetTxt().GetChar( nBreakPos - 1 ) )
+                if( '-' == rInf.GetTxt()[ nBreakPos - 1 ] )
                     xHyphWord = NULL;
             }
         }
@@ -429,7 +428,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             // check, if break position is soft hyphen and an underflow
             // has to be triggered
             if( nBreakPos > rInf.GetLineStart() && rInf.GetIdx() &&
-                CHAR_SOFTHYPHEN == rInf.GetTxt().GetChar( nBreakPos - 1 ) )
+                CHAR_SOFTHYPHEN == rInf.GetTxt()[ nBreakPos - 1 ] )
                 nBreakPos = rInf.GetIdx() - 1;
 
             const SvxAdjust& rAdjust = rInf.GetTxtFrm()->GetTxtNode()->GetSwAttrSet().GetAdjust().GetAdjust();
@@ -543,7 +542,7 @@ bool SwTxtGuess::AlternativeSpelling( const SwTxtFormatInfo &rInf,
     // if everything else fails, we want to cut at nPos
     nCutPos = nPos;
 
-    XubString aTxt( rInf.GetTxt().Copy( nBreakStart, nWordLen ) );
+    XubString aTxt( rInf.GetTxt().copy( nBreakStart, nWordLen ) );
 
     // check, if word has alternative spelling
     Reference< XHyphenator >  xHyph( ::GetHyphenator() );

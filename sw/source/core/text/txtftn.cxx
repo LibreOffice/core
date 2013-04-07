@@ -1343,7 +1343,7 @@ SwFtnSave::SwFtnSave( const SwTxtSizeInfo &rInf,
         else
         {
             // examine text and set script
-            String aTmpStr( rFtn.GetViewNumStr( *pDoc ) );
+            OUString aTmpStr( rFtn.GetViewNumStr( *pDoc ) );
             pFnt->SetActual( SwScriptInfo::WhichFont( 0, &aTmpStr, 0 ) );
         }
 
@@ -1418,7 +1418,7 @@ SwFtnPortion::SwFtnPortion( const XubString &rExpand,
  *                      SwFtnPortion::GetExpTxt()
  *************************************************************************/
 
-sal_Bool SwFtnPortion::GetExpTxt( const SwTxtSizeInfo &, XubString &rTxt ) const
+sal_Bool SwFtnPortion::GetExpTxt( const SwTxtSizeInfo &, OUString &rTxt ) const
 {
     rTxt = aExpand;
     return sal_True;
@@ -1483,7 +1483,7 @@ void SwFtnPortion::SetPreferredScriptType( sal_uInt8 nPreferredScriptType )
  *                      class SwQuoVadisPortion
  *************************************************************************/
 
-SwFldPortion *SwQuoVadisPortion::Clone( const XubString &rExpand ) const
+SwFldPortion *SwQuoVadisPortion::Clone( const OUString &rExpand ) const
 { return new SwQuoVadisPortion( rExpand, aErgo ); }
 
 SwQuoVadisPortion::SwQuoVadisPortion( const XubString &rExp, const XubString& rStr )
@@ -1528,7 +1528,7 @@ sal_Bool SwQuoVadisPortion::Format( SwTxtFormatInfo &rInf )
  *               virtual SwQuoVadisPortion::GetExpTxt()
  *************************************************************************/
 
-sal_Bool SwQuoVadisPortion::GetExpTxt( const SwTxtSizeInfo &, XubString &rTxt ) const
+sal_Bool SwQuoVadisPortion::GetExpTxt( const SwTxtSizeInfo &, OUString &rTxt ) const
 {
     rTxt = aExpand;
     // if this QuoVadisPortion has a follow, the follow is responsible for
@@ -1570,7 +1570,7 @@ void SwQuoVadisPortion::Paint( const SwTxtPaintInfo &rInf ) const
  *                      class SwErgoSumPortion
  *************************************************************************/
 
-SwFldPortion *SwErgoSumPortion::Clone( const XubString &rExpand ) const
+SwFldPortion *SwErgoSumPortion::Clone( const OUString &rExpand ) const
 {
     return new SwErgoSumPortion( rExpand, OUString() );
 }
@@ -1582,7 +1582,7 @@ SwErgoSumPortion::SwErgoSumPortion( const XubString &rExp, const XubString& rStr
     aExpand += rStr;
 
     // 7773: sinnvolle Massnahme: ein Blank Abstand zum Text
-    aExpand += ' ';
+    aExpand += OUString(' ');
     SetWhichPor( POR_ERGOSUM );
 }
 

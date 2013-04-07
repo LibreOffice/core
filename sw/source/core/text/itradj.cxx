@@ -48,7 +48,7 @@ void SwTxtAdjuster::FormatBlock( )
     const SwLinePortion *pFly = 0;
 
     sal_Bool bSkip = !IsLastBlock() &&
-        nStart + pCurr->GetLen() >= GetInfo().GetTxt().Len();
+        nStart + pCurr->GetLen() >= GetInfo().GetTxt().getLength();
 
     // Multi-line fields are tricky, because we need to check whether there are
     // any other text portions in the paragraph.
@@ -272,7 +272,7 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
 
     pCurrent->InitSpaceAdd();
     xub_StrLen nGluePortion = 0;
-    xub_StrLen nCharCnt = 0;
+    sal_Int32 nCharCnt = 0;
     MSHORT nSpaceIdx = 0;
 
     // i60591: hennerdrews
@@ -652,7 +652,7 @@ void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
                 // to left-aligned.
                 // The first text portion gets the whole Glue, but only if we have
                 // more than one line.
-                if( bComplete && GetInfo().GetTxt().Len() == nLen )
+                if( bComplete && GetInfo().GetTxt().getLength() == nLen )
                     ((SwGluePortion*)pPos)->MoveHalfGlue( pGlue );
                 else
                 {

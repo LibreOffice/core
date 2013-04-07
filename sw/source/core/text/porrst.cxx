@@ -110,7 +110,7 @@ sal_Bool SwBreakPortion::Format( SwTxtFormatInfo &rInf )
     Width( 0 );
     Height( pRoot->Height() );
     SetAscent( pRoot->GetAscent() );
-    if ( rInf.GetIdx()+1 == rInf.GetTxt().Len() )
+    if ( rInf.GetIdx()+1 == rInf.GetTxt().getLength() )
         rInf.SetNewLine( sal_True );
     return sal_True;
 }

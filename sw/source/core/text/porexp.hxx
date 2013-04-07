@@ -32,7 +32,7 @@ public:
     inline  SwExpandPortion() { SetWhichPor( POR_EXP ); }
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
     virtual xub_StrLen GetCrsrOfst( const MSHORT nOfst ) const;
-    virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
+    virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
     virtual SwPosSize GetTxtSize( const SwTxtSizeInfo &rInfo ) const;
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
 
@@ -60,7 +60,7 @@ public:
     void SetMulti( bool bNew ) { bMulti = bNew; }
 
     virtual SwLinePortion *Compress();
-    virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
+    virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
     virtual void FormatEOL( SwTxtFormatInfo &rInf );
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
@@ -85,7 +85,7 @@ public:
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
     virtual KSHORT GetViewWidth( const SwTxtSizeInfo &rInf ) const;
-    virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
+    virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const;
     sal_Bool IsScript() const { return bScript; }
     OUTPUT_OPERATOR
 };
