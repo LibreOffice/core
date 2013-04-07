@@ -603,7 +603,7 @@ public:
     virtual ::sfx2::SvBaseLink::UpdateResult DataChanged(
         const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
 
-    sal_Bool            Connect() { return GetRealObject() != NULL; }
+    bool                Connect() { return GetRealObject() != NULL; }
 };
 
 // -----------------------------------------------------------------------------
@@ -677,8 +677,8 @@ public:
     SdrLightEmbeddedClient_Impl* pLightClient; // must be registered as client only using AddOwnLightClient() call
 
     // New local var to avoid repeated loading if load of OLE2 fails
-    sal_Bool        mbLoadingOLEObjectFailed;
-    sal_Bool        mbConnected;
+    bool            mbLoadingOLEObjectFailed;
+    bool            mbConnected;
 
     SdrEmbedObjectLink* mpObjectLink;
     String maLinkURL;
@@ -687,8 +687,8 @@ public:
     : pGraphicObject( NULL )
     , pLightClient ( NULL )
     // init to start situation, loading did not fail
-    , mbLoadingOLEObjectFailed( sal_False )
-    , mbConnected( sal_False )
+    , mbLoadingOLEObjectFailed( false )
+    , mbConnected( false )
     , mpObjectLink( NULL )
     {
     }
@@ -1683,7 +1683,7 @@ void SdrOle2Obj::ImpSetVisAreaSize()
 
         // the client is required to get access to scaling
         SfxInPlaceClient* pClient = SfxInPlaceClient::GetClient( dynamic_cast<SfxObjectShell*>(pModel->GetPersist()), xObjRef.GetObject() );
-        sal_Bool bHasOwnClient =
+        bool bHasOwnClient =
                         ( mpImpl->pLightClient
                         && xObjRef->getClientSite() == uno::Reference< embed::XEmbeddedClient >( mpImpl->pLightClient ) );
 
@@ -1991,7 +1991,7 @@ void SdrOle2Obj::GetObjRef_Impl()
             // loop trying to load it again and again.
             if( xObjRef.is() )
             {
-                mpImpl->mbLoadingOLEObjectFailed = sal_True;
+                mpImpl->mbLoadingOLEObjectFailed = true;
             }
 
             // For math objects, set closed state to transparent

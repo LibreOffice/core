@@ -103,18 +103,18 @@ struct ImpSdrPathDragData  : public SdrDragStatUserData
     sal_uInt16                      nNextNextPnt0;
     bool                        bEliminate;     // delete point? (is set by MovDrag)
 
-    sal_Bool                        mbMultiPointDrag;
+    bool                        mbMultiPointDrag;
     const XPolyPolygon          maOrig;
     XPolyPolygon                maMove;
     std::vector<SdrHdl*>        maHandles;
 
 public:
-    ImpSdrPathDragData(const SdrPathObj& rPO, const SdrHdl& rHdl, sal_Bool bMuPoDr, const SdrDragStat& rDrag);
+    ImpSdrPathDragData(const SdrPathObj& rPO, const SdrHdl& rHdl, bool bMuPoDr, const SdrDragStat& rDrag);
     void ResetPoly(const SdrPathObj& rPO);
-    sal_Bool IsMultiPointDrag() const { return mbMultiPointDrag; }
+    bool IsMultiPointDrag() const { return mbMultiPointDrag; }
 };
 
-ImpSdrPathDragData::ImpSdrPathDragData(const SdrPathObj& rPO, const SdrHdl& rHdl, sal_Bool bMuPoDr, const SdrDragStat& rDrag)
+ImpSdrPathDragData::ImpSdrPathDragData(const SdrPathObj& rPO, const SdrHdl& rHdl, bool bMuPoDr, const SdrDragStat& rDrag)
 :   aXP(5),
     mbMultiPointDrag(bMuPoDr),
     maOrig(rPO.GetPathPoly()),
@@ -543,10 +543,10 @@ bool ImpPathForDragAndCreate::beginPathDrag( SdrDragStat& rDrag )  const
     if(!pHdl)
         return sal_False;
 
-    sal_Bool bMultiPointDrag(sal_True);
+    bool bMultiPointDrag(true);
 
     if(aPathPolygon[(sal_uInt16)pHdl->GetPolyNum()].IsControl((sal_uInt16)pHdl->GetPointNum()))
-        bMultiPointDrag = sal_False;
+        bMultiPointDrag = false;
 
     if(bMultiPointDrag)
     {
@@ -567,7 +567,7 @@ bool ImpPathForDragAndCreate::beginPathDrag( SdrDragStat& rDrag )  const
         }
 
         if(nSelectedPoints <= 1)
-            bMultiPointDrag = sal_False;
+            bMultiPointDrag = false;
     }
 
     ((ImpPathForDragAndCreate*)this)->mpSdrPathDragData = new ImpSdrPathDragData(mrSdrPathObject,*pHdl,bMultiPointDrag,rDrag);
@@ -605,7 +605,7 @@ bool ImpPathForDragAndCreate::movePathDrag( SdrDragStat& rDrag ) const
                 const XPolygon& rOrig = mpSdrPathDragData->maOrig[nPolyIndex];
                 XPolygon& rMove = mpSdrPathDragData->maMove[nPolyIndex];
                 const sal_uInt16 nPointCount(rOrig.GetPointCount());
-                sal_Bool bClosed(rOrig[0] == rOrig[nPointCount-1]);
+                bool bClosed(rOrig[0] == rOrig[nPointCount-1]);
 
                 // move point itself
                 rMove[nPointIndex] = rOrig[nPointIndex] + aDelta;
@@ -1062,13 +1062,13 @@ String ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag) 
             {
                 sal_uInt16 nPntMax(nPntAnz - 1);
                 sal_Bool bIsClosed(IsClosed(meObjectKind));
-                sal_Bool bPt1(nPntNum > 0);
-                sal_Bool bPt2(nPntNum < nPntMax);
+                bool bPt1(nPntNum > 0);
+                bool bPt2(nPntNum < nPntMax);
 
                 if(bIsClosed && nPntAnz > 2)
                 {
-                    bPt1 = sal_True;
-                    bPt2 = sal_True;
+                    bPt1 = true;
+                    bPt2 = true;
                 }
 
                 sal_uInt16 nPt1,nPt2;
@@ -1084,10 +1084,10 @@ String ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag) 
                     nPt2 = 0;
 
                 if(bPt1 && rXPoly.IsControl(nPt1))
-                    bPt1 = sal_False; // don't display
+                    bPt1 = false; // don't display
 
                 if(bPt2 && rXPoly.IsControl(nPt2))
-                    bPt2 = sal_False; // of bezier data
+                    bPt2 = false; // of bezier data
 
                 if(bPt1)
                 {
@@ -1671,7 +1671,7 @@ SdrPathObj::~SdrPathObj()
     impDeleteDAC();
 }
 
-sal_Bool ImpIsLine(const basegfx::B2DPolyPolygon& rPolyPolygon)
+bool ImpIsLine(const basegfx::B2DPolyPolygon& rPolyPolygon)
 {
     return (1L == rPolyPolygon.count() && 2L == rPolyPolygon.getB2DPolygon(0L).count());
 }
@@ -1901,7 +1901,7 @@ void SdrPathObj::TakeObjNameSingul(XubString& rName) const
     }
     else if(OBJ_PLIN == meKind || OBJ_POLY == meKind)
     {
-        const sal_Bool bClosed(OBJ_POLY == meKind);
+        const bool bClosed(OBJ_POLY == meKind);
         sal_uInt16 nId(0);
 
         if(mpDAC && mpDAC->IsCreating())

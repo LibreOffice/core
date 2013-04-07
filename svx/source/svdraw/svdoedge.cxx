@@ -231,8 +231,8 @@ void SdrEdgeObj::ImpSetAttrToEdgeInfo()
     }
     else if(eKind == SDREDGE_THREELINES)
     {
-        sal_Bool bHor1 = aEdgeInfo.nAngle1 == 0 || aEdgeInfo.nAngle1 == 18000;
-        sal_Bool bHor2 = aEdgeInfo.nAngle2 == 0 || aEdgeInfo.nAngle2 == 18000;
+        bool bHor1 = aEdgeInfo.nAngle1 == 0 || aEdgeInfo.nAngle1 == 18000;
+        bool bHor2 = aEdgeInfo.nAngle2 == 0 || aEdgeInfo.nAngle2 == 18000;
 
         if(bHor1)
         {
@@ -301,8 +301,8 @@ void SdrEdgeObj::ImpSetEdgeInfoToAttr()
     }
     else if(eKind == SDREDGE_THREELINES)
     {
-        sal_Bool bHor1 = aEdgeInfo.nAngle1 == 0 || aEdgeInfo.nAngle1 == 18000;
-        sal_Bool bHor2 = aEdgeInfo.nAngle2 == 0 || aEdgeInfo.nAngle2 == 18000;
+        bool bHor1 = aEdgeInfo.nAngle1 == 0 || aEdgeInfo.nAngle1 == 18000;
+        bool bHor2 = aEdgeInfo.nAngle2 == 0 || aEdgeInfo.nAngle2 == 18000;
 
         n = 2;
         nVals[0] = bHor1 ? aEdgeInfo.aObj1Line2.X() : aEdgeInfo.aObj1Line2.Y();

@@ -183,9 +183,9 @@ static MSO_SPT ImpGetCustomShapeType( const SdrObjCustomShape& rCustoShape )
     return eRetValue;
 };
 
-static sal_Bool ImpVerticalSwitch( const SdrObjCustomShape& rCustoShape )
+static bool ImpVerticalSwitch( const SdrObjCustomShape& rCustoShape )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     MSO_SPT eShapeType( ImpGetCustomShapeType( rCustoShape ) );
     switch( eShapeType )
     {
@@ -193,7 +193,7 @@ static sal_Bool ImpVerticalSwitch( const SdrObjCustomShape& rCustoShape )
         case mso_sptBorderCallout1 :            // 2 diag
         case mso_sptBorderCallout2 :            // 3
         {
-            bRet = sal_True;
+            bRet = true;
         }
         break;
         default: break;
@@ -220,12 +220,12 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
 
         // look for used stuff
         SdrObjListIter aIterator(rOriginal);
-        sal_Bool bLineUsed(sal_False);
-        sal_Bool bAllFillUsed(sal_False);
-        sal_Bool bSolidFillUsed(sal_False);
-        sal_Bool bGradientFillUsed(sal_False);
-        sal_Bool bHatchFillUsed(sal_False);
-        sal_Bool bBitmapFillUsed(sal_False);
+        bool bLineUsed(false);
+        bool bAllFillUsed(false);
+        bool bSolidFillUsed(false);
+        bool bGradientFillUsed(false);
+        bool bHatchFillUsed(false);
+        bool bBitmapFillUsed(false);
 
         while(aIterator.IsMore())
         {
@@ -238,7 +238,7 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
 
                 if(XLINE_NONE != eLineStyle)
                 {
-                    bLineUsed = sal_True;
+                    bLineUsed = true;
                 }
             }
 
@@ -246,22 +246,22 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
             {
                 if(!bSolidFillUsed && XFILL_SOLID == eFillStyle)
                 {
-                    bSolidFillUsed = sal_True;
+                    bSolidFillUsed = true;
                     bAllFillUsed = (bSolidFillUsed && bGradientFillUsed && bHatchFillUsed && bBitmapFillUsed);
                 }
                 if(!bGradientFillUsed && XFILL_GRADIENT == eFillStyle)
                 {
-                    bGradientFillUsed = sal_True;
+                    bGradientFillUsed = true;
                     bAllFillUsed = (bSolidFillUsed && bGradientFillUsed && bHatchFillUsed && bBitmapFillUsed);
                 }
                 if(!bHatchFillUsed && XFILL_HATCH == eFillStyle)
                 {
-                    bHatchFillUsed = sal_True;
+                    bHatchFillUsed = true;
                     bAllFillUsed = (bSolidFillUsed && bGradientFillUsed && bHatchFillUsed && bBitmapFillUsed);
                 }
                 if(!bBitmapFillUsed && XFILL_BITMAP == eFillStyle)
                 {
-                    bBitmapFillUsed = sal_True;
+                    bBitmapFillUsed = true;
                     bAllFillUsed = (bSolidFillUsed && bGradientFillUsed && bHatchFillUsed && bBitmapFillUsed);
                 }
             }
@@ -2494,7 +2494,7 @@ Rectangle SdrObjCustomShape::ImpCalculateTextFrame( const bool bHgt, const bool 
 bool SdrObjCustomShape::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
 {
     Rectangle aNewTextRect = ImpCalculateTextFrame( bHgt, bWdt );
-    sal_Bool bRet = !aNewTextRect.IsEmpty() && ( aNewTextRect != aRect );
+    bool bRet = !aNewTextRect.IsEmpty() && ( aNewTextRect != aRect );
     if ( bRet )
     {
         // taking care of handles that should not been changed
@@ -2523,7 +2523,7 @@ bool SdrObjCustomShape::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
 bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
 {
     Rectangle aNewTextRect = ImpCalculateTextFrame( bHgt, bWdt );
-    sal_Bool bRet = !aNewTextRect.IsEmpty() && ( aNewTextRect != aRect );
+    bool bRet = !aNewTextRect.IsEmpty() && ( aNewTextRect != aRect );
     if ( bRet )
     {
         Rectangle aBoundRect0;
@@ -2724,7 +2724,7 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRe
 
     if (pPara)
     {
-        sal_Bool bHitTest = sal_False;
+        bool bHitTest = false;
         if( pModel )
             bHitTest = &pModel->GetHitTestOutliner() == &rOutliner;
 

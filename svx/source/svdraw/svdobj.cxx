@@ -953,8 +953,8 @@ void SdrObject::BroadcastObjectChange() const
     if( pModel && pModel->isLocked() )
         return;
 
-    sal_Bool bPlusDataBroadcast(pPlusData && pPlusData->pBroadcast);
-    sal_Bool bObjectChange(IsInserted() && pModel);
+    bool bPlusDataBroadcast(pPlusData && pPlusData->pBroadcast);
+    bool bObjectChange(IsInserted() && pModel);
 
     if(bPlusDataBroadcast || bObjectChange)
     {

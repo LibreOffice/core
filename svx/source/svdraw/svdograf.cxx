@@ -114,7 +114,7 @@ public:
         const String& rMimeType, const ::com::sun::star::uno::Any & rValue );
     void                DataChanged( const Graphic& rGraphic );
 
-    sal_Bool                Connect() { return 0 != GetRealObject(); }
+    bool                Connect() { return 0 != GetRealObject(); }
     void                UpdateAsynchron();
     void                RemoveGraphicUpdater();
 };
@@ -127,7 +127,7 @@ public:
 
     void SAL_CALL Terminate( void );
 
-    sal_Bool GraphicLinkChanged( const String& rFileName ){ return maFileName != rFileName;    };
+    bool GraphicLinkChanged( const String& rFileName ){ return maFileName != rFileName;    };
 
 protected:
 
@@ -474,8 +474,8 @@ Graphic SdrGrafObj::GetTransformedGraphic( sal_uIntPtr nTransformFlags ) const
     GraphicType     eType = GetGraphicType();
     MapMode         aDestMap( pModel->GetScaleUnit(), Point(), pModel->GetScaleFraction(), pModel->GetScaleFraction() );
     const Size      aDestSize( GetLogicRect().GetSize() );
-    const sal_Bool      bMirror = ( nTransformFlags & SDRGRAFOBJ_TRANSFORMATTR_MIRROR ) != 0;
-    const sal_Bool      bRotate = ( ( nTransformFlags & SDRGRAFOBJ_TRANSFORMATTR_ROTATE ) != 0 ) &&
+    const bool      bMirror = ( nTransformFlags & SDRGRAFOBJ_TRANSFORMATTR_MIRROR ) != 0;
+    const bool      bRotate = ( ( nTransformFlags & SDRGRAFOBJ_TRANSFORMATTR_ROTATE ) != 0 ) &&
         ( aGeo.nDrehWink && aGeo.nDrehWink != 18000 ) && ( GRAPHIC_NONE != eType );
 
     // Need cropping info earlier

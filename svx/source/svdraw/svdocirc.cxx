@@ -1083,8 +1083,8 @@ void SdrCircObj::ImpSetAttrToCircInfo()
     sal_Int32 nNewStart = ((SdrCircStartAngleItem&)rSet.Get(SDRATTR_CIRCSTARTANGLE)).GetValue();
     sal_Int32 nNewEnd = ((SdrCircEndAngleItem&)rSet.Get(SDRATTR_CIRCENDANGLE)).GetValue();
 
-    sal_Bool bKindChg = meCircleKind != eNewKind;
-    sal_Bool bWinkChg = nNewStart != nStartWink || nNewEnd != nEndWink;
+    bool bKindChg = meCircleKind != eNewKind;
+    bool bWinkChg = nNewStart != nStartWink || nNewEnd != nEndWink;
 
     if(bKindChg || bWinkChg)
     {
