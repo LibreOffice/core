@@ -824,12 +824,11 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
                 aPos.nContent.Assign( 0, 0 );       // Deregister index!
                 GetNodes().Delete( aIndex, 1 );
 
-// This is a hack: whilst FlyFrames/Headers/Footers are not undoable we delete all Undo objects
-if( GetIDocumentUndoRedo().DoesUndo() )
-{
-    GetIDocumentUndoRedo().DelAllUndoObj();
-}
-
+                // This is a hack: whilst FlyFrames/Headers/Footers are not undoable we delete all Undo objects
+                if( GetIDocumentUndoRedo().DoesUndo() )
+                {
+                    GetIDocumentUndoRedo().DelAllUndoObj();
+                }
             }
             else
             {

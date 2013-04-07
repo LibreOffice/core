@@ -85,8 +85,8 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
 
         if( bAction )
             pESh->EndAllAction();
-         if( bUnLockView )
-             pESh->LockView( sal_False );
+        if( bUnLockView )
+            pESh->LockView( sal_False );
     }
 }
 
