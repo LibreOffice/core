@@ -41,6 +41,7 @@
 #include "cppuhelper/implbase2.hxx"
 #include "cppuhelper/weak.hxx"
 #include "osl/diagnose.h"
+#include "rtl/character.hxx"
 #include "rtl/string.h"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.hxx"
@@ -56,28 +57,8 @@ namespace {
 //TODO: move comphelper::string::misc into something like
 //sal/salhelper and use those instead
 
-bool isDigit(sal_Unicode c) {
-    return c >= '0' && c <= '9';
-}
-
-bool isUpperCase(sal_Unicode c) {
-    return c >= 'A' && c <= 'Z';
-}
-
-bool isLowerCase(sal_Unicode c) {
-    return c >= 'a' && c <= 'z';
-}
-
-bool isAlpha(sal_Unicode c) {
-    return isUpperCase(c) || isLowerCase(c);
-}
-
-bool isHexDigit(sal_Unicode c) {
-    return isDigit(c) || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f');
-}
-
 sal_Unicode toLowerCase(sal_Unicode c) {
-    return isUpperCase(c) ? c + ('a' - 'A') : c;
+    return rtl::isAsciiUpperCase(c) ? c + ('a' - 'A') : c;
 }
 
 bool equalIgnoreCase(sal_Unicode c1, sal_Unicode c2) {
@@ -88,8 +69,8 @@ bool equalIgnoreEscapeCase(OUString const & s1, OUString const & s2) {
     if (s1.getLength() == s2.getLength()) {
         for (sal_Int32 i = 0; i < s1.getLength();) {
             if (s1[i] == '%' && s2[i] == '%' && s1.getLength() - i > 2
-                && isHexDigit(s1[i + 1]) && isHexDigit(s1[i + 2])
-                && isHexDigit(s2[i + 1]) && isHexDigit(s2[i + 2])
+                && rtl::isAsciiHexDigit(s1[i + 1]) && rtl::isAsciiHexDigit(s1[i + 2])
+                && rtl::isAsciiHexDigit(s2[i + 1]) && rtl::isAsciiHexDigit(s2[i + 2])
                 && equalIgnoreCase(s1[i + 1], s2[i + 1])
                 && equalIgnoreCase(s1[i + 2], s2[i + 2]))
             {
@@ -107,12 +88,12 @@ bool equalIgnoreEscapeCase(OUString const & s1, OUString const & s2) {
 }
 
 sal_Int32 parseScheme(OUString const & uriReference) {
-    if (uriReference.getLength() >= 2 && isAlpha(uriReference[0])) {
+    if (uriReference.getLength() >= 2 && rtl::isAsciiAlpha(uriReference[0])) {
         for (sal_Int32 i = 0; i < uriReference.getLength(); ++i) {
             sal_Unicode c = uriReference[i];
             if (c == ':') {
                 return i;
-            } else if (!isAlpha(c) && !isDigit(c) && c != '+' && c != '-'
+            } else if (!rtl::isAsciiAlpha(c) && !rtl::isAsciiDigit(c) && c != '+' && c != '-'
                        && c != '.')
             {
                 break;
@@ -381,7 +362,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::parse(
             RTL_CONSTASCII_STRINGPARAM("com.sun.star.uri.UriSchemeParser_"));
         for (sal_Int32 i = 0; i < scheme.getLength(); ++i) {
             sal_Unicode c = scheme[i];
-            if (isUpperCase(c)) {
+            if (rtl::isAsciiUpperCase(c)) {
                 buf.append(toLowerCase(c));
             } else if (c == '+') {
                 buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("PLUS"));
@@ -390,7 +371,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::parse(
             } else if (c == '.') {
                 buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("DOT"));
             } else {
-                OSL_ASSERT(isLowerCase(c) || isDigit(c));
+                OSL_ASSERT(rtl::isAsciiLowerCase(c) || rtl::isAsciiDigit(c));
                 buf.append(c);
             }
         }

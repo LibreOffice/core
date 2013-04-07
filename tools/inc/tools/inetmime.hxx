@@ -23,6 +23,7 @@
 
 #include "tools/toolsdllapi.h"
 #include <rtl/alloc.h>
+#include <rtl/character.hxx>
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/tencinfo.h>
@@ -537,7 +538,7 @@ public:
 // static
 inline bool INetMIME::isUSASCII(sal_uInt32 nChar)
 {
-    return nChar <= 0x7F;
+    return rtl::isAscii(nChar);
 }
 
 // static
@@ -567,74 +568,74 @@ inline bool INetMIME::isVisible(sal_uInt32 nChar)
 // static
 inline bool INetMIME::isDigit(sal_uInt32 nChar)
 {
-    return nChar >= '0' && nChar <= '9';
+    return rtl::isAsciiDigit(nChar);
 }
 
 // static
 inline bool INetMIME::isCanonicHexDigit(sal_uInt32 nChar)
 {
-    return isDigit(nChar) || (nChar >= 'A' && nChar <= 'F');
+    return rtl::isAsciiCanonicHexDigit(nChar);
 }
 
 // static
 inline bool INetMIME::isHexDigit(sal_uInt32 nChar)
 {
-    return isCanonicHexDigit(nChar) || (nChar >= 'a' && nChar <= 'f');
+    return rtl::isAsciiHexDigit(nChar);
 }
 
 // static
 inline bool INetMIME::isUpperCase(sal_uInt32 nChar)
 {
-    return nChar >= 'A' && nChar <= 'Z';
+    return rtl::isAsciiUpperCase(nChar);
 }
 
 // static
 inline bool INetMIME::isLowerCase(sal_uInt32 nChar)
 {
-    return nChar >= 'a' && nChar <= 'z';
+    return rtl::isAsciiLowerCase(nChar);
 }
 
 // static
 inline bool INetMIME::isAlpha(sal_uInt32 nChar)
 {
-    return isUpperCase(nChar) || isLowerCase(nChar);
+    return rtl::isAsciiAlpha(nChar);
 }
 
 // static
 inline bool INetMIME::isAlphanumeric(sal_uInt32 nChar)
 {
-    return isAlpha(nChar) || isDigit(nChar);
+    return rtl::isAsciiAlphanumeric(nChar);
 }
 
 // static
 inline bool INetMIME::isBase64Digit(sal_uInt32 nChar)
 {
-    return isUpperCase(nChar) || isLowerCase(nChar) || isDigit(nChar)
+    return rtl::isAsciiUpperCase(nChar) || rtl::isAsciiLowerCase(nChar) || rtl::isAsciiDigit(nChar)
            || nChar == '+' || nChar == '/';
 }
 
 // static
 inline sal_uInt32 INetMIME::toUpperCase(sal_uInt32 nChar)
 {
-    return isLowerCase(nChar) ? nChar - ('a' - 'A') : nChar;
+    return rtl::isAsciiLowerCase(nChar) ? nChar - ('a' - 'A') : nChar;
 }
 
 // static
 inline sal_uInt32 INetMIME::toLowerCase(sal_uInt32 nChar)
 {
-    return isUpperCase(nChar) ? nChar + ('a' - 'A') : nChar;
+    return rtl::isAsciiUpperCase(nChar) ? nChar + ('a' - 'A') : nChar;
 }
 
 // static
 inline int INetMIME::getWeight(sal_uInt32 nChar)
 {
-    return isDigit(nChar) ? int(nChar - '0') : -1;
+    return rtl::isAsciiDigit(nChar) ? int(nChar - '0') : -1;
 }
 
 // static
 inline int INetMIME::getHexWeight(sal_uInt32 nChar)
 {
-    return isDigit(nChar) ? int(nChar - '0') :
+    return rtl::isAsciiDigit(nChar) ? int(nChar - '0') :
            nChar >= 'A' && nChar <= 'F' ? int(nChar - 'A' + 10) :
            nChar >= 'a' && nChar <= 'f' ? int(nChar - 'a' + 10) : -1;
 }
@@ -642,9 +643,9 @@ inline int INetMIME::getHexWeight(sal_uInt32 nChar)
 // static
 inline int INetMIME::getBase64Weight(sal_uInt32 nChar)
 {
-    return isUpperCase(nChar) ? int(nChar - 'A') :
-           isLowerCase(nChar) ? int(nChar - 'a' + 26) :
-           isDigit(nChar) ? int(nChar - '0' + 52) :
+    return rtl::isAsciiUpperCase(nChar) ? int(nChar - 'A') :
+           rtl::isAsciiLowerCase(nChar) ? int(nChar - 'a' + 26) :
+           rtl::isAsciiDigit(nChar) ? int(nChar - '0' + 52) :
            nChar == '+' ? 62 :
            nChar == '/' ? 63 :
            nChar == '=' ? -1 : -2;
