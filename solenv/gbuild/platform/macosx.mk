@@ -360,6 +360,21 @@ endif
 # Package class
 gb_Package_SDKDIRNAME := LibreOffice$(PRODUCTVERSION)_SDK
 
+# UIMenubarTarget class
+
+define gb_UIMenubarTarget__command
+$(call gb_Output_announce,$(2),$(true),UIM,1)
+$(call gb_ExternalExecutable_get_command,xsltproc) -o $(1) $(UI_MENUBAR_XSLT) $(3)
+
+endef
+
+define gb_UIMenubarTarget_UIMenubarTarget_platform
+$(call gb_UIMenubarTarget_get_target,$(1)) : UI_MENUBAR_XSLT := $(SRCDIR)/postprocess/packconfig/macosx/macosx_menubar_modification.xsl
+$(call gb_UIMenubarTarget_get_target,$(1)) : $(SRCDIR)/postprocess/packconfig/macosx/macosx_menubar_modification.xsl
+$(call gb_UIMenubarTarget_get_target,$(1)) :| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
+
+endef
+
 # Python
 gb_PYTHON_PRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
 
