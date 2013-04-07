@@ -37,7 +37,6 @@ public:
     long GetFontStretchedSize() const;
     float GetFontStretchFactor() const { return m_stretch_factor; };
     CTParagraphStyleRef GetParagraphStyle() const { return m_CTParagraphStyle; } ;
-    CGSize    GetSize() const;
     CGColorRef GetColor() const { return m_color; } ;
     void SetColor(SalColor color);
     void SetColor(void);
@@ -48,8 +47,6 @@ private:
     bool m_fake_italic;
     CGAffineTransform m_matrix;
     float m_stretch_factor;
-    float m_font_scale;
-    float m_fake_dpi_scale;
     CTParagraphStyleRef m_CTParagraphStyle;
     CTFontRef m_CTFont;
     CGColorRef m_color;
