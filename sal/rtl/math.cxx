@@ -22,6 +22,7 @@
 
 #include "osl/diagnose.h"
 #include "rtl/alloc.h"
+#include "rtl/character.hxx"
 #include "rtl/math.hxx"
 #include "rtl/strbuf.h"
 #include "rtl/string.h"
@@ -689,13 +690,6 @@ inline bool long10Overflow( long& nExp, int nAdd )
     return false;
 }
 
-// We are only concerned about ASCII arabic numerical digits here
-template< typename CharT >
-inline bool isDigit( CharT c )
-{
-    return 0x30 <= c && c <= 0x39;
-}
-
 template< typename CharT >
 inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
                              CharT cDecSeparator, CharT cGroupSeparator,
@@ -755,7 +749,7 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
         for (; p != pEnd; ++p)
         {
             CharT c = *p;
-            if (isDigit(c))
+            if (rtl::isAsciiDigit(c))
             {
                 fVal = fVal * 10.0 + static_cast< double >( c - CharT('0') );
                 ++nValExp;
@@ -783,7 +777,7 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
             for (; p != pEnd; ++p)
             {
                 CharT c = *p;
-                if (!isDigit(c))
+                if (!rtl::isAsciiDigit(c))
                     break;
                 if ( nDigs < nSigs )
                 {   // further digits (more than nSigs) don't have any
@@ -821,7 +815,7 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
             if ( fVal == 0.0 )
             {   // no matter what follows, zero stays zero, but carry on the
                 // offset
-                while (p != pEnd && isDigit(*p))
+                while (p != pEnd && rtl::isAsciiDigit(*p))
                     ++p;
             }
             else
@@ -831,7 +825,7 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
                 for (; p != pEnd; ++p)
                 {
                     CharT c = *p;
-                    if (!isDigit(c))
+                    if (!rtl::isAsciiDigit(c))
                         break;
                     int i = c - CharT('0');
                     if ( long10Overflow( nExp, i ) )
@@ -876,7 +870,7 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
                 fVal = HUGE_VAL;
                 eStatus = rtl_math_ConversionStatus_OutOfRange;
                 // Eat any further digits:
-                while (p != pEnd && isDigit(*p))
+                while (p != pEnd && rtl::isAsciiDigit(*p))
                     ++p;
             }
             else if (pEnd - p >= 4 && p[1] == CharT('N') && p[2] == CharT('A')
@@ -897,7 +891,7 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
                     bSign = false; // don't negate again
                 }
                 // Eat any further digits:
-                while (p != pEnd && isDigit(*p))
+                while (p != pEnd && rtl::isAsciiDigit(*p))
                     ++p;
             }
         }
